@@ -23,7 +23,7 @@
         canvas.height = augstums * dpr;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         // Mazāk pārslu uz maziem ekrāniem
-        var skaits = Math.round(Math.min(120, platums / 12));
+        var skaits = Math.round(Math.min(45, platums / 30));
         while (parslas.length < skaits) parslas.push(jaunaParsla(true));
         parslas.length = skaits;
     }
@@ -31,12 +31,43 @@
     function jaunaParsla(jebkurAugstums) {
         return {
             x: Math.random() * platums,
-            y: jebkurAugstums ? Math.random() * augstums : -10,
-            r: 1.5 + Math.random() * 2.5,
-            atr: 0.4 + Math.random() * 0.9,
+            y: jebkurAugstums ? Math.random() * augstums : -20,
+            r: 5 + Math.random() * 8,
+            atr: 0.4 + Math.random() * 0.8,
             sv: Math.random() * Math.PI * 2,
-            alfa: 0.5 + Math.random() * 0.5
+            rot: Math.random() * Math.PI,
+            rotAtr: (Math.random() - 0.5) * 0.02,
+            alfa: 0.6 + Math.random() * 0.4
         };
+    }
+
+    // Sešstaru sniegpārsla: stari ar diviem zariņu pāriem
+    function zimetParslu(p) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.beginPath();
+        for (var s = 0; s < 6; s++) {
+            ctx.moveTo(0, 0);
+            ctx.lineTo(0, -p.r);
+            for (var z = 1; z <= 2; z++) {
+                var y = -p.r * (0.3 + z * 0.22);
+                var g = p.r * (0.38 - z * 0.1);
+                ctx.moveTo(0, y);
+                ctx.lineTo(-g, y - g);
+                ctx.moveTo(0, y);
+                ctx.lineTo(g, y - g);
+            }
+            ctx.rotate(Math.PI / 3);
+        }
+        ctx.lineWidth = Math.max(1, p.r / 7);
+        ctx.lineCap = 'round';
+        // Gaiši zila pārsla ar ēnu, lai redzama arī uz gaišā fona
+        ctx.strokeStyle = 'rgba(205, 220, 236, ' + p.alfa + ')';
+        ctx.shadowColor = 'rgba(60, 80, 110, 0.6)';
+        ctx.shadowBlur = 3;
+        ctx.stroke();
+        ctx.restore();
     }
 
     var pedejais = 0;
@@ -49,17 +80,12 @@
             p.y += p.atr * dt;
             p.sv += 0.01 * dt;
             p.x += Math.sin(p.sv) * 0.4 * dt;
-            if (p.y > augstums + 5 || p.x < -10 || p.x > platums + 10) {
+            p.rot += p.rotAtr * dt;
+            if (p.y > augstums + 20 || p.x < -20 || p.x > platums + 20) {
                 parslas[i] = jaunaParsla(false);
                 continue;
             }
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            // Gaiši zila pārsla ar ēnu, lai redzama arī uz gaišā fona
-            ctx.fillStyle = 'rgba(205, 220, 236, ' + p.alfa + ')';
-            ctx.shadowColor = 'rgba(60, 80, 110, 0.55)';
-            ctx.shadowBlur = 4;
-            ctx.fill();
+            zimetParslu(p);
         }
         requestAnimationFrame(kadrs);
     }
