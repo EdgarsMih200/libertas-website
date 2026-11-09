@@ -346,15 +346,91 @@ footer a {
     color: var(--primary-bordo);
 }
 
+/* Materiālu saraksts: kartītes */
+.materials-virsraksts {
+    margin-bottom: 12px;
+}
+
+.materials-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.material-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.material-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.material-vaks {
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #fff;
+    text-decoration: none;
+}
+
+.material-vaks--ziemassvetki {
+    background: linear-gradient(135deg, var(--primary-bordo), #2F5D3A);
+}
+
+.material-ikona {
+    font-size: 56px;
+    line-height: 1;
+}
+
+.material-vaks-teksts {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    font-style: italic;
+}
+
+.material-card .materials-birka {
+    align-self: flex-start;
+    margin-bottom: 10px;
+}
+
+.material-apraksts {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 12px;
+}
+
+.material-saturs {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.material-saturs li {
+    font-size: 13px;
+    background: var(--bg-warm-light);
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    padding: 3px 10px;
+}
+
+/* Viena materiāla lapa */
+.materials-atpakal {
+    display: inline-block;
+    font-size: 15px;
+    text-decoration: none !important;
+}
+
 .materials-galva {
-    margin-top: 30px;
+    margin-top: 16px;
     text-align: center;
 }
 
-.materials-galva h2 {
-    border-top: none;
-    margin-top: 8px;
-    padding-top: 0;
+.materials-galva .section-title {
+    margin-top: 10px;
 }
 
 .materials-birka {
@@ -509,6 +585,7 @@ footer a {
     .materials-druka,
     .runat-poga,
     .materials-cta,
+    .materials-atpakal,
     .empanadillo {
         display: none !important;
     }

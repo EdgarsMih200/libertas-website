@@ -16,7 +16,8 @@ Short reference so work can start without re-reading every file.
 |---|---|
 | `index.html` | Home: header/nav, hero (with seasonal `p.svetku-sveiciens`) with CTA box, course grid (`#kursi`), footer |
 | `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
-| `materiali.html` + `materiali.js` | "Noderīgi materiāli" (in menu): free learning materials. Currently one unit: **Spāņu A1 — Ziemassvētki** (`#navidad`): vocab grid, phrases, grammar (articles, plural, *querer*), dialogue, Spanish traditions, exercises with `<details>` answers, print button. `materiali.js` adds 🔊 buttons (Web Speech, es-ES) to every `[data-es]` element |
+| `materiali.html` | "Noderīgi materiāli" (in menu): card grid (`.courses-grid.materials-grid` of `article.course-card.material-card`). **Adding a material** = new page `materiali-<valoda>-<tēma>.html` + copy one card (cover `.material-vaks` with a `--<tēma>` gradient modifier, `.materials-birka` tag, `.material-apraksts`, `.material-saturs` chips, `.btn-card` link) |
+| `materiali-spanu-ziemassvetki.html` + `materiali.js` | Material **Spāņu A1 — Ziemassvētki**: vocab grid, phrases, grammar (articles, plural, *querer*), dialogue, Spanish traditions, exercises with `<details>` answers, print button, "← Visi materiāli" back link. `materiali.js` (reusable on any material page) adds 🔊 buttons (Web Speech, es-ES) to every `[data-es]` element |
 | `script.js` | Shared JS (see below) |
 | `snow.js` | Home page only: falling, rotating six-armed snowflakes canvas (`.snow-canvas`) in Nov/Dec/Jan/Feb; skipped with `prefers-reduced-motion`; force with `?sniegs=1`. In Nov/Dec (or with `?sniegs=1`) it also adds `html.ziemassvetki` (turns on the Christmas styling) |
 | `zvani.js` | Home page only (Nov/Dec): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
@@ -74,7 +75,7 @@ Adding/changing a course means editing `index.html` (`article.course-card` with 
   `.course-price`, `.course-info`, `.btn-card`
 - SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
-- MATERIĀLU LAPA: `.materials-galva`, `.materials-birka`, `.vardu-saraksts` (`.es`/`.lv`), `.art-el`/`.art-la` (gender colours), `.runat-poga`, `.dialogs`, `.atbildes`, `.tradiciju-saraksts`, `.uzdevums`, `.materials-cta`, `@media print`; active nav link via `aria-current="page"`
+- MATERIĀLU LAPA: cards `.material-card`, `.material-vaks(--ziemassvetki)`, `.material-ikona`, `.material-apraksts`, `.material-saturs`; material page `.materials-atpakal`, `.materials-galva`, `.materials-birka`, `.vardu-saraksts` (`.es`/`.lv`), `.art-el`/`.art-la` (gender colours), `.runat-poga`, `.dialogs`, `.atbildes`, `.tradiciju-saraksts`, `.uzdevums`, `.materials-cta`, `@media print`; active nav link via `aria-current="page"`
 - KĀJENE: `footer`
 - SNIEGS (end of file): `.snow-canvas` (fixed, `pointer-events: none`, z-index 1000)
 - EMPANADILLO (end of file): `.empanadillo`, `.empa-poga`, `.empa-burbulis`, `.empa-aizvert`, `.empa-roka`, `.empa-acis`, `.empa-cepure`
