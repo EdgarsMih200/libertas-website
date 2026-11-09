@@ -2,6 +2,9 @@
 .gitignore
 .assetsignore
 .wrangler
+.claude
 node_modules
 wrangler.jsonc
 README.md
+context.md
+CLAUDE.md
