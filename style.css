@@ -341,6 +341,189 @@ footer a {
     border-radius: 3px;
 }
 
+/* MATERIĀLU LAPA (materiali.html) */
+.main-nav a[aria-current="page"] {
+    color: var(--primary-bordo);
+}
+
+.materials-galva {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.materials-galva h2 {
+    border-top: none;
+    margin-top: 8px;
+    padding-top: 0;
+}
+
+.materials-birka {
+    display: inline-block;
+    background: var(--primary-bordo);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
+.materials-druka {
+    margin: 4px 0 24px;
+    cursor: pointer;
+    font: inherit;
+}
+
+.vardu-saraksts {
+    list-style: none;
+    padding: 0 !important;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 10px;
+}
+
+.vardu-saraksts li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 8px;
+    margin: 0;
+    padding: 10px 12px;
+    background: var(--bg-warm-light);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+}
+
+.vardu-saraksts .es {
+    font-weight: 600;
+}
+
+.vardu-saraksts .lv {
+    flex-basis: 100%;
+    color: #555;
+    font-size: 15px;
+}
+
+.art-el,
+.art-la {
+    font-weight: 700;
+}
+
+.art-el {
+    color: #1F5FA8;
+}
+
+.art-la {
+    color: var(--primary-bordo);
+}
+
+.materials-piezime {
+    font-size: 15px;
+    color: #555;
+    margin-top: 10px;
+}
+
+.runat-poga {
+    border: 1px solid var(--border-light);
+    background: var(--bg-card);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    margin-right: 6px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+.runat-poga:hover,
+.runat-poga:focus-visible {
+    border-color: var(--primary-bordo);
+}
+
+.dialogs {
+    background: var(--bg-warm-light);
+    border-left: 4px solid var(--primary-bordo);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+}
+
+.dialogs p {
+    margin-bottom: 6px;
+}
+
+.atbildes {
+    margin: 4px 0 16px;
+}
+
+.atbildes summary {
+    cursor: pointer;
+    color: var(--primary-bordo);
+    font-weight: 600;
+}
+
+.atbildes p {
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--bg-warm-light);
+    border-radius: 8px;
+}
+
+.tradiciju-saraksts {
+    list-style: none;
+    padding: 0 !important;
+}
+
+.tradiciju-saraksts li {
+    margin-bottom: 12px;
+}
+
+.tradiciju-saraksts .datums {
+    display: inline-block;
+    min-width: 72px;
+    font-weight: 700;
+    color: var(--primary-bordo);
+}
+
+.uzdevums {
+    padding-left: 22px;
+    margin-bottom: 8px;
+}
+
+.uzdevums li {
+    margin-bottom: 4px;
+}
+
+.materials-cta {
+    margin-top: 36px;
+    text-align: center;
+    font-weight: 600;
+}
+
+@media print {
+    .site-header,
+    footer,
+    .legal-toc,
+    .materials-druka,
+    .runat-poga,
+    .materials-cta,
+    .empanadillo {
+        display: none !important;
+    }
+
+    .register-card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .atbildes {
+        break-inside: avoid;
+    }
+}
+
 /* KĀJENE */
 footer {
     background: var(--primary-bordo);
