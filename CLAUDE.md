@@ -11,5 +11,8 @@
 3. **Push after each completed stage.** When a stage of work is done, commit with a clear message and
    `git push origin main`. The user has authorized this. Pushing to `main` deploys the live site through Cloudflare,
    so don't push half-finished or broken work. Commit only files that belong to the stage.
+3a. **Safety copies.** Every pushed commit is a restore point on GitHub. Before a large or risky change
+   (redesign, deleting/renaming pages, restructuring), first create and push a backup tag:
+   `git tag backup-YYYY-MM-DD-<short-name> && git push origin --tags`. Never use force-push or rewrite history.
 4. New non-site files (notes, tooling) must be added to `.assetsignore` so they aren't published.
 5. Keep answers short. Show diffs or summaries, not whole files.
