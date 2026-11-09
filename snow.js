@@ -62,8 +62,8 @@
         }
         ctx.lineWidth = Math.max(1, p.r / 7);
         ctx.lineCap = 'round';
-        // Gaiši zila pārsla ar ēnu, lai redzama arī uz gaišā fona
-        ctx.strokeStyle = 'rgba(205, 220, 236, ' + p.alfa + ')';
+        // Balta pārsla ar ēnu, lai redzama arī uz gaišā fona
+        ctx.strokeStyle = 'rgba(255, 255, 255, ' + p.alfa + ')';
         ctx.shadowColor = 'rgba(60, 80, 110, 0.6)';
         ctx.shadowBlur = 3;
         ctx.stroke();
