@@ -24,6 +24,34 @@
     <!-- Hero Sadaļa -->
     <section class="hero-section">
         <div class="hero-overlay"></div>
+        <!-- Ziemassvētku zvaniņi uz egles zariem (redzami nov./dec.); uzbraucot ar peli, tie zvana (zvani.js) -->
+        <svg class="zvana-defs" aria-hidden="true" focusable="false">
+            <defs>
+                <linearGradient id="zvana-zelts" x1="0" x2="1">
+                    <stop offset="0" stop-color="#9C7418"/>
+                    <stop offset=".35" stop-color="#F6D879"/>
+                    <stop offset=".6" stop-color="#D4A537"/>
+                    <stop offset="1" stop-color="#8A6512"/>
+                </linearGradient>
+                <symbol id="zvana-forma" viewBox="0 0 40 70">
+                    <line x1="20" y1="0" x2="20" y2="24" stroke="#C9A24A" stroke-width="1.2"/>
+                    <path d="M20 22 C14 16 9 18 11 22 C13 25 17 24 20 22Z M20 22 C26 16 31 18 29 22 C27 25 23 24 20 22Z" fill="#B3261E"/>
+                    <circle cx="20" cy="22.5" r="2.2" fill="#8E1C17"/>
+                    <path d="M20 24 C27 24 30 31 30.5 42 C31 50 33 54 37 57 L3 57 C7 54 9 50 9.5 42 C10 31 13 24 20 24Z" fill="url(#zvana-zelts)" stroke="#8A6512" stroke-width="1"/>
+                    <rect x="2.5" y="55.5" width="35" height="4" rx="2" fill="#B8891F" stroke="#8A6512" stroke-width=".8"/>
+                    <path d="M14 30 C12 36 12 44 12 50" stroke="#FFF3C4" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/>
+                    <circle cx="20" cy="63" r="4" fill="#B8891F" stroke="#8A6512" stroke-width=".8"/>
+                </symbol>
+            </defs>
+        </svg>
+        <div class="zvanu-zars zvanu-zars-k" aria-hidden="true">
+            <span class="zvans zvans-1" data-nots="1046.5"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+            <span class="zvans zvans-2" data-nots="1318.5"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+        </div>
+        <div class="zvanu-zars zvanu-zars-l" aria-hidden="true">
+            <span class="zvans zvans-1" data-nots="1174.7"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+            <span class="zvans zvans-2" data-nots="1568"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+        </div>
         <div class="container hero-container">
             <div class="hero-text">
                 <p class="svetku-sveiciens">Priecīgus Ziemassvētkus!</p>
@@ -100,5 +128,6 @@
 
     <script src="script.js"></script>
     <script src="snow.js"></script>
+    <script src="zvani.js"></script>
 </body>
 </html>

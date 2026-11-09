@@ -965,7 +965,81 @@ html.ziemassvetki footer::before {
     filter: drop-shadow(0 -2px 2px rgba(0, 0, 0, 0.06));
 }
 
+/* Zelta zvaniņi uz egles zariem (pozīcijas % no zara attēla zars.svg 260x150) */
+.zvana-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+.zvanu-zars {
+    display: none;
+}
+
+html.ziemassvetki .zvanu-zars {
+    display: block;
+    position: absolute;
+    top: 0;
+    width: 250px;
+    height: 144px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+html.ziemassvetki .zvanu-zars-k {
+    left: 0;
+}
+
+html.ziemassvetki .zvanu-zars-l {
+    right: 0;
+    transform: scaleX(-1);
+}
+
+.zvans {
+    position: absolute;
+    width: 10%;
+    margin-left: -5%;
+    aspect-ratio: 40 / 70;
+    transform-origin: 50% 0;
+    pointer-events: auto;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
+}
+
+.zvans svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.zvans-1 {
+    left: 31.9%;
+    top: 14.4%;
+}
+
+.zvans-2 {
+    left: 87.7%;
+    top: 41%;
+}
+
+/* Zvans šūpojas, kad zvani.js pievieno klasi .zvana */
+.zvans.zvana {
+    animation: zvans-supojas 1.2s ease-out;
+}
+
+@keyframes zvans-supojas {
+    0% { transform: rotate(0deg); }
+    12% { transform: rotate(22deg); }
+    30% { transform: rotate(-18deg); }
+    48% { transform: rotate(12deg); }
+    66% { transform: rotate(-7deg); }
+    84% { transform: rotate(3deg); }
+    100% { transform: rotate(0deg); }
+}
+
 @media (max-width: 768px) {
+    html.ziemassvetki .zvanu-zars,
     html.ziemassvetki .hero-section::before,
     html.ziemassvetki .hero-section::after {
         width: 170px;
@@ -977,7 +1051,8 @@ html.ziemassvetki footer::before {
     html.ziemassvetki .site-header::before,
     html.ziemassvetki .site-header::after,
     html.ziemassvetki .cta-bantite:hover .cilpa,
-    html.ziemassvetki .cta-bantite:hover .lente {
+    html.ziemassvetki .cta-bantite:hover .lente,
+    .zvans.zvana {
         animation: none;
     }
 }

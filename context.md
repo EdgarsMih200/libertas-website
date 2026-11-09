@@ -18,6 +18,7 @@ Short reference so work can start without re-reading every file.
 | `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
 | `script.js` | Shared JS (see below) |
 | `snow.js` | Home page only: falling, rotating six-armed snowflakes canvas (`.snow-canvas`) in Nov/Dec/Jan/Feb; skipped with `prefers-reduced-motion`; force with `?sniegs=1`. In Nov/Dec (or with `?sniegs=1`) it also adds `html.ziemassvetki` (turns on the Christmas styling) |
+| `zvani.js` | Home page only (Nov/Dec): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
 | `style.css` | Shared styles (see sections below) |
 | `assets/` | `libertas.png` (logo), `ziemassvetki/` (Christmas decorations: `zars.svg` pine branch, `ilekss.svg` holly, `bumba.svg` bauble), `spain-a1.png`, `english-a1.jpg` (course images) |
 | `konts.html` + `konts.js` | "Mani kursi": own profile (phone editable), own enrollments, cancel while `pieteicies` |
@@ -73,7 +74,7 @@ Adding/changing a course means editing `index.html` (`article.course-card` with 
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
 - KĀJENE: `footer`
 - SNIEGS (end of file): `.snow-canvas` (fixed, `pointer-events: none`, z-index 1000)
-- ZIEMASSVĒTKU NOFORMĒJUMS (end of file): all rules under `html.ziemassvetki` (Nov/Dec, home page only). Vars `--xmas-green`, `--xmas-green-dark`, `--xmas-gold`, `--xmas-red`, `--xmas-blue`. Header light string (`.site-header::before/::after`, twinkle), pine branches in hero corners, `.svetku-sveiciens` greeting pill above the hero `h1` (hidden outside season), CTA box as a gift with an inline-SVG bow `span.cta-bantite` in `index.html` (loops `.cilpa-k`/`.cilpa-l` flap on hover), baubles beside `.section-title`, gold top + holly on `.course-card`, snow-capped `footer`
+- ZIEMASSVĒTKU NOFORMĒJUMS (end of file): all rules under `html.ziemassvetki` (Nov/Dec, home page only). Vars `--xmas-green`, `--xmas-green-dark`, `--xmas-gold`, `--xmas-red`, `--xmas-blue`. Header light string (`.site-header::before/::after`, twinkle), pine branches in hero corners with golden bells (`.zvanu-zars-k`/`-l` containers sized like the branch, bell SVG `<symbol id="zvana-forma">` in `index.html`), `.svetku-sveiciens` greeting pill above the hero `h1` (hidden outside season), CTA box as a gift with an inline-SVG bow `span.cta-bantite` in `index.html` (loops `.cilpa-k`/`.cilpa-l` flap on hover), baubles beside `.section-title`, gold top + holly on `.course-card`, snow-capped `footer`
 - RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet)
 
 ## Conventions
