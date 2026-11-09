@@ -1056,3 +1056,155 @@ html.ziemassvetki .zvanu-zars-l {
         animation: none;
     }
 }
+
+/* EMPANADILLO — talismans lapas stūrī (skat. empanadillo.js) */
+.empanadillo {
+    position: fixed;
+    right: 20px;
+    bottom: 16px;
+    z-index: 1001;
+    transform: translateY(140%);
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.empanadillo.ieradies {
+    transform: translateY(0);
+}
+
+.empa-poga {
+    display: block;
+    width: 110px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    animation: empa-supojas 3s ease-in-out infinite;
+}
+
+.empa-poga:focus-visible {
+    outline: 3px solid var(--primary-bordo);
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+.empa-poga svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.empa-roka {
+    transform-box: view-box;
+    transform-origin: 104px 62px;
+}
+
+.empanadillo.maj .empa-roka {
+    animation: empa-maj 0.4s ease-in-out 4;
+}
+
+.empa-acis {
+    transform-box: view-box;
+    transform-origin: 60px 50px;
+    animation: empa-mirkskina 4.5s infinite;
+}
+
+.empa-cepure {
+    display: none;
+}
+
+html.ziemassvetki .empa-cepure {
+    display: inline;
+}
+
+.empa-burbulis {
+    position: absolute;
+    right: 70px;
+    bottom: 100%;
+    margin-bottom: 4px;
+    width: max-content;
+    max-width: 240px;
+    background: var(--bg-card);
+    color: var(--text-dark);
+    border: 2px solid var(--primary-bordo);
+    border-radius: 16px 16px 4px 16px;
+    padding: 12px 30px 12px 14px;
+    font-size: 15px;
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    animation: empa-burbulis-paradas 0.3s ease-out;
+}
+
+.empa-burbulis[hidden] {
+    display: none;
+}
+
+.empa-burbulis b {
+    color: var(--primary-bordo);
+}
+
+.empa-aizvert {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border: 0;
+    background: none;
+    color: #888;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.empa-aizvert:hover {
+    color: var(--primary-bordo);
+}
+
+@keyframes empa-supojas {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-5px) rotate(-2deg); }
+}
+
+@keyframes empa-maj {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-30deg); }
+}
+
+@keyframes empa-mirkskina {
+    0%, 94%, 100% { transform: scaleY(1); }
+    97% { transform: scaleY(0.1); }
+}
+
+@keyframes empa-burbulis-paradas {
+    from { opacity: 0; transform: translateY(8px) scale(0.95); }
+    to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 768px) {
+    .empanadillo {
+        right: 10px;
+        bottom: 10px;
+    }
+
+    .empa-poga {
+        width: 76px;
+    }
+
+    .empa-burbulis {
+        right: 40px;
+        max-width: 200px;
+        font-size: 14px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .empanadillo,
+    .empa-poga,
+    .empa-acis,
+    .empanadillo.maj .empa-roka,
+    .empa-burbulis {
+        animation: none;
+        transition: none;
+    }
+}
