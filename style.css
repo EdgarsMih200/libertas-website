@@ -855,16 +855,64 @@ html.ziemassvetki .hero-cta-box {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 0 6px rgba(212, 165, 55, 0.12);
 }
 
-html.ziemassvetki .hero-cta-box::before {
-    content: "";
+.cta-bantite {
+    display: none;
+}
+
+html.ziemassvetki .cta-bantite {
+    display: block;
     position: absolute;
     top: -36px;
     left: 50%;
     width: 96px;
     height: 56px;
     transform: translateX(-50%);
-    background: url("assets/ziemassvetki/bantite.svg") center / contain no-repeat;
     filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
+    cursor: pointer;
+    z-index: 2;
+}
+
+.cta-bantite svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* Cilpas un lentes griežas ap mezglu (60, 32) */
+.cta-bantite .cilpa,
+.cta-bantite .lente {
+    transform-box: view-box;
+    transform-origin: 60px 32px;
+}
+
+/* Uzbraucot ar peli, lielās cilpas plivinās kā spārni */
+html.ziemassvetki .cta-bantite:hover .cilpa-k {
+    animation: cilpa-kreisa 0.45s ease-in-out infinite;
+}
+
+html.ziemassvetki .cta-bantite:hover .cilpa-l {
+    animation: cilpa-laba 0.45s ease-in-out infinite;
+}
+
+html.ziemassvetki .cta-bantite:hover .lente {
+    animation: lente-sups 0.9s ease-in-out infinite;
+}
+
+@keyframes cilpa-kreisa {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(24deg) scale(0.88, 0.8); }
+}
+
+@keyframes cilpa-laba {
+    0%, 100% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(-24deg) scale(0.88, 0.8); }
+}
+
+@keyframes lente-sups {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(6deg); }
+    75% { transform: rotate(-6deg); }
 }
 
 /* Virsraksts ar eglītes bumbām abās pusēs */
@@ -927,7 +975,9 @@ html.ziemassvetki footer::before {
 
 @media (prefers-reduced-motion: reduce) {
     html.ziemassvetki .site-header::before,
-    html.ziemassvetki .site-header::after {
+    html.ziemassvetki .site-header::after,
+    html.ziemassvetki .cta-bantite:hover .cilpa,
+    html.ziemassvetki .cta-bantite:hover .lente {
         animation: none;
     }
 }
