@@ -735,3 +735,25 @@ body {
     pointer-events: none;
     z-index: 1000;
 }
+
+/* ZIEMAS EGLĪTE virs "R" sākumlapas virsrakstā (redzama, kad snow.js pievieno html.ziema) */
+.r-egle {
+    position: relative;
+    display: inline-block;
+}
+
+.r-egle::before {
+    content: none;
+    position: absolute;
+    left: 50%;
+    bottom: 1.02em;
+    width: 0.7em;
+    height: 0.91em;
+    transform: translateX(-50%);
+    background: url("assets/egle.svg") center / contain no-repeat;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+html.ziema .r-egle::before {
+    content: "";
+}
