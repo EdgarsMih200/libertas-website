@@ -1,6 +1,6 @@
 /* EMPANADILLO — Libertas talismans (maza pikseļu stila empanada), kas sveicina apmeklētājus.
    Stūrī lapas apakšā; pirmajā apmeklējumā sesijā pats pasaka sveicienu.
-   Klikšķis uz viņa — nākamā frāze. Nov./dec. (html.ziemassvetki) viņam ir Ziemassvētku cepure, bet 5. decembrī — ballītes cepure. */
+   Klikšķis uz viņa — pastāsta savu pildījumu (katram apmeklētājam savu), tad nākamās frāzes. Nov./dec. (html.ziemassvetki) viņam ir Ziemassvētku cepure, bet 5. decembrī — ballītes cepure. */
 (function () {
     var svetki = document.documentElement.classList.contains('ziemassvetki');
     // 5. decembrī (saimnieka dzimšanas diena) — ballītes cepure Ziemassvētku cepures vietā.
@@ -155,9 +155,45 @@
         burbulis.hidden = true;
     }
 
+    // Pildījums: katram apmeklētājam savs. Pieteicies lietotājs — pēc lietotāja id (vienmēr tas pats),
+    // citiem — nejauši izvēlēts un atcerēts šajā pārlūkā (localStorage).
+    var PILDIJUMI = [
+        ['carne', 'sulīga liellopu gaļa ar sīpoliem un olīvām'],
+        ['pollo', 'vista ar sarkano papriku'],
+        ['jamón y queso', 'šķiņķis un kūstošs siers'],
+        ['espinaca', 'spināti ar rikotas sieru'],
+        ['humita', 'saldā kukurūza ar baltu mērci'],
+        ['atún', 'tunzivs ar tomātiem un olu'],
+        ['champiñones', 'sēnes ar sieru un ķiplokiem'],
+        ['dulce de leche', 'saldais karamelizētais piena krēms']
+    ];
+
+    function pildijumaNr() {
+        var me = window.LIB && window.LIB.me;
+        var id = me && me.user && (me.user.id || me.user.email);
+        if (id) {
+            var h = 0;
+            String(id).split('').forEach(function (c) { h = (h * 31 + c.charCodeAt(0)) >>> 0; });
+            return h % PILDIJUMI.length;
+        }
+        var nr = null;
+        try { nr = parseInt(localStorage.getItem('empaPildijums'), 10); } catch (e) {}
+        if (!(nr >= 0 && nr < PILDIJUMI.length)) {
+            nr = Math.floor(Math.random() * PILDIJUMI.length);
+            try { localStorage.setItem('empaPildijums', String(nr)); } catch (e) {}
+        }
+        return nr;
+    }
+
+    function pildijumaFraze() {
+        var p = PILDIJUMI[pildijumaNr()];
+        return 'Gribi zināt, kas man iekšā? Tev es esmu <b>empanada de ' + p[0] + '</b>: ' + p[1] + '!';
+    }
+
+    // Klikšķis: vispirms pastāsta savu pildījumu, tad pārējās frāzes pa kārtai
     poga.addEventListener('click', function () {
-        runat(frazes[nakama]);
-        nakama = (nakama + 1) % frazes.length;
+        runat(nakama === 0 ? pildijumaFraze() : frazes[nakama - 1]);
+        nakama = (nakama + 1) % (frazes.length + 1);
     });
     poga.addEventListener('mouseenter', maj);
     wrap.querySelector('.empa-aizvert').addEventListener('click', kluset);
