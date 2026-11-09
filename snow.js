@@ -5,8 +5,10 @@
     var ziema = menesis === 10 || menesis === 11 || menesis === 0 || menesis === 1;
     var piespiedu = /[?&]sniegs=1\b/.test(location.search);
     if (!ziema && !piespiedu) return;
-    // Klase ziemas rotājumiem (piem., eglīte virs "R" virsrakstā)
-    document.documentElement.classList.add('ziema');
+    // Klase ziemassvētku rotājumiem (eglīte virs "R" virsrakstā) — tikai novembrī un decembrī
+    if (menesis === 10 || menesis === 11 || piespiedu) {
+        document.documentElement.classList.add('ziemassvetki');
+    }
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var canvas = document.createElement('canvas');

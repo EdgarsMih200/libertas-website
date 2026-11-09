@@ -736,7 +736,7 @@ body {
     z-index: 1000;
 }
 
-/* ZIEMAS EGLĪTE virs "R" sākumlapas virsrakstā (redzama, kad snow.js pievieno html.ziema) */
+/* ZIEMAS EGLĪTE virs "R" sākumlapas virsrakstā (tikai nov. un dec.: snow.js pievieno html.ziemassvetki) */
 .r-egle {
     position: relative;
     display: inline-block;
@@ -754,6 +754,6 @@ body {
     filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
 }
 
-html.ziema .r-egle::before {
+html.ziemassvetki .r-egle::before {
     content: "";
 }
