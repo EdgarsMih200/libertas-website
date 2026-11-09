@@ -236,7 +236,7 @@ body {
     border-radius: 8px;
 }
 
-/* REĢISTRĀCIJA */
+/* SATURA KARTĪTE */
 .register-section {
     padding: 60px 20px;
 }
@@ -259,90 +259,6 @@ body {
     text-align: center;
     color: #555;
     margin-bottom: 30px;
-}
-
-.register-form {
-    display: flex;
-    flex-direction: column;
-}
-
-.register-form label {
-    display: block;
-    font-weight: 600;
-    font-size: 14px;
-    margin: 14px 0 6px;
-}
-
-.register-form input[type="text"],
-.register-form input[type="email"],
-.register-form input[type="tel"],
-.register-form select,
-.register-form textarea {
-    width: 100%;
-    padding: 12px 14px;
-    font: inherit;
-    font-size: 15px;
-    color: var(--text-dark);
-    background: var(--bg-warm-light);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.register-form input:focus,
-.register-form select:focus,
-.register-form textarea:focus {
-    outline: none;
-    border-color: var(--primary-bordo);
-    box-shadow: 0 0 0 3px rgba(107, 29, 29, 0.12);
-}
-
-.register-form textarea {
-    resize: vertical;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.optional {
-    font-weight: 400;
-    color: #888;
-}
-
-.register-form .checkbox {
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    font-weight: 400;
-    margin-top: 20px;
-}
-
-.register-form .checkbox input {
-    margin-top: 4px;
-    accent-color: var(--primary-bordo);
-}
-
-.btn-submit {
-    margin-top: 24px;
-    padding: 16px;
-    width: 100%;
-}
-
-.register-done {
-    text-align: center;
-}
-
-.register-done h2 {
-    font-family: var(--font-heading);
-    color: var(--primary-bordo);
-    margin-bottom: 10px;
-}
-
-.register-done p {
-    margin-bottom: 24px;
 }
 
 /* KĀJENE */
@@ -371,10 +287,5 @@ footer {
 
     .register-card {
         padding: 24px;
-    }
-
-    .form-row {
-        grid-template-columns: 1fr;
-        gap: 0;
     }
 }

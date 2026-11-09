@@ -15,9 +15,8 @@ Short reference so work can start without re-reading every file.
 | File | Purpose |
 |---|---|
 | `index.html` | Home: header/nav, hero with CTA box, course grid (`#kursi`), footer |
-| `registracija.html` | Course sign-up form (`#registerForm`) + thank-you block (`#registerDone`) |
-| `script.js` | Shared JS for both pages (see below) |
-| `style.css` | Shared styles for both pages (see sections below) |
+| `script.js` | Shared JS (see below) |
+| `style.css` | Shared styles (see sections below) |
 | `assets/` | `libertas.png` (logo), `spain-a1.png`, `english-a1.jpg` (course images) |
 | `wrangler.jsonc` | Cloudflare deploy config |
 | `.assetsignore` | Files NOT published to the live site (add any new non-site files here) |
@@ -25,28 +24,23 @@ Short reference so work can start without re-reading every file.
 
 ## Shared page skeleton (both pages)
 `header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Kursi, Par mums); the logo links to `index.html` (no separate "Sākums" item),
-(no register button in the header; sign-up is reached from the hero and course cards). Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
+(no register button in the header). Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
 Header/footer are duplicated in each HTML file: **change both pages** when editing them.
 
 Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) was removed from the menu.
 
-## Courses (single source of truth = 3 places, keep in sync)
+## Courses
 | id | Name | Price | Schedule | Image |
 |---|---|---|---|---|
 | `spain-a1` | Spāņu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, otrdienās un ceturtdienās | `assets/spain-a1.png` |
 | `english-a1` | Angļu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, pirmdienās un trešdienās | `assets/english-a1.jpg` |
 
-Adding/changing a course means editing:
-1. `index.html`: `article.course-card` in `.courses-grid`, link `registracija.html?course=<id>`
-2. `registracija.html`: `<option value="<id>">` in `select#course`
-3. `script.js`: `COURSE_NAMES` map
+Adding/changing a course means editing `index.html`: `article.course-card` in `.courses-grid`.
+Registration was removed on 2026-11-10 (restore point: tag `backup-2026-11-10-remove-registration`).
+The hero "REĢISTRĒTIES" and course "Pieteikties kursam" buttons now have `href="#"` and show a "coming soon" alert.
 
 ## script.js
-- `REGISTRATION_EMAIL`: recipient for applications. **Currently empty `''`.** Must be set before the form is useful.
-- `COURSE_NAMES`: id → display name.
-- `#exploreBtn` (hero button): shows an alert only if its href is `#`/empty.
-- Registration form: preselects the course from `?course=` and on submit builds a `mailto:` link
-  (subject "Pieteikums kursam: …"), then hides the form and shows `#registerDone`. No backend.
+- Any `a.btn-cta` whose href is `#`/empty shows a "coming soon" alert instead of navigating.
 
 ## style.css (by section, line numbers approx.)
 - `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
@@ -56,11 +50,9 @@ Adding/changing a course means editing:
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
 - KURSU IZKĀRTOJUMS (l.175): `.courses-section`, `.section-title`, `.courses-grid`, `.course-card`, `.course-body`,
   `.course-price`, `.course-info`, `.btn-card`
-- REĢISTRĀCIJA (l.244): `.register-section`, `.register-card`, `.register-intro`, `.register-form`, `.form-row`,
-  `.optional`, `.checkbox`, `.btn-submit`, `.register-done`
-- KĀJENE (l.353): `footer`
-- RESPONSĪVAIS DIZAINS (l.362): `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet),
-  form rows become one column
+- SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card)
+- KĀJENE: `footer`
+- RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet)
 
 ## Conventions
 - UI text and code comments are in Latvian. Section comments in CSS are UPPERCASE Latvian (`/* KĀJENE */`).
@@ -68,7 +60,7 @@ Adding/changing a course means editing:
 - Images go in `assets/`. Prefer compressed `.jpg`/`.webp` (under ~200 KB).
 
 ## Known gaps / TODO
-- `REGISTRATION_EMAIL` empty, so the form opens the mail client with no recipient.
+- No sign-up/registration page (buttons show a "coming soon" alert).
 - `#par-mums` (About) and `#faq` (BJU) sections missing.
 - No mobile navigation (nav is hidden under 768px).
 - No favicon, meta description or Open Graph tags.
