@@ -1,4 +1,4 @@
-/* EMPANADILLO — Libertas talismans (maza empanada), kas sveicina apmeklētājus.
+/* EMPANADILLO — Libertas talismans (maza pikseļu stila empanada), kas sveicina apmeklētājus.
    Stūrī lapas apakšā; pirmajā apmeklējumā sesijā pats pasaka sveicienu.
    Klikšķis uz viņa — nākamā frāze. Nov./dec. (html.ziemassvetki) viņam ir Ziemassvētku cepure. */
 (function () {
@@ -14,57 +14,88 @@
         '¡Hasta luego! Uz tikšanos nodarbībās!'
     ];
 
-    // Gofrētā mala (repulgue) gar empanadas loku
-    function mala() {
+    // Pikseļu zīmējums: katrs burts = viena krāsa, "." = caurspīdīgs
+    var KRASAS = {
+        O: '#4A2810', D: '#A8652A', M: '#D9963F', L: '#F0BE62', H: '#FBE3A0', S: '#B8742E',
+        W: '#FFFFFF', K: '#2A1A10', P: '#E8796B', R: '#7A1A14', T: '#E0605A', F: '#8A5020',
+        X: '#B3261E', B: '#8E1C17', G: '#D6D6D6'
+    };
+    var KERMENIS = [
+        '..................................',
+        '..................................',
+        '..................................',
+        '............OOOOOOOOOO............',
+        '..........OOHLDHLLHDLLOO..........',
+        '........OODHLDHLDDLHDLLDOO........',
+        '.......OLDHLDHLDHHDLLDLLDLO.......',
+        '......OLDHLDHLLLLLLLLLDLLDMO......',
+        '.....OLDHLDLLLLLLLLLLLLDLLDMO.....',
+        '....OLDHLLHSSLLLLLLLLSSLLLMDMO....',
+        '...OLDHLLHHLLLLLLLLLLLLLLLMMDMO...',
+        '...ODHLDLLLLLLLLLLLLLLLLLLDMMDO...',
+        '..ODHLDLLLLLLLLLLLLLLLLLMMMDMMDO..',
+        '..OHLDLLLLLLLLLLLLLLLLLLMMMMDMMO..',
+        '.OOLDLLLLLLLLLLLLLMMLLLLMMMMMDMMO.',
+        'OLMOLLLLPPLLLLRMMMMRMLLMPPMMDMDMO.',
+        'OMDOLLLLLLLLMMMRRRRMMMMMMSDDDMMDO.',
+        '.OOMDLLSSLMMMMMRTTRMMMMDDDSDDDMMO.',
+        '.OMDMLLMMMMMMSMMRRMMDDSDDDDDDMDMO.',
+        '.ODMMMMMMMMMMMMMMDDDDDDDDDDDDMMDO.',
+        '..OODDDDDDDDDDDDDDDDDDDDDDDDDDOO..',
+        '....ODDDDDDDDDDDDDDDDDDDDDDDDO....',
+        '.....OOOOOFFFFOOOOOOFFFFOOOOO.....',
+        '.........OFFFFFO...OFFFFFO........',
+        '..........OOOOO.....OOOOO.........'
+    ];
+    var ACIS = [
+        '.WW........WW.',
+        'WKKW......WKKW',
+        'WHKW......WHKW',
+        'WKKW......WKKW',
+        '.WW........WW.'
+    ];
+    var ROKA_A = ['...OO.', '..OLLO', '..OLMO', '...OMO', '..OMMO', '.OMMO.', 'OMMO..'];
+    var ROKA_B = ['......OO', '.....OLLO', '.....OLMO', '....OMMO.', '...OMMO..', '..OMMO...', 'OMMMO....'];
+    var CEPURE = [
+        '...................OO..',
+        '..................OWWO.',
+        '...........OOOO..OWWWWO',
+        '........OOOXXXXOOOWGWO.',
+        '......OOXXXXXXXXXXBOO..',
+        '.....OXXXXXXXXXXXBBO...',
+        '....OXXXXXXXXXXXBBO....',
+        '...OXXXXXXXXXXXXBO.....',
+        '..OWWWWWWWWWWWWWWWO....',
+        '.OWWWWWWWWWWWWWWGGGO...',
+        '..OGGGGGGGGGGGGGGOO....',
+        '...OOOOOOOOOOOOOO......'
+    ];
+
+    // Pārvērš pikseļu rindas SVG taisnstūros (blakus esošus vienas krāsas pikseļus apvieno)
+    function pikseli(rindas, ox, oy) {
         var s = '';
-        var n = 15;
-        for (var i = 0; i <= n; i++) {
-            var a = Math.PI + (Math.PI * i) / n;
-            var x = 60 + 47 * Math.cos(a);
-            var y = 72 + 52 * Math.sin(a);
-            var rot = (a * 180) / Math.PI + 90;
-            s += '<ellipse cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" rx="5.2" ry="7.5" transform="rotate(' +
-                rot.toFixed(1) + ' ' + x.toFixed(1) + ' ' + y.toFixed(1) + ')"/>';
-        }
+        rindas.forEach(function (r, y) {
+            var x = 0;
+            while (x < r.length) {
+                var c = r[x];
+                var len = 1;
+                while (x + len < r.length && r[x + len] === c) len++;
+                if (c !== '.') {
+                    s += '<rect x="' + (x + ox) + '" y="' + (y + oy) + '" width="' + len + '" height="1" fill="' + KRASAS[c] + '"/>';
+                }
+                x += len;
+            }
+        });
         return s;
     }
 
     var svg =
-        '<svg viewBox="0 -14 124 106" aria-hidden="true" focusable="false">' +
-        '<defs><radialGradient id="empa-mikla" cx=".45" cy=".35" r=".75">' +
-        '<stop offset="0" stop-color="#F7CF7A"/><stop offset=".6" stop-color="#E3A64A"/><stop offset="1" stop-color="#BF7F2A"/>' +
-        '</radialGradient></defs>' +
-        '<ellipse cx="60" cy="88" rx="38" ry="4" fill="#000" opacity=".12"/>' +
-        // Kājas
-        '<ellipse cx="46" cy="82" rx="7" ry="4.5" fill="#A8692A"/><ellipse cx="74" cy="82" rx="7" ry="4.5" fill="#A8692A"/>' +
-        // Kreisā roka
-        '<path d="M16 64 Q4 66 3 76" stroke="#C98A35" stroke-width="6" fill="none" stroke-linecap="round"/>' +
-        '<circle cx="3" cy="77" r="4.5" fill="#E3A64A"/>' +
-        // Labā roka (māj)
-        '<g class="empa-roka"><path d="M104 62 Q116 56 118 42" stroke="#C98A35" stroke-width="6" fill="none" stroke-linecap="round"/>' +
-        '<circle cx="118" cy="40" r="5" fill="#E3A64A"/></g>' +
-        // Ķermenis
-        '<path d="M8 76 C8 40 30 18 60 18 C90 18 112 40 112 76 Q60 84 8 76Z" fill="url(#empa-mikla)" stroke="#A8692A" stroke-width="1.5"/>' +
-        '<g fill="#EDB75E" stroke="#B87A2E" stroke-width="1">' + mala() + '</g>' +
-        // Cepti plankumiņi
-        '<g fill="#B87A2E" opacity=".35"><ellipse cx="30" cy="66" rx="3" ry="2"/><ellipse cx="92" cy="68" rx="3.5" ry="2"/><ellipse cx="84" cy="36" rx="2.5" ry="1.6"/></g>' +
-        // Seja
-        '<g class="empa-acis">' +
-        '<ellipse cx="46" cy="50" rx="7" ry="8" fill="#fff"/><ellipse cx="74" cy="50" rx="7" ry="8" fill="#fff"/>' +
-        '<circle cx="47.5" cy="51.5" r="4.2" fill="#3A2416"/><circle cx="75.5" cy="51.5" r="4.2" fill="#3A2416"/>' +
-        '<circle cx="49" cy="49.5" r="1.5" fill="#fff"/><circle cx="77" cy="49.5" r="1.5" fill="#fff"/>' +
-        '</g>' +
-        '<path d="M39 40 Q45 36 51 39 M69 39 Q75 36 81 40" stroke="#7A4A22" stroke-width="2" fill="none" stroke-linecap="round"/>' +
-        '<ellipse cx="36" cy="62" rx="5.5" ry="3.5" fill="#E86A5C" opacity=".45"/><ellipse cx="84" cy="62" rx="5.5" ry="3.5" fill="#E86A5C" opacity=".45"/>' +
-        '<path d="M51 61 Q60 73 69 61 Q60 65 51 61Z" fill="#8E1C17"/>' +
-        '<path d="M55 66 Q60 70 65 66 Q60 64 55 66Z" fill="#E86A5C"/>' +
-        // Ziemassvētku cepure (redzama tikai nov./dec.)
-        '<g class="empa-cepure">' +
-        '<path d="M38 26 Q50 -8 96 -6 L82 22Z" fill="#B3261E"/>' +
-        '<path d="M60 8 Q74 -4 90 -5" stroke="#8E1C17" stroke-width="2" fill="none" opacity=".5"/>' +
-        '<rect x="34" y="18" width="52" height="11" rx="5.5" fill="#fff" transform="rotate(-8 60 23)"/>' +
-        '<circle cx="97" cy="-5" r="6" fill="#fff"/>' +
-        '</g>' +
+        '<svg viewBox="0 -6 39 31" shape-rendering="crispEdges" aria-hidden="true" focusable="false">' +
+        '<g class="empa-roka empa-roka-a">' + pikseli(ROKA_A, 29, 6) + '</g>' +
+        '<g class="empa-roka empa-roka-b">' + pikseli(ROKA_B, 29, 6) + '</g>' +
+        pikseli(KERMENIS, 0, 0) +
+        '<g class="empa-acis">' + pikseli(ACIS, 10, 11) + '</g>' +
+        '<g class="empa-cepure">' + pikseli(CEPURE, 6, -6) + '</g>' +
         '</svg>';
 
     var wrap = document.createElement('div');

@@ -1073,12 +1073,12 @@ html.ziemassvetki .zvanu-zars-l {
 
 .empa-poga {
     display: block;
-    width: 110px;
+    width: 88px;
     padding: 0;
     border: 0;
     background: none;
     cursor: pointer;
-    animation: empa-supojas 3s ease-in-out infinite;
+    animation: empa-supojas 1.6s steps(1) infinite;
 }
 
 .empa-poga:focus-visible {
@@ -1092,21 +1092,26 @@ html.ziemassvetki .zvanu-zars-l {
     width: 100%;
     height: auto;
     overflow: visible;
+    image-rendering: pixelated;
 }
 
-.empa-roka {
-    transform-box: view-box;
-    transform-origin: 104px 62px;
+/* Māšana: divi rokas kadri pārmaiņus (pikseļu stilā, bez griešanas) */
+.empa-roka-b {
+    visibility: hidden;
 }
 
-.empanadillo.maj .empa-roka {
-    animation: empa-maj 0.4s ease-in-out 4;
+.empanadillo.maj .empa-roka-a {
+    animation: empa-maj-a 0.36s steps(1) 4;
+}
+
+.empanadillo.maj .empa-roka-b {
+    animation: empa-maj-b 0.36s steps(1) 4;
 }
 
 .empa-acis {
     transform-box: view-box;
-    transform-origin: 60px 50px;
-    animation: empa-mirkskina 4.5s infinite;
+    transform-origin: 17px 13.5px;
+    animation: empa-mirkskina 4.5s steps(1) infinite;
 }
 
 .empa-cepure {
@@ -1119,19 +1124,19 @@ html.ziemassvetki .empa-cepure {
 
 .empa-burbulis {
     position: absolute;
-    right: 70px;
+    right: 56px;
     bottom: 100%;
     margin-bottom: 4px;
     width: max-content;
     max-width: 240px;
     background: var(--bg-card);
     color: var(--text-dark);
-    border: 2px solid var(--primary-bordo);
-    border-radius: 16px 16px 4px 16px;
+    border: 3px solid var(--primary-bordo);
+    border-radius: 4px;
     padding: 12px 30px 12px 14px;
     font-size: 15px;
     line-height: 1.4;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    box-shadow: 4px 4px 0 rgba(107, 29, 29, 0.25);
     animation: empa-burbulis-paradas 0.3s ease-out;
 }
 
@@ -1162,13 +1167,18 @@ html.ziemassvetki .empa-cepure {
 }
 
 @keyframes empa-supojas {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-5px) rotate(-2deg); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
 }
 
-@keyframes empa-maj {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(-30deg); }
+@keyframes empa-maj-a {
+    0% { visibility: hidden; }
+    50% { visibility: visible; }
+}
+
+@keyframes empa-maj-b {
+    0% { visibility: visible; }
+    50% { visibility: hidden; }
 }
 
 @keyframes empa-mirkskina {
@@ -1188,7 +1198,7 @@ html.ziemassvetki .empa-cepure {
     }
 
     .empa-poga {
-        width: 76px;
+        width: 64px;
     }
 
     .empa-burbulis {
@@ -1202,7 +1212,8 @@ html.ziemassvetki .empa-cepure {
     .empanadillo,
     .empa-poga,
     .empa-acis,
-    .empanadillo.maj .empa-roka,
+    .empanadillo.maj .empa-roka-a,
+    .empanadillo.maj .empa-roka-b,
     .empa-burbulis {
         animation: none;
         transition: none;
