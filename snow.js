@@ -1,8 +1,8 @@
-/* SNIEGS — krītošas sniegpārslas sākumlapā ziemas mēnešos (decembris, janvāris, februāris).
+/* SNIEGS — krītošas sniegpārslas sākumlapā no novembra līdz februārim (nov., dec., janv., febr.).
    Pārbaudei jebkurā mēnesī: index.html?sniegs=1 */
 (function () {
     var menesis = new Date().getMonth(); // 0 = janvāris
-    var ziema = menesis === 11 || menesis === 0 || menesis === 1;
+    var ziema = menesis === 10 || menesis === 11 || menesis === 0 || menesis === 1;
     var piespiedu = /[?&]sniegs=1\b/.test(location.search);
     if (!ziema && !piespiedu) return;
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
