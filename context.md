@@ -24,11 +24,11 @@ Short reference so work can start without re-reading every file.
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
 
 ## Shared page skeleton (both pages)
-`header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Sākums, Kursi, Par mums, BJU),
-`a.btn-cta.nav-btn` "Reģistrēties" → `registracija.html`. Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
+`header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Kursi, Par mums); the logo links to `index.html` (no separate "Sākums" item),
+(no register button in the header; sign-up is reached from the hero and course cards). Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
 Header/footer are duplicated in each HTML file: **change both pages** when editing them.
 
-Nav anchors `#par-mums` and `#faq` do **not exist yet** (planned sections).
+Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) was removed from the menu.
 
 ## Courses (single source of truth = 3 places, keep in sync)
 | id | Name | Price | Schedule | Image |
@@ -51,7 +51,7 @@ Adding/changing a course means editing:
 ## style.css (by section, line numbers approx.)
 - `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
   `--bg-card #FFF`, `--text-dark #2C2C2C`, `--border-light #E8E2D9`, `--font-heading Georgia`, `--font-body` system stack
-- NAVIGĀCIJA (l.37): `.site-header` (sticky), `.nav-wrapper`, `.logo img` (100px high), `.main-nav a`, `.nav-btn`
+- NAVIGĀCIJA (l.37): `.site-header` (sticky), `.nav-wrapper`, `.logo img` (100px high), `.main-nav a`
 - POGAS (l.79): `.btn-cta` (bordo), `.btn-large`, `.btn-secondary` (beige), `.btn-title`, `.btn-sub`
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
 - KURSU IZKĀRTOJUMS (l.175): `.courses-section`, `.section-title`, `.courses-grid`, `.course-card`, `.course-body`,
