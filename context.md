@@ -17,6 +17,7 @@ Short reference so work can start without re-reading every file.
 | `index.html` | Home: header/nav, hero with CTA box, course grid (`#kursi`), footer |
 | `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
 | `script.js` | Shared JS (see below) |
+| `snow.js` | Home page only: falling snow canvas (`.snow-canvas`) in Dec/Jan/Feb; skipped with `prefers-reduced-motion`; force with `?sniegs=1` |
 | `style.css` | Shared styles (see sections below) |
 | `assets/` | `libertas.png` (logo), `spain-a1.png`, `english-a1.jpg` (course images) |
 | `konts.html` + `konts.js` | "Mani kursi": own profile (phone editable), own enrollments, cancel while `pieteicies` |
@@ -71,6 +72,7 @@ Adding/changing a course means editing `index.html` (`article.course-card` with 
 - SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
 - KĀJENE: `footer`
+- SNIEGS (end of file): `.snow-canvas` (fixed, `pointer-events: none`, z-index 1000)
 - RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet)
 
 ## Conventions
