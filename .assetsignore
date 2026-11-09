@@ -8,3 +8,5 @@ wrangler.jsonc
 README.md
 context.md
 CLAUDE.md
+worker
+migrations

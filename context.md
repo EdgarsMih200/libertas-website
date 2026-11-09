@@ -19,7 +19,11 @@ Short reference so work can start without re-reading every file.
 | `script.js` | Shared JS (see below) |
 | `style.css` | Shared styles (see sections below) |
 | `assets/` | `libertas.png` (logo), `spain-a1.png`, `english-a1.jpg` (course images) |
-| `wrangler.jsonc` | Cloudflare deploy config |
+| `konts.html` + `konts.js` | "Mani kursi": own profile (phone editable), own enrollments, cancel while `pieteicies` |
+| `admin.html` + `admin.js` | Admin panel (users: data, last login/visit; enrollments: status, paid, notes, add/delete). noindex |
+| `worker/index.js` | Cloudflare Worker: Google OAuth, sessions, JSON API (runs first for `/api/*`, `/auth/*`) |
+| `migrations/` | D1 schema (`0001_init.sql`: users, sessions, courses, enrollments) |
+| `wrangler.jsonc` | Cloudflare config: worker `main`, assets, D1 `DB` (`libertas-db`), vars `ADMIN_EMAILS`, `GOOGLE_CLIENT_ID` |
 | `.assetsignore` | Files NOT published to the live site (add any new non-site files here) |
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
 
@@ -37,12 +41,24 @@ Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) wa
 | `spain-a1` | Spāņu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, otrdienās un ceturtdienās | `assets/spain-a1.png` |
 | `english-a1` | Angļu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, pirmdienās un trešdienās | `assets/english-a1.jpg` |
 
-Adding/changing a course means editing `index.html`: `article.course-card` in `.courses-grid`.
-Registration was removed on 2026-11-10 (restore point: tag `backup-2026-11-10-remove-registration`).
-The hero "REĢISTRĒTIES" and course "Pieteikties kursam" buttons now have `href="#"` and show a "coming soon" alert.
+Adding/changing a course means editing `index.html` (`article.course-card` with `data-course="<id>"` on its button)
+**and** inserting a row in the D1 `courses` table (new migration file).
+
+## Accounts, enrollment, admin (added 2026-11-10, restore point tag `backup-2026-11-10-before-google-auth`)
+- Sign-in: Google OAuth via `/auth/google?return=…` → `/auth/google/callback`; session cookie `lsid` (30 d, token hashed in D1).
+  `oauth_state` cookie during sign-in. Secret `GOOGLE_CLIENT_SECRET` set with `wrangler secret put` (not in repo).
+  If the client id/secret isn't configured, `/auth/google` shows a "being set up" page.
+- Admin = email in `ADMIN_EMAILS` var (`edza7112@gmail.com`).
+- Enrollment status values: `pieteicies` → `uznemts` → `sacis` → `pabeidzis`, or `atteicies`; plus `paid`/`paid_at`/`notes`.
+- `last_seen_at` ("last visit") is updated by `GET /api/me` (every page load, throttled to 5 min).
+- API: `/api/me` (GET/PATCH), `/api/enroll`, `/api/enroll/cancel`, `/api/courses`, `/api/admin/users`,
+  `/api/admin/enrollments` (GET/POST), `/api/admin/enrollments/:id` (PATCH/DELETE). Mutations reject foreign `Origin`.
+- Local dev: `npx wrangler d1 migrations apply libertas-db --local`, then `npx wrangler dev`. Remote schema: `--remote`.
 
 ## script.js
-- Any `a.btn-cta` whose href is `#`/empty shows a "coming soon" alert instead of navigating.
+- Calls `/api/me`, injects sign-in button or user chip/menu (Mani kursi, Administrācija, Iziet) into `.nav-wrapper`.
+- Exposes `window.LIB` (`api`, `el`, `toast`, `signInUrl`, `STATUSI`, `me`) and fires `lib:me`; used by `konts.js`/`admin.js`.
+- Course buttons (`data-course`): enroll, or sign in first (pending course kept in sessionStorage).
 
 ## style.css (by section, line numbers approx.)
 - `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
@@ -64,7 +80,8 @@ The hero "REĢISTRĒTIES" and course "Pieteikties kursam" buttons now have `href
 
 ## Known gaps / TODO
 - `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
-- No sign-up/registration page (buttons show a "coming soon" alert).
+- Google OAuth client must be created and `GOOGLE_CLIENT_ID` / secret set before sign-in works live.
+- No email notifications on new enrollments; no online payment (admin marks paid manually).
 - `#par-mums` (About) and `#faq` (BJU) sections missing.
 - No mobile navigation (nav is hidden under 768px).
 - No favicon, meta description or Open Graph tags.
