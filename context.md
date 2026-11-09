@@ -15,6 +15,7 @@ Short reference so work can start without re-reading every file.
 | File | Purpose |
 |---|---|
 | `index.html` | Home: header/nav, hero with CTA box, course grid (`#kursi`), footer |
+| `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
 | `script.js` | Shared JS (see below) |
 | `style.css` | Shared styles (see sections below) |
 | `assets/` | `libertas.png` (logo), `spain-a1.png`, `english-a1.jpg` (course images) |
@@ -22,10 +23,11 @@ Short reference so work can start without re-reading every file.
 | `.assetsignore` | Files NOT published to the live site (add any new non-site files here) |
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
 
-## Shared page skeleton (both pages)
+## Shared page skeleton (all pages)
 `header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Kursi, Par mums); the logo links to `index.html` (no separate "Sākums" item),
 (no register button in the header). Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
-Header/footer are duplicated in each HTML file: **change both pages** when editing them.
+Footer also links to `noteikumi.html`.
+Header/footer are duplicated in each HTML file: **change every page** when editing them.
 
 Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) was removed from the menu.
 
@@ -50,7 +52,8 @@ The hero "REĢISTRĒTIES" and course "Pieteikties kursam" buttons now have `href
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
 - KURSU IZKĀRTOJUMS (l.175): `.courses-section`, `.section-title`, `.courses-grid`, `.course-card`, `.course-body`,
   `.course-price`, `.course-info`, `.btn-card`
-- SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card)
+- SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
+- JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
 - KĀJENE: `footer`
 - RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet)
 
@@ -60,6 +63,7 @@ The hero "REĢISTRĒTIES" and course "Pieteikties kursam" buttons now have `href
 - Images go in `assets/`. Prefer compressed `.jpg`/`.webp` (under ~200 KB).
 
 ## Known gaps / TODO
+- `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
 - No sign-up/registration page (buttons show a "coming soon" alert).
 - `#par-mums` (About) and `#faq` (BJU) sections missing.
 - No mobile navigation (nav is hidden under 768px).

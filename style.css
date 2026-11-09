@@ -261,6 +261,86 @@ body {
     margin-bottom: 30px;
 }
 
+/* JURIDISKĀ LAPA (noteikumi.html) */
+.legal-card {
+    max-width: 820px;
+}
+
+.legal-card h2 {
+    font-family: var(--font-heading);
+    color: var(--primary-bordo);
+    font-size: 24px;
+    margin: 40px 0 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+    scroll-margin-top: 140px;
+}
+
+.legal-card h3 {
+    font-size: 17px;
+    margin: 24px 0 8px;
+}
+
+.legal-card p,
+.legal-card ul {
+    margin-bottom: 12px;
+}
+
+.legal-card ul {
+    padding-left: 22px;
+}
+
+.legal-card li {
+    margin-bottom: 6px;
+}
+
+.legal-card a,
+footer a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.legal-card a {
+    color: var(--primary-bordo);
+}
+
+.legal-toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    justify-content: center;
+    padding: 14px;
+    background: var(--bg-warm-light);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+}
+
+.legal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.legal-table th,
+.legal-table td {
+    text-align: left;
+    vertical-align: top;
+    padding: 10px;
+    border: 1px solid var(--border-light);
+}
+
+.legal-table th {
+    background: var(--bg-warm-light);
+}
+
+/* Aizpildāmās vietas — jāaizstāj ar īstiem datiem */
+.placeholder {
+    background: #FFF3C4;
+    padding: 0 3px;
+    border-radius: 3px;
+}
+
 /* KĀJENE */
 footer {
     background: var(--primary-bordo);
