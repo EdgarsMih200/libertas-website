@@ -1,8 +1,12 @@
 /* EMPANADILLO — Libertas talismans (maza pikseļu stila empanada), kas sveicina apmeklētājus.
    Stūrī lapas apakšā; pirmajā apmeklējumā sesijā pats pasaka sveicienu.
-   Klikšķis uz viņa — nākamā frāze. Nov./dec. (html.ziemassvetki) viņam ir Ziemassvētku cepure. */
+   Klikšķis uz viņa — nākamā frāze. Nov./dec. (html.ziemassvetki) viņam ir Ziemassvētku cepure, bet 5. decembrī — ballītes cepure. */
 (function () {
     var svetki = document.documentElement.classList.contains('ziemassvetki');
+    // 5. decembrī (saimnieka dzimšanas diena) — ballītes cepure Ziemassvētku cepures vietā.
+    // Pārbaudei jebkurā dienā: index.html?ballite=1
+    var sodien = new Date();
+    var dzimsanasDiena = (sodien.getMonth() === 11 && sodien.getDate() === 5) || /[?&]ballite=1\b/.test(location.search);
 
     var sveiciens = svetki
         ? '¡Feliz Navidad! Es esmu <b>Empanadillo</b>. Laipni lūdzam Libertas!'
@@ -18,7 +22,7 @@
     var KRASAS = {
         O: '#4A2810', D: '#A8652A', M: '#D9963F', L: '#F0BE62', H: '#FBE3A0', S: '#B8742E',
         W: '#FFFFFF', K: '#2A1A10', P: '#E8796B', R: '#7A1A14', T: '#E0605A', F: '#8A5020',
-        X: '#B3261E', B: '#8E1C17', G: '#D6D6D6'
+        X: '#B3261E', B: '#8E1C17', G: '#D6D6D6', Y: '#F2C230', N: '#E85A8C', U: '#3B6FB6'
     };
     var KERMENIS = [
         '..................................',
@@ -71,6 +75,24 @@
         '...OOOOOOOOOOOOOO......'
     ];
 
+    var BALLITES_CEPURE = [
+        '.......OO.......',
+        '......OYYO......',
+        '.....OYYYYO.....',
+        '......OYYO......',
+        '......ONNO......',
+        '.....ONNYYO.....',
+        '.....ONYYUO.....',
+        '....ONYYUUNO....',
+        '....OYYUUNNO....',
+        '...OYYUUNNYYO...',
+        '...OYUUNNYYUO...',
+        '..OYUUNNYYUUNO..',
+        '..OUUNNYYUUNNO..',
+        '.OUUNNYYUUNNYYO.',
+        '..OOOOOOOOOOOO..'
+    ];
+
     // Pārvērš pikseļu rindas SVG taisnstūros (blakus esošus vienas krāsas pikseļus apvieno)
     function pikseli(rindas, ox, oy) {
         var s = '';
@@ -95,7 +117,9 @@
         '<g class="empa-roka empa-roka-b">' + pikseli(ROKA_B, 29, 6) + '</g>' +
         pikseli(KERMENIS, 0, 0) +
         '<g class="empa-acis">' + pikseli(ACIS, 10, 11) + '</g>' +
-        '<g class="empa-cepure">' + pikseli(CEPURE, 6, -6) + '</g>' +
+        (dzimsanasDiena
+            ? '<g class="empa-ballite">' + pikseli(BALLITES_CEPURE, 10, -10) + '</g>'
+            : '<g class="empa-cepure">' + pikseli(CEPURE, 6, -6) + '</g>') +
         '</svg>';
 
     var wrap = document.createElement('div');
