@@ -6,7 +6,7 @@
     <title>Noderīgi materiāli — Libertas</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="mat-lapa">
 
     <!-- Galvene / Navigācija -->
     <header class="site-header">
@@ -22,29 +22,48 @@
         </div>
     </header>
 
-    <!-- Materiālu saraksts -->
-    <section class="courses-section container">
-        <h1 class="section-title materials-virsraksts">Noderīgi materiāli</h1>
-        <p class="register-intro">Bezmaksas mācību materiāli valodu apguvei. Lieto, drukā un dalies!</p>
+    <!-- Materiālu virsraksts -->
+    <section class="mat-hero">
+        <div class="container mat-hero-iekssa">
+            <span class="mat-virsbirka">Bezmaksas · Drukājami · Ar izrunu</span>
+            <h1>Noderīgi materiāli</h1>
+            <p class="mat-hero-teksts">
+                Īsas, krāsainas nodarbības valodu apguvei mājās. Klausies izrunu, pildi uzdevumus
+                un pārbaudi sevi — viss vienā lapā.
+            </p>
+            <div class="mat-filtri" role="group" aria-label="Filtrēt pēc valodas" hidden></div>
+        </div>
+    </section>
 
-        <div class="courses-grid materials-grid">
-            <!-- Materiāla kartīte: kopē šo <article>, lai pievienotu jaunu materiālu -->
-            <article class="course-card material-card">
-                <a href="materiali-spanu-ziemassvetki.html" class="material-vaks material-vaks--ziemassvetki" tabindex="-1" aria-hidden="true">
-                    <span class="material-ikona">🎄</span>
-                    <span class="material-vaks-teksts" lang="es">¡Feliz Navidad!</span>
-                </a>
-                <div class="course-body">
-                    <span class="materials-birka">Spāņu valoda · A1</span>
-                    <h3>Ziemassvētki spāņu valodā</h3>
-                    <p class="material-apraksts">20 svētku vārdi, apsveikumi, artikuli un daudzskaitlis, dialogs un Spānijas tradīcijas.</p>
-                    <ul class="material-saturs">
-                        <li>🔊 Izruna</li>
-                        <li>✏️ 4 uzdevumi ar atbildēm</li>
-                        <li>🖨️ Drukājams</li>
-                    </ul>
-                    <a href="materiali-spanu-ziemassvetki.html" class="btn-cta btn-card">Atvērt materiālu</a>
+    <!-- Materiālu kartītes -->
+    <section class="container mat-saraksts">
+        <div class="mat-rezgis">
+            <!-- Materiāla kartīte: kopē šo <article>, lai pievienotu jaunu materiālu.
+                 data-valoda = filtra atslēga, data-valoda-nosaukums = teksts filtra pogā -->
+            <article class="mat-karte" data-valoda="spanu" data-valoda-nosaukums="Spāņu valoda">
+                <div class="mat-karte-vaks mat-vaks--ziemassvetki" aria-hidden="true">
+                    <span class="mat-limenis">A1</span>
+                    <span class="mat-valoda">Spāņu valoda</span>
+                    <span class="mat-karte-emoji">🎄</span>
+                    <span class="mat-karte-moto">¡Feliz Navidad!</span>
                 </div>
+                <div class="mat-karte-saturs">
+                    <h2><a href="materiali-spanu-ziemassvetki.html" class="mat-karte-saite">Ziemassvētki spāņu valodā</a></h2>
+                    <p>Apsveikumi, 20 svētku vārdi, artikuli, dialogs un tas, kāpēc spāņi Vecgada naktī ēd 12 vīnogas.</p>
+                    <ul class="mat-karte-meta">
+                        <li>📚 20 vārdi</li>
+                        <li>✏️ 4 uzdevumi</li>
+                        <li>⏱️ ~30 min</li>
+                    </ul>
+                    <span class="mat-karte-bulta">Sākt nodarbību <span aria-hidden="true">→</span></span>
+                </div>
+            </article>
+
+            <!-- Vieta nākamajiem materiāliem -->
+            <article class="mat-karte mat-karte--drizuma" aria-label="Drīzumā vairāk materiālu">
+                <span class="mat-karte-emoji" aria-hidden="true">✨</span>
+                <h2>Drīzumā vairāk</h2>
+                <p>Gatavojam jaunus materiālus spāņu un angļu valodā.</p>
             </article>
         </div>
     </section>
@@ -57,5 +76,6 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="materiali.js"></script>
 </body>
 </html>

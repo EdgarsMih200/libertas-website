@@ -6,7 +6,7 @@
     <title>Ziemassvētki spāņu valodā (A1) — Noderīgi materiāli — Libertas</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="mat-lapa">
 
     <!-- Galvene / Navigācija -->
     <header class="site-header">
@@ -22,203 +22,409 @@
         </div>
     </header>
 
-    <!-- Materiāls: Spāņu A1 — Ziemassvētki -->
-    <section class="register-section container">
-        <article class="register-card legal-card materiali-card">
-            <a href="materiali.html" class="materials-atpakal">← Visi materiāli</a>
-            <header class="materials-galva">
-                <span class="materials-birka">Spāņu valoda · A1</span>
-                <h1 class="section-title" id="navidad">¡Feliz Navidad! — Ziemassvētki spāņu valodā</h1>
-                <p>
-                    Pamatvārdi, frāzes un tradīcijas, lai tu varētu apsveikt draugus spāniski un saprast,
-                    kā svētkus svin Spānijā. Spied <span class="runat-piemers" aria-hidden="true">🔊</span>,
-                    lai dzirdētu izrunu.
-                </p>
-                <button type="button" class="btn-secondary materials-druka" onclick="window.print()">Drukāt materiālu</button>
-            </header>
+    <!-- Materiāla virsraksts -->
+    <section class="mat-hero mat-vaks--ziemassvetki">
+        <div class="container mat-hero-iekssa">
+            <a href="materiali.html" class="mat-atpakal">← Visi materiāli</a>
+            <div class="mat-birkas">
+                <span class="mat-limenis">A1</span>
+                <span class="mat-valoda">Spāņu valoda</span>
+            </div>
+            <h1><span lang="es" class="mat-hero-es">¡Feliz Navidad!</span> Ziemassvētki spāņu valodā</h1>
+            <p class="mat-hero-teksts">
+                Pamatvārdi, apsveikumi un tradīcijas, lai tu varētu apsveikt draugus spāniski un saprast,
+                kā svētkus svin Spānijā. Spied 🔊, lai dzirdētu izrunu.
+            </p>
+            <ul class="mat-statistika">
+                <li><strong>20</strong> vārdi</li>
+                <li><strong>10</strong> frāzes</li>
+                <li><strong>4</strong> uzdevumi</li>
+                <li><strong>~30</strong> min</li>
+            </ul>
+            <div class="mat-hero-pogas">
+                <a href="#vardi" class="btn-cta mat-poga-gaisa">Sākt nodarbību</a>
+                <button type="button" class="mat-poga-caurspid" onclick="window.print()">🖨️ Drukāt</button>
+            </div>
+        </div>
+    </section>
 
-            <nav class="legal-toc" aria-label="Saturs">
-                <a href="#vardi">1. Vārdi</a>
-                <a href="#frazes">2. Frāzes</a>
-                <a href="#gramatika">3. Gramatika</a>
-                <a href="#dialogs">4. Dialogs</a>
-                <a href="#tradicijas">5. Tradīcijas Spānijā</a>
-                <a href="#uzdevumi">6. Uzdevumi</a>
-            </nav>
+    <div class="container mat-izkartojums">
+        <!-- Satura rādītājs (sānos) -->
+        <nav class="mat-saturs" aria-label="Saturs">
+            <span class="mat-saturs-virsraksts">Saturs</span>
+            <a href="#vardi"><span>1</span> Vārdi</a>
+            <a href="#frazes"><span>2</span> Frāzes</a>
+            <a href="#gramatika"><span>3</span> Gramatika</a>
+            <a href="#dialogs"><span>4</span> Dialogs</a>
+            <a href="#tradicijas"><span>5</span> Tradīcijas</a>
+            <a href="#uzdevumi"><span>6</span> Uzdevumi</a>
+        </nav>
+
+        <main class="mat-galvenais">
 
             <!-- 1. VĀRDI -->
-            <h2 id="vardi">1. Ziemassvētku vārdi</h2>
-            <p>Spāņu valodā lietvārdi ir vīriešu dzimtē (<strong>el</strong>) vai sieviešu dzimtē (<strong>la</strong>). Mācies vārdu kopā ar artikulu!</p>
-            <ul class="vardu-saraksts">
-                <li data-es="la Navidad"><span class="es"><span class="art-la">la</span> Navidad</span><span class="lv">Ziemassvētki</span></li>
-                <li data-es="la Nochebuena"><span class="es"><span class="art-la">la</span> Nochebuena</span><span class="lv">Ziemassvētku vakars (24.12.)</span></li>
-                <li data-es="el árbol de Navidad"><span class="es"><span class="art-el">el</span> árbol de Navidad</span><span class="lv">Ziemassvētku eglīte</span></li>
-                <li data-es="el belén"><span class="es"><span class="art-el">el</span> belén</span><span class="lv">Betlēmes ainiņa</span></li>
-                <li data-es="el regalo"><span class="es"><span class="art-el">el</span> regalo</span><span class="lv">dāvana</span></li>
-                <li data-es="la estrella"><span class="es"><span class="art-la">la</span> estrella</span><span class="lv">zvaigzne</span></li>
-                <li data-es="la vela"><span class="es"><span class="art-la">la</span> vela</span><span class="lv">svece</span></li>
-                <li data-es="la campana"><span class="es"><span class="art-la">la</span> campana</span><span class="lv">zvans</span></li>
-                <li data-es="la nieve"><span class="es"><span class="art-la">la</span> nieve</span><span class="lv">sniegs</span></li>
-                <li data-es="el muñeco de nieve"><span class="es"><span class="art-el">el</span> muñeco de nieve</span><span class="lv">sniegavīrs</span></li>
-                <li data-es="Papá Noel"><span class="es">Papá Noel</span><span class="lv">Ziemassvētku vecītis</span></li>
-                <li data-es="los Reyes Magos"><span class="es"><span class="art-el">los</span> Reyes Magos</span><span class="lv">Trīs Gudrie ķēniņi</span></li>
-                <li data-es="el villancico"><span class="es"><span class="art-el">el</span> villancico</span><span class="lv">Ziemassvētku dziesma</span></li>
-                <li data-es="la familia"><span class="es"><span class="art-la">la</span> familia</span><span class="lv">ģimene</span></li>
-                <li data-es="la cena"><span class="es"><span class="art-la">la</span> cena</span><span class="lv">vakariņas</span></li>
-                <li data-es="el turrón"><span class="es"><span class="art-el">el</span> turrón</span><span class="lv">turons (mandeļu saldums)</span></li>
-                <li data-es="las uvas"><span class="es"><span class="art-la">las</span> uvas</span><span class="lv">vīnogas</span></li>
-                <li data-es="la Nochevieja"><span class="es"><span class="art-la">la</span> Nochevieja</span><span class="lv">Vecgada vakars (31.12.)</span></li>
-                <li data-es="el Año Nuevo"><span class="es"><span class="art-el">el</span> Año Nuevo</span><span class="lv">Jaunais gads</span></li>
-                <li data-es="el frío"><span class="es"><span class="art-el">el</span> frío</span><span class="lv">aukstums</span></li>
-            </ul>
-            <p class="materials-piezime"><span class="art-el">el / los</span> — vīriešu dzimte · <span class="art-la">la / las</span> — sieviešu dzimte</p>
+            <section class="mat-sadala" id="vardi">
+                <h2><span class="mat-nr">1</span> Ziemassvētku vārdi</h2>
+                <p class="mat-ievads">Uzklikšķini uz kartītes, lai redzētu tulkojumu. Mācies vārdu kopā ar artikulu:
+                    <span class="art-el">el / los</span> — vīriešu dzimte, <span class="art-la">la / las</span> — sieviešu dzimte.</p>
+                <ul class="vardu-rezgis">
+                    <li class="vards" data-es="la Navidad">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎄</span><span class="vards-es" lang="es"><span class="art-la">la</span> Navidad</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētki</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la Nochebuena">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🌙</span><span class="vards-es" lang="es"><span class="art-la">la</span> Nochebuena</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku vakars (24.12.)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el árbol de Navidad">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🌲</span><span class="vards-es" lang="es"><span class="art-el">el</span> árbol de Navidad</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku eglīte</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el belén">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🐑</span><span class="vards-es" lang="es"><span class="art-el">el</span> belén</span></span>
+                            <span class="vards-puse vards-aizmugure">Betlēmes ainiņa</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el regalo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎁</span><span class="vards-es" lang="es"><span class="art-el">el</span> regalo</span></span>
+                            <span class="vards-puse vards-aizmugure">dāvana</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la estrella">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">⭐</span><span class="vards-es" lang="es"><span class="art-la">la</span> estrella</span></span>
+                            <span class="vards-puse vards-aizmugure">zvaigzne</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la vela">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🕯️</span><span class="vards-es" lang="es"><span class="art-la">la</span> vela</span></span>
+                            <span class="vards-puse vards-aizmugure">svece</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la campana">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🔔</span><span class="vards-es" lang="es"><span class="art-la">la</span> campana</span></span>
+                            <span class="vards-puse vards-aizmugure">zvans</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la nieve">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">❄️</span><span class="vards-es" lang="es"><span class="art-la">la</span> nieve</span></span>
+                            <span class="vards-puse vards-aizmugure">sniegs</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el muñeco de nieve">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">⛄</span><span class="vards-es" lang="es"><span class="art-el">el</span> muñeco de nieve</span></span>
+                            <span class="vards-puse vards-aizmugure">sniegavīrs</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="Papá Noel">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎅</span><span class="vards-es" lang="es">Papá Noel</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku vecītis</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="los Reyes Magos">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">👑</span><span class="vards-es" lang="es"><span class="art-el">los</span> Reyes Magos</span></span>
+                            <span class="vards-puse vards-aizmugure">Trīs Gudrie ķēniņi</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el villancico">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎶</span><span class="vards-es" lang="es"><span class="art-el">el</span> villancico</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku dziesma</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la familia">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">👨‍👩‍👧</span><span class="vards-es" lang="es"><span class="art-la">la</span> familia</span></span>
+                            <span class="vards-puse vards-aizmugure">ģimene</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la cena">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🍽️</span><span class="vards-es" lang="es"><span class="art-la">la</span> cena</span></span>
+                            <span class="vards-puse vards-aizmugure">vakariņas</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el turrón">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🍬</span><span class="vards-es" lang="es"><span class="art-el">el</span> turrón</span></span>
+                            <span class="vards-puse vards-aizmugure">turons (mandeļu saldums)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="las uvas">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🍇</span><span class="vards-es" lang="es"><span class="art-la">las</span> uvas</span></span>
+                            <span class="vards-puse vards-aizmugure">vīnogas</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la Nochevieja">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🥂</span><span class="vards-es" lang="es"><span class="art-la">la</span> Nochevieja</span></span>
+                            <span class="vards-puse vards-aizmugure">Vecgada vakars (31.12.)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el Año Nuevo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎆</span><span class="vards-es" lang="es"><span class="art-el">el</span> Año Nuevo</span></span>
+                            <span class="vards-puse vards-aizmugure">Jaunais gads</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el frío">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🥶</span><span class="vards-es" lang="es"><span class="art-el">el</span> frío</span></span>
+                            <span class="vards-puse vards-aizmugure">aukstums</span>
+                        </button>
+                    </li>
+                </ul>
+            </section>
 
             <!-- 2. FRĀZES -->
-            <h2 id="frazes">2. Apsveikumi un frāzes</h2>
-            <table class="legal-table frazu-tabula">
-                <thead>
-                    <tr><th>Spāniski</th><th>Latviski</th></tr>
-                </thead>
-                <tbody>
-                    <tr data-es="¡Feliz Navidad!"><td lang="es">¡Feliz Navidad!</td><td>Priecīgus Ziemassvētkus!</td></tr>
-                    <tr data-es="¡Felices fiestas!"><td lang="es">¡Felices fiestas!</td><td>Priecīgus svētkus!</td></tr>
-                    <tr data-es="¡Feliz Año Nuevo!"><td lang="es">¡Feliz Año Nuevo!</td><td>Laimīgu Jauno gadu!</td></tr>
-                    <tr data-es="Te deseo una feliz Navidad."><td lang="es">Te deseo una feliz Navidad.</td><td>Novēlu tev priecīgus Ziemassvētkus.</td></tr>
-                    <tr data-es="Gracias, igualmente."><td lang="es">Gracias, igualmente.</td><td>Paldies, tev arī.</td></tr>
-                    <tr data-es="¿Qué quieres para Navidad?"><td lang="es">¿Qué quieres para Navidad?</td><td>Ko tu vēlies Ziemassvētkos?</td></tr>
-                    <tr data-es="Quiero un libro."><td lang="es">Quiero un libro.</td><td>Es gribu grāmatu.</td></tr>
-                    <tr data-es="Este regalo es para ti."><td lang="es">Este regalo es para ti.</td><td>Šī dāvana ir tev.</td></tr>
-                    <tr data-es="¡Muchas gracias! ¡Me encanta!"><td lang="es">¡Muchas gracias! ¡Me encanta!</td><td>Liels paldies! Man ļoti patīk!</td></tr>
-                    <tr data-es="Hace frío y nieva."><td lang="es">Hace frío y nieva.</td><td>Ir auksti, un snieg.</td></tr>
-                </tbody>
-            </table>
-            <p class="materials-piezime">
-                💡 Spāņu valodā jautājuma un izsaukuma teikumi sākas ar apgrieztu zīmi: <strong>¿…?</strong> un <strong>¡…!</strong>
-            </p>
+            <section class="mat-sadala" id="frazes">
+                <h2><span class="mat-nr">2</span> Apsveikumi un frāzes</h2>
+                <ul class="frazu-saraksts">
+                    <li data-es="¡Feliz Navidad!"><span class="fraze-teksts"><span class="es" lang="es">¡Feliz Navidad!</span><span class="lv">Priecīgus Ziemassvētkus!</span></span></li>
+                    <li data-es="¡Felices fiestas!"><span class="fraze-teksts"><span class="es" lang="es">¡Felices fiestas!</span><span class="lv">Priecīgus svētkus!</span></span></li>
+                    <li data-es="¡Feliz Año Nuevo!"><span class="fraze-teksts"><span class="es" lang="es">¡Feliz Año Nuevo!</span><span class="lv">Laimīgu Jauno gadu!</span></span></li>
+                    <li data-es="Te deseo una feliz Navidad."><span class="fraze-teksts"><span class="es" lang="es">Te deseo una feliz Navidad.</span><span class="lv">Novēlu tev priecīgus Ziemassvētkus.</span></span></li>
+                    <li data-es="Gracias, igualmente."><span class="fraze-teksts"><span class="es" lang="es">Gracias, igualmente.</span><span class="lv">Paldies, tev arī.</span></span></li>
+                    <li data-es="¿Qué quieres para Navidad?"><span class="fraze-teksts"><span class="es" lang="es">¿Qué quieres para Navidad?</span><span class="lv">Ko tu vēlies Ziemassvētkos?</span></span></li>
+                    <li data-es="Quiero un libro."><span class="fraze-teksts"><span class="es" lang="es">Quiero un libro.</span><span class="lv">Es gribu grāmatu.</span></span></li>
+                    <li data-es="Este regalo es para ti."><span class="fraze-teksts"><span class="es" lang="es">Este regalo es para ti.</span><span class="lv">Šī dāvana ir tev.</span></span></li>
+                    <li data-es="¡Muchas gracias! ¡Me encanta!"><span class="fraze-teksts"><span class="es" lang="es">¡Muchas gracias! ¡Me encanta!</span><span class="lv">Liels paldies! Man ļoti patīk!</span></span></li>
+                    <li data-es="Hace frío y nieva."><span class="fraze-teksts"><span class="es" lang="es">Hace frío y nieva.</span><span class="lv">Ir auksti, un snieg.</span></span></li>
+                </ul>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> Spāņu valodā jautājumi un izsaucieni sākas ar apgrieztu zīmi: <strong>¿…?</strong> un <strong>¡…!</strong></p>
+            </section>
 
             <!-- 3. GRAMATIKA -->
-            <h2 id="gramatika">3. Gramatika: artikuli un daudzskaitlis</h2>
-            <h3>Noteiktie artikuli</h3>
-            <table class="legal-table">
-                <thead>
-                    <tr><th></th><th>Vienskaitlis</th><th>Daudzskaitlis</th></tr>
-                </thead>
-                <tbody>
-                    <tr><th>Vīriešu dzimte</th><td lang="es"><strong>el</strong> regalo</td><td lang="es"><strong>los</strong> regalos</td></tr>
-                    <tr><th>Sieviešu dzimte</th><td lang="es"><strong>la</strong> estrella</td><td lang="es"><strong>las</strong> estrellas</td></tr>
-                </tbody>
-            </table>
-            <h3>Kā veido daudzskaitli</h3>
-            <ul>
-                <li>Vārds beidzas ar patskani → pieliek <strong>-s</strong>: <span lang="es">regalo → regalos, vela → velas</span></li>
-                <li>Vārds beidzas ar līdzskani → pieliek <strong>-es</strong>: <span lang="es">árbol → árboles</span></li>
-                <li>Galotne <strong>-z</strong> pārvēršas par <strong>-ces</strong>: <span lang="es">la luz → las luces</span> (gaisma → lampiņas)</li>
-            </ul>
-            <h3>Darbības vārds <span lang="es">querer</span> (gribēt) tagadnē</h3>
-            <table class="legal-table">
-                <tbody>
-                    <tr><td lang="es">yo <strong>quiero</strong></td><td>es gribu</td><td lang="es">nosotros <strong>queremos</strong></td><td>mēs gribam</td></tr>
-                    <tr><td lang="es">tú <strong>quieres</strong></td><td>tu gribi</td><td lang="es">vosotros <strong>queréis</strong></td><td>jūs gribat</td></tr>
-                    <tr><td lang="es">él / ella <strong>quiere</strong></td><td>viņš / viņa grib</td><td lang="es">ellos / ellas <strong>quieren</strong></td><td>viņi / viņas grib</td></tr>
-                </tbody>
-            </table>
+            <section class="mat-sadala" id="gramatika">
+                <h2><span class="mat-nr">3</span> Gramatika</h2>
+
+                <h3>Noteiktie artikuli</h3>
+                <div class="artikulu-rezgis" lang="es">
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">el</span><span>regalo</span><small lang="lv">vīr. dz. · vsk.</small></div>
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">los</span><span>regalos</span><small lang="lv">vīr. dz. · dsk.</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">la</span><span>estrella</span><small lang="lv">siev. dz. · vsk.</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">las</span><span>estrellas</span><small lang="lv">siev. dz. · dsk.</small></div>
+                </div>
+
+                <h3>Kā veido daudzskaitli</h3>
+                <div class="likumu-rezgis">
+                    <div class="likums"><span class="likums-galotne">+ s</span><p>Beidzas ar patskani</p><span lang="es">regalo → regalo<b>s</b></span></div>
+                    <div class="likums"><span class="likums-galotne">+ es</span><p>Beidzas ar līdzskani</p><span lang="es">árbol → árbol<b>es</b></span></div>
+                    <div class="likums"><span class="likums-galotne">z → ces</span><p>Beidzas ar -z</p><span lang="es">luz → lu<b>ces</b></span></div>
+                </div>
+
+                <h3>Darbības vārds <em lang="es">querer</em> — gribēt</h3>
+                <div class="locijumi">
+                    <div data-es="yo quiero"><span lang="es">yo <b>quiero</b></span><small>es gribu</small></div>
+                    <div data-es="nosotros queremos"><span lang="es">nosotros <b>queremos</b></span><small>mēs gribam</small></div>
+                    <div data-es="tú quieres"><span lang="es">tú <b>quieres</b></span><small>tu gribi</small></div>
+                    <div data-es="vosotros queréis"><span lang="es">vosotros <b>queréis</b></span><small>jūs gribat</small></div>
+                    <div data-es="él quiere"><span lang="es">él / ella <b>quiere</b></span><small>viņš / viņa grib</small></div>
+                    <div data-es="ellos quieren"><span lang="es">ellos / ellas <b>quieren</b></span><small>viņi / viņas grib</small></div>
+                </div>
+            </section>
 
             <!-- 4. DIALOGS -->
-            <h2 id="dialogs">4. Dialogs: dāvanu apmaiņa</h2>
-            <div class="dialogs" lang="es">
-                <p data-es="¡Hola, Pablo! ¡Feliz Navidad!"><strong>Ana:</strong> ¡Hola, Pablo! ¡Feliz Navidad!</p>
-                <p data-es="¡Hola, Ana! ¡Feliz Navidad! Este regalo es para ti."><strong>Pablo:</strong> ¡Hola, Ana! ¡Feliz Navidad! Este regalo es para ti.</p>
-                <p data-es="¡Oh, muchas gracias! ¿Qué es?"><strong>Ana:</strong> ¡Oh, muchas gracias! ¿Qué es?</p>
-                <p data-es="Es un libro en español."><strong>Pablo:</strong> Es un libro en español.</p>
-                <p data-es="¡Me encanta! Y esto es para ti: turrón."><strong>Ana:</strong> ¡Me encanta! Y esto es para ti: turrón.</p>
-                <p data-es="¡Qué rico! Gracias. ¿Qué haces en Nochebuena?"><strong>Pablo:</strong> ¡Qué rico! Gracias. ¿Qué haces en Nochebuena?</p>
-                <p data-es="Ceno con mi familia. ¿Y tú?"><strong>Ana:</strong> Ceno con mi familia. ¿Y tú?</p>
-                <p data-es="Yo también. ¡Felices fiestas!"><strong>Pablo:</strong> Yo también. ¡Felices fiestas!</p>
-                <p data-es="¡Igualmente!"><strong>Ana:</strong> ¡Igualmente!</p>
-            </div>
-            <details class="atbildes">
-                <summary>Rādīt tulkojumu</summary>
-                <p>
-                    <strong>Ana:</strong> Sveiks, Pablo! Priecīgus Ziemassvētkus!<br>
-                    <strong>Pablo:</strong> Sveika, Ana! Priecīgus Ziemassvētkus! Šī dāvana ir tev.<br>
-                    <strong>Ana:</strong> Ak, liels paldies! Kas tas ir?<br>
-                    <strong>Pablo:</strong> Tā ir grāmata spāņu valodā.<br>
-                    <strong>Ana:</strong> Man ļoti patīk! Un šis ir tev — turons.<br>
-                    <strong>Pablo:</strong> Cik garšīgi! Paldies. Ko tu dari Ziemassvētku vakarā?<br>
-                    <strong>Ana:</strong> Vakariņoju ar ģimeni. Un tu?<br>
-                    <strong>Pablo:</strong> Es arī. Priecīgus svētkus!<br>
-                    <strong>Ana:</strong> Tev arī!
-                </p>
-            </details>
+            <section class="mat-sadala" id="dialogs">
+                <h2><span class="mat-nr">4</span> Dialogs: dāvanu apmaiņa</h2>
+                <div class="dialoga-riki">
+                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden>▶ Klausīties visu dialogu</button>
+                    <label class="mat-sledzis"><input type="checkbox" id="radit-tulkojumu"> Rādīt tulkojumu</label>
+                </div>
+                <div class="cats">
+                    <div class="replika replika--a" data-es="¡Hola, Pablo! ¡Feliz Navidad!">
+                        <span class="replika-avatars" aria-hidden="true">A</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Ana</strong>
+                            <span class="es" lang="es">¡Hola, Pablo! ¡Feliz Navidad!</span>
+                            <span class="lv">Sveiks, Pablo! Priecīgus Ziemassvētkus!</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¡Hola, Ana! ¡Feliz Navidad! Este regalo es para ti.">
+                        <span class="replika-avatars" aria-hidden="true">P</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Pablo</strong>
+                            <span class="es" lang="es">¡Hola, Ana! ¡Feliz Navidad! Este regalo es para ti.</span>
+                            <span class="lv">Sveika, Ana! Priecīgus Ziemassvētkus! Šī dāvana ir tev.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="¡Oh, muchas gracias! ¿Qué es?">
+                        <span class="replika-avatars" aria-hidden="true">A</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Ana</strong>
+                            <span class="es" lang="es">¡Oh, muchas gracias! ¿Qué es?</span>
+                            <span class="lv">Ak, liels paldies! Kas tas ir?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="Es un libro en español.">
+                        <span class="replika-avatars" aria-hidden="true">P</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Pablo</strong>
+                            <span class="es" lang="es">Es un libro en español.</span>
+                            <span class="lv">Tā ir grāmata spāņu valodā.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="¡Me encanta! Y esto es para ti: turrón.">
+                        <span class="replika-avatars" aria-hidden="true">A</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Ana</strong>
+                            <span class="es" lang="es">¡Me encanta! Y esto es para ti: turrón.</span>
+                            <span class="lv">Man ļoti patīk! Un šis ir tev — turons.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¡Qué rico! Gracias. ¿Qué haces en Nochebuena?">
+                        <span class="replika-avatars" aria-hidden="true">P</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Pablo</strong>
+                            <span class="es" lang="es">¡Qué rico! Gracias. ¿Qué haces en Nochebuena?</span>
+                            <span class="lv">Cik garšīgi! Paldies. Ko tu dari Ziemassvētku vakarā?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Ceno con mi familia. ¿Y tú?">
+                        <span class="replika-avatars" aria-hidden="true">A</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Ana</strong>
+                            <span class="es" lang="es">Ceno con mi familia. ¿Y tú?</span>
+                            <span class="lv">Vakariņoju ar ģimeni. Un tu?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="Yo también. ¡Felices fiestas!">
+                        <span class="replika-avatars" aria-hidden="true">P</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Pablo</strong>
+                            <span class="es" lang="es">Yo también. ¡Felices fiestas!</span>
+                            <span class="lv">Es arī. Priecīgus svētkus!</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="¡Igualmente!">
+                        <span class="replika-avatars" aria-hidden="true">A</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Ana</strong>
+                            <span class="es" lang="es">¡Igualmente!</span>
+                            <span class="lv">Tev arī!</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- 5. TRADĪCIJAS -->
-            <h2 id="tradicijas">5. Kā Ziemassvētkus svin Spānijā</h2>
-            <ul class="tradiciju-saraksts">
-                <li><span class="datums">22.12.</span> <strong lang="es">El Gordo</strong> — lielā Ziemassvētku loterija. Bērni dziedot nolasa laimīgos numurus, un to translē visā valstī.</li>
-                <li><span class="datums">24.12.</span> <strong lang="es">La Nochebuena</strong> — galvenās svētku vakariņas ar ģimeni. Uz galda ir jūras veltes, šķiņķis un <span lang="es">turrón</span>.</li>
-                <li><span class="datums">25.12.</span> <strong lang="es">La Navidad</strong> — Ziemassvētku diena. Dažas ģimenes jau šajā dienā saņem dāvanas no <span lang="es">Papá Noel</span>.</li>
-                <li><span class="datums">28.12.</span> <strong lang="es">El Día de los Santos Inocentes</strong> — Spānijas “1. aprīlis”: cilvēki viens otru izjoko.</li>
-                <li><span class="datums">31.12.</span> <strong lang="es">La Nochevieja</strong> — pusnaktī ar katru no 12 pulksteņa sitieniem apēd vienu vīnogu (<span lang="es">las doce uvas</span>), lai nākamais gads būtu laimīgs.</li>
-                <li><span class="datums">5.–6.01.</span> <strong lang="es">Los Reyes Magos</strong> — 5. janvāra vakarā pilsētās notiek ķēniņu gājiens (<span lang="es">la cabalgata</span>), un 6. janvāra rītā bērni saņem dāvanas. Ēd <span lang="es">roscón de Reyes</span> — gredzenveida svētku maizi.</li>
-            </ul>
+            <section class="mat-sadala" id="tradicijas">
+                <h2><span class="mat-nr">5</span> Kā Ziemassvētkus svin Spānijā</h2>
+                <ol class="laika-josla">
+                    <li><span class="laika-emoji" aria-hidden="true">🎟️</span><div><span class="laika-datums">22. decembris</span><strong lang="es">El Gordo</strong><p>Lielā Ziemassvētku loterija. Bērni dziedot nolasa laimīgos numurus, un to translē visā valstī.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">🍽️</span><div><span class="laika-datums">24. decembris</span><strong lang="es">La Nochebuena</strong><p>Galvenās svētku vakariņas ar ģimeni: jūras veltes, šķiņķis un <span lang="es">turrón</span>.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">🎅</span><div><span class="laika-datums">25. decembris</span><strong lang="es">La Navidad</strong><p>Ziemassvētku diena. Dažas ģimenes jau šajā dienā saņem dāvanas no <span lang="es">Papá Noel</span>.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">🤡</span><div><span class="laika-datums">28. decembris</span><strong lang="es">Los Santos Inocentes</strong><p>Spānijas “1. aprīlis” — cilvēki viens otru izjoko.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">🍇</span><div><span class="laika-datums">31. decembris</span><strong lang="es">La Nochevieja</strong><p>Pusnaktī ar katru no 12 pulksteņa sitieniem apēd vienu vīnogu (<span lang="es">las doce uvas</span>) — laimīgam gadam.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">👑</span><div><span class="laika-datums">5.–6. janvāris</span><strong lang="es">Los Reyes Magos</strong><p>5. janvāra vakarā notiek ķēniņu gājiens (<span lang="es">la cabalgata</span>), 6. janvāra rītā bērni saņem dāvanas un ēd <span lang="es">roscón de Reyes</span>.</p></div></li>
+                </ol>
+            </section>
 
             <!-- 6. UZDEVUMI -->
-            <h2 id="uzdevumi">6. Uzdevumi</h2>
+            <section class="mat-sadala" id="uzdevumi">
+                <h2><span class="mat-nr">6</span> Uzdevumi</h2>
+                <p class="mat-ievads">Ieraksti atbildes un spied “Pārbaudīt”. Garumzīmes un pieturzīmes var nerakstīt.</p>
 
-            <h3>1. uzdevums. Ieraksti artikulu: el, la, los vai las</h3>
-            <ol class="uzdevums" lang="es">
-                <li>___ estrella</li>
-                <li>___ regalos</li>
-                <li>___ árbol</li>
-                <li>___ uvas</li>
-                <li>___ villancico</li>
-                <li>___ velas</li>
-            </ol>
-            <details class="atbildes">
-                <summary>Pārbaudi atbildes</summary>
-                <p lang="es">1. la estrella · 2. los regalos · 3. el árbol · 4. las uvas · 5. el villancico · 6. las velas</p>
-            </details>
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">1</span> Ieraksti artikulu: <em>el, la, los</em> vai <em>las</em></h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="la" aria-label="Atbilde" autocomplete="off" spellcheck="false"> estrella</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="los" aria-label="Atbilde" autocomplete="off" spellcheck="false"> regalos</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="el" aria-label="Atbilde" autocomplete="off" spellcheck="false"> árbol</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="las" aria-label="Atbilde" autocomplete="off" spellcheck="false"> uvas</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="el" aria-label="Atbilde" autocomplete="off" spellcheck="false"> villancico</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="las" aria-label="Atbilde" autocomplete="off" spellcheck="false"> velas</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. la estrella · 2. los regalos · 3. el árbol · 4. las uvas · 5. el villancico · 6. las velas</p>
+                    </details>
+                </div>
 
-            <h3>2. uzdevums. Izveido daudzskaitli</h3>
-            <ol class="uzdevums" lang="es">
-                <li>la campana → ___</li>
-                <li>el regalo → ___</li>
-                <li>el árbol → ___</li>
-                <li>la luz → ___</li>
-            </ol>
-            <details class="atbildes">
-                <summary>Pārbaudi atbildes</summary>
-                <p lang="es">1. las campanas · 2. los regalos · 3. los árboles · 4. las luces</p>
-            </details>
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">2</span> Izveido daudzskaitli</h3>
+                    <ol class="uzdevums" lang="es">
+                        <li>la campana → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="las campanas" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li>el regalo → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="los regalos" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li>el árbol → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="los árboles" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li>la luz → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="las luces" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. las campanas · 2. los regalos · 3. los árboles · 4. las luces</p>
+                    </details>
+                </div>
 
-            <h3>3. uzdevums. Ieraksti pareizo formu: quiero, quieres vai quiere</h3>
-            <ol class="uzdevums" lang="es">
-                <li>Yo ___ un libro.</li>
-                <li>¿Qué ___ tú para Navidad?</li>
-                <li>Ana ___ turrón.</li>
-            </ol>
-            <details class="atbildes">
-                <summary>Pārbaudi atbildes</summary>
-                <p lang="es">1. quiero · 2. quieres · 3. quiere</p>
-            </details>
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">3</span> Ieraksti pareizo formu: <em>quiero, quieres</em> vai <em>quiere</em></h3>
+                    <ol class="uzdevums" lang="es">
+                        <li>Yo <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="quiero" aria-label="Atbilde" autocomplete="off" spellcheck="false"> un libro.</li>
+                        <li>¿Qué <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="quieres" aria-label="Atbilde" autocomplete="off" spellcheck="false"> tú para Navidad?</li>
+                        <li>Ana <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="quiere" aria-label="Atbilde" autocomplete="off" spellcheck="false"> turrón.</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. quiero · 2. quieres · 3. quiere</p>
+                    </details>
+                </div>
 
-            <h3>4. uzdevums. Pārtulko spāniski</h3>
-            <ol class="uzdevums">
-                <li>Priecīgus Ziemassvētkus!</li>
-                <li>Šī dāvana ir tev.</li>
-                <li>Paldies, tev arī.</li>
-                <li>Laimīgu Jauno gadu!</li>
-            </ol>
-            <details class="atbildes">
-                <summary>Pārbaudi atbildes</summary>
-                <p lang="es">1. ¡Feliz Navidad! · 2. Este regalo es para ti. · 3. Gracias, igualmente. · 4. ¡Feliz Año Nuevo!</p>
-            </details>
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">4</span> Pārtulko spāniski</h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><span lang="lv">Priecīgus Ziemassvētkus!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="feliz navidad" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Šī dāvana ir tev.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="este regalo es para ti" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Paldies, tev arī.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="gracias igualmente" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Laimīgu Jauno gadu!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="feliz año nuevo|próspero año nuevo" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. ¡Feliz Navidad! · 2. Este regalo es para ti. · 3. Gracias, igualmente. · 4. ¡Feliz Año Nuevo!</p>
+                    </details>
+                </div>
+            </section>
 
-            <p class="materials-cta">
-                Gribi runāt spāniski droši? <a href="index.html#kursi">Piesakies kursam “Spāņu valodas pamati (A1)”</a>.
-            </p>
-        </article>
-    </section>
+            <!-- Aicinājums -->
+            <aside class="mat-cta">
+                <span class="mat-cta-emoji" aria-hidden="true">💬</span>
+                <div>
+                    <h2>Gribi runāt spāniski droši?</h2>
+                    <p>7 nedēļu kurss “Spāņu valodas pamati (A1)” — ar dzīvu sarunu praksi.</p>
+                </div>
+                <a href="index.html#kursi" class="btn-cta mat-poga-gaisa">Apskatīt kursu</a>
+            </aside>
+        </main>
+    </div>
 
     <!-- Kājene -->
     <footer>

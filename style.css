@@ -6,6 +6,9 @@
     --bg-card: #FFFFFF;
     --text-dark: #2C2C2C;
     --border-light: #E8E2D9;
+    --accent-green: #2F5D3A;
+    --accent-gold: #D4A537;
+    --accent-blue: #1F5FA8;
     --font-heading: 'Georgia', serif;
     --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -341,67 +344,314 @@ footer a {
     border-radius: 3px;
 }
 
-/* MATERIĀLU LAPA (materiali.html) */
+/* MATERIĀLU LAPAS (materiali.html, materiali-*.html) */
 .main-nav a[aria-current="page"] {
     color: var(--primary-bordo);
 }
 
-/* Materiālu saraksts: kartītes */
-.materials-virsraksts {
-    margin-bottom: 12px;
+/* Virsraksta josla */
+.mat-hero {
+    position: relative;
+    overflow: hidden;
+    max-width: 1160px;
+    margin: 24px auto 0;
+    border-radius: 28px;
+    color: #fff;
+    background:
+        radial-gradient(circle at 85% 20%, rgba(201, 162, 39, 0.35) 0, transparent 45%),
+        radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.12) 0, transparent 40%),
+        linear-gradient(135deg, var(--primary-bordo) 0%, var(--primary-bordo-hover) 100%);
+    box-shadow: 0 20px 50px rgba(107, 29, 29, 0.25);
 }
 
-.materials-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+.mat-vaks--ziemassvetki {
+    background:
+        radial-gradient(circle at 85% 15%, rgba(201, 162, 39, 0.40) 0, transparent 40%),
+        linear-gradient(135deg, var(--primary-bordo) 0%, #4A1A24 45%, var(--accent-green) 100%);
 }
 
-.material-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* Krītoši sniega punktiņi fonā */
+.mat-hero::before,
+.mat-karte-vaks::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.55) 1.5px, transparent 2px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.35) 1px, transparent 1.5px);
+    background-size: 46px 46px, 28px 28px;
+    background-position: 0 0, 14px 20px;
+    animation: mat-sniegs 18s linear infinite;
+    pointer-events: none;
 }
 
-.material-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+@keyframes mat-sniegs {
+    to { background-position: 0 460px, 14px 300px; }
 }
 
-.material-vaks {
-    height: 160px;
+.mat-hero-iekssa {
+    position: relative;
+    padding: 56px 48px;
+    max-width: 820px;
+    margin: 0;
+}
+
+.mat-hero h1 {
+    font-family: var(--font-heading);
+    font-size: 44px;
+    line-height: 1.15;
+    margin: 12px 0 14px;
+}
+
+.mat-hero-es {
+    display: block;
+    font-style: italic;
+    color: var(--accent-gold);
+    font-size: 0.7em;
+}
+
+.mat-hero-teksts {
+    font-size: 18px;
+    opacity: 0.92;
+    max-width: 620px;
+}
+
+.mat-virsbirka,
+.mat-valoda,
+.mat-limenis {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    backdrop-filter: blur(6px);
+}
+
+.mat-limenis {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: var(--text-dark);
+}
+
+.mat-birkas {
+    display: flex;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.mat-atpakal {
+    color: #fff;
+    opacity: 0.85;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.mat-atpakal:hover {
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.mat-statistika {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    margin: 24px 0 28px;
+}
+
+.mat-statistika li {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.mat-statistika strong {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    line-height: 1.1;
+}
+
+.mat-hero-pogas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mat-poga-gaisa {
+    background: #fff;
+    color: var(--primary-bordo);
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.mat-poga-gaisa:hover {
+    background: var(--accent-gold);
+    color: var(--text-dark);
+}
+
+.mat-poga-caurspid {
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 12px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.mat-poga-caurspid:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Filtri */
+.mat-filtri {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.mat-filtri[hidden] {
+    display: none;
+}
+
+.mat-filtrs {
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 7px 16px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.mat-filtrs[aria-pressed="true"] {
+    background: #fff;
+    color: var(--primary-bordo);
+}
+
+/* Materiālu kartītes */
+.mat-saraksts {
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+
+.mat-rezgis {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+}
+
+.mat-karte {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mat-karte[hidden] {
+    display: none;
+}
+
+.mat-karte:not(.mat-karte--drizuma):hover {
+    transform: translateY(-6px);
+    box-shadow: 0 22px 40px rgba(107, 29, 29, 0.16);
+}
+
+.mat-karte-vaks {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 4px;
     color: #fff;
+}
+
+.mat-karte-vaks .mat-limenis,
+.mat-karte-vaks .mat-valoda {
+    position: absolute;
+    top: 14px;
+}
+
+.mat-karte-vaks .mat-limenis { left: 14px; }
+.mat-karte-vaks .mat-valoda { right: 14px; }
+
+.mat-karte-emoji {
+    position: relative;
+    font-size: 64px;
+    line-height: 1;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.3));
+    transition: transform 0.4s ease;
+}
+
+.mat-karte:hover .mat-karte-emoji {
+    transform: scale(1.12) rotate(-6deg);
+}
+
+.mat-karte-moto {
+    position: relative;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 22px;
+}
+
+.mat-karte-saturs {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 22px 24px 24px;
+}
+
+.mat-karte h2 {
+    font-family: var(--font-heading);
+    font-size: 22px;
+    color: var(--primary-bordo);
+    margin-bottom: 8px;
+}
+
+.mat-karte-saite {
+    color: inherit;
     text-decoration: none;
 }
 
-.material-vaks--ziemassvetki {
-    background: linear-gradient(135deg, var(--primary-bordo), #2F5D3A);
+/* Visa kartīte ir klikšķināma */
+.mat-karte-saite::after {
+    content: "";
+    position: absolute;
+    inset: 0;
 }
 
-.material-ikona {
-    font-size: 56px;
-    line-height: 1;
+.mat-karte-saite:focus-visible {
+    outline: none;
 }
 
-.material-vaks-teksts {
-    font-family: var(--font-heading);
-    font-size: 22px;
-    font-style: italic;
+.mat-karte:focus-within {
+    outline: 3px solid var(--accent-gold);
+    outline-offset: 3px;
 }
 
-.material-card .materials-birka {
-    align-self: flex-start;
-    margin-bottom: 10px;
-}
-
-.material-apraksts {
-    font-size: 15px;
+.mat-karte p {
     color: #555;
-    margin-bottom: 12px;
+    font-size: 15px;
+    margin-bottom: 16px;
 }
 
-.material-saturs {
+.mat-karte-meta {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
@@ -409,75 +659,150 @@ footer a {
     margin-bottom: 20px;
 }
 
-.material-saturs li {
+.mat-karte-meta li {
     font-size: 13px;
     background: var(--bg-warm-light);
-    border: 1px solid var(--border-light);
     border-radius: 999px;
-    padding: 3px 10px;
+    padding: 4px 11px;
 }
 
-/* Viena materiāla lapa */
-.materials-atpakal {
+.mat-karte-bulta {
+    margin-top: auto;
+    font-weight: 700;
+    color: var(--primary-bordo);
+}
+
+.mat-karte-bulta span {
     display: inline-block;
-    font-size: 15px;
-    text-decoration: none !important;
+    transition: transform 0.25s ease;
 }
 
-.materials-galva {
-    margin-top: 16px;
+.mat-karte:hover .mat-karte-bulta span {
+    transform: translateX(6px);
+}
+
+.mat-karte--drizuma {
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 40px 28px;
+    background: transparent;
+    border: 2px dashed var(--border-light);
+    box-shadow: none;
+    min-height: 300px;
 }
 
-.materials-galva .section-title {
-    margin-top: 10px;
+.mat-karte--drizuma .mat-karte-emoji {
+    font-size: 44px;
+    margin-bottom: 10px;
+    filter: none;
 }
 
-.materials-birka {
-    display: inline-block;
+/* Viena materiāla izkārtojums: saturs sānos + sadaļas */
+.mat-izkartojums {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 36px;
+    padding-top: 36px;
+    align-items: start;
+}
+
+.mat-saturs {
+    position: sticky;
+    top: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mat-saturs-virsraksts {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.mat-saturs a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.mat-saturs a span {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--border-light);
+}
+
+.mat-saturs a:hover {
+    background: var(--bg-card);
+}
+
+.mat-saturs a.aktivs {
+    background: var(--bg-card);
+    color: var(--primary-bordo);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.mat-saturs a.aktivs span {
     background: var(--primary-bordo);
     color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    padding: 4px 12px;
-    border-radius: 999px;
 }
 
-.materials-druka {
-    margin: 4px 0 24px;
-    cursor: pointer;
-    font: inherit;
-}
-
-.vardu-saraksts {
-    list-style: none;
-    padding: 0 !important;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 10px;
-}
-
-.vardu-saraksts li {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 2px 8px;
-    margin: 0;
-    padding: 10px 12px;
-    background: var(--bg-warm-light);
+.mat-sadala {
+    background: var(--bg-card);
     border: 1px solid var(--border-light);
-    border-radius: 8px;
+    border-radius: 22px;
+    padding: 36px;
+    margin-bottom: 28px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+    scroll-margin-top: 150px;
 }
 
-.vardu-saraksts .es {
-    font-weight: 600;
+.mat-sadala h2 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    color: var(--primary-bordo);
+    margin-bottom: 12px;
 }
 
-.vardu-saraksts .lv {
-    flex-basis: 100%;
+.mat-sadala h3 {
+    font-size: 18px;
+    margin: 28px 0 12px;
+}
+
+.mat-nr {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary-bordo), var(--accent-green));
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 18px;
+}
+
+.mat-ievads {
     color: #555;
-    font-size: 15px;
+    margin-bottom: 20px;
 }
 
 .art-el,
@@ -485,119 +810,727 @@ footer a {
     font-weight: 700;
 }
 
-.art-el {
-    color: #1F5FA8;
-}
+.art-el { color: var(--accent-blue); }
+.art-la { color: var(--primary-bordo); }
 
-.art-la {
-    color: var(--primary-bordo);
-}
-
-.materials-piezime {
-    font-size: 15px;
-    color: #555;
-    margin-top: 10px;
-}
-
+/* Izrunas poga */
 .runat-poga {
-    border: 1px solid var(--border-light);
-    background: var(--bg-card);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    display: inline-grid;
+    place-items: center;
     flex-shrink: 0;
-    margin-right: 6px;
-    font-size: 14px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: var(--bg-warm-light);
+    font-size: 15px;
     line-height: 1;
     cursor: pointer;
-    vertical-align: middle;
+    transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .runat-poga:hover,
 .runat-poga:focus-visible {
-    border-color: var(--primary-bordo);
+    background: var(--accent-gold);
+    transform: scale(1.1);
 }
 
-.dialogs {
+/* 1. Vārdu kartītes (apgriežamas) */
+.vardu-rezgis {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 14px;
+}
+
+.vards {
+    position: relative;
+    perspective: 900px;
+}
+
+.vards .runat-poga {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 2;
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.vards-karte {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 140px;
+    border: none;
+    padding: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.vards-karte.apgriezta {
+    transform: rotateY(180deg);
+}
+
+.vards-puse {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 16px;
+    text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.vards-prieksa {
     background: var(--bg-warm-light);
-    border-left: 4px solid var(--primary-bordo);
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
+    border: 1px solid var(--border-light);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.dialogs p {
-    margin-bottom: 6px;
+.vards-karte:hover .vards-prieksa,
+.vards-karte:focus-visible .vards-prieksa {
+    border-color: var(--accent-gold);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.vards-emoji {
+    font-size: 34px;
+    line-height: 1;
+}
+
+.vards-es {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.vards-aizmugure {
+    transform: rotateY(180deg);
+    background: linear-gradient(135deg, var(--primary-bordo), var(--accent-green));
+    color: #fff;
+    font-weight: 600;
+}
+
+/* 2. Frāzes */
+.frazu-saraksts {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+}
+
+.frazu-saraksts li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--border-light);
+    transition: background 0.2s ease;
+}
+
+.frazu-saraksts li:hover {
+    background: var(--bg-warm-light);
+}
+
+.fraze-teksts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 20px;
+    flex-grow: 1;
+}
+
+.fraze-teksts .es {
+    font-weight: 600;
+    font-size: 17px;
+}
+
+.fraze-teksts .lv {
+    color: #666;
+}
+
+.mat-padoms {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(201, 162, 39, 0.14);
+}
+
+/* 3. Gramatika */
+.artikulu-rezgis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+}
+
+.artikuls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 18px 10px;
+    border-radius: 16px;
+    text-align: center;
+}
+
+.artikuls--el { background: rgba(31, 95, 168, 0.09); }
+.artikuls--la { background: rgba(107, 29, 29, 0.08); }
+
+.artikuls-vards {
+    font-family: var(--font-heading);
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.artikuls--el .artikuls-vards { color: var(--accent-blue); }
+.artikuls--la .artikuls-vards { color: var(--primary-bordo); }
+
+.artikuls small,
+.locijumi small {
+    color: #777;
+    font-size: 13px;
+}
+
+.likumu-rezgis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.likums {
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+}
+
+.likums-galotne {
+    display: inline-block;
+    font-weight: 700;
+    color: #fff;
+    background: var(--accent-green);
+    padding: 2px 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.likums p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.likums b {
+    color: var(--accent-green);
+}
+
+.locijumi {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.locijumi > div {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: var(--bg-warm-light);
+}
+
+.locijumi small {
+    flex-basis: 100%;
+    padding-left: 46px;
+}
+
+.locijumi b {
+    color: var(--primary-bordo);
+}
+
+/* 4. Dialogs kā čats */
+.dialoga-riki {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    margin-bottom: 20px;
+}
+
+.mat-poga-maza {
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    background: var(--primary-bordo);
+    border: none;
+    padding: 9px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.mat-poga-maza:hover {
+    background: var(--primary-bordo-hover);
+}
+
+.mat-poga-maza[hidden] {
+    display: none;
+}
+
+.mat-sledzis {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.mat-sledzis input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary-bordo);
+}
+
+.cats {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 18px;
+    background: var(--bg-warm-light);
+}
+
+.replika {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    max-width: 82%;
+}
+
+.replika--p {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.replika-avatars {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-weight: 700;
+    color: #fff;
+    background: var(--primary-bordo);
+}
+
+.replika--p .replika-avatars {
+    background: var(--accent-green);
+}
+
+.replika-burbulis {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px 10px;
+    padding: 10px 14px;
+    border-radius: 18px 18px 18px 4px;
+    background: var(--bg-card);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.replika--p .replika-burbulis {
+    border-radius: 18px 18px 4px 18px;
+    background: #EAF2EC;
+}
+
+.replika-burbulis strong {
+    flex-basis: 100%;
+    font-size: 12px;
+    color: #888;
+}
+
+.replika-burbulis .es {
+    flex: 1;
+    order: 1;
+}
+
+.replika-burbulis .runat-poga {
+    order: 2;
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+}
+
+.replika-burbulis .lv {
+    order: 3;
+    display: none;
+    flex-basis: 100%;
+    font-size: 14px;
+    color: #777;
+    font-style: italic;
+}
+
+.rada-tulkojumu .replika-burbulis .lv {
+    display: block;
+}
+
+.replika.runa .replika-burbulis {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 3px var(--accent-gold);
+}
+
+/* 5. Tradīcijas: laika josla */
+.laika-josla {
+    list-style: none;
+    position: relative;
+    padding-left: 8px;
+}
+
+.laika-josla::before {
+    content: "";
+    position: absolute;
+    left: 31px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: linear-gradient(var(--primary-bordo), var(--accent-green));
+}
+
+.laika-josla li {
+    position: relative;
+    display: flex;
+    gap: 18px;
+    padding-bottom: 22px;
+}
+
+.laika-emoji {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 22px;
+    background: var(--bg-card);
+    border: 2px solid var(--border-light);
+}
+
+.laika-datums {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--accent-green);
+}
+
+.laika-josla strong {
+    font-family: var(--font-heading);
+    font-size: 19px;
+}
+
+.laika-josla p {
+    color: #555;
+}
+
+/* 6. Uzdevumi */
+.uzdevums-bloks {
+    padding: 22px 24px;
+    border-radius: 18px;
+    background: var(--bg-warm-light);
+    margin-bottom: 16px;
+}
+
+.uzdevums-bloks h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px;
+    font-size: 17px;
+}
+
+.uzd-nr {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    font-size: 14px;
+}
+
+.uzdevums {
+    padding-left: 22px;
+    display: grid;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.uzd-lauks {
+    font: inherit;
+    padding: 6px 10px;
+    border: 2px solid var(--border-light);
+    border-radius: 10px;
+    background: var(--bg-card);
+    margin: 0 4px;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.uzd-lauks:focus {
+    outline: none;
+    border-color: var(--accent-gold);
+}
+
+.uzd-lauks--s { width: 90px; }
+.uzd-lauks--m { width: 170px; }
+.uzd-lauks--l { width: 100%; max-width: 280px; display: block; margin: 6px 0 0; }
+
+.uzd-lauks.pareizi {
+    border-color: var(--accent-green);
+    background: #EAF2EC;
+}
+
+.uzd-lauks.nepareizi {
+    border-color: var(--primary-bordo);
+    background: #F8E9E9;
+}
+
+.uzd-darbibas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+.uzd-parbaudit {
+    border: none;
+    font: inherit;
+    font-weight: 600;
+    padding: 9px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.uzd-rezultats {
+    font-weight: 600;
+}
+
+.uzd-rezultats.visi-pareizi {
+    color: var(--accent-green);
 }
 
 .atbildes {
-    margin: 4px 0 16px;
+    margin-top: 12px;
 }
 
 .atbildes summary {
     cursor: pointer;
     color: var(--primary-bordo);
     font-weight: 600;
+    font-size: 15px;
 }
 
 .atbildes p {
     margin-top: 8px;
     padding: 10px 14px;
-    background: var(--bg-warm-light);
-    border-radius: 8px;
+    background: var(--bg-card);
+    border-radius: 10px;
 }
 
-.tradiciju-saraksts {
-    list-style: none;
-    padding: 0 !important;
+/* Aicinājums beigās */
+.mat-cta {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 28px;
+    padding: 32px 36px;
+    border-radius: 22px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary-bordo), var(--accent-green));
 }
 
-.tradiciju-saraksts li {
-    margin-bottom: 12px;
+.mat-cta-emoji {
+    font-size: 48px;
 }
 
-.tradiciju-saraksts .datums {
-    display: inline-block;
-    min-width: 72px;
-    font-weight: 700;
-    color: var(--primary-bordo);
+.mat-cta div {
+    flex: 1;
+    min-width: 220px;
 }
 
-.uzdevums {
-    padding-left: 22px;
-    margin-bottom: 8px;
+.mat-cta h2 {
+    font-family: var(--font-heading);
+    font-size: 24px;
 }
 
-.uzdevums li {
-    margin-bottom: 4px;
+.mat-cta p {
+    opacity: 0.9;
 }
 
-.materials-cta {
-    margin-top: 36px;
-    text-align: center;
-    font-weight: 600;
+/* Materiālu lapas uz mazākiem ekrāniem */
+@media (max-width: 900px) {
+    .mat-izkartojums {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+    }
+
+    .mat-saturs {
+        position: static;
+        flex-direction: row;
+        overflow-x: auto;
+        margin-bottom: 20px;
+        padding-bottom: 4px;
+    }
+
+    .mat-saturs-virsraksts {
+        display: none;
+    }
+
+    .mat-saturs a {
+        flex-shrink: 0;
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+    }
+}
+
+@media (max-width: 640px) {
+    .mat-hero {
+        margin: 16px 12px 0;
+        border-radius: 22px;
+    }
+
+    .mat-hero-iekssa {
+        padding: 36px 22px;
+    }
+
+    .mat-hero h1 {
+        font-size: 32px;
+    }
+
+    .mat-sadala {
+        padding: 24px 18px;
+    }
+
+    .mat-sadala h2 {
+        font-size: 23px;
+    }
+
+    .vardu-rezgis {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .fraze-teksts,
+    .locijumi,
+    .likumu-rezgis {
+        grid-template-columns: 1fr;
+    }
+
+    .artikulu-rezgis {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .replika {
+        max-width: 95%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mat-hero::before,
+    .mat-karte-vaks::before {
+        animation: none;
+    }
+
+    .vards-karte,
+    .mat-karte,
+    .mat-karte-emoji {
+        transition: none;
+    }
 }
 
 @media print {
     .site-header,
     footer,
-    .legal-toc,
-    .materials-druka,
+    .mat-saturs,
+    .mat-hero-pogas,
+    .mat-atpakal,
     .runat-poga,
-    .materials-cta,
-    .materials-atpakal,
+    .mat-cta,
+    .dialoga-riki,
+    .uzd-darbibas,
     .empanadillo {
         display: none !important;
     }
 
-    .register-card {
-        border: none;
+    body {
+        background: #fff;
+    }
+
+    .mat-hero {
+        color: var(--text-dark);
+        background: none;
         box-shadow: none;
+        margin: 0;
+    }
+
+    .mat-hero::before {
+        display: none;
+    }
+
+    .mat-hero-iekssa {
+        padding: 0 0 16px;
+    }
+
+    .mat-izkartojums {
+        display: block;
         padding: 0;
     }
 
-    .atbildes {
-        break-inside: avoid;
+    .mat-sadala {
+        border: none;
+        box-shadow: none;
+        padding: 12px 0;
+        break-inside: avoid-page;
+    }
+
+    /* Drukā kartītēm redzamas abas puses */
+    .vards-karte {
+        height: auto;
+        transform: none !important;
+    }
+
+    .vards-puse {
+        position: static;
+        backface-visibility: visible;
+        transform: none;
+        padding: 6px;
+    }
+
+    .vards-aizmugure {
+        background: none;
+        color: #555;
+        font-weight: 400;
+    }
+
+    .replika-burbulis .lv {
+        display: block;
     }
 }
 

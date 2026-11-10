@@ -16,8 +16,9 @@ Short reference so work can start without re-reading every file.
 |---|---|
 | `index.html` | Home: header/nav, hero (with seasonal `p.svetku-sveiciens`) with CTA box, course grid (`#kursi`), footer |
 | `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
-| `materiali.html` | "Noderīgi materiāli" (in menu): card grid (`.courses-grid.materials-grid` of `article.course-card.material-card`). **Adding a material** = new page `materiali-<valoda>-<tēma>.html` + copy one card (cover `.material-vaks` with a `--<tēma>` gradient modifier, `.materials-birka` tag, `.material-apraksts`, `.material-saturs` chips, `.btn-card` link) |
-| `materiali-spanu-ziemassvetki.html` + `materiali.js` | Material **Spāņu A1 — Ziemassvētki**: vocab grid, phrases, grammar (articles, plural, *querer*), dialogue, Spanish traditions, exercises with `<details>` answers, print button, "← Visi materiāli" back link. `materiali.js` (reusable on any material page) adds 🔊 buttons (Web Speech, es-ES) to every `[data-es]` element |
+| `materiali.html` | "Noderīgi materiāli" (in menu): hero band `.mat-hero` + card grid `.mat-rezgis` of `article.mat-karte` (cover `.mat-karte-vaks` + theme class e.g. `.mat-vaks--ziemassvetki`, `.mat-limenis`, `.mat-valoda`, emoji, `.mat-karte-meta` chips; whole card clickable via `.mat-karte-saite::after`) + dashed `.mat-karte--drizuma` placeholder. Cards carry `data-valoda` / `data-valoda-nosaukums`; language filter chips (`.mat-filtri`) appear automatically once 2+ languages exist. **Adding a material** = new page `materiali-<valoda>-<tēma>.html` (copy the Christmas one) + copy one card |
+| `materiali-spanu-ziemassvetki.html` | Material **Spāņu A1 — Ziemassvētki**: hero with stats, sticky side TOC `.mat-saturs` (active link highlighted), sections `.mat-sadala` with `.mat-nr`: flip vocab cards (`.vardu-rezgis` > `.vards` > `button.vards-karte`), phrases list, grammar tiles (`.artikulu-rezgis`, `.likumu-rezgis`, `.locijumi`), chat dialogue (`.cats` > `.replika--a/--p`, translation toggle, "listen to whole dialogue"), timeline `.laika-josla`, self-checking exercises (`.uzdevums-bloks`, inputs `.uzd-lauks[data-atbilde]`, `|` = alternative answers; check ignores case/accents/punctuation), CTA `.mat-cta` |
+| `materiali.js` | Shared by material pages: 🔊 buttons on every `[data-es]` (Web Speech es-ES; placed in `[data-runa-vieta]` if present), flip cards, dialogue playback/translation, exercise checking, TOC highlighting, card filters |
 | `script.js` | Shared JS (see below) |
 | `snow.js` | Home page only: falling, rotating six-armed snowflakes canvas (`.snow-canvas`) in Nov/Dec/Jan/Feb; skipped with `prefers-reduced-motion`; force with `?sniegs=1`. In Nov/Dec (or with `?sniegs=1`) it also adds `html.ziemassvetki` (turns on the Christmas styling) |
 | `zvani.js` | Home page only (Nov/Dec): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
@@ -67,7 +68,7 @@ Adding/changing a course means editing `index.html` (`article.course-card` with 
 
 ## style.css (by section, line numbers approx.)
 - `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
-  `--bg-card #FFF`, `--text-dark #2C2C2C`, `--border-light #E8E2D9`, `--font-heading Georgia`, `--font-body` system stack
+  `--bg-card #FFF`, `--text-dark #2C2C2C`, `--border-light #E8E2D9`, `--accent-green #2F5D3A`, `--accent-gold #D4A537`, `--accent-blue #1F5FA8`, `--font-heading Georgia`, `--font-body` system stack
 - NAVIGĀCIJA (l.37): `.site-header` (sticky), `.nav-wrapper`, `.logo img` (100px high), `.main-nav a`
 - POGAS (l.79): `.btn-cta` (bordo), `.btn-large`, `.btn-secondary` (beige), `.btn-title`, `.btn-sub`
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
@@ -75,7 +76,7 @@ Adding/changing a course means editing `index.html` (`article.course-card` with 
   `.course-price`, `.course-info`, `.btn-card`
 - SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
-- MATERIĀLU LAPA: cards `.material-card`, `.material-vaks(--ziemassvetki)`, `.material-ikona`, `.material-apraksts`, `.material-saturs`; material page `.materials-atpakal`, `.materials-galva`, `.materials-birka`, `.vardu-saraksts` (`.es`/`.lv`), `.art-el`/`.art-la` (gender colours), `.runat-poga`, `.dialogs`, `.atbildes`, `.tradiciju-saraksts`, `.uzdevums`, `.materials-cta`, `@media print`; active nav link via `aria-current="page"`
+- MATERIĀLU LAPAS (`mat-*` prefix, before KĀJENE): see `materiali*.html` rows above; own responsive rules (900px / 640px), reduced-motion and `@media print` (print shows both flip-card sides and translations, hides UI)
 - KĀJENE: `footer`
 - SNIEGS (end of file): `.snow-canvas` (fixed, `pointer-events: none`, z-index 1000)
 - EMPANADILLO (end of file): `.empanadillo`, `.empa-poga`, `.empa-burbulis`, `.empa-aizvert`, `.empa-roka`, `.empa-acis`, `.empa-cepure`
