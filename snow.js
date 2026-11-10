@@ -1,16 +1,9 @@
 /* SNIEGS — krītošas sniegpārslas sākumlapā no novembra līdz februārim (nov., dec., janv., febr.).
-   Ziemassvētku rotājumi (html.ziemassvetki) — tikai decembrī; sveiciens "Priecīgus Ziemassvētkus!"
-   (html.svetku-dienas) — tikai 22.–26. decembrī.
-   Pārbaudei jebkurā dienā: ?sniegs=1 (sniegs), ?ziemassvetki=1 (rotājumi), ?sveiciens=1 (rotājumi + sveiciens) */
+   Pārbaudei jebkurā dienā: ?sniegs=1. Svētku klases (html.ziemassvetki, html.svetku-dienas, html.ballite)
+   tagad iestata sezona.js (<head>, visās lapās). */
 (function () {
-    var sodien = new Date();
-    var menesis = sodien.getMonth(); // 0 = janvāris
-    var diena = sodien.getDate();
+    var menesis = new Date().getMonth(); // 0 = janvāris
     var q = location.search;
-    var html = document.documentElement;
-    var sveiciens = (menesis === 11 && diena >= 22 && diena <= 26) || /[?&]sveiciens=1\b/.test(q);
-    if (menesis === 11 || sveiciens || /[?&]ziemassvetki=1\b/.test(q)) html.classList.add('ziemassvetki');
-    if (sveiciens) html.classList.add('svetku-dienas');
 
     var ziema = menesis === 10 || menesis === 11 || menesis === 0 || menesis === 1;
     if (!ziema && !/[?&]sniegs=1\b/.test(q)) return;
