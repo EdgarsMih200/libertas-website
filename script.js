@@ -168,3 +168,25 @@
             });
     });
 })();
+
+// Sākumlapas bento flīzes: gaismas plankums seko kursoram + ieejas animācija, kad sadaļa parādās ekrānā
+(function() {
+    var bento = document.querySelector('.bento');
+    if (!bento) return;
+    bento.addEventListener('pointermove', function(e) {
+        var f = e.target.closest('.bento-flize');
+        if (!f) return;
+        var r = f.getBoundingClientRect();
+        f.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        f.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    bento.classList.add('gaida');
+    var io = new IntersectionObserver(function(ieraksti) {
+        if (!ieraksti[0].isIntersecting) return;
+        bento.classList.add('redzams');
+        bento.classList.remove('gaida');
+        io.disconnect();
+    }, { rootMargin: '0px 0px -10% 0px' });
+    io.observe(bento);
+})();

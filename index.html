@@ -91,140 +91,116 @@
         </div>
     </section>
 
-    <!-- Noderīgi materiāli (ilustrētas kartītes ved uz materiali.html) -->
-    <section id="materiali" class="sakums-materiali container">
-        <h2 class="section-title">Noderīgi materiāli</h2>
-        <p class="sakums-ievads">Bezmaksas nodarbības valodu apguvei mājās — ar izrunu, uzdevumiem un pašpārbaudi.</p>
+    <!-- Noderīgi materiāli: bento režģis (visas flīzes ved uz materiali.html) -->
+    <section id="materiali" class="bento-sadala container" aria-labelledby="bento-virsraksts">
+        <header class="bento-galva">
+            <div>
+                <span class="bento-zime"><span class="bento-zime-punkts" aria-hidden="true"></span>Bezmaksas · mācies savā tempā</span>
+                <h2 id="bento-virsraksts" class="bento-virsraksts">Noderīgi <em>materiāli</em></h2>
+            </div>
+            <p class="bento-ievads">Interaktīvas nodarbības valodu apguvei mājās — ar izrunu, uzdevumiem un tūlītēju pašpārbaudi.</p>
+        </header>
 
-        <div class="ilu-rezgis">
-            <!-- 1. Ziemassvētki spāņu valodā: eglīte ar Spānijas krāsu virteni un "¡Hola!" -->
-            <a href="materiali.html" class="ilu-karte">
-                <span class="ilu-attels ilu-attels--ziem">
-                    <svg viewBox="0 0 160 120" aria-hidden="true">
-                        <circle cx="80" cy="66" r="50" fill="#fff" opacity=".55"/>
-                        <rect x="74" y="92" width="12" height="14" rx="2" fill="#7A4A2A"/>
-                        <path d="M80 50 L122 96 Q80 102 38 96Z" fill="#2F5D3A"/>
-                        <path d="M80 34 L110 72 Q80 77 50 72Z" fill="#3B7148"/>
-                        <path d="M80 20 L100 50 Q80 54 60 50Z" fill="#4A8757"/>
-                        <path d="M58 60 Q80 70 104 58" stroke="#C8352B" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        <path d="M50 84 Q80 94 112 80" stroke="#D4A537" stroke-width="3" fill="none" stroke-linecap="round"/>
-                        <circle cx="70" cy="45" r="3.5" fill="#C8352B"/>
-                        <circle cx="91" cy="44" r="3" fill="#F6D879"/>
-                        <circle cx="66" cy="74" r="4" fill="#F6D879"/>
-                        <circle cx="96" cy="72" r="4" fill="#C8352B"/>
-                        <circle cx="80" cy="88" r="3.5" fill="#F3EAE0"/>
-                        <circle cx="104" cy="88" r="3" fill="#F6D879"/>
-                        <circle cx="56" cy="90" r="3" fill="#C8352B"/>
-                        <polygon points="80,10 82,15.2 87.6,15.5 83.2,19 84.7,24.5 80,21.4 75.3,24.5 76.8,19 72.4,15.5 78,15.2" fill="#F6D879" stroke="#B8891F" stroke-width=".8"/>
-                        <path d="M112 14 h36 a8 8 0 0 1 8 8 v12 a8 8 0 0 1 -8 8 h-24 l-8 8 v-8 h-4 a8 8 0 0 1 -8 -8 v-12 a8 8 0 0 1 8 -8Z" fill="#6B1D1D"/>
-                        <text x="130" y="32" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="11" fill="#fff">¡Hola!</text>
-                        <circle cx="24" cy="30" r="2" fill="#fff"/>
-                        <circle cx="34" cy="50" r="1.5" fill="#fff"/>
-                        <circle cx="140" cy="70" r="2" fill="#fff"/>
-                    </svg>
+        <div class="bento">
+            <!-- 1. Galvenā flīze: Ziemassvētku nodarbība -->
+            <a href="materiali.html" class="bento-flize bento-flize--galvena">
+                <span class="bento-tags">
+                    <span class="tags tags--gaiss"><span class="tags-punkts" aria-hidden="true"></span>Jauns</span>
+                    <span class="tags tags--gaiss">Spāņu valoda</span>
+                    <span class="tags tags--gaiss">A1</span>
                 </span>
-                <span class="ilu-birka">Spāņu valoda · A1</span>
-                <h3>Ziemassvētki spāņu valodā</h3>
-                <p>Apsveikumi, svētku vārdi un dialogs par spāņu tradīcijām.</p>
+
+                <span class="bento-skats" aria-hidden="true">
+                    <span class="stikls stikls--aizmugure">
+                        <span class="stikls-mazs">la estrella</span>
+                        <span class="stikls-tulk">zvaigzne</span>
+                    </span>
+                    <span class="stikls stikls--prieksa">
+                        <span class="stikls-rinda">
+                            <span class="stikls-poga"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                            <span>
+                                <span class="stikls-frase" lang="es">¡Feliz Navidad!</span>
+                                <span class="stikls-tulk">Priecīgus Ziemassvētkus!</span>
+                            </span>
+                        </span>
+                        <span class="stikls-josla"><span></span></span>
+                    </span>
+                    <svg class="bento-zvaigzne" viewBox="0 0 40 40"><path d="M20 0c1.3 10.6 8.8 18.1 20 20-11.2 1.9-18.7 9.4-20 20-1.3-10.6-8.8-18.1-20-20C11.2 18.1 18.7 10.6 20 0z"/></svg>
+                </span>
+
+                <div class="bento-teksts">
+                    <h3>Ziemassvētki spāņu valodā</h3>
+                    <p>Apsveikumi, svētku vārdi un dialogs par spāņu tradīcijām.</p>
+                    <span class="bento-skaitli">
+                        <span><strong>20</strong> vārdi</span>
+                        <span><strong>10</strong> frāzes</span>
+                        <span><strong>4</strong> uzdevumi</span>
+                        <span><strong>~30</strong> min</span>
+                    </span>
+                </div>
+                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
             </a>
 
-            <!-- 2. Izruna: runas burbulis ar skaņas viļņiem un atskaņošanas poga -->
-            <a href="materiali.html" class="ilu-karte">
-                <span class="ilu-attels ilu-attels--zila">
-                    <svg viewBox="0 0 160 120" aria-hidden="true">
-                        <circle cx="80" cy="62" r="50" fill="#fff" opacity=".55"/>
-                        <path d="M46 80 L40 102 L66 82Z" fill="#1F5FA8"/>
-                        <rect x="26" y="20" width="108" height="66" rx="18" fill="#fff" stroke="#1F5FA8" stroke-width="3"/>
-                        <g fill="#1F5FA8">
-                            <rect x="41" y="49" width="5" height="8" rx="2.5"/>
-                            <rect x="50" y="44" width="5" height="18" rx="2.5"/>
-                            <rect x="59" y="38" width="5" height="30" rx="2.5"/>
-                            <rect x="68" y="32" width="5" height="42" rx="2.5" fill="#D4A537"/>
-                            <rect x="77" y="40" width="5" height="26" rx="2.5"/>
-                            <rect x="86" y="30" width="5" height="46" rx="2.5" fill="#D4A537"/>
-                            <rect x="95" y="37" width="5" height="32" rx="2.5"/>
-                            <rect x="104" y="44" width="5" height="18" rx="2.5"/>
-                            <rect x="113" y="49" width="5" height="8" rx="2.5"/>
-                        </g>
-                        <circle cx="126" cy="94" r="15" fill="#6B1D1D"/>
-                        <path d="M121 86 L134 94 L121 102Z" fill="#fff"/>
-                    </svg>
+            <!-- 2. Izruna: stikla atskaņotājs ar skaņas viļņiem -->
+            <a href="materiali.html" class="bento-flize bento-flize--izruna">
+                <span class="tags">Izruna</span>
+                <span class="bento-skats" aria-hidden="true">
+                    <span class="stikls stikls--atskanotajs">
+                        <span class="stikls-poga"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                        <span class="vilni"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                        <span class="stikls-laiks">0:02</span>
+                    </span>
+                    <span class="izruna-frase"><span lang="es">Buenos días</span> <span class="izruna-ipa">/ˈbwe.nos ˈði.as/</span></span>
                 </span>
-                <span class="ilu-birka">Izruna</span>
-                <h3>Klausies un atkārto</h3>
-                <p>Katru vārdu un frāzi vari noklausīties dzimtās valodas izrunā.</p>
+                <div class="bento-teksts">
+                    <h3>Klausies un atkārto</h3>
+                    <p>Katru vārdu un frāzi vari noklausīties ar vienu klikšķi.</p>
+                </div>
+                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
             </a>
 
-            <!-- 3. Uzdevumi: lapa ar atzīmēm un zīmulis -->
-            <a href="materiali.html" class="ilu-karte">
-                <span class="ilu-attels ilu-attels--zala">
-                    <svg viewBox="0 0 160 120" aria-hidden="true">
-                        <circle cx="80" cy="62" r="50" fill="#fff" opacity=".55"/>
-                        <g transform="rotate(-4 78 60)">
-                            <rect x="44" y="14" width="66" height="90" rx="6" fill="#fff" stroke="#D9D1C6" stroke-width="1.5"/>
-                            <rect x="52" y="22" width="34" height="5" rx="2.5" fill="#6B1D1D"/>
-                            <g fill="none" stroke="#2F5D3A" stroke-width="2">
-                                <rect x="52" y="36" width="11" height="11" rx="2.5"/>
-                                <rect x="52" y="55" width="11" height="11" rx="2.5"/>
-                                <rect x="52" y="74" width="11" height="11" rx="2.5"/>
-                            </g>
-                            <g fill="none" stroke="#2F5D3A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M54.5 41.5 l3 3 l6 -8"/>
-                                <path d="M54.5 60.5 l3 3 l6 -8"/>
-                            </g>
-                            <g fill="#E8E2D9">
-                                <rect x="68" y="39" width="32" height="5" rx="2.5"/>
-                                <rect x="68" y="58" width="26" height="5" rx="2.5"/>
-                                <rect x="68" y="77" width="30" height="5" rx="2.5"/>
-                                <rect x="52" y="92" width="48" height="4" rx="2"/>
-                            </g>
-                        </g>
-                        <g transform="translate(96 84) rotate(-45)">
-                            <rect x="0" y="0" width="54" height="10" fill="#D4A537"/>
-                            <rect x="0" y="0" width="54" height="3.3" fill="#F6D879"/>
-                            <rect x="54" y="0" width="5" height="10" fill="#C9C2B8"/>
-                            <rect x="59" y="0" width="8" height="10" rx="2" fill="#E2675E"/>
-                            <polygon points="0,0 -13,5 0,10" fill="#F1D9B5"/>
-                            <polygon points="-8.5,3.3 -13,5 -8.5,6.7" fill="#2C2C2C"/>
-                        </g>
-                    </svg>
+            <!-- 3. Uzdevumi: aizpildīts lauks ar atzīmi un progresa aplis -->
+            <a href="materiali.html" class="bento-flize bento-flize--uzdevumi">
+                <span class="tags">Uzdevumi</span>
+                <span class="bento-skats" aria-hidden="true">
+                    <span class="stikls stikls--uzdevums">
+                        <span class="uzd-teikums" lang="es">Yo <span class="uzd-lauks-demo">quiero<svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span> turrón.</span>
+                    </span>
+                    <span class="progresa-aplis" style="--p: 75"><span>3/4</span></span>
                 </span>
-                <span class="ilu-birka">Uzdevumi</span>
-                <h3>Pārbaudi sevi</h3>
-                <p>Uzdevumi, kas atbildes pārbauda uzreiz — bez skolotāja.</p>
+                <div class="bento-teksts">
+                    <h3>Pārbaudi sevi</h3>
+                    <p>Atbildes tiek pārbaudītas uzreiz — bez skolotāja.</p>
+                </div>
+                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
             </a>
 
-            <!-- 4. Drukāšanai: printeris ar izdrukātu lapu -->
-            <a href="materiali.html" class="ilu-karte">
-                <span class="ilu-attels ilu-attels--zelta">
-                    <svg viewBox="0 0 160 120" aria-hidden="true">
-                        <circle cx="80" cy="62" r="50" fill="#fff" opacity=".55"/>
-                        <rect x="56" y="12" width="48" height="34" rx="3" fill="#fff" stroke="#D9D1C6" stroke-width="1.5"/>
-                        <rect x="62" y="20" width="28" height="3" rx="1.5" fill="#E8E2D9"/>
-                        <rect x="62" y="27" width="36" height="3" rx="1.5" fill="#E8E2D9"/>
-                        <rect x="34" y="40" width="92" height="40" rx="12" fill="#6B1D1D"/>
-                        <rect x="34" y="40" width="92" height="10" rx="5" fill="#8A2A2A"/>
-                        <circle cx="112" cy="56" r="3" fill="#7CD38A"/>
-                        <rect x="100" y="54" width="6" height="4" rx="2" fill="#D4A537"/>
-                        <rect x="44" y="68" width="72" height="7" rx="3.5" fill="#3D0F0F"/>
-                        <g transform="rotate(2 80 92)">
-                            <rect x="52" y="71" width="56" height="40" rx="3" fill="#fff" stroke="#D9D1C6" stroke-width="1.5"/>
-                            <rect x="58" y="78" width="26" height="4" rx="2" fill="#6B1D1D"/>
-                            <rect x="58" y="87" width="42" height="3" rx="1.5" fill="#E8E2D9"/>
-                            <rect x="58" y="94" width="36" height="3" rx="1.5" fill="#E8E2D9"/>
-                            <rect x="58" y="101" width="40" height="3" rx="1.5" fill="#E8E2D9"/>
-                            <circle cx="98" cy="80" r="4" fill="#D4A537"/>
-                        </g>
-                    </svg>
+            <!-- 4. Drukāšanai: lapu kaudzīte -->
+            <a href="materiali.html" class="bento-flize bento-flize--druka">
+                <div class="bento-teksts">
+                    <span class="tags">Drukāšanai</span>
+                    <h3>Drukājami materiāli</h3>
+                    <p>Izdrukā lapu un mācies arī bez ekrāna — mājās vai ceļā.</p>
+                </div>
+                <span class="bento-skats" aria-hidden="true">
+                    <span class="lapa lapa--3"></span>
+                    <span class="lapa lapa--2"></span>
+                    <span class="lapa lapa--1">
+                        <i class="lapa-virsr"></i><i></i><i></i><i class="isa"></i><i></i>
+                        <span class="lapa-formats">A4</span>
+                    </span>
                 </span>
-                <span class="ilu-birka">Drukāšanai</span>
-                <h3>Drukājami materiāli</h3>
-                <p>Izdrukā lapu un mācies arī bez ekrāna — mājās vai ceļā.</p>
+                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
             </a>
-        </div>
 
-        <div class="sakums-visi">
-            <a href="materiali.html" class="btn-cta sakums-visi-poga">Visi materiāli <span aria-hidden="true">→</span></a>
+            <!-- 5. Uz visu materiālu lapu -->
+            <a href="materiali.html" class="bento-flize bento-flize--visi">
+                <span class="bento-visi-teksts">
+                    <span class="bento-visi-mazs">Visa kolekcija</span>
+                    <span class="bento-visi-liels">Visi materiāli</span>
+                </span>
+                <span class="bento-bulta bento-bulta--liela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            </a>
         </div>
     </section>
 

@@ -265,11 +265,7 @@ body {
     border-radius: 8px;
 }
 
-/* SĀKUMLAPAS MATERIĀLI (ilustrētas kartītes, ved uz materiali.html) */
-.sakums-materiali {
-    padding: 60px 20px;
-}
-
+/* Ievada teksts zem sadaļas virsraksta (kursi.html) */
 .sakums-ievads {
     text-align: center;
     color: #5a5148;
@@ -277,105 +273,701 @@ body {
     max-width: 560px;
 }
 
-/* Ilustrētas kartītes: zīmējums (inline SVG) + apraksts; visa kartīte ved uz materiali.html */
-.ilu-rezgis {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 32px;
+/* SĀKUMLAPAS MATERIĀLI — BENTO (asimetrisks režģis, stikla UI elementi, ved uz materiali.html) */
+.bento-sadala {
+    --b-tinte: color-mix(in srgb, var(--primary-bordo) 8%, transparent);
+    --b-liniija: color-mix(in srgb, var(--text-dark) 9%, transparent);
+    --b-teksts-vajs: color-mix(in srgb, var(--text-dark) 62%, var(--bg-warm-light));
+    --b-ena: 0 1px 2px rgba(44, 20, 20, .04), 0 8px 24px -12px rgba(44, 20, 20, .12);
+    --b-ena-hover: 0 2px 4px rgba(44, 20, 20, .05), 0 30px 60px -24px rgba(107, 29, 29, .35);
+    --b-ease: cubic-bezier(.2, .7, .2, 1);
+    position: relative;
+    padding: 96px 20px 104px;
 }
 
-.ilu-karte {
+/* Galva: kreisajā pusē virsraksts, labajā ievads; plāna līnija apakšā */
+.bento-galva {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: end;
+    gap: 32px 64px;
+    padding-bottom: 36px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--b-liniija);
+}
+
+.bento-zime {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--primary-bordo);
+    background: rgba(255, 255, 255, .6);
+    border: 1px solid color-mix(in srgb, var(--primary-bordo) 14%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.bento-zime-punkts,
+.tags-punkts {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-gold) 25%, transparent);
+    animation: bento-pulss 2.4s ease-in-out infinite;
+}
+
+@keyframes bento-pulss {
+    50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent-gold) 0%, transparent); }
+}
+
+.bento-virsraksts {
+    margin-top: 18px;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 76px);
+    line-height: .98;
+    letter-spacing: -.035em;
+    color: var(--text-dark);
+}
+
+.bento-virsraksts em {
+    font-style: italic;
+    color: var(--primary-bordo);
+}
+
+.bento-ievads {
+    max-width: 420px;
+    justify-self: end;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--b-teksts-vajs);
+}
+
+/* Režģis: 12 kolonnas; galvenā flīze 7×2, pa labi divas, apakšā plata + CTA */
+.bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(250px, auto);
+    gap: 16px;
+}
+
+.bento-flize--galvena  { grid-column: 1 / 8;  grid-row: 1 / 3; }
+.bento-flize--izruna   { grid-column: 8 / 13; grid-row: 1; }
+.bento-flize--uzdevumi { grid-column: 8 / 13; grid-row: 2; }
+.bento-flize--druka    { grid-column: 1 / 9;  grid-row: 3; }
+.bento-flize--visi     { grid-column: 9 / 13; grid-row: 3; }
+
+/* Flīze: gaiša virsma ar maigu gradientu; hover = pacelšanās, ēna, gradienta apmale, gaismas plankums */
+.bento-flize {
+    --mx: 50%;
+    --my: 0%;
+    position: relative;
+    isolation: isolate;
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    padding: 28px;
+    border-radius: 28px;
+    overflow: hidden;
     color: var(--text-dark);
     text-decoration: none;
+    background:
+        radial-gradient(120% 90% at 100% 0%, var(--b-tinte), transparent 60%),
+        linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(255, 255, 255, .7));
+    box-shadow: var(--b-ena), inset 0 0 0 1px rgba(255, 255, 255, .8);
+    transition: transform .5s var(--b-ease), box-shadow .5s var(--b-ease);
 }
 
-.ilu-attels {
-    position: relative;
-    display: block;
-    aspect-ratio: 4 / 3;
-    border-radius: 24px;
-    overflow: hidden;
-    margin-bottom: 18px;
+/* gradienta apmale (redzama tikai hover/fokusā) */
+.bento-flize::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(135deg, var(--accent-gold), color-mix(in srgb, var(--primary-bordo) 70%, transparent) 45%, transparent 70%, var(--accent-gold));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
 }
 
-.ilu-attels svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transition: transform 0.5s ease;
+/* gaismas plankums seko kursoram (--mx/--my iestata script.js) */
+.bento-flize::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent-gold) 18%, transparent), transparent 60%);
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
 }
 
-.ilu-karte:hover .ilu-attels svg,
-.ilu-karte:focus-visible .ilu-attels svg {
-    transform: scale(1.06) rotate(-1.5deg);
+.bento-flize:hover,
+.bento-flize:focus-visible {
+    transform: translateY(-6px);
+    box-shadow: var(--b-ena-hover), inset 0 0 0 1px rgba(255, 255, 255, .8);
 }
 
-.ilu-karte:focus-visible {
-    outline: none;
-}
+.bento-flize:hover::before,
+.bento-flize:focus-visible::before,
+.bento-flize:hover::after { opacity: 1; }
 
-.ilu-karte:focus-visible .ilu-attels {
-    outline: 3px solid var(--accent-gold);
-    outline-offset: 3px;
-}
+.bento-flize:focus-visible { outline: none; }
+.bento-flize:focus-visible::before { padding: 3px; }
 
-.ilu-attels--ziem  { background: linear-gradient(160deg, #F6E3D6 0%, #E9CFC0 100%); }
-.ilu-attels--zila  { background: linear-gradient(160deg, #E6EEF8 0%, #CFDDF0 100%); }
-.ilu-attels--zala  { background: linear-gradient(160deg, #E7F0E6 0%, #CFE0CF 100%); }
-.ilu-attels--zelta { background: linear-gradient(160deg, #F8EFD9 0%, #EEDDB4 100%); }
-
-.ilu-birka {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    color: var(--accent-gold);
-    margin-bottom: 4px;
-}
-
-.ilu-karte h3 {
+.bento-flize h3 {
     font-family: var(--font-heading);
-    font-size: 20px;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.bento-flize p {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--b-teksts-vajs);
+    max-width: 36ch;
+}
+
+.bento-teksts {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin-top: auto;
+    padding-right: 56px;
+}
+
+/* Tagi: pilnīgi noapaļoti, ar plānu apmali; --gaiss = uz tumša fona */
+.bento-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tags {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: .01em;
     color: var(--primary-bordo);
-    line-height: 1.25;
-    margin-bottom: 6px;
+    background: rgba(255, 255, 255, .75);
+    border: 1px solid var(--b-liniija);
+    box-shadow: 0 1px 2px rgba(44, 20, 20, .05);
 }
 
-.ilu-karte p {
-    font-size: 14px;
-    color: #6b625a;
-    line-height: 1.5;
+.bento-teksts .tags { margin-bottom: 14px; }
+
+.tags--gaiss {
+    color: #fff;
+    background: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .22);
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-@media (max-width: 960px) {
-    .ilu-rezgis { grid-template-columns: repeat(2, 1fr); }
+/* Bultiņas poga labajā apakšējā stūrī */
+.bento-bulta {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--b-liniija);
+    color: var(--primary-bordo);
+    transition: transform .5s var(--b-ease), background .3s ease, color .3s ease;
 }
 
-@media (max-width: 520px) {
-    .ilu-rezgis { gap: 24px 14px; }
-    .ilu-attels { border-radius: 16px; margin-bottom: 12px; }
-    .ilu-karte h3 { font-size: 17px; }
-    .ilu-karte p { font-size: 13px; }
+.bento-bulta svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.bento-flize:hover .bento-bulta,
+.bento-flize:focus-visible .bento-bulta {
+    background: var(--primary-bordo);
+    color: #fff;
+    border-color: transparent;
+    transform: rotate(45deg);
+}
+
+/* Vizuālā zona katrā flīzē */
+.bento-skats {
+    position: relative;
+    z-index: 1;
+    display: block;
+    flex: 1;
+}
+
+/* Stikla panelis (glassmorphism) */
+.stikls {
+    display: block;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .55);
+    border: 1px solid rgba(255, 255, 255, .8);
+    box-shadow: 0 10px 30px -12px rgba(44, 20, 20, .18), inset 0 1px 0 rgba(255, 255, 255, .9);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.stikls-poga {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--primary-bordo);
+    box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--primary-bordo) 60%, transparent);
+}
+
+.stikls-poga svg { width: 18px; height: 18px; fill: #fff; margin-left: 2px; }
+
+/* ---------- 1. Galvenā flīze (tumša) ---------- */
+.bento-flize--galvena {
+    padding: 36px;
+    color: #fff;
+    background:
+        radial-gradient(60% 55% at 85% 20%, color-mix(in srgb, var(--accent-gold) 38%, transparent), transparent 70%),
+        radial-gradient(70% 60% at 0% 100%, color-mix(in srgb, var(--accent-green) 45%, transparent), transparent 70%),
+        linear-gradient(160deg, var(--primary-bordo) 0%, var(--primary-bordo-hover) 55%, color-mix(in srgb, var(--primary-bordo-hover) 70%, #000) 100%);
+    box-shadow: 0 30px 60px -30px color-mix(in srgb, var(--primary-bordo) 80%, transparent), inset 0 0 0 1px rgba(255, 255, 255, .08);
+}
+
+/* smalks līniju tīkls fonā */
+.bento-flize--galvena .bento-skats::before {
+    content: "";
+    position: absolute;
+    inset: -40px -36px;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, .06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .06) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask: radial-gradient(ellipse at 60% 45%, #000 20%, transparent 70%);
+    mask: radial-gradient(ellipse at 60% 45%, #000 20%, transparent 70%);
+}
+
+.bento-flize--galvena h3 { color: #fff; font-size: clamp(32px, 3.4vw, 44px); }
+.bento-flize--galvena p { color: rgba(255, 255, 255, .72); font-size: 16px; }
+.bento-flize--galvena .bento-bulta { right: 32px; bottom: 32px; width: 52px; height: 52px; background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .25); color: #fff; backdrop-filter: blur(8px); }
+.bento-flize--galvena:hover .bento-bulta { background: #fff; color: var(--primary-bordo); }
+.bento-flize--galvena::after { background: radial-gradient(480px circle at var(--mx) var(--my), rgba(255, 255, 255, .12), transparent 60%); }
+
+.bento-flize--galvena .bento-skats { min-height: 240px; }
+
+.bento-flize--galvena .stikls {
+    position: absolute;
+    background: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .22);
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .45), inset 0 1px 0 rgba(255, 255, 255, .25);
+    transition: transform .7s var(--b-ease);
+}
+
+.stikls--prieksa {
+    left: 8%;
+    top: 34%;
+    width: min(340px, 78%);
+    padding: 20px 22px;
+}
+
+.stikls--aizmugure {
+    right: 6%;
+    top: 4%;
+    width: 180px;
+    padding: 18px 20px;
+    transform: rotate(6deg);
+}
+
+.bento-flize--galvena:hover .stikls--prieksa { transform: translate(-6px, -8px); }
+.bento-flize--galvena:hover .stikls--aizmugure { transform: rotate(9deg) translate(8px, -6px); }
+
+.stikls-rinda { display: flex; align-items: center; gap: 14px; }
+
+.bento-flize--galvena .stikls-poga { background: #fff; box-shadow: 0 6px 20px -6px rgba(0, 0, 0, .5); }
+.bento-flize--galvena .stikls-poga svg { fill: var(--primary-bordo); }
+
+.stikls-frase {
+    display: block;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.stikls-mazs {
+    display: block;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 20px;
+}
+
+.stikls-tulk {
+    display: block;
+    margin-top: 2px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .65);
+}
+
+.stikls-josla {
+    display: block;
+    height: 3px;
+    margin-top: 16px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, .18);
+    overflow: hidden;
+}
+
+.stikls-josla span {
+    display: block;
+    width: 38%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--accent-gold), #fff);
+    transition: width 1.2s var(--b-ease);
+}
+
+.bento-flize--galvena:hover .stikls-josla span { width: 86%; }
+
+.bento-zvaigzne {
+    position: absolute;
+    left: 4%;
+    top: 6%;
+    width: 30px;
+    fill: var(--accent-gold);
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent-gold) 70%, transparent));
+    animation: bento-mirdz 4s ease-in-out infinite;
+}
+
+@keyframes bento-mirdz {
+    50% { transform: scale(.75) rotate(20deg); opacity: .7; }
+}
+
+.bento-skaitli {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, .14);
+    font-size: 13px;
+    color: rgba(255, 255, 255, .6);
+}
+
+.bento-skaitli strong {
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: 20px;
+    color: #fff;
+    margin-right: 4px;
+}
+
+/* ---------- 2. Izruna ---------- */
+.bento-flize--izruna { --b-tinte: color-mix(in srgb, var(--accent-blue) 14%, transparent); }
+
+.bento-flize--izruna .bento-skats { display: flex; flex-direction: column; justify-content: center; gap: 12px; }
+
+.stikls--atskanotajs {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 18px 10px 10px;
+    border-radius: 999px;
+}
+
+.stikls--atskanotajs .stikls-poga { width: 40px; height: 40px; background: var(--accent-blue); box-shadow: 0 6px 16px -4px color-mix(in srgb, var(--accent-blue) 60%, transparent); }
+
+.vilni {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 32px;
+}
+
+.vilni i {
+    flex: 1;
+    max-width: 4px;
+    height: var(--h, 40%);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--accent-blue) 55%, transparent);
+    transform-origin: center;
+}
+
+.vilni i:nth-child(1)  { --h: 25%; }
+.vilni i:nth-child(2)  { --h: 50%; }
+.vilni i:nth-child(3)  { --h: 80%; }
+.vilni i:nth-child(4)  { --h: 45%; }
+.vilni i:nth-child(5)  { --h: 100%; background: var(--accent-gold); }
+.vilni i:nth-child(6)  { --h: 65%; }
+.vilni i:nth-child(7)  { --h: 90%; background: var(--accent-gold); }
+.vilni i:nth-child(8)  { --h: 40%; }
+.vilni i:nth-child(9)  { --h: 70%; }
+.vilni i:nth-child(10) { --h: 30%; }
+.vilni i:nth-child(11) { --h: 55%; }
+.vilni i:nth-child(12) { --h: 35%; }
+.vilni i:nth-child(13) { --h: 20%; }
+.vilni i:nth-child(14) { --h: 12%; }
+
+.bento-flize--izruna:hover .vilni i { animation: bento-vilnis .9s ease-in-out infinite alternate; }
+.vilni i:nth-child(3n)   { animation-delay: -.3s !important; }
+.vilni i:nth-child(3n+1) { animation-delay: -.6s !important; }
+
+@keyframes bento-vilnis {
+    from { transform: scaleY(.35); }
+    to   { transform: scaleY(1); }
+}
+
+.stikls-laiks { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--b-teksts-vajs); }
+
+.izruna-frase {
+    padding-left: 12px;
+    font-family: var(--font-heading);
+    font-style: italic;
+    font-size: 18px;
+}
+
+.izruna-ipa {
+    font-family: var(--font-body);
+    font-style: normal;
+    font-size: 13px;
+    color: var(--b-teksts-vajs);
+    margin-left: 6px;
+}
+
+/* ---------- 3. Uzdevumi ---------- */
+.bento-flize--uzdevumi { --b-tinte: color-mix(in srgb, var(--accent-green) 14%, transparent); }
+
+.bento-flize--uzdevumi .bento-skats { display: flex; align-items: center; gap: 16px; }
+
+.stikls--uzdevums { flex: 1; padding: 16px 18px; }
+
+.uzd-teikums {
+    font-family: var(--font-heading);
+    font-size: 18px;
+}
+
+.uzd-lauks-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 4px;
+    padding: 1px 10px 1px 12px;
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--accent-green);
+    background: color-mix(in srgb, var(--accent-green) 10%, #fff);
+    border: 1px solid color-mix(in srgb, var(--accent-green) 30%, transparent);
+}
+
+.uzd-lauks-demo svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 24;
+    stroke-dashoffset: 0;
+}
+
+.bento-flize--uzdevumi:hover .uzd-lauks-demo svg { animation: bento-kekss .6s var(--b-ease); }
+
+@keyframes bento-kekss {
+    from { stroke-dashoffset: 24; }
+}
+
+.progresa-aplis {
+    flex: none;
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent-green) calc(var(--p) * 1%), color-mix(in srgb, var(--accent-green) 14%, transparent) 0);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent-green);
+}
+
+.progresa-aplis::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--bg-card);
+}
+
+.progresa-aplis span { position: relative; }
+
+/* ---------- 4. Drukāšanai (plata, horizontāla) ---------- */
+.bento-flize--druka {
+    --b-tinte: color-mix(in srgb, var(--accent-gold) 22%, transparent);
+    flex-direction: row;
+    align-items: stretch;
+}
+
+.bento-flize--druka .bento-teksts { flex: 1; align-self: flex-end; margin-top: 0; }
+.bento-flize--druka .bento-skats { flex: 0 0 46%; min-height: 190px; }
+
+.lapa {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 132px;
+    height: 176px;
+    margin: -88px 0 0 -66px;
+    border-radius: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    box-shadow: 0 18px 36px -18px rgba(44, 20, 20, .3);
+    transition: transform .6s var(--b-ease);
+}
+
+.lapa--3 { transform: rotate(-12deg) translate(-26px, 8px); opacity: .7; }
+.lapa--2 { transform: rotate(-5deg) translate(-12px, 4px); }
+.lapa--1 {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 20px 16px;
+    transform: rotate(4deg);
+}
+
+.lapa--1 i {
+    display: block;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--border-light);
+}
+
+.lapa--1 i.lapa-virsr { width: 60%; height: 8px; background: var(--primary-bordo); margin-bottom: 6px; }
+.lapa--1 i.isa { width: 70%; }
+
+.lapa-formats {
+    position: absolute;
+    right: -14px;
+    bottom: 18px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary-bordo);
+    background: color-mix(in srgb, var(--accent-gold) 30%, #fff);
+    border: 1px solid color-mix(in srgb, var(--accent-gold) 45%, transparent);
+}
+
+.bento-flize--druka:hover .lapa--3 { transform: rotate(-18deg) translate(-56px, 10px); }
+.bento-flize--druka:hover .lapa--2 { transform: rotate(-8deg) translate(-28px, 0); }
+.bento-flize--druka:hover .lapa--1 { transform: rotate(7deg) translate(18px, -10px); }
+
+/* ---------- 5. CTA flīze ---------- */
+.bento-flize--visi {
+    justify-content: space-between;
+    background:
+        radial-gradient(80% 80% at 100% 100%, color-mix(in srgb, var(--accent-gold) 30%, transparent), transparent 70%),
+        var(--text-dark);
+    color: #fff;
+}
+
+.bento-visi-mazs {
+    display: block;
+    font-size: 13px;
+    color: rgba(255, 255, 255, .55);
+    margin-bottom: 8px;
+}
+
+.bento-visi-liels {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: clamp(30px, 3vw, 40px);
+    line-height: 1.02;
+    letter-spacing: -.03em;
+}
+
+.bento-bulta--liela { width: 60px; height: 60px; background: var(--accent-gold); border: 0; color: var(--text-dark); }
+.bento-flize--visi:hover .bento-bulta--liela { transform: translateX(6px); background: #fff; color: var(--text-dark); }
+.bento-flize--visi::after { background: radial-gradient(380px circle at var(--mx) var(--my), rgba(255, 255, 255, .1), transparent 60%); }
+
+/* Ieejas animācija, kad sadaļa parādās ekrānā (.redzams pievieno script.js) */
+.bento.gaida .bento-flize { opacity: 0; transform: translateY(24px); }
+.bento.redzams .bento-flize {
+    opacity: 1;
+    transform: none;
+    transition: opacity .8s var(--b-ease), transform .8s var(--b-ease), box-shadow .5s var(--b-ease);
+}
+.bento.redzams .bento-flize:nth-child(2) { transition-delay: .08s, .08s, 0s; }
+.bento.redzams .bento-flize:nth-child(3) { transition-delay: .16s, .16s, 0s; }
+.bento.redzams .bento-flize:nth-child(4) { transition-delay: .24s, .24s, 0s; }
+.bento.redzams .bento-flize:nth-child(5) { transition-delay: .32s, .32s, 0s; }
+.bento.redzams .bento-flize:hover,
+.bento.redzams .bento-flize:focus-visible { transform: translateY(-6px); transition-delay: 0s; }
+
+@media (max-width: 1024px) {
+    .bento-flize--galvena  { grid-column: 1 / 13; grid-row: auto; }
+    .bento-flize--izruna   { grid-column: 1 / 7;  grid-row: auto; }
+    .bento-flize--uzdevumi { grid-column: 7 / 13; grid-row: auto; }
+    .bento-flize--druka    { grid-column: 1 / 13; grid-row: auto; }
+    .bento-flize--visi     { grid-column: 1 / 13; grid-row: auto; flex-direction: row; align-items: center; min-height: 0; }
+    .bento { grid-auto-rows: auto; }
+    .bento-flize--visi { min-height: 120px; }
+}
+
+@media (max-width: 720px) {
+    .bento-sadala { padding: 64px 16px 72px; }
+    .bento-galva { grid-template-columns: 1fr; gap: 16px; padding-bottom: 24px; margin-bottom: 24px; }
+    .bento-ievads { justify-self: start; font-size: 16px; }
+    .bento { gap: 12px; }
+    .bento-flize--izruna, .bento-flize--uzdevumi { grid-column: 1 / 13; }
+    .bento-flize { padding: 22px; border-radius: 22px; }
+    .bento-flize--galvena { padding: 24px; }
+    .bento-flize--galvena .bento-bulta { right: 22px; bottom: 22px; }
+    .bento-flize--galvena .bento-skats { min-height: 210px; }
+    .stikls--prieksa { left: 0; width: 90%; padding: 16px; }
+    .stikls--aizmugure { right: 0; width: 150px; }
+    .stikls-frase { font-size: 19px; }
+    .bento-flize--druka { flex-direction: column-reverse; }
+    .bento-flize--druka .bento-skats { flex-basis: 200px; }
+    .bento-flize h3 { font-size: 23px; }
+    .bento-bulta { right: 18px; bottom: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .ilu-attels svg { transition: none; }
-    .ilu-karte:hover .ilu-attels svg { transform: none; }
-}
-
-.sakums-visi {
-    text-align: center;
-    margin-top: 28px;
-}
-
-.sakums-visi-poga {
-    flex-direction: row;
-    gap: 8px;
-    padding: 12px 28px;
-    font-weight: 600;
-    border-radius: 999px;
+    .bento-flize, .bento-flize *, .bento-flize::before, .bento-flize::after { animation: none !important; transition: none !important; }
+    .bento-zime-punkts { animation: none; }
+    .bento.gaida .bento-flize { opacity: 1; transform: none; }
+    .bento-flize:hover { transform: none; }
 }
 
 /* SATURA KARTĪTE */

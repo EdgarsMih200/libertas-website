@@ -14,7 +14,7 @@ Short reference so work can start without re-reading every file.
 ## Files
 | File | Purpose |
 |---|---|
-| `index.html` | Home: header/nav, hero (with seasonal `p.svetku-sveiciens`) with CTA box (both buttons → `kursi.html`), materials teaser `section#materiali.sakums-materiali` (`.sakums-ievads`, illustrated tiles `.ilu-rezgis` (4 cols → 2 under 960px) > `a.ilu-karte` > `.ilu-attels` (+`--ziem/--zila/--zala/--zelta` tinted panel with a hand-drawn inline SVG: tree with "¡Hola!", speech bubble with sound waves, worksheet + pencil, printer) + `.ilu-birka`, `h3`, `p`; no emojis; all lead to `materiali.html`; button `.sakums-visi-poga`), footer |
+| `index.html` | Home: header/nav, hero (with seasonal `p.svetku-sveiciens`) with CTA box (both buttons → `kursi.html`), materials teaser `section#materiali.bento-sadala` (editorial header `.bento-galva` with pill `.bento-zime` + `h2.bento-virsraksts`; 12-col bento grid `.bento` of `a.bento-flize`: `--galvena` (dark, 7×2, glass UI `.stikls` mock of the Christmas lesson + stats), `--izruna` (glass player, waveform `.vilni`), `--uzdevumi` (filled answer chip + `.progresa-aplis`), `--druka` (wide, paper stack `.lapa`), `--visi` (dark CTA); tags `.tags`/`.tags--gaiss`, corner arrow `.bento-bulta`; hover = lift + gradient border + cursor spotlight; all lead to `materiali.html`), footer |
 | `kursi.html` | "Kursi" (menu): `section#kursi.courses-section` with `h1.section-title`, `.sakums-ievads`, course cards. Enrollment via `script.js` (`data-course`) |
 | `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
 | `materiali.html` | "Noderīgi materiāli" (in menu): hero band `.mat-hero` + card grid `.mat-rezgis` of `article.mat-karte` (cover `.mat-karte-vaks` + theme class e.g. `.mat-vaks--ziemassvetki` (Spanish, bordo→green) / `.mat-vaks--ziemassvetki-en` (English, blue→green), `.mat-limenis`, `.mat-valoda`, emoji, `.mat-karte-meta` chips; whole card clickable via `.mat-karte-saite::after`) + dashed `.mat-karte--drizuma` placeholder. Cards carry `data-valoda` / `data-valoda-nosaukums`; language filter chips (`.mat-filtri`) appear automatically once 2+ languages exist. **Adding a material** = new page `materiali-<valoda>-<tēma>.html` (copy the Christmas one) + copy one card |
@@ -72,6 +72,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - Calls `/api/me`, injects sign-in button or user chip/menu (Mani kursi, Administrācija, Iziet) into `.nav-wrapper`.
 - Exposes `window.LIB` (`api`, `el`, `toast`, `signInUrl`, `STATUSI`, `me`) and fires `lib:me`; used by `konts.js`/`admin.js`.
 - Course buttons (`data-course`): enroll, or sign in first (pending course kept in sessionStorage).
+- Home bento: sets `--mx/--my` on `.bento-flize` for the cursor spotlight; reveal-on-scroll (`.bento.gaida` → `.redzams`) via IntersectionObserver.
 
 ## style.css (by section, line numbers approx.)
 - `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
@@ -81,7 +82,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
 - KURSU IZKĀRTOJUMS (l.175): `.courses-section`, `.section-title`, `.courses-grid`, `.course-card`, `.course-body`,
   `.course-price`, `.course-info`, `.btn-card`
-- SĀKUMLAPAS MATERIĀLI: `.sakums-materiali`, `.sakums-ievads`, `.ilu-*`, `.sakums-visi(-poga)`
+- SĀKUMLAPAS MATERIĀLI — BENTO: `.bento-*`, `.stikls*`, `.tags`, `.vilni`, `.progresa-aplis`, `.lapa*` (local tokens `--b-*` via `color-mix` of root vars; breakpoints 1024px / 720px; reduced-motion off).; `.sakums-ievads` (intro under `.section-title`, used by `kursi.html`) sits just above it
 - SATURA KARTĪTE: `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
 - MATERIĀLU LAPAS (`mat-*` prefix, before KĀJENE): see `materiali*.html` rows above; own responsive rules (900px / 640px), reduced-motion and `@media print` (print shows both flip-card sides and translations, hides UI)
