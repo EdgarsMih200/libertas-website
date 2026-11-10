@@ -32,12 +32,26 @@
         </div>
     </header>
 
-    <section class="register-section container">
-        <div class="register-card account-card" id="konts">
-            <h1 class="section-title">Mani kursi</h1>
-            <p class="register-intro">Ielādē…</p>
+    <main class="konta-lapa">
+        <div class="lapas-josla lapas-josla--maza">
+            <div class="lapas-josla-ainava" aria-hidden="true">
+                <svg viewBox="0 340 1440 180" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+            </div>
+            <div class="container lapas-josla-saturs">
+                <h1 class="section-title">Mani kursi</h1>
+            </div>
         </div>
-    </section>
+
+        <section class="register-section container" aria-label="Profils un pieteikumi">
+            <!-- saturu zīmē konts.js; līdz tam — ielādes stāvoklis -->
+            <div class="register-card account-card" id="konts" aria-busy="true">
+                <div class="ielades-stavoklis">
+                    <span data-empa-poza="ielade" data-empa-merogs="2"></span>
+                    <p class="register-intro"><em lang="es">Momentito…</em> Ielādējam tavus kursus.</p>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Kājene -->
     <footer class="site-footer">
