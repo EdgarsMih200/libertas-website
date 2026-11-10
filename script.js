@@ -131,14 +131,17 @@
         });
 
         // Piekrišanas piezīme viesiem — kursu lapā pie pieteikšanās (hero poga "Izvēlies kursu" vairs neved uz Google)
-        var ievads = document.querySelector('.courses-section .sakums-ievads');
+        // vieta: [data-consent-vieta] (kursi.html "Kā pieteikties"), citādi aiz ievada teksta
+        var vieta = document.querySelector('[data-consent-vieta]');
+        var ievads = vieta || document.querySelector('.courses-section .sakums-ievads');
         if (!logged && ievads) {
             var note = el('p', 'consent-note');
             note.appendChild(document.createTextNode('Piesakoties kursam, jūs ienāksiet ar Google un piekrītat '));
             var na = el('a', '', 'noteikumiem un privātuma politikai'); na.href = 'noteikumi.html';
             note.appendChild(na);
             note.appendChild(document.createTextNode('.'));
-            ievads.parentNode.insertBefore(note, ievads.nextSibling);
+            if (vieta) vieta.appendChild(note);
+            else ievads.parentNode.insertBefore(note, ievads.nextSibling);
         }
 
         // Gaidošais pieteikums pēc ienākšanas

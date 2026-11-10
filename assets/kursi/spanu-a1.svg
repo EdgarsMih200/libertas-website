@@ -1,28 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" role="img" aria-label="Spāņu valoda A1">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF4E0"/><stop offset="1" stop-color="#FBD9A8"/></linearGradient>
-    <pattern id="flizes" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M20 4 L36 20 L20 36 L4 20 Z" fill="none" stroke="#E8A23A" stroke-width="1.5" opacity=".35"/>
-      <circle cx="20" cy="20" r="3" fill="#C8401F" opacity=".25"/>
-    </pattern>
-  </defs>
-  <rect width="600" height="320" fill="url(#bg)"/>
-  <rect x="330" width="270" height="320" fill="url(#flizes)"/>
-  <g transform="translate(470 110)">
-    <g stroke="#E8A23A" stroke-width="8" stroke-linecap="round">
-      <line x1="0" y1="-88" x2="0" y2="-68"/><line x1="0" y1="68" x2="0" y2="88"/>
-      <line x1="-88" y1="0" x2="-68" y2="0"/><line x1="68" y1="0" x2="88" y2="0"/>
-      <line x1="-62" y1="-62" x2="-48" y2="-48"/><line x1="48" y1="48" x2="62" y2="62"/>
-      <line x1="-62" y1="62" x2="-48" y2="48"/><line x1="48" y1="-48" x2="62" y2="-62"/>
-    </g>
-    <circle r="52" fill="#F2B233" stroke="#E08A1E" stroke-width="4"/>
-  </g>
-  <g transform="translate(330 196)">
-    <path d="M22 0 h188 a22 22 0 0 1 22 22 v46 a22 22 0 0 1 -22 22 h-150 l-30 24 v-24 h-8 a22 22 0 0 1 -22 -22 v-46 a22 22 0 0 1 22 -22z" fill="#C8401F"/>
-    <text x="116" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="38" font-weight="700" fill="#FFF4E0">¡Hola!</text>
-  </g>
-  <text x="40" y="78" font-family="Georgia, serif" font-size="24" fill="#8A2E14" letter-spacing="2">SPĀŅU VALODA</text>
-  <rect x="42" y="94" width="60" height="6" rx="3" fill="#E8A23A"/>
-  <text x="36" y="210" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#C8401F">A1</text>
-  <text x="42" y="256" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#8A2E14">pamati no nulles</text>
+<!-- Libertas kursa vāks: plakana slāņota ainava (rits), teksts debesīs kreisajā pusē (drošā zona y 40–280 telefona 12:5 apgriezumam) -->
+<defs><linearGradient id="d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ECE9E4"/><stop offset=".55" stop-color="#F2DFD2"/><stop offset="1" stop-color="#F3CDB4"/></linearGradient></defs>
+<rect width="600" height="320" fill="url(#d)"/>
+<g opacity="1"><circle cx="470" cy="214" r="72" fill="#F6B994" opacity=".2"/><circle cx="470" cy="214" r="46.5" fill="#F6B994" opacity=".35"/><circle cx="470" cy="214" r="30" fill="#F6B994"/></g><g fill="#6B1D1D" opacity=".8"><path d="M300 54c4-4 8-4 11-1 3-4 8-5 13-3-5 1-9 3-11 6-3-2-8-2-13-2z"/><path d="M326 70c3-3 6-3 8-1 2-3 6-3 10-2-4 1-7 3-8 5-2-2-6-2-10-2z"/></g><path d="M0 214 C80 206 150 204 230 200 L268 176 L290 186 L318 160 L346 178 L372 150 L398 170 L424 158 L452 176 L478 164 L520 184 L560 170 L600 182 L600 230 L0 230Z" fill="#C9C3D4"/><path d="M318 160 L330 170 L322 172 L346 178 L336 166Z M372 150 L384 162 L376 164 L398 170 L388 158Z" fill="#ECE6EA" opacity=".7"/><path d="M200 230 C280 214 360 206 440 210 C500 213 560 206 600 200 L600 236 L200 236Z" fill="#B7B1C8"/><rect x="0" y="226" width="600" height="94" fill="#D9DDDB"/><g fill="#FFFFFF" opacity=".7"><rect x="430" y="238" width="80" height="2.2" rx="1"/><rect x="448" y="248" width="44" height="2" rx="1"/><rect x="410" y="244" width="18" height="1.6" rx=".8"/></g><path d="M300 320 C340 262 400 222 480 216 C540 212 580 220 600 226 L600 320Z" fill="#93A5A4"/><g><path d="M473 218l4-44h18l4 44z" fill="#F6F1E8"/><path d="M477 174l9-12 9 12z" fill="#7A3A2C"/><rect x="483" y="204" width="6" height="14" fill="#9E98B4"/><g stroke="#5C4A40" stroke-width="2.4" stroke-linecap="round"><path d="M486 178l-24-24M486 178l26-20M486 178l22 24M486 178l-24 20"/></g><g fill="#F6F1E8" opacity=".9"><path d="M462 154l6-2 16 16-4 4z"/><path d="M512 158l2 6-20 14-3-4z"/><path d="M508 202l-6 2-14-18 4-3z"/><path d="M462 198l-2-6 20-14 3 4z"/></g><circle cx="486" cy="178" r="3" fill="#5C4A40"/></g><rect x="418.5" y="239" width="3" height="5" fill="#4F6B5D"/><ellipse cx="420" cy="236.5" rx="7" ry="4.5" fill="#5F7C6D"/><rect x="438.5" y="230" width="3" height="6" fill="#4F6B5D"/><ellipse cx="440" cy="227" rx="8.399999999999999" ry="5.4" fill="#5F7C6D"/><rect x="538.5" y="223" width="3" height="5" fill="#4F6B5D"/><ellipse cx="540" cy="220.5" rx="7" ry="4.5" fill="#5F7C6D"/><rect x="564.5" y="228" width="3" height="6" fill="#4F6B5D"/><ellipse cx="566" cy="225" rx="8.399999999999999" ry="5.4" fill="#5F7C6D"/><rect x="398.5" y="251.5" width="3" height="4.5" fill="#4F6B5D"/><ellipse cx="400" cy="249.25" rx="6.3" ry="4.05" fill="#5F7C6D"/><path d="M0 290 C90 276 180 280 260 296 C330 310 400 300 470 284 C530 270 570 266 600 268 L600 320 L0 320Z" fill="#5F7C6D"/><path d="M150 320 C190 300 250 292 320 290 C350 289 380 288 400 286 L408 288 C380 292 340 296 300 300 C250 306 220 312 210 320Z" fill="#EAD9C4"/><ellipse cx="520" cy="254" rx="6.2" ry="22" fill="#4F6B5D"/><ellipse cx="538" cy="242" rx="8.4" ry="30" fill="#4F6B5D"/><ellipse cx="556" cy="256" rx="5.6" ry="20" fill="#4F6B5D"/><rect x="468.5" y="284" width="3" height="6" fill="#4F6B5D"/><ellipse cx="470" cy="281" rx="8.399999999999999" ry="5.4" fill="#4F6B5D"/><rect x="94.5" y="285" width="3" height="5" fill="#4F6B5D"/><ellipse cx="96" cy="282.5" rx="7" ry="4.5" fill="#4F6B5D"/>
+<g font-family="'Source Sans 3', 'Segoe UI', Arial, sans-serif" font-weight="700" font-size="14" letter-spacing="2.6" fill="#3A332D"><text x="36" y="62">SPĀŅU VALODA</text></g><rect x="36" y="74" width="36" height="3" rx="1.5" fill="#6B1D1D"/><text x="32" y="156" font-family="Lora, Georgia, 'Times New Roman', serif" font-weight="600" font-size="86" fill="#6B1D1D">A1</text><text x="36" y="190" font-family="Lora, Georgia, 'Times New Roman', serif" font-style="italic" font-size="20" fill="#4A433C">pamati no nulles</text>
 </svg>

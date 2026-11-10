@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="mat-lapa">
+<body>
 
     <!-- Galvene / Navigācija -->
     <header class="site-header">
@@ -31,80 +31,120 @@
         </div>
     </header>
 
-    <!-- Kursu piedāvājums -->
-    <section id="kursi" class="courses-section container">
-        <h1 class="section-title">Kursu piedāvājums</h1>
-        <p class="sakums-ievads">Mazas grupas, dzīvas nodarbības un praktiska valoda jau no pirmās dienas.</p>
-        
-        <div class="courses-grid">
-            <!-- Spāņu A1 -->
-            <article class="course-card">
-                <img src="assets/kursi/spanu-a1.svg" alt="Spāņu valoda A1" width="600" height="320">
-                <div class="course-body">
-                    <h3>Spāņu valodas pamati A1</h3>
-                    <p class="course-price">280,00 EUR</p>
-                    <p class="course-info">7 nedēļas | Otrdienās un ceturtdienās</p>
-                    <a href="#" class="btn-cta btn-card" data-course="spain-a1">Pieteikties kursam</a>
-                </div>
-            </article>
-
-            <!-- Spāņu A2 -->
-            <article class="course-card">
-                <img src="assets/kursi/spanu-a2.svg" alt="Spāņu valoda A2" width="600" height="320">
-                <div class="course-body">
-                    <h3>Spāņu valodas pamati A2</h3>
-                    <p class="course-price">280,00 EUR</p>
-                    <p class="course-info">Grafiks tiks precizēts</p>
-                    <a href="#" class="btn-cta btn-card" data-course="spain-a2">Pieteikties kursam</a>
-                </div>
-            </article>
-
-            <!-- Angļu A1 -->
-            <article class="course-card">
-                <img src="assets/kursi/anglu-a1.svg" alt="Angļu valoda A1" width="600" height="320">
-                <div class="course-body">
-                    <h3>Angļu valodas pamati A1</h3>
-                    <p class="course-price">280,00 EUR</p>
-                    <p class="course-info">7 nedēļas | Pirmdienās un trešdienās</p>
-                    <a href="#" class="btn-cta btn-card" data-course="english-a1">Pieteikties kursam</a>
-                </div>
-            </article>
-
-            <!-- Angļu A2 -->
-            <article class="course-card">
-                <img src="assets/kursi/anglu-a2.svg" alt="Angļu valoda A2" width="600" height="320">
-                <div class="course-body">
-                    <h3>Angļu valodas pamati A2</h3>
-                    <p class="course-price">280,00 EUR</p>
-                    <p class="course-info">Grafiks tiks precizēts</p>
-                    <a href="#" class="btn-cta btn-card" data-course="english-a2">Pieteikties kursam</a>
-                </div>
-            </article>
-
-            <!-- Spāņu B1.1 -->
-            <article class="course-card">
-                <img src="assets/kursi/spanu-b1-1.svg" alt="Spāņu valoda B1.1" width="600" height="320">
-                <div class="course-body">
-                    <h3>Spāņu valoda B1.1</h3>
-                    <p class="course-price">420,00 EUR</p>
-                    <p class="course-info">Grafiks tiks precizēts</p>
-                    <a href="#" class="btn-cta btn-card" data-course="spain-b1-1">Pieteikties kursam</a>
-                </div>
-            </article>
-
-            <!-- Spāņu B1.2 -->
-            <article class="course-card">
-                <img src="assets/kursi/spanu-b1-2.svg" alt="Spāņu valoda B1.2" width="600" height="320">
-                <div class="course-body">
-                    <h3>Spāņu valoda B1.2</h3>
-                    <p class="course-price">420,00 EUR</p>
-                    <p class="course-info">Grafiks tiks precizēts</p>
-                    <a href="#" class="btn-cta btn-card" data-course="spain-b1-2">Pieteikties kursam</a>
-                </div>
-            </article>
+    <main id="kursi" class="courses-section">
+        <!-- Lapas josla: ainava no assets/scene/ainava.svg, virsraksts uz papīra miglas -->
+        <div class="lapas-josla">
+            <div class="lapas-josla-ainava" aria-hidden="true">
+                <svg viewBox="0 220 1440 390" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+            </div>
+            <div class="container lapas-josla-saturs">
+                <nav class="lapas-cels" aria-label="Atrašanās vieta"><a href="index.html">Sākums</a><span aria-hidden="true">/</span><span aria-current="page">Kursi</span></nav>
+                <h1 class="section-title">Kursu piedāvājums</h1>
+                <p class="sakums-ievads lapas-josla-ievads">Mazas grupas, dzīvas nodarbības un praktiska valoda jau no pirmās dienas.</p>
+            </div>
         </div>
-    </section>
 
+        <!-- Kursi pa valodām, pēc līmeņa. Jauns kurss = article.course-card ar data-course="<D1 id>" uz pogas -->
+        <section class="container kursu-grupa" id="spanu" aria-labelledby="spanu-virsraksts">
+            <div class="kursu-grupa-galva">
+                <h2 id="spanu-virsraksts">Spāņu valoda</h2>
+                <span class="kursu-grupa-meta">4 kursi · A1 → B1.2</span>
+            </div>
+            <div class="courses-grid">
+                <!-- Spāņu A1 -->
+                <article class="course-card">
+                    <img src="assets/kursi/spanu-a1.svg" alt="Spāņu valoda A1" width="600" height="320" decoding="async">
+                    <div class="course-body">
+                        <span class="chip chip--limenis">A1</span>
+                        <h3>Spāņu valodas pamati A1</h3>
+                        <p class="course-price">280,00 EUR</p>
+                        <p class="course-info"><svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>7 nedēļas · Otrdienās un ceturtdienās</p>
+                        <a href="#" class="btn-cta btn-card" data-course="spain-a1">Pieteikties kursam</a>
+                    </div>
+                </article>
+
+                <!-- Spāņu A2 -->
+                <article class="course-card">
+                    <img src="assets/kursi/spanu-a2.svg" alt="Spāņu valoda A2" width="600" height="320" decoding="async">
+                    <div class="course-body">
+                        <span class="chip chip--limenis">A2</span>
+                        <h3>Spāņu valodas pamati A2</h3>
+                        <p class="course-price">280,00 EUR</p>
+                        <p class="course-info"><svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Grafiks tiks precizēts</p>
+                        <a href="#" class="btn-cta btn-card" data-course="spain-a2">Pieteikties kursam</a>
+                    </div>
+                </article>
+
+                <!-- Spāņu B1.1 -->
+                <article class="course-card">
+                    <img src="assets/kursi/spanu-b1-1.svg" alt="Spāņu valoda B1.1" width="600" height="320" decoding="async">
+                    <div class="course-body">
+                        <span class="chip chip--limenis">B1.1</span>
+                        <h3>Spāņu valoda B1.1</h3>
+                        <p class="course-price">420,00 EUR</p>
+                        <p class="course-info"><svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Grafiks tiks precizēts</p>
+                        <a href="#" class="btn-cta btn-card" data-course="spain-b1-1">Pieteikties kursam</a>
+                    </div>
+                </article>
+
+                <!-- Spāņu B1.2 -->
+                <article class="course-card">
+                    <img src="assets/kursi/spanu-b1-2.svg" alt="Spāņu valoda B1.2" width="600" height="320" decoding="async">
+                    <div class="course-body">
+                        <span class="chip chip--limenis">B1.2</span>
+                        <h3>Spāņu valoda B1.2</h3>
+                        <p class="course-price">420,00 EUR</p>
+                        <p class="course-info"><svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Grafiks tiks precizēts</p>
+                        <a href="#" class="btn-cta btn-card" data-course="spain-b1-2">Pieteikties kursam</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="container kursu-grupa" id="anglu" aria-labelledby="anglu-virsraksts">
+            <div class="kursu-grupa-galva">
+                <h2 id="anglu-virsraksts">Angļu valoda</h2>
+                <span class="kursu-grupa-meta">2 kursi · A1 → A2</span>
+            </div>
+            <div class="courses-grid">
+                <!-- Angļu A1 -->
+                <article class="course-card">
+                    <img src="assets/kursi/anglu-a1.svg" alt="Angļu valoda A1" width="600" height="320" loading="lazy" decoding="async">
+                    <div class="course-body">
+                        <span class="chip chip--limenis">A1</span>
+                        <h3>Angļu valodas pamati A1</h3>
+                        <p class="course-price">280,00 EUR</p>
+                        <p class="course-info"><svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>7 nedēļas · Pirmdienās un trešdienās</p>
+                        <a href="#" class="btn-cta btn-card" data-course="english-a1">Pieteikties kursam</a>
+                    </div>
+                </article>
+
+                <!-- Angļu A2 -->
+                <article class="course-card">
+                    <img src="assets/kursi/anglu-a2.svg" alt="Angļu valoda A2" width="600" height="320" loading="lazy" decoding="async">
+                    <div class="course-body">
+                        <span class="chip chip--limenis">A2</span>
+                        <h3>Angļu valodas pamati A2</h3>
+                        <p class="course-price">280,00 EUR</p>
+                        <p class="course-info"><svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>Grafiks tiks precizēts</p>
+                        <a href="#" class="btn-cta btn-card" data-course="english-a2">Pieteikties kursam</a>
+                    </div>
+                </article>
+
+                <!-- Kā pieteikties: tikai esošā plūsma (script.js pieteikšanās + Google ienākšana, konts.html) -->
+                <aside class="pieteiksanas-soli" aria-labelledby="soli-virsraksts">
+                    <h3 id="soli-virsraksts">Kā pieteikties</h3>
+                    <ol>
+                        <li><b>Izvēlies kursu</b><span>Spied “Pieteikties kursam” pie vajadzīgā līmeņa.</span></li>
+                        <li><b>Ienāc ar Google</b><span>Ja vēl neesi ienācis, pieteikums tevi sagaidīs pēc ienākšanas.</span></li>
+                        <li><b>Seko pieteikumam</b><span>Statusu redzi sadaļā <a href="konts.html">“Mani kursi”</a>; tur vari arī atteikties, kamēr pieteikums nav apstiprināts.</span></li>
+                    </ol>
+                    <!-- script.js šeit ieliek p.consent-note (tikai viesiem) -->
+                    <div class="pieteiksanas-piekrisana" data-consent-vieta></div>
+                </aside>
+            </div>
+        </section>
+    </main>
     <!-- Kājene -->
     <footer class="site-footer">
         <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
@@ -121,6 +161,8 @@
                     <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
                     <ul>
                         <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
                         <li><a href="konts.html">Mani kursi</a></li>
                     </ul>
                 </nav>
