@@ -25,11 +25,11 @@ Short reference so work can start without re-reading every file.
 | `zvani.js` | Home page only (December): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
 | `empanadillo.js` | Home page: mascot **Empanadillo** (pixel-art empanada: letter-grid sprites `KERMENIS`, `ACIS`, `ROKA_A/B`, `CEPURE` + palette `KRASAS`, turned into SVG rects in JS; 88px, 64px on mobile) fixed bottom-right. Slides in, greets once per session (sessionStorage `empaSveiciens`) in a speech bubble; click = first his filling (`PILDIJUMI`: per signed-in user by hash of `LIB.me.user.id`, for guests random and kept in localStorage `empaPildijums`), then the other phrases (`frazes`), hover = waves (two arm frames `.empa-roka-a/-b`). Wears a Santa hat under `html.ziemassvetki`, but on 5 December (owner's birthday) a pixel party hat `BALLITES_CEPURE` instead (test with `?ballite=1`). Load after `snow.js` |
 | `style.css` | Shared styles (see sections below) |
-| `assets/` | `libertas.png` (logo), `ziemassvetki/` (Christmas decorations: `zars.svg` pine branch, `ilekss.svg` holly, `bumba.svg` bauble), `spain-a1.png`, `english-a1.jpg` (course images) |
+| `assets/` | `libertas.png` (logo), `ziemassvetki/` (Christmas decorations: `zars.svg` pine branch, `ilekss.svg` holly, `bumba.svg` bauble), `kursi/*.svg` (course cover illustrations, 600×320, drawn in SVG: `spanu-a1`, `spanu-a2`, `spanu-b1-1`, `spanu-b1-2`, `anglu-a1`, `anglu-a2`); old `spain-a1.png`, `english-a1.jpg` no longer used |
 | `konts.html` + `konts.js` | "Mani kursi": own profile (phone editable), own enrollments, cancel while `pieteicies` |
 | `admin.html` + `admin.js` | Admin panel (users: data, last login/visit; enrollments: status, paid, notes, add/delete). noindex |
 | `worker/index.js` | Cloudflare Worker: Google OAuth, sessions, JSON API (runs first for `/api/*`, `/auth/*`) |
-| `migrations/` | D1 schema (`0001_init.sql`: users, sessions, courses, enrollments) |
+| `migrations/` | D1 schema (`0001_init.sql`: users, sessions, courses, enrollments; `0002_more_courses.sql`: A2/B1 courses) |
 | `wrangler.jsonc` | Cloudflare config: worker `main`, assets, D1 `DB` (`libertas-db`), vars `ADMIN_EMAILS`, `GOOGLE_CLIENT_ID` |
 | `.assetsignore` | Files NOT published to the live site (add any new non-site files here) |
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
@@ -45,9 +45,14 @@ Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) wa
 ## Courses
 | id | Name | Price | Schedule | Image |
 |---|---|---|---|---|
-| `spain-a1` | Spāņu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, otrdienās un ceturtdienās | `assets/spain-a1.png` |
-| `english-a1` | Angļu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, pirmdienās un trešdienās | `assets/english-a1.jpg` |
+| `spain-a1` | Spāņu valodas pamati A1 | 280,00 EUR | 7 nedēļas, otrdienās un ceturtdienās | `assets/kursi/spanu-a1.svg` |
+| `spain-a2` | Spāņu valodas pamati A2 | 280,00 EUR | Grafiks tiks precizēts | `assets/kursi/spanu-a2.svg` |
+| `english-a1` | Angļu valodas pamati A1 | 280,00 EUR | 7 nedēļas, pirmdienās un trešdienās | `assets/kursi/anglu-a1.svg` |
+| `english-a2` | Angļu valodas pamati A2 | 280,00 EUR | Grafiks tiks precizēts | `assets/kursi/anglu-a2.svg` |
+| `spain-b1-1` | Spāņu valoda B1.1 | 420,00 EUR | Grafiks tiks precizēts | `assets/kursi/spanu-b1-1.svg` |
+| `spain-b1-2` | Spāņu valoda B1.2 | 420,00 EUR | Grafiks tiks precizēts | `assets/kursi/spanu-b1-2.svg` |
 
+Course rows live in D1 via `migrations/0001_init.sql` + `0002_more_courses.sql` (adds the 4 new courses, renames A1s).
 Adding/changing a course means editing `kursi.html` (`article.course-card` with `data-course="<id>"` on its button)
 **and** inserting a row in the D1 `courses` table (new migration file).
 
@@ -91,6 +96,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - Images go in `assets/`. Prefer compressed `.jpg`/`.webp` (under ~200 KB).
 
 ## Known gaps / TODO
+- Schedules for `spain-a2`, `english-a2`, `spain-b1-1`, `spain-b1-2` are "Grafiks tiks precizēts" (update `kursi.html` + D1).
 - `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
 - Google OAuth client must be created and `GOOGLE_CLIENT_ID` / secret set before sign-in works live.
 - No email notifications on new enrollments; no online payment (admin marks paid manually).

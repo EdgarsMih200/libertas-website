@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" role="img" aria-label="Spāņu valoda A1">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF4E0"/><stop offset="1" stop-color="#FBD9A8"/></linearGradient>
+    <pattern id="flizes" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M20 4 L36 20 L20 36 L4 20 Z" fill="none" stroke="#E8A23A" stroke-width="1.5" opacity=".35"/>
+      <circle cx="20" cy="20" r="3" fill="#C8401F" opacity=".25"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="320" fill="url(#bg)"/>
+  <rect x="330" width="270" height="320" fill="url(#flizes)"/>
+  <g transform="translate(470 110)">
+    <g stroke="#E8A23A" stroke-width="8" stroke-linecap="round">
+      <line x1="0" y1="-88" x2="0" y2="-68"/><line x1="0" y1="68" x2="0" y2="88"/>
+      <line x1="-88" y1="0" x2="-68" y2="0"/><line x1="68" y1="0" x2="88" y2="0"/>
+      <line x1="-62" y1="-62" x2="-48" y2="-48"/><line x1="48" y1="48" x2="62" y2="62"/>
+      <line x1="-62" y1="62" x2="-48" y2="48"/><line x1="48" y1="-48" x2="62" y2="-62"/>
+    </g>
+    <circle r="52" fill="#F2B233" stroke="#E08A1E" stroke-width="4"/>
+  </g>
+  <g transform="translate(330 196)">
+    <path d="M22 0 h188 a22 22 0 0 1 22 22 v46 a22 22 0 0 1 -22 22 h-150 l-30 24 v-24 h-8 a22 22 0 0 1 -22 -22 v-46 a22 22 0 0 1 22 -22z" fill="#C8401F"/>
+    <text x="116" y="58" text-anchor="middle" font-family="Georgia, serif" font-size="38" font-weight="700" fill="#FFF4E0">¡Hola!</text>
+  </g>
+  <text x="40" y="78" font-family="Georgia, serif" font-size="24" fill="#8A2E14" letter-spacing="2">SPĀŅU VALODA</text>
+  <rect x="42" y="94" width="60" height="6" rx="3" fill="#E8A23A"/>
+  <text x="36" y="210" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#C8401F">A1</text>
+  <text x="42" y="256" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#8A2E14">pamati no nulles</text>
+</svg>

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" role="img" aria-label="Spāņu valoda A2">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCE6D2"/><stop offset="1" stop-color="#F3B98C"/></linearGradient>
+  </defs>
+  <rect width="600" height="320" fill="url(#bg)"/>
+  <rect x="320" y="0" width="280" height="54" fill="#B8381C"/>
+  <g fill="#FCE6D2"><rect x="348" y="0" width="28" height="54"/><rect x="404" y="0" width="28" height="54"/><rect x="460" y="0" width="28" height="54"/><rect x="516" y="0" width="28" height="54"/><rect x="572" y="0" width="28" height="54"/></g>
+  <path d="M320 54 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0 q14 18 28 0z" fill="#B8381C"/>
+  <rect x="340" y="282" width="240" height="12" rx="6" fill="#7A3B1E"/>
+  <g transform="translate(436 204)">
+    <path d="M6 8 c4 -14 -6 -18 0 -30 M26 8 c4 -14 -6 -18 0 -30 M46 8 c4 -14 -6 -18 0 -30" stroke="#A86A45" stroke-width="4" fill="none" stroke-linecap="round" opacity=".7"/>
+    <path d="M-8 14 h70 l-8 50 a10 10 0 0 1 -10 8 h-34 a10 10 0 0 1 -10 -8z" fill="#FFF8F0" stroke="#7A3B1E" stroke-width="4"/>
+    <path d="M60 26 a14 14 0 0 1 -2 28" stroke="#7A3B1E" stroke-width="5" fill="none"/>
+    <ellipse cx="27" cy="74" rx="52" ry="7" fill="#FFF8F0" stroke="#7A3B1E" stroke-width="4"/>
+  </g>
+  <g transform="translate(340 82)">
+    <path d="M18 0 h220 a18 18 0 0 1 18 18 v36 a18 18 0 0 1 -18 18 h-140 l-26 22 v-22 h-54 a18 18 0 0 1 -18 -18 v-36 a18 18 0 0 1 18 -18z" fill="#2F5D3A"/>
+    <text x="128" y="45" text-anchor="middle" font-family="Georgia, serif" font-size="25" font-style="italic" fill="#FCE6D2">Un café, por favor</text>
+  </g>
+  <text x="40" y="78" font-family="Georgia, serif" font-size="24" fill="#7A2A12" letter-spacing="2">SPĀŅU VALODA</text>
+  <rect x="42" y="94" width="60" height="6" rx="3" fill="#2F5D3A"/>
+  <text x="36" y="210" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#B8381C">A2</text>
+  <text x="42" y="256" font-family="Georgia, serif" font-size="22" font-style="italic" fill="#7A2A12">ikdienas sarunas</text>
+</svg>
