@@ -1267,8 +1267,7 @@ footer a {
 }
 
 /* Krītoši sniega punktiņi fonā */
-.mat-hero::before,
-.mat-karte-vaks::before {
+.mat-hero::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -1404,119 +1403,334 @@ footer a {
     background: rgba(255, 255, 255, 0.12);
 }
 
-/* Filtri */
-.mat-filtri {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 24px;
+/* MATERIĀLU SARAKSTS (materiali.html): gaiša galva, segmentēts filtrs, stikla kartītes */
+.mat-saraksta-lapa {
+    --m-liniija: color-mix(in srgb, var(--text-dark) 9%, transparent);
+    --m-vajs: color-mix(in srgb, var(--text-dark) 62%, var(--bg-warm-light));
+    --m-ena: 0 1px 2px rgba(44, 20, 20, .04), 0 10px 30px -14px rgba(44, 20, 20, .14);
+    --m-ena-hover: 0 2px 4px rgba(44, 20, 20, .05), 0 34px 64px -28px rgba(107, 29, 29, .38);
+    --m-ease: cubic-bezier(.2, .7, .2, 1);
+    position: relative;
+    padding: 72px 20px 96px;
+    isolation: isolate;
 }
+
+.mat-galva {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    align-items: end;
+    gap: 28px 64px;
+}
+
+.mat-zime {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--primary-bordo);
+    background: rgba(255, 255, 255, .6);
+    border: 1px solid color-mix(in srgb, var(--primary-bordo) 14%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.mat-galva h1 {
+    margin-top: 18px;
+    font-family: var(--font-heading);
+    font-weight: 400;
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 1;
+    letter-spacing: -.035em;
+    color: var(--text-dark);
+}
+
+.mat-galva h1 em {
+    font-style: italic;
+    color: var(--primary-bordo);
+}
+
+.mat-galva-ievads {
+    max-width: 440px;
+    justify-self: end;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--m-vajs);
+}
+
+/* Rīkjosla: filtri + skaits */
+.mat-rikjosla {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 44px 0 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--m-liniija);
+}
+
+.mat-skaits {
+    font-size: 14px;
+    color: var(--m-vajs);
+    white-space: nowrap;
+}
+
+.mat-skaits strong {
+    color: var(--text-dark);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Segmentēts filtrs ar slīdošu indikatoru */
+.mat-filtri {
+    position: relative;
+    display: inline-flex;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .7);
+    border: 1px solid var(--m-liniija);
+    box-shadow: var(--m-ena);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.mat-filtri::-webkit-scrollbar { display: none; }
 
 .mat-filtri[hidden] {
     display: none;
 }
 
+.mat-filtri-slids {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    width: var(--w, 0);
+    transform: translateX(var(--x, 0));
+    border-radius: 999px;
+    background: var(--text-dark);
+    box-shadow: 0 6px 16px -6px rgba(44, 20, 20, .45);
+    transition: transform .45s var(--m-ease), width .45s var(--m-ease);
+}
+
+.mat-filtri.bez-anim .mat-filtri-slids {
+    transition: none;
+}
+
 .mat-filtrs {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     font: inherit;
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 7px 16px;
+    white-space: nowrap;
+    color: var(--m-vajs);
+    background: transparent;
+    border: 0;
+    padding: 9px 16px;
     border-radius: 999px;
     cursor: pointer;
+    transition: color .3s ease;
+}
+
+.mat-filtrs:hover {
+    color: var(--text-dark);
 }
 
 .mat-filtrs[aria-pressed="true"] {
-    background: #fff;
-    color: var(--primary-bordo);
+    color: #fff;
 }
 
-/* Materiālu kartītes */
-.mat-saraksts {
-    padding-top: 40px;
-    padding-bottom: 20px;
+.mat-filtrs:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 2px;
 }
 
+.mat-filtrs-sk {
+    min-width: 20px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+    background: var(--m-liniija);
+    transition: background .3s ease, color .3s ease;
+}
+
+.mat-filtrs[aria-pressed="true"] .mat-filtrs-sk {
+    background: rgba(255, 255, 255, .18);
+}
+
+/* Kartīšu režģis */
 .mat-rezgis {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
 }
 
+/* Kartīte: stikla virsma, gradienta mala uz hover. Tēmu dod --k1/--k2 */
 .mat-karte {
+    --k1: var(--primary-bordo);
+    --k2: var(--accent-green);
     position: relative;
     display: flex;
     flex-direction: column;
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    border-radius: 22px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    padding: 8px;
+    border-radius: 26px;
+    background: rgba(255, 255, 255, .72);
+    border: 1px solid var(--m-liniija);
+    box-shadow: var(--m-ena);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    transition: transform .5s var(--m-ease), box-shadow .5s var(--m-ease);
+}
+
+.mat-karte--en {
+    --k1: var(--accent-blue);
+    --k2: var(--accent-green);
 }
 
 .mat-karte[hidden] {
     display: none;
 }
 
+.mat-karte.paradas {
+    animation: mat-paradas .5s var(--m-ease) both;
+}
+
+@keyframes mat-paradas {
+    from { opacity: 0; transform: translateY(14px) scale(.98); }
+}
+
+/* Gradienta apmale (maska), redzama tikai uz hover */
+.mat-karte::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--k1), var(--accent-gold) 50%, var(--k2));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+}
+
 .mat-karte:not(.mat-karte--drizuma):hover {
     transform: translateY(-6px);
-    box-shadow: 0 22px 40px rgba(107, 29, 29, 0.16);
+    box-shadow: var(--m-ena-hover);
 }
 
-.mat-karte-vaks {
+.mat-karte:not(.mat-karte--drizuma):hover::before {
+    opacity: 1;
+}
+
+/* Vāks: gaišs tonis, liels slīpraksta sveiciens, emocijzīme stikla diskā */
+.mat-vaks {
     position: relative;
     overflow: hidden;
-    height: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    color: #fff;
+    height: 188px;
+    border-radius: 19px;
+    padding: 20px 22px;
+    background:
+        radial-gradient(120% 140% at 100% 100%, color-mix(in srgb, var(--k2) 30%, transparent), transparent 55%),
+        radial-gradient(90% 120% at 0% 0%, color-mix(in srgb, var(--accent-gold) 22%, transparent), transparent 60%),
+        linear-gradient(135deg, color-mix(in srgb, var(--k1) 16%, var(--bg-warm-light)), color-mix(in srgb, var(--k1) 6%, #fff));
 }
 
-.mat-karte-vaks .mat-limenis,
-.mat-karte-vaks .mat-valoda {
-    position: absolute;
-    top: 14px;
-}
-
-.mat-karte-vaks .mat-limenis { left: 14px; }
-.mat-karte-vaks .mat-valoda { right: 14px; }
-
-.mat-karte-emoji {
+.mat-vaks-sveiciens {
     position: relative;
-    font-size: 64px;
-    line-height: 1;
-    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.3));
-    transition: transform 0.4s ease;
-}
-
-.mat-karte:hover .mat-karte-emoji {
-    transform: scale(1.12) rotate(-6deg);
-}
-
-.mat-karte-moto {
-    position: relative;
+    display: block;
+    max-width: 70%;
     font-family: var(--font-heading);
     font-style: italic;
-    font-size: 22px;
+    font-size: 30px;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    color: var(--k1);
+}
+
+.mat-vaks-valoda {
+    position: absolute;
+    left: 22px;
+    bottom: 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--k1) 70%, var(--text-dark));
+    opacity: .8;
+}
+
+.mat-vaks-disks {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    font-size: 46px;
+    line-height: 1;
+    background: rgba(255, 255, 255, .55);
+    border: 1px solid rgba(255, 255, 255, .8);
+    box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--k1) 45%, transparent), inset 0 1px 0 #fff;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform .6s var(--m-ease);
+}
+
+.mat-karte:hover .mat-vaks-disks {
+    transform: translateY(-4px) rotate(-8deg) scale(1.05);
 }
 
 .mat-karte-saturs {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 22px 24px 24px;
+    padding: 20px 16px 14px;
+}
+
+.mat-karte-virs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.mat-karte-limenis {
+    padding: 2px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: var(--k1);
+    background: color-mix(in srgb, var(--k1) 10%, transparent);
+}
+
+.mat-karte-tema {
+    font-size: 13px;
+    color: var(--m-vajs);
 }
 
 .mat-karte h2 {
     font-family: var(--font-heading);
-    font-size: 22px;
-    color: var(--primary-bordo);
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    color: var(--text-dark);
     margin-bottom: 8px;
 }
 
@@ -1530,6 +1744,7 @@ footer a {
     content: "";
     position: absolute;
     inset: 0;
+    border-radius: 26px;
 }
 
 .mat-karte-saite:focus-visible {
@@ -1542,56 +1757,135 @@ footer a {
 }
 
 .mat-karte p {
-    color: #555;
+    color: var(--m-vajs);
     font-size: 15px;
-    margin-bottom: 16px;
+    line-height: 1.55;
+    margin-bottom: 18px;
 }
 
-.mat-karte-meta {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 20px;
-}
-
-.mat-karte-meta li {
+.mat-karte .mat-karte-ieklauts {
+    margin: -8px 0 16px;
     font-size: 13px;
-    background: var(--bg-warm-light);
-    border-radius: 999px;
-    padding: 4px 11px;
+    color: var(--m-vajs);
+}
+
+.mat-karte-ieklauts b {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Dati: trīs kolonnas ar atdalītājiem */
+.mat-karte-dati {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 0 0 18px;
+    padding: 12px 0;
+    border-top: 1px solid var(--m-liniija);
+    border-bottom: 1px solid var(--m-liniija);
+}
+
+.mat-karte-dati div {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.mat-karte-dati div + div {
+    padding-left: 14px;
+    border-left: 1px solid var(--m-liniija);
+}
+
+.mat-karte-dati dd {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+.mat-karte-dati dt {
+    font-size: 12px;
+    color: var(--m-vajs);
+}
+
+.mat-karte-apaksa {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text-dark);
 }
 
 .mat-karte-bulta {
-    margin-top: auto;
-    font-weight: 700;
-    color: var(--primary-bordo);
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--m-liniija);
+    color: var(--text-dark);
+    transition: background .35s ease, color .35s ease, border-color .35s ease, transform .5s var(--m-ease);
 }
 
-.mat-karte-bulta span {
-    display: inline-block;
-    transition: transform 0.25s ease;
+.mat-karte-bulta svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
-.mat-karte:hover .mat-karte-bulta span {
-    transform: translateX(6px);
+.mat-karte:hover .mat-karte-bulta {
+    background: var(--k1);
+    border-color: var(--k1);
+    color: #fff;
+    transform: rotate(45deg) scale(1.05);
 }
 
+/* Drīzumā: klusa, svītrota virsma */
 .mat-karte--drizuma {
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 28px;
-    background: transparent;
-    border: 2px dashed var(--border-light);
+    align-items: flex-start;
+    justify-content: flex-end;
+    min-height: 340px;
+    padding: 28px;
+    background:
+        repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--text-dark) 3%, transparent) 10px 11px),
+        rgba(255, 255, 255, .35);
+    border-style: dashed;
     box-shadow: none;
-    min-height: 300px;
 }
 
-.mat-karte--drizuma .mat-karte-emoji {
-    font-size: 44px;
-    margin-bottom: 10px;
-    filter: none;
+.mat-karte--drizuma .mat-karte-tema {
+    margin-bottom: 8px;
+}
+
+.mat-karte--drizuma p {
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .mat-galva { grid-template-columns: 1fr; gap: 16px; }
+    .mat-galva-ievads { justify-self: start; }
+}
+
+@media (max-width: 640px) {
+    .mat-saraksta-lapa { padding: 44px 16px 72px; }
+    .mat-rikjosla { flex-direction: column; align-items: stretch; margin: 32px 0 24px; padding-top: 22px; }
+    .mat-filtri { align-self: flex-start; }
+    .mat-filtrs { padding: 8px 12px; font-size: 13px; }
+    .mat-filtrs-sk { display: none; }
+    .mat-rezgis { grid-template-columns: 1fr; }
+    .mat-vaks { height: 164px; }
+    .mat-vaks-sveiciens { font-size: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mat-filtri-slids,
+    .mat-vaks-disks,
+    .mat-karte-bulta { transition: none; }
+    .mat-karte.paradas { animation: none; }
 }
 
 /* Viena materiāla izkārtojums: saturs sānos + sadaļas */
@@ -2349,14 +2643,11 @@ footer a {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .mat-hero::before,
-    .mat-karte-vaks::before {
+    .mat-hero::before {
         animation: none;
     }
 
-    .vards-karte,
-    .mat-karte,
-    .mat-karte-emoji {
+    .vards-karte {
         transition: none;
     }
 }

@@ -141,30 +141,68 @@
         document.querySelectorAll('.mat-sadala[id]').forEach(function (s) { nov.observe(s); });
     }
 
-    // FILTRI materiālu sarakstā (parādās, kad ir vairāk nekā viena valoda)
+    // FILTRI materiālu sarakstā: segmentēta josla ar slīdošu indikatoru, skaits pogās un zem galvas
     var filtri = document.querySelector('.mat-filtri');
     var kartes = document.querySelectorAll('.mat-karte[data-valoda]');
+    var skaits = document.querySelector('.mat-skaits');
+    function skaitsTeksts(n) {
+        var vienskaitlis = n % 10 === 1 && n % 100 !== 11;
+        return '<strong>' + n + '</strong> ' + (vienskaitlis ? 'materiāls' : 'materiāli');
+    }
+    if (skaits) skaits.innerHTML = skaitsTeksts(kartes.length);
     if (filtri && kartes.length) {
-        var valodas = {};
-        kartes.forEach(function (k) { valodas[k.dataset.valoda] = k.dataset.valodaNosaukums || k.dataset.valoda; });
+        var valodas = {}, skaiti = {};
+        kartes.forEach(function (k) {
+            valodas[k.dataset.valoda] = k.dataset.valodaNosaukums || k.dataset.valoda;
+            skaiti[k.dataset.valoda] = (skaiti[k.dataset.valoda] || 0) + 1;
+        });
         var atslegas = Object.keys(valodas);
         if (atslegas.length > 1) {
-            function izveidot(atsl, nos) {
+            var slids = document.createElement('span');
+            slids.className = 'mat-filtri-slids';
+            slids.setAttribute('aria-hidden', 'true');
+            filtri.appendChild(slids);
+
+            function novietot(b) {
+                filtri.style.setProperty('--x', b.offsetLeft + 'px');
+                filtri.style.setProperty('--w', b.offsetWidth + 'px');
+            }
+            function izveidot(atsl, nos, n) {
                 var b = document.createElement('button');
                 b.type = 'button';
                 b.className = 'mat-filtrs';
-                b.textContent = nos;
+                b.innerHTML = '<span></span><span class="mat-filtrs-sk">' + n + '</span>';
+                b.firstChild.textContent = nos;
                 b.setAttribute('aria-pressed', atsl === '' ? 'true' : 'false');
                 b.addEventListener('click', function () {
                     filtri.querySelectorAll('.mat-filtrs').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
                     b.setAttribute('aria-pressed', 'true');
-                    kartes.forEach(function (k) { k.hidden = atsl !== '' && k.dataset.valoda !== atsl; });
+                    novietot(b);
+                    var redzamas = 0;
+                    kartes.forEach(function (k) {
+                        var slept = atsl !== '' && k.dataset.valoda !== atsl;
+                        k.hidden = slept;
+                        k.classList.remove('paradas');
+                        if (!slept) {
+                            redzamas++;
+                            void k.offsetWidth; // restartē animāciju
+                            k.classList.add('paradas');
+                        }
+                    });
+                    if (skaits) skaits.innerHTML = skaitsTeksts(redzamas);
                 });
                 filtri.appendChild(b);
             }
-            izveidot('', 'Visas valodas');
-            atslegas.forEach(function (a) { izveidot(a, valodas[a]); });
+            izveidot('', 'Visas valodas', kartes.length);
+            atslegas.forEach(function (a) { izveidot(a, valodas[a], skaiti[a]); });
             filtri.hidden = false;
+
+            function atjaunot() { novietot(filtri.querySelector('.mat-filtrs[aria-pressed="true"]')); }
+            filtri.classList.add('bez-anim'); // pirmā novietošana bez animācijas
+            atjaunot();
+            requestAnimationFrame(function () { requestAnimationFrame(function () { filtri.classList.remove('bez-anim'); }); });
+            window.addEventListener('resize', atjaunot);
+            if (document.fonts && document.fonts.ready) document.fonts.ready.then(atjaunot);
         }
     }
 })();
