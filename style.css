@@ -761,8 +761,8 @@ button.chip:hover { border-color: var(--c-line-strong); }
 
 }
 
-/* Orientieri tikai platā ekrānā (šaurākā tie sadurtos ar apakšvirsrakstu) */
-@media (max-width: 1199px) {
+/* Orientieri tikai 1200–1599px (šaurākā tie sadurtos ar apakšvirsrakstu, ļoti platā ainava apgriezta augšā un tie sniegtos līdz virsrakstam) */
+@media (max-width: 1199px), (min-width: 1600px) {
     .hero-orientieris { display: none; }
 }
 
