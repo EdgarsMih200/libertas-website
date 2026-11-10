@@ -130,20 +130,15 @@
             });
         });
 
-        // Hero "REĢISTRĒTIES": neienākušam — uz Google, citādi uz kursiem
-        var hero = document.getElementById('exploreBtn');
-        if (hero) {
-            hero.addEventListener('click', function(e) {
-                if (!logged) { e.preventDefault(); location.href = signInUrl('/kursi.html'); }
-            });
-            if (!logged) {
-                var note = el('p', 'consent-note');
-                note.appendChild(document.createTextNode('Ienākot ar Google, jūs piekrītat '));
-                var na = el('a', '', 'noteikumiem un privātuma politikai'); na.href = 'noteikumi.html';
-                note.appendChild(na);
-                note.appendChild(document.createTextNode('.'));
-                hero.parentNode.appendChild(note);
-            }
+        // Piekrišanas piezīme viesiem — kursu lapā pie pieteikšanās (hero poga "Izvēlies kursu" vairs neved uz Google)
+        var ievads = document.querySelector('.courses-section .sakums-ievads');
+        if (!logged && ievads) {
+            var note = el('p', 'consent-note');
+            note.appendChild(document.createTextNode('Piesakoties kursam, jūs ienāksiet ar Google un piekrītat '));
+            var na = el('a', '', 'noteikumiem un privātuma politikai'); na.href = 'noteikumi.html';
+            note.appendChild(na);
+            note.appendChild(document.createTextNode('.'));
+            ievads.parentNode.insertBefore(note, ievads.nextSibling);
         }
 
         // Gaidošais pieteikums pēc ienākšanas
@@ -237,4 +232,29 @@
         io.disconnect();
     }, { rootMargin: '0px 0px -10% 0px' });
     io.observe(bento);
+})();
+
+// Sākumlapas hero: maiga paralakse (tikai pele, bez samazinātas kustības, ≥1024px). Slāņus pārvieto CSS pēc --px/--py.
+(function() {
+    var ainava = document.querySelector('.hero-ainava');
+    if (!ainava || !window.matchMedia) return;
+    var mq = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference) and (min-width: 1024px)');
+    var mx = 0, my = 0, x = 0, y = 0, rafId = 0;
+    function solis() {
+        x += (mx - x) * 0.08;
+        y += (my - y) * 0.08;
+        ainava.style.setProperty('--px', x.toFixed(3));
+        ainava.style.setProperty('--py', y.toFixed(3));
+        rafId = (Math.abs(mx - x) > 0.002 || Math.abs(my - y) > 0.002) ? requestAnimationFrame(solis) : 0;
+    }
+    function sakt() { if (!rafId) rafId = requestAnimationFrame(solis); }
+    var hero = ainava.parentNode;
+    hero.addEventListener('pointermove', function(e) {
+        if (!mq.matches) return;
+        var r = hero.getBoundingClientRect();
+        mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        sakt();
+    });
+    hero.addEventListener('pointerleave', function() { mx = 0; my = 0; sakt(); });
 })();

@@ -20,6 +20,12 @@
     --scene-far: #C9C5D6;  --scene-far-2: #B9B6CC;  --scene-mid: #8FA3A6;  --scene-lake: #D7DEDA;
     --scene-near: #5F7C6D;  --scene-path: #E9D9C2;  --scene-front: #2F4A40;  --scene-deep: #1E2E29;
     --c-season-glow: #F2C46A;  --c-season-snow: #F4F1EA;
+    /* ainavas SVG slāņi (--sc-*, pages.html): diena pēc noklusējuma; .sc-rits = rīts, .sc-ziema = ziemas vakars */
+    --sc-sky1: #F6F1E8; --sc-sky2: #F4E3D0; --sc-sky3: #F2D3B8; --sc-sun: #F7C9A3; --sc-sun-o: 1; --sc-cloud: #FFFDF8;
+    --sc-far: #C9C5D6; --sc-far2: #B9B6CC; --sc-chalk: #E7E2EA; --sc-landmark: #A39EBA; --sc-lamp: #FFF3E2;
+    --sc-lake: #D7DEDA; --sc-glint: #FFFFFF; --sc-mid: #8FA3A6; --sc-mid2: #7E9497;
+    --sc-near: #5F7C6D; --sc-near2: #526E60; --sc-cabin: #486255; --sc-window: #3B5348; --sc-lights-o: 0;
+    --sc-path: #E9D9C2; --sc-front: #2F4A40; --sc-deep: #1E2E29; --sc-snow: #F4F1EA; --sc-snow-o: 0; --sc-bunting-o: 0; --sc-bird: #6B1D1D;
     /* tipogrāfija */
     --ff-display: "Lora", "Iowan Old Style", Georgia, "Times New Roman", serif;
     --ff-body: "Source Sans 3", system-ui, "Segoe UI", Roboto, Arial, sans-serif;
@@ -545,43 +551,237 @@ button.chip:hover { border-color: var(--c-line-strong); }
     cursor: not-allowed;
 }
 
-/* HERO SADAĻA */
+/* HERO SADAĻA (layout.md §1, Step 5): ainava = viens inline SVG (viewBox 0 -100 1440 900) kadrā ar fiksētām proporcijām.
+   Kadrs .hero-ainava-kadrs vienmēr ir 1440:900, tāpēc orientierus un ceļotāju var likt % no ainavas koordinātām.
+   ≥1024: teksts virs ainavas (kadrs pielāgots kā "xMidYMax slice"); <1024: teksts debesīs, ainava josla zem tā. */
 .hero-section {
-    padding: 80px 0;
+    --hero-h: clamp(600px, 56vw, 860px);
     position: relative;
+    height: var(--hero-h);
+    overflow: hidden;
+    background: var(--sc-sky1);
+}
+
+.hero-ainava {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.hero-ainava-kadrs {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: max(100%, calc(var(--hero-h) * 1.6));
+    aspect-ratio: 1440 / 900;
+    transform: translateX(-50%);
+}
+
+.hero-ainava-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky2) 42%, var(--sc-sky3) 62%, var(--sc-sky3) 100%);
+}
+
+.ainavas-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+
+/* Paralakse (script.js iestata --px/--py tikai pele + bez samazinātas kustības + ≥1024px) */
+.ainava-slanis { transform: translate(calc(var(--px, 0) * var(--d, 0) * 1px), calc(var(--py, 0) * var(--d, 0) * .25px)); }
+.ainava-slanis--debesis { --d: -14; }
+.ainava-slanis--talu    { --d: -8; }
+.ainava-slanis--vidus   { --d: -4; }
+.ainava-slanis--prieksa { --d: 18; }
+
+/* Orientieri: vējdzirnavas (Spānija) un bāka (Anglija) */
+.hero-orientieris {
+    position: absolute;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 13px;
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-2);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--c-ink);
+    white-space: nowrap;
+    transform: translate(calc(-50% + var(--px, 0) * -.55vw), -100%);
+}
+
+.hero-orientieris::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-accent);
+}
+
+.hero-orientieris::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 1px;
+    height: 10px;
+    background: var(--c-ink);
+    opacity: .35;
+}
+
+.hero-orientieris--es { left: 22.92%; top: 43.2%; }
+.hero-orientieris--en { left: 81.94%; top: 47.6%; }
+
+/* Ceļotāja vieta: kājas takas sākumā (x 430, y 772 ainavā) */
+.hero-empa {
+    position: absolute;
+    z-index: 2;
+    left: 29.86%;
+    top: 96.89%;
+    transform: translate(-48%, -100%);
 }
 
 .hero-container {
-    display: flex;
-    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: var(--sp-5);
+    padding-top: clamp(40px, 5vw, 88px);
+    text-align: center;
+}
+
+.hero-text {
+    display: grid;
+    justify-items: center;
+    gap: 18px;
+    max-width: 940px;
+}
+
+.hero-zime {
+    display: inline-flex;
     align-items: center;
-    gap: 40px;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: var(--r-pill);
+    background: rgb(255 253 248 / .75);
+    border: 1px solid rgb(52 80 63 / .18);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--c-sage-ink);
+}
+
+.hero-zime-punkts {
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-brand);
 }
 
 .hero-text h1 {
-    font-family: var(--font-heading);
-    font-size: 48px;
-    color: var(--primary-bordo);
-    line-height: 1.2;
-    margin-bottom: 15px;
+    font-size: var(--fs-display);
+    font-weight: 600;
+    line-height: 1.04;
+    letter-spacing: -.015em;
+    color: var(--c-brand);
 }
 
+.hero-text h1 em { font-weight: 400; }
+
 .hero-subtitle {
-    font-size: 20px;
-    color: var(--text-dark);
-    background: rgba(255, 255, 255, 0.6);
-    padding: 8px 16px;
-    border-radius: 8px;
-    display: inline-block;
+    max-width: 60ch;
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    color: var(--c-ink);
 }
 
 .hero-cta-box {
-    background: rgba(255, 255, 255, 0.85);
-    padding: 30px;
-    border-radius: 16px;
-    border: 2px solid #ffffff;
-    min-width: 320px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-3);
+}
+
+.btn-hero {
+    flex-direction: row;
+    gap: .5em;
+    width: auto;
+    padding: 12px 28px;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.btn-ikona {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Planšete: teksts debesīs, ainavas josla zem tā (apgriezums x 120–1320, apakša y 800) */
+@media (max-width: 1023px) {
+    .hero-section {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, var(--sc-sky1), var(--sc-sky2));
+    }
+
+    .hero-container { padding-top: clamp(16px, 5vw, 48px); padding-bottom: var(--sp-5); }
+
+    .hero-ainava {
+        position: relative;
+        inset: auto;
+        order: 2;
+        aspect-ratio: 1440 / 620;
+    }
+
+    .hero-ainava-kadrs {
+        left: -10%;
+        width: 120%;
+        transform: none;
+    }
+
+}
+
+/* Orientieri tikai platā ekrānā (šaurākā tie sadurtos ar apakšvirsrakstu) */
+@media (max-width: 1199px) {
+    .hero-orientieris { display: none; }
+}
+
+/* Telefons: josla 270px (apgriezums x 100–820), pogas pilnā platumā, ceļotājs ainavas labajā pusē */
+@media (max-width: 767px) {
+    .hero-container { gap: var(--sp-4); padding-top: var(--sp-4); }
+    .hero-text { gap: 14px; }
+    .hero-cta-box { flex-direction: column; justify-self: stretch; }
+    .btn-hero { width: 100%; }
+
+    .hero-ainava { aspect-ratio: auto; height: 270px; }
+
+    .hero-ainava-kadrs {
+        left: 50%;
+        width: max(200%, 270px * 1440 / 500);
+        transform: translateX(-31.94%);
+    }
+
+    .hero-empa { left: 43.4%; top: 97.78%; }
 }
 
 /* KURSU IZKĀRTOJUMS */
@@ -3264,15 +3464,6 @@ button.chip:hover { border-color: var(--c-line-strong); }
 
 /* RESPONSĪVAIS DIZAINS */
 @media (max-width: 768px) {
-    .hero-container {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .hero-text h1 {
-        font-size: 34px;
-    }
-
     .register-card {
         padding: 24px;
     }
@@ -3716,7 +3907,6 @@ html.ziemassvetki .site-header::after {
 /* Egles zari hero stūros */
 html.ziemassvetki .hero-section {
     overflow: hidden;
-    padding-top: 120px;
 }
 
 html.ziemassvetki .hero-section::before,
@@ -3728,6 +3918,7 @@ html.ziemassvetki .hero-section::after {
     height: 144px;
     background: url("assets/ziemassvetki/zars.svg") left top / contain no-repeat;
     pointer-events: none;
+    z-index: 1; /* virs hero ainavas */
 }
 
 html.ziemassvetki .hero-section::before {
