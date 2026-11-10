@@ -1,14 +1,19 @@
 /* SNIEGS — krītošas sniegpārslas sākumlapā no novembra līdz februārim (nov., dec., janv., febr.).
-   Pārbaudei jebkurā mēnesī: index.html?sniegs=1 */
+   Ziemassvētku rotājumi (html.ziemassvetki) — tikai decembrī; sveiciens "Priecīgus Ziemassvētkus!"
+   (html.svetku-dienas) — tikai 22.–26. decembrī.
+   Pārbaudei jebkurā dienā: ?sniegs=1 (sniegs), ?ziemassvetki=1 (rotājumi), ?sveiciens=1 (rotājumi + sveiciens) */
 (function () {
-    var menesis = new Date().getMonth(); // 0 = janvāris
+    var sodien = new Date();
+    var menesis = sodien.getMonth(); // 0 = janvāris
+    var diena = sodien.getDate();
+    var q = location.search;
+    var html = document.documentElement;
+    var sveiciens = (menesis === 11 && diena >= 22 && diena <= 26) || /[?&]sveiciens=1\b/.test(q);
+    if (menesis === 11 || sveiciens || /[?&]ziemassvetki=1\b/.test(q)) html.classList.add('ziemassvetki');
+    if (sveiciens) html.classList.add('svetku-dienas');
+
     var ziema = menesis === 10 || menesis === 11 || menesis === 0 || menesis === 1;
-    var piespiedu = /[?&]sniegs=1\b/.test(location.search);
-    if (!ziema && !piespiedu) return;
-    // Klase ziemassvētku rotājumiem (eglīte virs "R" virsrakstā) — tikai novembrī un decembrī
-    if (menesis === 10 || menesis === 11 || piespiedu) {
-        document.documentElement.classList.add('ziemassvetki');
-    }
+    if (!ziema && !/[?&]sniegs=1\b/.test(q)) return;
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     var canvas = document.createElement('canvas');

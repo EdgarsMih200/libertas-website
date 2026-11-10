@@ -55,7 +55,7 @@
         var list = me.enrollments || [];
         if (!list.length) {
             var p = el('p', 'muted', 'Jums vēl nav pieteikumu. ');
-            var l = el('a', '', 'Skatīt kursus'); l.href = 'index.html#kursi';
+            var l = el('a', '', 'Skatīt kursus'); l.href = 'kursi.html';
             p.appendChild(l);
             root.appendChild(p);
         }

@@ -123,7 +123,7 @@
                 if (btn.classList.contains('btn-busy') || btn.classList.contains('btn-done')) return;
                 if (!logged) {
                     try { sessionStorage.setItem('pendingCourse', id); } catch (x) {}
-                    location.href = signInUrl('/index.html#kursi');
+                    location.href = signInUrl('/kursi.html');
                     return;
                 }
                 enroll(btn, id);
@@ -134,7 +134,7 @@
         var hero = document.getElementById('exploreBtn');
         if (hero) {
             hero.addEventListener('click', function(e) {
-                if (!logged) { e.preventDefault(); location.href = signInUrl('/index.html#kursi'); }
+                if (!logged) { e.preventDefault(); location.href = signInUrl('/kursi.html'); }
             });
             if (!logged) {
                 var note = el('p', 'consent-note');

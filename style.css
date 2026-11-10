@@ -45,7 +45,7 @@ body {
     top: 0;
     z-index: 1000;
     border-bottom: 1px solid var(--border-light);
-    padding: 12px 0;
+    padding: 4px 0;
 }
 
 .nav-wrapper {
@@ -55,23 +55,47 @@ body {
 }
 
 .logo img {
-    height: 100px;
+    height: 72px;
     display: block;
+}
+
+/* Izvēlnes pogas: "tabletes" ar maigu fonu, aktīvā — bordo */
+.main-nav {
+    display: flex;
+    gap: 6px;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    box-shadow: 0 2px 10px rgba(107, 29, 29, 0.06);
 }
 
 .main-nav a {
     text-decoration: none;
     color: var(--text-dark);
-    font-weight: 500;
-    margin: 0 15px;
-    font-size: 16px;
-    transition: color 0.2s;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.2px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
-.main-nav a:hover, 
-.main-nav a.active {
+.main-nav a:hover {
     color: var(--primary-bordo);
-    border-bottom: 2px solid var(--primary-bordo);
+    background: #F3EAE0;
+}
+
+.main-nav a.active,
+.main-nav a[aria-current="page"] {
+    color: #fff;
+    background: var(--primary-bordo);
+    box-shadow: 0 3px 10px rgba(107, 29, 29, 0.28);
+}
+
+.main-nav a:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 2px;
 }
 
 /* POGAS */
@@ -239,6 +263,105 @@ body {
     border-radius: 8px;
 }
 
+/* SĀKUMLAPAS MATERIĀLI (mazās kartītes, ved uz materiali.html) */
+.sakums-materiali {
+    padding: 60px 20px;
+}
+
+.sakums-ievads {
+    text-align: center;
+    color: #5a5148;
+    margin: -28px auto 32px;
+    max-width: 560px;
+}
+
+.mini-rezgis {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+}
+
+.mini-karte {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    color: var(--text-dark);
+    text-decoration: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.mini-karte:hover,
+.mini-karte:focus-visible {
+    transform: translateY(-3px);
+    border-color: rgba(107, 29, 29, 0.3);
+    box-shadow: 0 10px 22px rgba(107, 29, 29, 0.12);
+    outline: none;
+}
+
+.mini-ikona {
+    flex: 0 0 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    font-size: 26px;
+    background: var(--primary-bordo);
+    transition: transform 0.3s;
+}
+
+.mini-karte:hover .mini-ikona {
+    transform: rotate(-6deg) scale(1.06);
+}
+
+.mini-ikona--zila { background: linear-gradient(135deg, var(--accent-blue), #164578); }
+.mini-ikona--zala { background: linear-gradient(135deg, var(--accent-green), #1F4028); }
+.mini-ikona--zelta { background: linear-gradient(135deg, var(--accent-gold), #A37A1F); }
+
+.mini-teksts {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+    min-width: 0;
+}
+
+.mini-teksts strong {
+    font-family: var(--font-heading);
+    color: var(--primary-bordo);
+    font-size: 16px;
+    margin: 2px 0;
+}
+
+.mini-teksts span:last-child {
+    font-size: 13px;
+    color: #6b625a;
+}
+
+.mini-birka {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--accent-gold);
+}
+
+.sakums-visi {
+    text-align: center;
+    margin-top: 28px;
+}
+
+.sakums-visi-poga {
+    flex-direction: row;
+    gap: 8px;
+    padding: 12px 28px;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
 /* SATURA KARTĪTE */
 .register-section {
     padding: 60px 20px;
@@ -345,9 +468,6 @@ footer a {
 }
 
 /* MATERIĀLU LAPAS (materiali.html, materiali-*.html) */
-.main-nav a[aria-current="page"] {
-    color: var(--primary-bordo);
-}
 
 /* Virsraksta josla */
 .mat-hero {
@@ -1929,7 +2049,7 @@ body {
     z-index: 1000;
 }
 
-/* ZIEMASSVĒTKU NOFORMĒJUMS (sākumlapa, nov. un dec.: snow.js pievieno html.ziemassvetki) */
+/* ZIEMASSVĒTKU NOFORMĒJUMS (sākumlapa, decembrī: snow.js pievieno html.ziemassvetki; sveicienu — 22.–26. dec. ar html.svetku-dienas) */
 :root {
     --xmas-green: #2E6B45;
     --xmas-green-dark: #1F5A38;
@@ -2020,7 +2140,7 @@ html.ziemassvetki .hero-container {
     z-index: 1;
 }
 
-html.ziemassvetki .svetku-sveiciens {
+html.svetku-dienas .svetku-sveiciens {
     display: inline-block;
     font-family: var(--font-heading);
     font-style: italic;
@@ -2033,8 +2153,8 @@ html.ziemassvetki .svetku-sveiciens {
     margin-bottom: 14px;
 }
 
-html.ziemassvetki .svetku-sveiciens::before,
-html.ziemassvetki .svetku-sveiciens::after {
+html.svetku-dienas .svetku-sveiciens::before,
+html.svetku-dienas .svetku-sveiciens::after {
     content: "\2726";
     color: var(--xmas-gold);
     margin: 0 8px;

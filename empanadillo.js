@@ -1,6 +1,6 @@
 /* EMPANADILLO — Libertas talismans (maza pikseļu stila empanada), kas sveicina apmeklētājus.
    Stūrī lapas apakšā; pirmajā apmeklējumā sesijā pats pasaka sveicienu.
-   Klikšķis uz viņa — pastāsta savu pildījumu (katram apmeklētājam savu), tad nākamās frāzes. Nov./dec. (html.ziemassvetki) viņam ir Ziemassvētku cepure, bet 5. decembrī — ballītes cepure. */
+   Klikšķis uz viņa — pastāsta savu pildījumu (katram apmeklētājam savu), tad nākamās frāzes. Decembrī (html.ziemassvetki) viņam ir Ziemassvētku cepure, bet 5. decembrī — ballītes cepure. */
 (function () {
     var svetki = document.documentElement.classList.contains('ziemassvetki');
     // 5. decembrī (saimnieka dzimšanas diena) — ballītes cepure Ziemassvētku cepures vietā.

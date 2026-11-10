@@ -14,14 +14,15 @@ Short reference so work can start without re-reading every file.
 ## Files
 | File | Purpose |
 |---|---|
-| `index.html` | Home: header/nav, hero (with seasonal `p.svetku-sveiciens`) with CTA box, course grid (`#kursi`), footer |
+| `index.html` | Home: header/nav, hero (with seasonal `p.svetku-sveiciens`) with CTA box (both buttons → `kursi.html`), materials teaser `section#materiali.sakums-materiali` (`.sakums-ievads`, small link cards `.mini-rezgis` > `a.mini-karte` > `.mini-ikona` (+`--zila/--zala/--zelta` or `mat-vaks--ziemassvetki`) + `.mini-teksts` with `.mini-birka`; all lead to `materiali.html`; button `.sakums-visi-poga`), footer |
+| `kursi.html` | "Kursi" (menu): `section#kursi.courses-section` with `h1.section-title`, `.sakums-ievads`, course cards. Enrollment via `script.js` (`data-course`) |
 | `noteikumi.html` | Terms of service + GDPR privacy policy + cookies (LV law). Reuses `.register-card` + `.legal-card`. Company details are `span.placeholder` (yellow) until filled in |
 | `materiali.html` | "Noderīgi materiāli" (in menu): hero band `.mat-hero` + card grid `.mat-rezgis` of `article.mat-karte` (cover `.mat-karte-vaks` + theme class e.g. `.mat-vaks--ziemassvetki`, `.mat-limenis`, `.mat-valoda`, emoji, `.mat-karte-meta` chips; whole card clickable via `.mat-karte-saite::after`) + dashed `.mat-karte--drizuma` placeholder. Cards carry `data-valoda` / `data-valoda-nosaukums`; language filter chips (`.mat-filtri`) appear automatically once 2+ languages exist. **Adding a material** = new page `materiali-<valoda>-<tēma>.html` (copy the Christmas one) + copy one card |
 | `materiali-spanu-ziemassvetki.html` | Material **Spāņu A1 — Ziemassvētki**: hero with stats, sticky side TOC `.mat-saturs` (active link highlighted), sections `.mat-sadala` with `.mat-nr`: flip vocab cards (`.vardu-rezgis` > `.vards` > `button.vards-karte`), phrases list, grammar tiles (`.artikulu-rezgis`, `.likumu-rezgis`, `.locijumi`), chat dialogue (`.cats` > `.replika--a/--p`, translation toggle, "listen to whole dialogue"), timeline `.laika-josla`, self-checking exercises (`.uzdevums-bloks`, inputs `.uzd-lauks[data-atbilde]`, `|` = alternative answers; check ignores case/accents/punctuation), CTA `.mat-cta` |
 | `materiali.js` | Shared by material pages: 🔊 buttons on every `[data-es]` (Web Speech es-ES; placed in `[data-runa-vieta]` if present), flip cards, dialogue playback/translation, exercise checking, TOC highlighting, card filters |
 | `script.js` | Shared JS (see below) |
-| `snow.js` | Home page only: falling, rotating six-armed snowflakes canvas (`.snow-canvas`) in Nov/Dec/Jan/Feb; skipped with `prefers-reduced-motion`; force with `?sniegs=1`. In Nov/Dec (or with `?sniegs=1`) it also adds `html.ziemassvetki` (turns on the Christmas styling) |
-| `zvani.js` | Home page only (Nov/Dec): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
+| `snow.js` | Home page only: falling, rotating six-armed snowflakes canvas (`.snow-canvas`) in Nov/Dec/Jan/Feb; skipped with `prefers-reduced-motion`; force with `?sniegs=1`. Adds `html.ziemassvetki` (Christmas decor) **only in December** (test `?ziemassvetki=1`) and `html.svetku-dienas` (shows "Priecīgus Ziemassvētkus!") **only 22–26 Dec** (test `?sveiciens=1`) |
+| `zvani.js` | Home page only (December): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
 | `empanadillo.js` | Home page: mascot **Empanadillo** (pixel-art empanada: letter-grid sprites `KERMENIS`, `ACIS`, `ROKA_A/B`, `CEPURE` + palette `KRASAS`, turned into SVG rects in JS; 88px, 64px on mobile) fixed bottom-right. Slides in, greets once per session (sessionStorage `empaSveiciens`) in a speech bubble; click = first his filling (`PILDIJUMI`: per signed-in user by hash of `LIB.me.user.id`, for guests random and kept in localStorage `empaPildijums`), then the other phrases (`frazes`), hover = waves (two arm frames `.empa-roka-a/-b`). Wears a Santa hat under `html.ziemassvetki`, but on 5 December (owner's birthday) a pixel party hat `BALLITES_CEPURE` instead (test with `?ballite=1`). Load after `snow.js` |
 | `style.css` | Shared styles (see sections below) |
 | `assets/` | `libertas.png` (logo), `ziemassvetki/` (Christmas decorations: `zars.svg` pine branch, `ilekss.svg` holly, `bumba.svg` bauble), `spain-a1.png`, `english-a1.jpg` (course images) |
@@ -34,7 +35,7 @@ Short reference so work can start without re-reading every file.
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
 
 ## Shared page skeleton (all pages)
-`header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Kursi, Noderīgi materiāli, Par mums); the logo links to `index.html` (no separate "Sākums" item),
+`header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Kursi → `kursi.html`, Noderīgi materiāli, Par mums); the logo links to `index.html` (no separate "Sākums" item),
 (no register button in the header). Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
 Footer also links to `noteikumi.html`.
 Header/footer are duplicated in each HTML file: **change every page** when editing them.
@@ -47,7 +48,7 @@ Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) wa
 | `spain-a1` | Spāņu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, otrdienās un ceturtdienās | `assets/spain-a1.png` |
 | `english-a1` | Angļu valodas pamati (A1) | 280,00 EUR | 7 nedēļas, pirmdienās un trešdienās | `assets/english-a1.jpg` |
 
-Adding/changing a course means editing `index.html` (`article.course-card` with `data-course="<id>"` on its button)
+Adding/changing a course means editing `kursi.html` (`article.course-card` with `data-course="<id>"` on its button)
 **and** inserting a row in the D1 `courses` table (new migration file).
 
 ## Accounts, enrollment, admin (added 2026-11-10, restore point tag `backup-2026-11-10-before-google-auth`)
@@ -69,18 +70,19 @@ Adding/changing a course means editing `index.html` (`article.course-card` with 
 ## style.css (by section, line numbers approx.)
 - `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
   `--bg-card #FFF`, `--text-dark #2C2C2C`, `--border-light #E8E2D9`, `--accent-green #2F5D3A`, `--accent-gold #D4A537`, `--accent-blue #1F5FA8`, `--font-heading Georgia`, `--font-body` system stack
-- NAVIGĀCIJA (l.37): `.site-header` (sticky), `.nav-wrapper`, `.logo img` (100px high), `.main-nav a`
+- NAVIGĀCIJA (l.37): `.site-header` (sticky, slim: 4px padding), `.nav-wrapper`, `.logo img` (72px high), `.main-nav` (white pill bar) with pill links `.main-nav a`; current page `a[aria-current="page"]` / `.active` = filled bordo
 - POGAS (l.79): `.btn-cta` (bordo), `.btn-large`, `.btn-secondary` (beige), `.btn-title`, `.btn-sub`
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
 - KURSU IZKĀRTOJUMS (l.175): `.courses-section`, `.section-title`, `.courses-grid`, `.course-card`, `.course-body`,
   `.course-price`, `.course-info`, `.btn-card`
-- SATURA KARTĪTE (l.239): `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
+- SĀKUMLAPAS MATERIĀLI: `.sakums-materiali`, `.sakums-ievads`, `.mini-*`, `.sakums-visi(-poga)`
+- SATURA KARTĪTE: `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
 - MATERIĀLU LAPAS (`mat-*` prefix, before KĀJENE): see `materiali*.html` rows above; own responsive rules (900px / 640px), reduced-motion and `@media print` (print shows both flip-card sides and translations, hides UI)
 - KĀJENE: `footer`
 - SNIEGS (end of file): `.snow-canvas` (fixed, `pointer-events: none`, z-index 1000)
 - EMPANADILLO (end of file): `.empanadillo`, `.empa-poga`, `.empa-burbulis`, `.empa-aizvert`, `.empa-roka`, `.empa-acis`, `.empa-cepure`
-- ZIEMASSVĒTKU NOFORMĒJUMS (end of file): all rules under `html.ziemassvetki` (Nov/Dec, home page only). Vars `--xmas-green`, `--xmas-green-dark`, `--xmas-gold`, `--xmas-red`, `--xmas-blue`. Header light string (`.site-header::before/::after`, twinkle), pine branches in hero corners with golden bells (`.zvanu-zars-k`/`-l` containers sized like the branch, bell SVG `<symbol id="zvana-forma">` in `index.html`), `.svetku-sveiciens` greeting pill above the hero `h1` (hidden outside season), CTA box as a gift with an inline-SVG bow `span.cta-bantite` in `index.html` (loops `.cilpa-k`/`.cilpa-l` flap on hover), baubles beside `.section-title`, gold top + holly on `.course-card`, snow-capped `footer`
+- ZIEMASSVĒTKU NOFORMĒJUMS (end of file): all rules under `html.ziemassvetki` (December, home page only). Vars `--xmas-green`, `--xmas-green-dark`, `--xmas-gold`, `--xmas-red`, `--xmas-blue`. Header light string (`.site-header::before/::after`, twinkle), pine branches in hero corners with golden bells (`.zvanu-zars-k`/`-l` containers sized like the branch, bell SVG `<symbol id="zvana-forma">` in `index.html`), `.svetku-sveiciens` greeting pill above the hero `h1` (shown only under `html.svetku-dienas`), CTA box as a gift with an inline-SVG bow `span.cta-bantite` in `index.html` (loops `.cilpa-k`/`.cilpa-l` flap on hover), baubles beside `.section-title`, gold top + holly on `.course-card`, snow-capped `footer`
 - RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet)
 
 ## Conventions

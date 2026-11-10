@@ -1,4 +1,4 @@
-/* ZVANIŅI — zelta zvaniņi uz egles zariem sākumlapā (nov./dec., kad html.ziemassvetki).
+/* ZVANIŅI — zelta zvaniņi uz egles zariem sākumlapā (decembrī, kad html.ziemassvetki).
    Uzbraucot ar peli (vai pieskaroties), zvans nošūpojas un nozvana.
    Skaņa tiek sintezēta ar Web Audio API, tāpēc nav vajadzīgs skaņas fails.
    Pārlūki atļauj skaņu tikai pēc pirmā klikšķa/pieskāriena/taustiņa lapā. */
