@@ -21,3 +21,8 @@
 ## Rollback
 - `git checkout main && git reset --hard pre-redesign-backup` (only with confirmation)
 - single file: `git checkout pre-redesign-backup -- path/to/file`
+
+## Step 6–7 (2026-11-10/11)
+- Implemented in 4 chunks on `redesign/new-style`: foundation (tokens, fonts, components, light logo, header + mobile nav, footer), home (hero scene, features, course path, bento, pixel traveller mascot), inner pages (kursi grouped + new covers, materials, lessons, noteikumi/konts/admin, 404 + wrangler not_found_handling), seasonal (winter evening scene, flat bells/garland/snow, 5 Dec bunting + lanterns; `sezona.js` site-wide).
+- QA: `docs/redesign/qa.md` — all 7 checks pass. Follow-ups fixed (mascot bubble on phones, konts reserved height, unused images in .assetsignore).
+- Open for client: favicon/meta/OG, contacts, Par mums + FAQ content, noteikumi placeholders.
