@@ -3,37 +3,48 @@
     var runaIr = 'speechSynthesis' in window;
     var balss = null;
 
-    // IZRUNA (pārlūka runas sintēze, es-ES)
-    function izveletiesBalsi() {
-        var balsis = speechSynthesis.getVoices();
-        balss = balsis.find(function (b) { return b.lang === 'es-ES'; }) ||
-                balsis.find(function (b) { return b.lang && b.lang.indexOf('es') === 0; }) || null;
+    // IZRUNA (pārlūka runas sintēze): data-es → es-ES, data-en → en-GB
+    var VALODAS = { es: 'es-ES', en: 'en-GB' };
+    var balsis = {};
+
+    function izveletiesBalsis() {
+        var visas = speechSynthesis.getVoices();
+        Object.keys(VALODAS).forEach(function (v) {
+            balsis[v] = visas.find(function (b) { return b.lang === VALODAS[v]; }) ||
+                        visas.find(function (b) { return b.lang && b.lang.indexOf(v) === 0; }) || null;
+        });
     }
 
-    function izteikums(teksts) {
-        var u = new SpeechSynthesisUtterance(teksts);
-        u.lang = 'es-ES';
+    // Atgriež { teksts, valoda } no elementa ar data-es vai data-en
+    function runasDati(el) {
+        if (el.hasAttribute('data-en')) return { teksts: el.getAttribute('data-en'), valoda: 'en' };
+        return { teksts: el.getAttribute('data-es'), valoda: 'es' };
+    }
+
+    function izteikums(d) {
+        var u = new SpeechSynthesisUtterance(d.teksts);
+        u.lang = VALODAS[d.valoda];
         u.rate = 0.85;
-        if (balss) u.voice = balss;
+        if (balsis[d.valoda]) u.voice = balsis[d.valoda];
         return u;
     }
 
     if (runaIr) {
-        izveletiesBalsi();
-        speechSynthesis.addEventListener('voiceschanged', izveletiesBalsi);
+        izveletiesBalsis();
+        speechSynthesis.addEventListener('voiceschanged', izveletiesBalsis);
 
-        document.querySelectorAll('[data-es]').forEach(function (el) {
-            var teksts = el.getAttribute('data-es');
+        document.querySelectorAll('[data-es], [data-en]').forEach(function (el) {
+            var d = runasDati(el);
             var poga = document.createElement('button');
             poga.type = 'button';
             poga.className = 'runat-poga';
             poga.textContent = '🔊';
-            poga.setAttribute('aria-label', 'Klausīties: ' + teksts);
+            poga.setAttribute('aria-label', 'Klausīties: ' + d.teksts);
             poga.title = 'Klausīties izrunu';
             poga.addEventListener('click', function (e) {
                 e.stopPropagation();
                 speechSynthesis.cancel();
-                speechSynthesis.speak(izteikums(teksts));
+                speechSynthesis.speak(izteikums(d));
             });
             var vieta = el.querySelector('[data-runa-vieta]');
             if (vieta) vieta.appendChild(poga);
@@ -64,7 +75,7 @@
             speechSynthesis.cancel();
             var replikas = cats.querySelectorAll('.replika');
             replikas.forEach(function (r, i) {
-                var u = izteikums(r.getAttribute('data-es'));
+                var u = izteikums(runasDati(r));
                 // Pārmaiņus divas balss augstuma variācijas, lai atšķirtu runātājus
                 u.pitch = r.classList.contains('replika--p') ? 0.8 : 1.15;
                 u.onstart = function () {
@@ -80,8 +91,12 @@
     // UZDEVUMI: atbilžu pārbaude (bez garumzīmēm, pieturzīmēm un lielajiem burtiem)
     function normalizet(s) {
         return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+            .replace(/['’]/g, '')
             .replace(/[¡!¿?.,;:—–-]/g, ' ').replace(/\s+/g, ' ').trim();
     }
+
+    // Uzslava, kad viss pareizi (body data-uzslava, citādi spāniski)
+    var uzslava = document.body.getAttribute('data-uzslava') || '¡Muy bien!';
 
     document.querySelectorAll('.uzdevums-bloks').forEach(function (bloks) {
         var poga = bloks.querySelector('.uzd-parbaudit');
@@ -99,7 +114,7 @@
                 if (ok) pareizi++;
             });
             var visi = pareizi === lauki.length;
-            rez.textContent = pareizi + ' / ' + lauki.length + ' pareizi' + (visi ? ' — ¡Muy bien! 🎉' : '');
+            rez.textContent = pareizi + ' / ' + lauki.length + ' pareizi' + (visi ? ' — ' + uzslava + ' 🎉' : '');
             rez.classList.toggle('visi-pareizi', visi);
         }
 

@@ -506,6 +506,13 @@ footer a {
         linear-gradient(135deg, var(--primary-bordo) 0%, #4A1A24 45%, var(--accent-green) 100%);
 }
 
+/* Angļu Ziemassvētki: ziemīgi zils → egļu zaļš */
+.mat-vaks--ziemassvetki-en {
+    background:
+        radial-gradient(circle at 85% 15%, rgba(201, 162, 39, 0.40) 0, transparent 40%),
+        linear-gradient(135deg, var(--accent-blue) 0%, #163A66 45%, var(--accent-green) 100%);
+}
+
 /* Krītoši sniega punktiņi fonā */
 .mat-hero::before,
 .mat-karte-vaks::before {
