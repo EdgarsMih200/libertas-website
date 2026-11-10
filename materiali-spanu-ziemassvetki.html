@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="mat-lapa">
+<body class="mat-lapa mat-nodarbiba">
 
     <!-- Galvene / Navigācija -->
     <header class="site-header">
@@ -32,9 +32,12 @@
     </header>
 
     <!-- Materiāla virsraksts -->
-    <section class="mat-hero mat-vaks--ziemassvetki">
-        <div class="container mat-hero-iekssa">
-            <a href="materiali.html" class="mat-atpakal">← Visi materiāli</a>
+    <section class="mat-hero lapas-josla lapas-josla--augsta">
+        <div class="lapas-josla-ainava" aria-hidden="true">
+            <svg viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-clouds"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+        </div>
+        <div class="container mat-hero-iekssa lapas-josla-saturs">
+            <a href="materiali.html" class="mat-atpakal"><svg class="mat-atpakal-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Visi materiāli</a>
             <div class="mat-birkas">
                 <span class="mat-limenis">A1</span>
                 <span class="mat-valoda">Spāņu valoda</span>
@@ -42,7 +45,7 @@
             <h1><span lang="es" class="mat-hero-es">¡Feliz Navidad!</span> Ziemassvētki spāņu valodā</h1>
             <p class="mat-hero-teksts">
                 Pamatvārdi, apsveikumi un tradīcijas, lai tu varētu apsveikt draugus spāniski un saprast,
-                kā svētkus svin Spānijā. Spied 🔊, lai dzirdētu izrunu.
+                kā svētkus svin Spānijā. Spied <svg class="ikona-skana" viewBox="0 0 24 24" role="img" aria-label="skaļruņa pogu" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none"/></svg>, lai dzirdētu izrunu.
             </p>
             <ul class="mat-statistika">
                 <li><strong>20</strong> vārdi</li>
@@ -51,8 +54,8 @@
                 <li><strong>~30</strong> min</li>
             </ul>
             <div class="mat-hero-pogas">
-                <a href="#vardi" class="btn-cta mat-poga-gaisa">Sākt nodarbību</a>
-                <button type="button" class="mat-poga-caurspid" onclick="window.print()">🖨️ Drukāt</button>
+                <a href="#vardi" class="btn-cta">Sākt nodarbību</a>
+                <button type="button" class="btn-secondary mat-poga-druka" onclick="window.print()"><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><path d="M7 14h10v6H7z"/></svg>Drukāt</button>
             </div>
         </div>
     </section>
@@ -252,7 +255,7 @@
             <section class="mat-sadala" id="dialogs">
                 <h2><span class="mat-nr">4</span> Dialogs: dāvanu apmaiņa</h2>
                 <div class="dialoga-riki">
-                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden>▶ Klausīties visu dialogu</button>
+                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg>Klausīties visu dialogu</button>
                     <label class="mat-sledzis"><input type="checkbox" id="radit-tulkojumu"> Rādīt tulkojumu</label>
                 </div>
                 <div class="cats">
@@ -425,12 +428,11 @@
 
             <!-- Aicinājums -->
             <aside class="mat-cta">
-                <span class="mat-cta-emoji" aria-hidden="true">💬</span>
                 <div>
                     <h2>Gribi runāt spāniski droši?</h2>
                     <p>7 nedēļu kurss “Spāņu valodas pamati (A1)” — ar dzīvu sarunu praksi.</p>
                 </div>
-                <a href="kursi.html" class="btn-cta mat-poga-gaisa">Apskatīt kursu</a>
+                <a href="kursi.html#spanu" class="btn-cta">Apskatīt kursu</a>
             </aside>
         </main>
     </div>
