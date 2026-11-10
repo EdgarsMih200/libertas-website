@@ -127,22 +127,6 @@
 
     <!-- Hero: ainava (inline SVG, fiksētas proporcijas = bez nobīdes) + teksts. Ceļotājs Empanadillo stāv takas sākumā (empanadillo.js) -->
     <section class="hero-section">
-        <div class="hero-ainava">
-            <div class="hero-ainava-kadrs">
-                <svg class="hero-ainava-svg" viewBox="0 -100 1440 900" aria-hidden="true" focusable="false">
-                    <g class="ainava-slanis ainava-slanis--debesis"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/></g>
-                    <g class="ainava-slanis ainava-slanis--talu"><use href="#sc-far"/></g>
-                    <use href="#sc-lake"/>
-                    <g class="ainava-slanis ainava-slanis--vidus"><use href="#sc-mid"/></g>
-                    <use href="#sc-near"/><use href="#sc-path"/>
-                    <g class="ainava-slanis ainava-slanis--prieksa"><use href="#sc-front"/></g>
-                </svg>
-                <span class="hero-orientieris hero-orientieris--es" aria-hidden="true">Spāņu valoda</span>
-                <span class="hero-orientieris hero-orientieris--en" aria-hidden="true">Angļu valoda</span>
-                <!-- Šeit empanadillo.js ieliek lielo ceļotāju (×4 / ×3 / ×2) -->
-                <div class="hero-empa" data-empa-hero></div>
-            </div>
-        </div>
         <!-- Ziemassvētku zvaniņi uz egles zariem (redzami nov./dec.); uzbraucot ar peli, tie zvana (zvani.js) -->
         <svg class="zvana-defs" aria-hidden="true" focusable="false">
             <defs>
@@ -200,6 +184,23 @@
                 </span>
                 <a href="kursi.html" class="btn-cta btn-hero" id="exploreBtn">Izvēlies kursu <svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
                 <a href="materiali.html" class="btn-secondary btn-hero">Noderīgi materiāli</a>
+            </div>
+        </div>
+        <!-- Ainava DOM pēc teksta: tabulēšanas secība teksts → pogas → ceļotājs -->
+        <div class="hero-ainava">
+            <div class="hero-ainava-kadrs">
+                <svg class="hero-ainava-svg" viewBox="0 -100 1440 900" aria-hidden="true" focusable="false">
+                    <g class="ainava-slanis ainava-slanis--debesis"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/></g>
+                    <g class="ainava-slanis ainava-slanis--talu"><use href="#sc-far"/></g>
+                    <use href="#sc-lake"/>
+                    <g class="ainava-slanis ainava-slanis--vidus"><use href="#sc-mid"/></g>
+                    <use href="#sc-near"/><use href="#sc-path"/>
+                    <g class="ainava-slanis ainava-slanis--prieksa"><use href="#sc-front"/></g>
+                </svg>
+                <span class="hero-orientieris hero-orientieris--es" aria-hidden="true">Spāņu valoda</span>
+                <span class="hero-orientieris hero-orientieris--en" aria-hidden="true">Angļu valoda</span>
+                <!-- Šeit empanadillo.js ieliek lielo ceļotāju (×4 / ×3 / ×2) -->
+                <div class="hero-empa" data-empa-hero></div>
             </div>
         </div>
     </section>

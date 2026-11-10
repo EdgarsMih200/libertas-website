@@ -4220,56 +4220,53 @@ html.ziemassvetki .zvanu-zars-l {
     }
 }
 
-/* EMPANADILLO — talismans lapas stūrī (skat. empanadillo.js) */
+/* EMPANADILLO — ceļotājs talismans (skat. empanadillo.js, docs/redesign/mascot-final/usage.md).
+   .empa = kopīgais; .empanadillo.empa--mazs = stūra palīgs (fiksēts); .empa--liels = lielais hero ainavā.
+   Tikai veseli mērogi: lielais 52×35 ×4/×3/×2, mazais 32×27 ×3/×2. Kustība tikai ar kadru maiņu (steps). */
+.empa { position: relative; }
+
+.empa-poga {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: none;
+    cursor: pointer;
+}
+
+.empa-poga:focus-visible {
+    outline: 3px solid var(--c-focus);
+    outline-offset: 4px;
+}
+
+.empa-poga svg {
+    display: block;
+    overflow: visible;
+    image-rendering: pixelated;
+}
+
+.empa--liels .empa-poga svg { width: 208px; height: 140px; }
+.empa--mazs .empa-poga svg { width: 96px; height: 81px; }
+
+/* Stūra palīgs: ieslīd no apakšas; sākumlapā paslēpts, kamēr hero ceļotājs redzams */
 .empanadillo {
     position: fixed;
     right: 20px;
     bottom: 16px;
     z-index: 1001;
     transform: translateY(140%);
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    visibility: hidden;
+    transition: transform .6s var(--ease), visibility 0s linear .6s;
 }
 
 .empanadillo.ieradies {
     transform: translateY(0);
+    visibility: visible;
+    transition: transform .6s var(--ease), visibility 0s;
 }
 
-.empa-poga {
-    display: block;
-    width: 88px;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    animation: empa-supojas 1.6s steps(1) infinite;
-}
-
-.empa-poga:focus-visible {
-    outline: 3px solid var(--primary-bordo);
-    outline-offset: 4px;
-    border-radius: 12px;
-}
-
-.empa-poga svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    overflow: visible;
-    image-rendering: pixelated;
-}
-
-/* Māšana: divi rokas kadri pārmaiņus (pikseļu stilā, bez griešanas) */
-.empa-roka-b {
-    visibility: hidden;
-}
-
-.empanadillo.maj .empa-roka-a {
-    animation: empa-maj-a 0.36s steps(1) 4;
-}
-
-.empanadillo.maj .empa-roka-b {
-    animation: empa-maj-b 0.36s steps(1) 4;
-}
+/* Šūpošanās: 1 sprite pikselis uz augšu ik 1,6 s; mirkšķināšana ik 4,5 s */
+.empa-figura { animation: empa-supojas 1.6s steps(1) infinite; }
 
 .empa-acis {
     transform-box: view-box;
@@ -4277,108 +4274,138 @@ html.ziemassvetki .zvanu-zars-l {
     animation: empa-mirkskina 4.5s steps(1) infinite;
 }
 
-.empa-cepure {
-    display: none;
-}
+.empa--mazs .empa-acis { transform-origin: 15px 9.5px; }
 
-html.ziemassvetki .empa-cepure {
-    display: inline;
-}
+/* Rokas: lielajam miera stāvoklī roka nolaista; mazajam — kadrs A. Māšana (.maj) = A ↔ B, 4 cikli */
+.empa-roka-b,
+.empa--liels .empa-roka-a { visibility: hidden; }
 
+.empa.maj .empa-roka-a { animation: empa-maj-a .36s steps(1) 4; }
+.empa.maj .empa-roka-b { animation: empa-maj-b .36s steps(1) 4; }
+.empa.maj .empa-roka-miers { animation: empa-paslept 1.44s steps(1); }
+
+/* Cepures: Ziemassvētku — tikai decembrī (html.ziemassvetki); ballītes — vienmēr, kad tā uzzīmēta (5. dec.) */
+.empa-cepure { display: none; }
+html.ziemassvetki .empa-cepure { display: inline; }
+
+/* Runas burbulis (design-system): papīrs, plāna līnija, maiga ēna, aste uz galvu */
 .empa-burbulis {
     position: absolute;
-    right: 56px;
-    bottom: 100%;
-    margin-bottom: 4px;
+    z-index: 1;
     width: max-content;
-    max-width: 240px;
-    background: var(--bg-card);
-    color: var(--text-dark);
-    border: 3px solid var(--primary-bordo);
-    border-radius: 4px;
-    padding: 12px 30px 12px 14px;
-    font-size: 15px;
-    line-height: 1.4;
-    box-shadow: 4px 4px 0 rgba(107, 29, 29, 0.25);
-    animation: empa-burbulis-paradas 0.3s ease-out;
+    max-width: 260px;
+    padding: 12px 36px 12px 14px;
+    border: 1px solid var(--c-line);
+    border-radius: 14px;
+    background: var(--c-surface);
+    box-shadow: 0 10px 28px -12px rgb(36 33 30 / .35);
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+    text-align: left;
+    animation: empa-burbulis-paradas .3s var(--ease);
 }
 
-.empa-burbulis[hidden] {
-    display: none;
+.empa-burbulis[hidden] { display: none; }
+.empa-burbulis b { color: var(--c-brand); }
+
+.empa-burbulis::after {
+    content: "";
+    position: absolute;
+    bottom: -7px;
+    width: 12px;
+    height: 12px;
+    background: var(--c-surface);
+    border-right: 1px solid var(--c-line);
+    border-bottom: 1px solid var(--c-line);
+    transform: rotate(45deg);
 }
 
-.empa-burbulis b {
-    color: var(--primary-bordo);
-}
+/* stūrī: virs viņa, pa kreisi; aste labajā pusē */
+.empa--mazs .empa-burbulis { right: 40px; bottom: calc(100% - 4px); }
+.empa--mazs .empa-burbulis::after { right: 20px; }
+
+/* hero: pa labi augšā no galvas; aste kreisajā pusē */
+.empa--liels .empa-burbulis { left: 60%; bottom: calc(100% - 18px); }
+.empa--liels .empa-burbulis::after { left: 24px; }
 
 .empa-aizvert {
     position: absolute;
     top: 4px;
-    right: 6px;
-    width: 22px;
-    height: 22px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
     border: 0;
+    border-radius: 6px;
     background: none;
-    color: #888;
+    color: var(--c-muted);
     font-size: 18px;
     line-height: 1;
     cursor: pointer;
 }
 
-.empa-aizvert:hover {
-    color: var(--primary-bordo);
+/* 44px skāriena laukums ap 28px pogu */
+.empa-aizvert::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
 }
+
+.empa-aizvert:hover { background: var(--c-sunk); color: var(--c-ink); }
 
 @keyframes empa-supojas {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-3px); }
+    50% { transform: translateY(-1px); }
 }
 
 @keyframes empa-maj-a {
-    0% { visibility: hidden; }
-    50% { visibility: visible; }
-}
-
-@keyframes empa-maj-b {
     0% { visibility: visible; }
     50% { visibility: hidden; }
 }
 
+@keyframes empa-maj-b {
+    0% { visibility: hidden; }
+    50% { visibility: visible; }
+}
+
+@keyframes empa-paslept {
+    0%, 100% { visibility: hidden; }
+}
+
 @keyframes empa-mirkskina {
     0%, 94%, 100% { transform: scaleY(1); }
-    97% { transform: scaleY(0.1); }
+    97% { transform: scaleY(.2); }
 }
 
 @keyframes empa-burbulis-paradas {
-    from { opacity: 0; transform: translateY(8px) scale(0.95); }
+    from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: none; }
 }
 
+@media (max-width: 1023px) {
+    .empa--liels .empa-poga svg { width: 156px; height: 105px; }
+}
+
 @media (max-width: 768px) {
-    .empanadillo {
-        right: 10px;
-        bottom: 10px;
-    }
+    .empanadillo { right: 10px; bottom: 10px; }
+    .empa--mazs .empa-poga svg { width: 64px; height: 54px; }
+    .empa--mazs .empa-burbulis { right: 24px; max-width: 200px; }
+}
 
-    .empa-poga {
-        width: 64px;
-    }
-
-    .empa-burbulis {
-        right: 40px;
-        max-width: 200px;
-        font-size: 14px;
-    }
+@media (max-width: 767px) {
+    .empa--liels .empa-poga svg { width: 104px; height: 70px; }
+    /* telefonā burbulis virs viņa, pa kreisi (nesedz pogas — tās ir virs ainavas) */
+    .empa--liels .empa-burbulis { left: auto; right: 30%; bottom: calc(100% - 6px); max-width: 200px; }
+    .empa--liels .empa-burbulis::after { left: auto; right: 20px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     .empanadillo,
-    .empa-poga,
+    .empanadillo.ieradies { transition: none; }
+    .empa-figura,
     .empa-acis,
-    .empanadillo.maj .empa-roka-a,
-    .empanadillo.maj .empa-roka-b,
-    .empa-burbulis {
-        animation: none;
-        transition: none;
-    }
+    .empa.maj .empa-roka-a,
+    .empa.maj .empa-roka-b,
+    .empa.maj .empa-roka-miers,
+    .empa-burbulis { animation: none; }
 }
