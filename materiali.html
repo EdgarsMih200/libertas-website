@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="mat-lapa">
+<body>
 
     <!-- Galvene / Navigācija -->
     <header class="site-header">
@@ -31,88 +31,96 @@
         </div>
     </header>
 
-    <!-- Materiālu saraksts: gaiša galva, filtri, kartītes -->
-    <section class="container mat-saraksta-lapa">
-        <div class="mat-galva">
-            <div>
+    <!-- Materiālu saraksts: horizonta josla, filtri, kartītes ar ainavas vinjetēm -->
+    <main class="mat-saraksta-lapa">
+        <div class="lapas-josla mat-galva">
+            <div class="lapas-josla-ainava" aria-hidden="true">
+                <svg viewBox="0 220 1440 390" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+            </div>
+            <div class="container lapas-josla-saturs">
                 <span class="mat-zime"><span class="tags-punkts" aria-hidden="true"></span>Bezmaksas · Drukājami · Ar izrunu</span>
                 <h1>Noderīgi <em>materiāli</em></h1>
+                <p class="mat-galva-ievads lapas-josla-ievads">
+                    Īsas, krāsainas nodarbības valodu apguvei mājās. Klausies izrunu, pildi uzdevumus
+                    un pārbaudi sevi — viss vienā lapā.
+                </p>
             </div>
-            <p class="mat-galva-ievads">
-                Īsas, krāsainas nodarbības valodu apguvei mājās. Klausies izrunu, pildi uzdevumus
-                un pārbaudi sevi — viss vienā lapā.
-            </p>
+            <!-- Empanadillo lasa karti (dekoratīvs; empanadillo.js) -->
+            <span class="lapas-josla-empa" data-empa-poza="lasa" data-empa-merogs="2"></span>
         </div>
 
-        <div class="mat-rikjosla">
-            <div class="mat-filtri" role="group" aria-label="Filtrēt pēc valodas" hidden></div>
-            <p class="mat-skaits" aria-live="polite"></p>
+        <div class="container">
+            <div class="mat-rikjosla">
+                <div class="mat-filtri" role="group" aria-label="Filtrēt pēc valodas" hidden></div>
+                <p class="mat-skaits" aria-live="polite"></p>
+            </div>
+
+            <div class="mat-rezgis">
+                <!-- Materiāla kartīte: kopē šo <article>, lai pievienotu jaunu materiālu.
+                     data-valoda = filtra atslēga, data-valoda-nosaukums = teksts filtra pogā.
+                     Vāks = ainavas vinjete (<use> no assets/scene/ainava.svg); svētku tēmai .sc-ziema (ziemas vakars),
+                     apgriezumu izvēlas viewBox (spāņu: vējdzirnavas pa kreisi, angļu: bāka pa labi) -->
+                <article class="mat-karte" data-valoda="spanu" data-valoda-nosaukums="Spāņu valoda">
+                    <div class="mat-vaks" aria-hidden="true">
+                        <svg class="mat-vaks-ainava sc-ziema" viewBox="180 280 600 320" preserveAspectRatio="xMidYMid slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun" transform="translate(-660 -60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/><use href="assets/scene/ainava.svg#sc-path"/></svg>
+                        <span class="mat-vaks-sveiciens" lang="es">¡Feliz Navidad!</span>
+                        <span class="mat-vaks-valoda" lang="es">Español</span>
+                    </div>
+                    <div class="mat-karte-saturs">
+                        <div class="mat-karte-virs">
+                            <span class="mat-karte-limenis">A1</span>
+                            <span class="mat-karte-tema">Spāņu valoda · Svētki</span>
+                        </div>
+                        <h2><a href="materiali-spanu-ziemassvetki.html" class="mat-karte-saite">Ziemassvētki spāņu valodā</a></h2>
+                        <p>Apsveikumi, svētku vārdi, artikuli, dialogs un tas, kāpēc spāņi Vecgada naktī ēd 12 vīnogas.</p>
+                        <p class="mat-karte-ieklauts">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></p>
+                        <dl class="mat-karte-dati">
+                            <div><dt>vārdi</dt><dd>20</dd></div>
+                            <div><dt>uzdevumi</dt><dd>4</dd></div>
+                            <div><dt>minūtes</dt><dd>30′</dd></div>
+                        </dl>
+                        <div class="mat-karte-apaksa">
+                            Sākt nodarbību
+                            <span class="mat-karte-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="mat-karte mat-karte--en" data-valoda="anglu" data-valoda-nosaukums="Angļu valoda">
+                    <div class="mat-vaks" aria-hidden="true">
+                        <svg class="mat-vaks-ainava sc-ziema" viewBox="880 280 600 320" preserveAspectRatio="xMidYMid slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+                        <span class="mat-vaks-sveiciens" lang="en">Merry Christmas!</span>
+                        <span class="mat-vaks-valoda" lang="en">English</span>
+                    </div>
+                    <div class="mat-karte-saturs">
+                        <div class="mat-karte-virs">
+                            <span class="mat-karte-limenis">A1</span>
+                            <span class="mat-karte-tema">Angļu valoda · Svētki</span>
+                        </div>
+                        <h2><a href="materiali-anglu-ziemassvetki.html" class="mat-karte-saite">Ziemassvētki angļu valodā</a></h2>
+                        <p>Apsveikumi, svētku vārdi, artikuli a/an, dialogs un tas, kas ir Boxing Day un Christmas crackers.</p>
+                        <p class="mat-karte-ieklauts">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></p>
+                        <dl class="mat-karte-dati">
+                            <div><dt>vārdi</dt><dd>20</dd></div>
+                            <div><dt>uzdevumi</dt><dd>4</dd></div>
+                            <div><dt>minūtes</dt><dd>30′</dd></div>
+                        </dl>
+                        <div class="mat-karte-apaksa">
+                            Sākt nodarbību
+                            <span class="mat-karte-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Vieta nākamajiem materiāliem -->
+                <article class="mat-karte mat-karte--drizuma" aria-label="Drīzumā vairāk materiālu">
+                    <span class="mat-karte-tema">Drīzumā</span>
+                    <h2>Jauni materiāli ceļā</h2>
+                    <p>Gatavojam nākamās nodarbības spāņu un angļu valodā.</p>
+                </article>
+            </div>
         </div>
-
-        <div class="mat-rezgis">
-            <!-- Materiāla kartīte: kopē šo <article>, lai pievienotu jaunu materiālu.
-                 data-valoda = filtra atslēga, data-valoda-nosaukums = teksts filtra pogā.
-                 Krāsu tēma: bez klases = bordo→zaļš, .mat-karte--en = zils→zaļš -->
-            <article class="mat-karte" data-valoda="spanu" data-valoda-nosaukums="Spāņu valoda">
-                <div class="mat-vaks" aria-hidden="true">
-                    <span class="mat-vaks-sveiciens">¡Feliz Navidad!</span>
-                    <span class="mat-vaks-valoda">Español</span>
-                    <span class="mat-vaks-disks">🎄</span>
-                </div>
-                <div class="mat-karte-saturs">
-                    <div class="mat-karte-virs">
-                        <span class="mat-karte-limenis">A1</span>
-                        <span class="mat-karte-tema">Spāņu valoda · Svētki</span>
-                    </div>
-                    <h2><a href="materiali-spanu-ziemassvetki.html" class="mat-karte-saite">Ziemassvētki spāņu valodā</a></h2>
-                    <p>Apsveikumi, svētku vārdi, artikuli, dialogs un tas, kāpēc spāņi Vecgada naktī ēd 12 vīnogas.</p>
-                    <p class="mat-karte-ieklauts">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></p>
-                    <dl class="mat-karte-dati">
-                        <div><dt>vārdi</dt><dd>20</dd></div>
-                        <div><dt>uzdevumi</dt><dd>4</dd></div>
-                        <div><dt>minūtes</dt><dd>30′</dd></div>
-                    </dl>
-                    <div class="mat-karte-apaksa">
-                        Sākt nodarbību
-                        <span class="mat-karte-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-                    </div>
-                </div>
-            </article>
-
-            <article class="mat-karte mat-karte--en" data-valoda="anglu" data-valoda-nosaukums="Angļu valoda">
-                <div class="mat-vaks" aria-hidden="true">
-                    <span class="mat-vaks-sveiciens">Merry Christmas!</span>
-                    <span class="mat-vaks-valoda">English</span>
-                    <span class="mat-vaks-disks">⛄</span>
-                </div>
-                <div class="mat-karte-saturs">
-                    <div class="mat-karte-virs">
-                        <span class="mat-karte-limenis">A1</span>
-                        <span class="mat-karte-tema">Angļu valoda · Svētki</span>
-                    </div>
-                    <h2><a href="materiali-anglu-ziemassvetki.html" class="mat-karte-saite">Ziemassvētki angļu valodā</a></h2>
-                    <p>Apsveikumi, svētku vārdi, artikuli a/an, dialogs un tas, kas ir Boxing Day un Christmas crackers.</p>
-                    <p class="mat-karte-ieklauts">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></p>
-                    <dl class="mat-karte-dati">
-                        <div><dt>vārdi</dt><dd>20</dd></div>
-                        <div><dt>uzdevumi</dt><dd>4</dd></div>
-                        <div><dt>minūtes</dt><dd>30′</dd></div>
-                    </dl>
-                    <div class="mat-karte-apaksa">
-                        Sākt nodarbību
-                        <span class="mat-karte-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Vieta nākamajiem materiāliem -->
-            <article class="mat-karte mat-karte--drizuma" aria-label="Drīzumā vairāk materiālu">
-                <span class="mat-karte-tema">Drīzumā</span>
-                <h2>Jauni materiāli ceļā</h2>
-                <p>Gatavojam nākamās nodarbības spāņu un angļu valodā.</p>
-            </article>
-        </div>
-    </section>
+    </main>
 
     <!-- Kājene -->
     <footer class="site-footer">
