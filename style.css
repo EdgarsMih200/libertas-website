@@ -4336,15 +4336,8 @@ body {
     z-index: 1000;
 }
 
-/* ZIEMASSVĒTKU NOFORMĒJUMS (sākumlapa, decembrī: snow.js pievieno html.ziemassvetki; sveicienu — 22.–26. dec. ar html.svetku-dienas) */
-:root {
-    --xmas-green: #2E6B45;
-    --xmas-green-dark: #1F5A38;
-    --xmas-gold: #D4A537;
-    --xmas-red: #B3261E;
-    --xmas-blue: #2F5D9E;
-}
-
+/* ZIEMASSVĒTKU NOFORMĒJUMS (decembrī: sezona.js pievieno html.ziemassvetki visās lapās; sveicienu — 22.–26. dec. ar html.svetku-dienas;
+   5. dec. — html.ballite). Plakani rekvizīti ainavas valodā (design-system.md §4.2): akcents, izkārtojums un tipogrāfija nemainās */
 .svetku-sveiciens {
     display: none;
 }
@@ -4388,192 +4381,75 @@ html.ziemassvetki .lapas-josla { --josla-migla: 72%; }
     html.ziemassvetki .lapas-josla { --josla-migla: 84%; }
 }
 
-/* Lampiņu virtene zem galvenes: divas kārtas, kas mirgo pārmaiņus */
-html.ziemassvetki .site-header {
-    border-bottom: 2px solid var(--xmas-green-dark);
-}
-
+/* Lampiņu virtene zem galvenes: plakans vads ar siltām spuldzītēm (assets/ziemassvetki/virtene.svg) + lēna mirdzēšana */
 html.ziemassvetki .site-header::before,
 html.ziemassvetki .site-header::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -10px;
-    height: 12px;
+    top: 100%;
+    height: 24px;
+    margin-top: -3px;
     pointer-events: none;
+    background-position: 0 0;
     background-repeat: repeat-x;
-    background-size: 96px 12px;
-}
-
-html.ziemassvetki .site-header::before {
-    background-image:
-        radial-gradient(circle at 12px 7px, var(--xmas-red) 0 4px, transparent 5px),
-        radial-gradient(circle at 60px 7px, var(--xmas-gold) 0 4px, transparent 5px);
-    filter: drop-shadow(0 0 4px rgba(212, 165, 55, 0.8));
-    animation: lampinas 1.6s ease-in-out infinite alternate;
+    background-size: 120px 24px;
 }
 
 html.ziemassvetki .site-header::after {
+    background-image: url("assets/ziemassvetki/virtene.svg");
+}
+
+/* mirdzums ap spuldzītēm (tās pašas pozīcijas kā virtene.svg) */
+html.ziemassvetki .site-header::before {
     background-image:
-        radial-gradient(circle at 36px 7px, var(--xmas-green) 0 4px, transparent 5px),
-        radial-gradient(circle at 84px 7px, var(--xmas-blue) 0 4px, transparent 5px);
-    filter: drop-shadow(0 0 4px rgba(120, 180, 255, 0.7));
-    animation: lampinas 1.6s ease-in-out -0.8s infinite alternate;
+        radial-gradient(circle at 20px 13px, rgb(242 196 106 / .55) 0, rgb(242 196 106 / 0) 10px),
+        radial-gradient(circle at 60px 16px, rgb(242 196 106 / .55) 0, rgb(242 196 106 / 0) 10px),
+        radial-gradient(circle at 100px 13px, rgb(242 196 106 / .55) 0, rgb(242 196 106 / 0) 10px);
+    animation: virtene-mirdz 2.8s ease-in-out infinite alternate;
 }
 
-@keyframes lampinas {
-    from { opacity: 1; }
-    to { opacity: 0.35; }
+@keyframes virtene-mirdz {
+    from { opacity: .35; }
+    to { opacity: 1; }
 }
 
-/* Egles zari hero stūros */
-html.ziemassvetki .hero-section {
-    overflow: hidden;
-}
-
-html.ziemassvetki .hero-section::before,
-html.ziemassvetki .hero-section::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 250px;
-    height: 144px;
-    background: url("assets/ziemassvetki/zars.svg") left top / contain no-repeat;
-    pointer-events: none;
-    z-index: 1; /* virs hero ainavas */
-}
-
-html.ziemassvetki .hero-section::before {
-    left: 0;
-}
-
-html.ziemassvetki .hero-section::after {
-    right: 0;
-    transform: scaleX(-1);
-}
-
-html.ziemassvetki .hero-container {
-    position: relative;
-    z-index: 1;
-}
-
-html.svetku-dienas .svetku-sveiciens {
-    display: inline-block;
-    font-family: var(--font-heading);
-    font-style: italic;
-    font-size: 18px;
-    color: var(--xmas-green-dark);
-    background: rgba(255, 255, 255, 0.75);
-    border: 1px solid var(--xmas-gold);
-    border-radius: 999px;
-    padding: 4px 16px;
-    margin-bottom: 14px;
-}
-
-html.svetku-dienas .svetku-sveiciens::before,
-html.svetku-dienas .svetku-sveiciens::after {
-    content: "\2726";
-    color: var(--xmas-gold);
-    margin: 0 8px;
-    font-style: normal;
-}
-
-/* CTA kaste kā dāvana ar bantīti */
-html.ziemassvetki .hero-cta-box {
-    position: relative;
-    border: 2px solid var(--xmas-gold);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 0 6px rgba(212, 165, 55, 0.12);
-}
-
-.cta-bantite {
+/* atvērtā mobilā izvēlne: virtene nav vajadzīga */
+html.ziemassvetki .site-header.izvelne-atverta::before,
+html.ziemassvetki .site-header.izvelne-atverta::after {
     display: none;
 }
 
-html.ziemassvetki .cta-bantite {
-    display: block;
-    position: absolute;
-    top: -36px;
-    left: 50%;
-    width: 96px;
-    height: 56px;
-    transform: translateX(-50%);
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
-    cursor: pointer;
-    z-index: 2;
+/* telefonā hero teksts nedaudz zemāk, lai virtene neskartu pirmo "pill" */
+@media (max-width: 767px) {
+    html.ziemassvetki .hero-container { padding-top: calc(var(--sp-4) + 10px); }
 }
 
-.cta-bantite svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
+/* Sveiciens 22.–26. dec.: tāda pati "pill" kā .hero-zime, bet akcenta maigajā tonī */
+html.svetku-dienas .svetku-sveiciens {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0;
+    padding: 8px 18px;
+    border-radius: var(--r-pill);
+    background: var(--c-accent-soft);
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    color: var(--c-accent-strong);
+    box-shadow: 0 0 0 4px rgb(242 196 106 / .28);
 }
 
-/* Cilpas un lentes griežas ap mezglu (60, 32) */
-.cta-bantite .cilpa,
-.cta-bantite .lente {
-    transform-box: view-box;
-    transform-origin: 60px 32px;
-}
-
-/* Uzbraucot ar peli, lielās cilpas plivinās kā spārni */
-html.ziemassvetki .cta-bantite:hover .cilpa-k {
-    animation: cilpa-kreisa 0.45s ease-in-out infinite;
-}
-
-html.ziemassvetki .cta-bantite:hover .cilpa-l {
-    animation: cilpa-laba 0.45s ease-in-out infinite;
-}
-
-html.ziemassvetki .cta-bantite:hover .lente {
-    animation: lente-sups 0.9s ease-in-out infinite;
-}
-
-@keyframes cilpa-kreisa {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(24deg) scale(0.88, 0.8); }
-}
-
-@keyframes cilpa-laba {
-    0%, 100% { transform: rotate(0deg) scale(1); }
-    50% { transform: rotate(-24deg) scale(0.88, 0.8); }
-}
-
-@keyframes lente-sups {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(6deg); }
-    75% { transform: rotate(-6deg); }
-}
-
-/* Virsraksts ar eglītes bumbām abās pusēs */
-html.ziemassvetki .section-title::before,
-html.ziemassvetki .section-title::after {
+html.svetku-dienas .svetku-sveiciens::before {
     content: "";
-    display: inline-block;
-    width: 24px;
-    height: 32px;
-    margin: 0 14px;
-    vertical-align: -2px;
-    background: url("assets/ziemassvetki/bumba.svg") center / contain no-repeat;
-}
-
-/* Kursu kartītes ar zelta maliņu un ileksa zariņu */
-html.ziemassvetki .course-card {
-    position: relative;
-    border-top: 4px solid var(--xmas-gold);
-}
-
-html.ziemassvetki .course-card::before {
-    content: "";
-    position: absolute;
-    top: 6px;
-    right: 8px;
-    width: 64px;
-    height: 52px;
-    background: url("assets/ziemassvetki/ilekss.svg") center / contain no-repeat;
-    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.35));
-    z-index: 1;
+    flex: none;
+    width: 12px;
+    height: 12px;
+    background: var(--c-accent);
+    clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
 }
 
 /* Kājene: ziemas kārta virs silueta (assets/ziemassvetki/kajene-sniegs.svg, tās pašas koordinātas kā kajene-mezs.svg;
@@ -4591,7 +4467,8 @@ html.ziemassvetki .site-footer::before {
     pointer-events: none;
 }
 
-/* Zelta zvaniņi uz egles zariem (pozīcijas % no zara attēla zars.svg 260x150) */
+/* Zvaniņi: plakani zvani karājas pie priekšplāna priežu zariem (hero kadra % = ainavas koordinātas, x/1440, (y+100)/900).
+   zvani.js: uzbraucot/pieskaroties šūpojas (.zvana) un zvana (data-nots) */
 .zvana-defs {
     position: absolute;
     width: 0;
@@ -4599,58 +4476,43 @@ html.ziemassvetki .site-footer::before {
     overflow: hidden;
 }
 
-.zvanu-zars {
-    display: none;
-}
+.hero-zvani { display: none; }
 
-html.ziemassvetki .zvanu-zars {
+html.ziemassvetki .hero-zvani {
     display: block;
     position: absolute;
-    top: 0;
-    width: 250px;
-    height: 144px;
-    z-index: 2;
+    inset: 0;
+    z-index: 1;
     pointer-events: none;
-}
-
-html.ziemassvetki .zvanu-zars-k {
-    left: 0;
-}
-
-html.ziemassvetki .zvanu-zars-l {
-    right: 0;
-    transform: scaleX(-1);
+    /* tā pati paralakse kā priekšplānam (.ainava-slanis--prieksa, --d: 18) */
+    transform: translate(calc(var(--px, 0) * 18px), calc(var(--py, 0) * 4.5px));
 }
 
 .zvans {
     position: absolute;
-    width: 10%;
-    margin-left: -5%;
+    width: 2.4%;
     aspect-ratio: 40 / 70;
-    transform-origin: 50% 0;
+    transform: translateX(-50%);
     pointer-events: auto;
     cursor: pointer;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.25));
 }
 
 .zvans svg {
     display: block;
     width: 100%;
     height: 100%;
+    overflow: visible;
+    transform-origin: 50% 0;
 }
 
-.zvans-1 {
-    left: 31.9%;
-    top: 14.4%;
-}
-
-.zvans-2 {
-    left: 87.7%;
-    top: 41%;
-}
+/* zaru gali ainavā: (198, 705), (155, 665) kreisajā priežu pudurī; (1203, 681), (1252, 617) labajā */
+.zvans-1 { left: 13.78%; top: 89.44%; }
+.zvans-2 { left: 10.76%; top: 85%; width: 2%; }
+.zvans-3 { left: 83.54%; top: 86.78%; }
+.zvans-4 { left: 86.94%; top: 79.67%; width: 2%; }
 
 /* Zvans šūpojas, kad zvani.js pievieno klasi .zvana */
-.zvans.zvana {
+.zvans.zvana svg {
     animation: zvans-supojas 1.2s ease-out;
 }
 
@@ -4664,21 +4526,9 @@ html.ziemassvetki .zvanu-zars-l {
     100% { transform: rotate(0deg); }
 }
 
-@media (max-width: 768px) {
-    html.ziemassvetki .zvanu-zars,
-    html.ziemassvetki .hero-section::before,
-    html.ziemassvetki .hero-section::after {
-        width: 170px;
-        height: 98px;
-    }
-}
-
 @media (prefers-reduced-motion: reduce) {
     html.ziemassvetki .site-header::before,
-    html.ziemassvetki .site-header::after,
-    html.ziemassvetki .cta-bantite:hover .cilpa,
-    html.ziemassvetki .cta-bantite:hover .lente,
-    .zvans.zvana {
+    .zvans.zvana svg {
         animation: none;
     }
 }

@@ -4,6 +4,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800">
 <defs>
 
+  <radialGradient id="glow"><stop offset="0" stop-color="#F2C46A" stop-opacity=".65"/><stop offset=".45" stop-color="#F2C46A" stop-opacity=".22"/><stop offset="1" stop-color="#F2C46A" stop-opacity="0"/></radialGradient>
   <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
     <stop offset="1" stop-color="#fff" stop-opacity="0"/>
@@ -73,8 +74,8 @@
     <path d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="7"/>
     <g style="fill:var(--sc-near2)"><use href="#pine" x="-34.6" y="505.2" width="29.1" height="72.8"/><use href="#pine" x="-18.7" y="475.8" width="39.6" height="99.1"/><use href="#pine" x="6.0" y="502.3" width="27.9" height="69.7"/><use href="#pine" x="26.3" y="482.6" width="34.4" height="85.9"/><use href="#pine" x="60.7" y="486.8" width="31.1" height="77.8"/><use href="#pine" x="82.5" y="490.8" width="28.8" height="71.9"/><use href="#pine" x="105.5" y="491.0" width="27.9" height="69.7"/><use href="#pine" x="130.6" y="490.6" width="27.2" height="68.0"/><use href="#pine" x="154.1" y="476.0" width="33.3" height="83.2"/><use href="#pine" x="172.7" y="461.5" width="39.6" height="99.0"/><use href="#pine" x="198.5" y="465.3" width="38.6" height="96.6"/><use href="#pine" x="229.1" y="479.2" width="33.7" height="84.3"/><use href="#pine" x="256.8" y="487.7" width="30.9" height="77.3"/><use href="#pine" x="1031.4" y="532.1" width="37.2" height="93.1"/><use href="#pine" x="1060.7" y="538.2" width="32.8" height="82.0"/><use href="#pine" x="1086.4" y="539.6" width="30.5" height="76.2"/><use href="#pine" x="1115.2" y="547.5" width="25.5" height="63.9"/><use href="#pine" x="1137.8" y="520.7" width="34.5" height="86.1"/><use href="#pine" x="1180.1" y="547.5" width="21.3" height="53.3"/><use href="#pine" x="1344.7" y="529.8" width="23.4" height="58.6"/><use href="#pine" x="1376.8" y="534.3" width="22.0" height="54.9"/><use href="#pine" x="1400.7" y="513.4" width="30.6" height="76.5"/><use href="#pine" x="1420.0" y="498.2" width="36.9" height="92.2"/></g>
     <g>
-      <circle cx="1238" cy="584" r="22" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
-      <circle cx="1312" cy="580" r="18" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+      <circle cx="1238" cy="584" r="28" fill="url(#glow)" style="opacity:var(--sc-lights-o)"/>
+      <circle cx="1312" cy="580" r="24" fill="url(#glow)" style="opacity:var(--sc-lights-o)"/>
       <path style="fill:var(--sc-cabin)" d="M1222 596 L1222 582 L1238 570 L1254 582 L1254 596 Z M1298 592 L1298 580 L1311 570 L1324 580 L1324 592 Z"/>
       <path style="fill:var(--sc-snow);opacity:var(--sc-snow-o)" d="M1220 583 L1238 568 L1256 583 L1252 583 L1238 572 L1224 583 Z M1296 581 L1311 568 L1326 581 L1322 581 L1311 572 L1300 581 Z"/>
       <rect x="1233" y="584" width="7" height="6" style="fill:var(--sc-window)"/><rect x="1307" y="582" width="6" height="5" style="fill:var(--sc-window)"/>
