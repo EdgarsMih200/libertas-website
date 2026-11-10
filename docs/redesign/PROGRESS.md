@@ -5,8 +5,9 @@
 - Step 5.5 backup done early (2026-11-10): original = `a4d5ade`, tags `pre-redesign-backup` + `backup-2026-11-10-pre-redesign` (pushed), work branch `redesign/new-style` (pushed). `main` untouched until Step 7.
 
 ## In progress
+- Step 3 refinement ready: `docs/redesign/mascot-final/` (sprites.js, index.html, usage.md) — waiting for client OK
 - Step 2 approved by client (2026-11-10), incl. new hero copy + light SVG logo version.
-- Step 3: 3 mascot options ready (A evolution, B traveller, C geometry) — WAITING for client choice. Page: `docs/redesign/mascot-options/index.html` (serve via http, heavy page)
+- Step 3: client chose B Traveller, drawn in ORIGINAL PIXEL-ART style (2026-11-10). Deliberate exception: mascot = pixel sprite living in a flat-vector world (nod to ref 1 + original identity); soft flat ground shadow ties him in. Refinement → `docs/redesign/mascot-final/`.
 
 ## Decisions
 - `docs/` in `.assetsignore` (not published).
