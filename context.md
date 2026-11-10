@@ -100,7 +100,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
   underline grows on hover (accent-strong), `aria-current`/`.active` = bordo underline; `.izvelnes-poga` (hidden >768px).
   ≤768px: order logo · `.auth-box` · menu button; `.main-nav` = absolute sheet under the header (60px Lora rows, bordo left marker on the current page,
   footer silhouette strip via `.main-nav::after`), shown with `.site-header.izvelne-atverta`
-- POGAS: `.btn-cta` (terracotta pill, 48px, hover/active/focus/disabled), `.btn-large`, `.btn-secondary` (outlined pill), `.btn-title`, `.btn-sub`;
+- POGAS: `.btn-cta` (terracotta pill, 48px, hover/active/focus/disabled), `.btn-secondary` (outlined pill);
   `.chip` (sage; `[aria-pressed=true]` accent-soft + ✓; `.chip--limenis`) and `.lauks` (48px input, `aria-invalid`) helpers for new markup;
   shared input styles also cover `.account-form input`, `.admin-filters`, `.admin-add select`
 - HERO SADAĻA: `.hero-section` (`--hero-h: clamp(600px,56vw,860px)`), `.hero-ainava`, `.hero-ainava-kadrs` (xMidYMax-slice emulation), `.hero-ainava-svg`, `.ainavas-defs`, `.ainava-slanis*` (`--d` depth), `.hero-orientieris*`, `.hero-empa`, `.hero-container`, `.hero-text`, `.hero-zime(-punkts)`, `.hero-subtitle`, `.hero-cta-box`, `.btn-hero`, `.btn-ikona`; breakpoints 1023px / 767px (+ chips 1200–1599px)

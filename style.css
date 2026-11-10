@@ -408,12 +408,6 @@ footer :focus-visible {
     outline-offset: 3px;
 }
 
-.btn-large {
-    width: 100%;
-    padding: 14px 32px;
-    margin-bottom: 12px;
-}
-
 .btn-secondary {
     display: flex;
     flex-direction: column;
@@ -456,19 +450,6 @@ footer :focus-visible {
     box-shadow: none;
     transform: none;
     cursor: not-allowed;
-}
-
-/* Divrindu pogas saturs (hero) */
-.btn-title {
-    font-size: 1.0625rem;
-    font-weight: 700;
-    letter-spacing: .06em;
-}
-
-.btn-sub {
-    font-size: .8125rem;
-    font-weight: 400;
-    opacity: .92;
 }
 
 /* ČIPI (birkas, filtri): salvija; izvēlēts = akcenta tonis. .chip — jauniem elementiem */
@@ -3898,7 +3879,7 @@ html.ziemassvetki .lapas-josla {
     padding: 4px 14px 4px 4px;
     cursor: pointer;
     font: inherit;
-    color: var(--text-dark);
+    color: var(--c-ink);
 }
 
 .user-chip:hover {
@@ -3963,7 +3944,7 @@ html.ziemassvetki .lapas-josla {
     background: none;
     font: inherit;
     font-size: 15px;
-    color: var(--text-dark);
+    color: var(--c-ink);
     text-decoration: none;
     border-radius: 8px;
     cursor: pointer;
