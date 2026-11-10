@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Libertas stila dēlis</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-bg:#F6F1E8;--c-surface:#FFFDF8;--c-sunk:#EDE5D8;--c-line:#D9CFC0;--c-line-strong:#8C8273;
+  --c-ink:#24211E;--c-muted:#5C554D;--c-disabled:#8F877B;
+  --c-brand:#6B1D1D;--c-brand-strong:#521515;
+  --c-accent:#B4502A;--c-accent-strong:#963F20;--c-accent-press:#7E341A;--c-accent-soft:#F6E1D5;--c-on-accent:#FFFFFF;
+  --c-sage:#DDE5DA;--c-sage-ink:#34503F;
+  --c-forest:#1E2E29;--c-forest-2:#2B4038;--c-on-forest:#E9E4D8;--c-on-forest-muted:#AFB9B0;--c-focus-dark:#F0B999;
+  --c-success:#2E6A47;--c-success-bg:#E3EFE5;--c-error:#A4282A;--c-error-bg:#F8E3E1;
+  --c-warn:#7F5300;--c-warn-bg:#FAEED3;--c-info:#2F5878;--c-info-bg:#E2EBF2;
+  --ff-display:"Lora","Iowan Old Style",Georgia,"Times New Roman",serif;
+  --ff-body:"Source Sans 3",system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+  --fs-display:clamp(2.5rem,1.6rem + 4vw,4.75rem);--fs-h1:clamp(2rem,1.5rem + 2.2vw,3.25rem);
+  --fs-h2:clamp(1.625rem,1.3rem + 1.4vw,2.375rem);--fs-h3:clamp(1.25rem,1.12rem + .55vw,1.5rem);
+  --fs-lead:clamp(1.125rem,1.05rem + .35vw,1.3125rem);--fs-body:1.0625rem;--fs-sm:.9375rem;--fs-xs:.8125rem;
+  --r-xs:6px;--r-sm:12px;--r-md:20px;--r-lg:28px;--r-pill:999px;
+  --shadow-1:0 1px 2px rgb(36 33 30/.06),0 2px 8px -2px rgb(36 33 30/.08);
+  --shadow-2:0 2px 4px rgb(36 33 30/.05),0 12px 32px -12px rgb(36 33 30/.18);
+  --shadow-3:0 4px 8px rgb(36 33 30/.05),0 28px 56px -24px rgb(30 46 41/.32);
+  --shadow-cta:0 8px 20px -8px rgb(180 80 42/.55);
+  --ease:cubic-bezier(.2,.7,.2,1);--dur-1:150ms;--dur-2:250ms;--dur-3:450ms;
+  /* scene: day (dawn) */
+  --sc-sky1:#F6F1E8;--sc-sky2:#F4E3D0;--sc-sky3:#F2D3B8;--sc-sun:#F7C9A3;--sc-sun-o:1;--sc-cloud:#FFFDF8;
+  --sc-far:#C9C5D6;--sc-far2:#B9B6CC;--sc-chalk:#E7E2EA;--sc-landmark:#A39EBA;--sc-lamp:#FFF3E2;
+  --sc-lake:#D7DEDA;--sc-glint:#FFFFFF;--sc-mid:#8FA3A6;--sc-mid2:#7E9497;
+  --sc-near:#5F7C6D;--sc-near2:#526E60;--sc-cabin:#486255;--sc-window:#3B5348;--sc-lights-o:0;
+  --sc-path:#E9D9C2;--sc-front:#2F4A40;--sc-deep:#1E2E29;--sc-snow:#F4F1EA;--sc-snow-o:0;--sc-bunting-o:0;--sc-bird:#6B1D1D;
+}
+.sc-winter{
+  --sc-sky1:#2A3550;--sc-sky2:#6E5A73;--sc-sky3:#D88A6A;--sc-sun:#F0A27E;--sc-sun-o:.55;--sc-cloud:#9A8AA6;
+  --sc-far:#6E6C8A;--sc-far2:#615F7D;--sc-chalk:#8F8BA8;--sc-landmark:#4F4D69;--sc-lamp:#F2C46A;
+  --sc-lake:#7E8399;--sc-glint:#F2C46A;--sc-mid:#4F6070;--sc-mid2:#46566A;
+  --sc-near:#3A5047;--sc-near2:#33473F;--sc-cabin:#2C3E36;--sc-window:#F2C46A;--sc-lights-o:1;
+  --sc-path:#C9C1C0;--sc-front:#22332D;--sc-deep:#17231F;--sc-snow-o:1;--sc-bird:#E8A598;
+}
+.sc-birthday{--sc-bunting-o:1}
+.sc-noon{--sc-sky1:#E9EFEC;--sc-sky2:#EEF0E8;--sc-sky3:#F3E6D3;--sc-sun:#FBE7C8}
+.sc-morning{--sc-sky1:#EFEDE6;--sc-sky2:#F3E7D8;--sc-sky3:#F2DBC3;--sc-sun:#F9D9B5}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font:400 var(--fs-body)/1.6 var(--ff-body);overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+h1,h2,h3,h4{font-family:var(--ff-display);margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:var(--c-accent-strong)}
+:focus-visible{outline:2px solid var(--c-ink);outline-offset:3px}
+.wrap{width:min(1240px,100% - 2*clamp(16px,4vw,40px));margin-inline:auto}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- board chrome ---------- */
+.board-head{padding:clamp(28px,5vw,56px) 0 8px}
+.board-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.board-top .logo{height:52px;width:auto}
+.eyebrow{font:600 var(--fs-xs)/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted);display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-brand)}
+.board-title{font-size:var(--fs-h1);color:var(--c-brand);font-weight:600;margin:18px 0 12px;line-height:1.1}
+.board-title em{font-weight:400}
+.concept{max-width:68ch;font-size:var(--fs-lead);line-height:1.55;color:var(--c-ink)}
+.concept b{font-family:var(--ff-display);font-weight:600;color:var(--c-brand)}
+.moods{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.toc{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--c-bg) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--c-line);margin-top:28px}
+.toc ul{display:flex;gap:4px 18px;list-style:none;margin-block:0;padding:12px 0;overflow-x:auto;scrollbar-width:none}
+.toc a{font:600 var(--fs-sm)/1 var(--ff-body);color:var(--c-muted);text-decoration:none;white-space:nowrap;padding:6px 0;border-bottom:2px solid transparent}
+.toc a:hover{color:var(--c-accent-strong);border-color:currentColor}
+section.blk{padding:clamp(48px,6vw,88px) 0 0}
+.blk-h{display:grid;gap:8px;margin-bottom:24px;max-width:72ch}
+.blk-h h2{font-size:var(--fs-h2);font-weight:500;line-height:1.15}
+.blk-h h2 em{color:var(--c-brand);font-style:italic;font-weight:400}
+.blk-h p{color:var(--c-muted)}
+.note{font-size:var(--fs-sm);color:var(--c-muted);margin-top:12px}
+.note b{color:var(--c-ink)}
+.panel{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);padding:clamp(18px,2.5vw,28px);box-shadow:var(--shadow-1)}
+.panel h3{font-family:var(--ff-body);font:600 var(--fs-xs)/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted);margin-bottom:16px}
+.grid-2{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.grid-3{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+
+/* ---------- palette ---------- */
+.swatches{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr))}
+.sw{border-radius:var(--r-md);overflow:hidden;background:var(--c-surface);border:1px solid var(--c-line);box-shadow:var(--shadow-1);display:flex;flex-direction:column}
+.sw-c{height:96px;display:flex;align-items:flex-end;justify-content:space-between;padding:10px 12px;font:600 15px/1 var(--ff-body)}
+.sw-b{padding:12px 14px 14px;display:grid;gap:4px}
+.sw-n{font:600 var(--fs-sm)/1.3 var(--ff-body)}
+.sw-hex{font:600 13px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace;color:var(--c-muted)}
+.sw-r{font-size:14px;color:var(--c-muted);line-height:1.4}
+.cr{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cr span{font:600 12px/1 var(--ff-body);padding:5px 8px;border-radius:var(--r-pill);background:var(--c-sunk);color:var(--c-ink);white-space:nowrap}
+.cr .aaa{background:var(--c-success-bg);color:var(--c-success)}
+.cr .aa{background:var(--c-info-bg);color:var(--c-info)}
+.sw--hero{grid-column:span 2}
+@media (max-width:520px){.sw--hero{grid-column:auto}}
+.sw--hero .sw-c{height:140px}
+.landpal{display:flex;border-radius:var(--r-md);overflow:hidden;height:72px;border:1px solid var(--c-line);margin-top:20px}
+.landpal div{flex:1;display:flex;align-items:flex-end;padding:8px;font:600 11px/1.2 ui-monospace,Consolas,monospace}
+.sem{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));margin-top:20px}
+.sem div{border-radius:var(--r-sm);padding:12px 14px;display:flex;gap:10px;align-items:center;font-weight:600;font-size:var(--fs-sm)}
+.sem svg{flex:none}
+.sem small{display:block;font-weight:400;font-size:13px;opacity:.9}
+
+/* ---------- type ---------- */
+.spec{display:grid;gap:0}
+.spec-row{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:baseline;padding:18px 0;border-top:1px solid var(--c-line)}
+.spec-row:first-child{border-top:0}
+.spec-meta{font:600 12px/1.45 ui-monospace,Consolas,monospace;color:var(--c-muted)}
+@media (max-width:640px){.spec-row{grid-template-columns:1fr;gap:6px}}
+.t-display,.t-h1,.t-h2,.t-h3{font-family:var(--ff-display)}
+.t-display{font-size:var(--fs-display);font-weight:600;letter-spacing:-.015em;line-height:1.04;color:var(--c-brand)}
+.t-display em{font-weight:400}
+.t-h1{font-size:var(--fs-h1);font-weight:600;line-height:1.1;color:var(--c-brand)}
+.t-h1 em,.t-h2 em{font-style:italic;font-weight:400;color:var(--c-brand)}
+.t-h2{font-size:var(--fs-h2);font-weight:500;line-height:1.15}
+.t-h3{font-size:var(--fs-h3);font-weight:600;line-height:1.25}
+.t-h3 .price{font-family:var(--ff-body);font-weight:700;font-variant-numeric:tabular-nums;color:var(--c-ink);white-space:nowrap}
+.t-lead{font-size:var(--fs-lead);line-height:1.55;max-width:60ch}
+.t-body{max-width:68ch}
+.t-xs{font:600 var(--fs-xs)/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted)}
+.diac{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-top:20px}
+.diac div{background:var(--c-sunk);border-radius:var(--r-sm);padding:14px 16px}
+.diac .d1{font:500 28px/1.3 var(--ff-display)}
+.diac .d2{font:400 24px/1.4 var(--ff-body)}
+.diac small{display:block;font:600 12px/1.4 var(--ff-body);color:var(--c-muted);margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- components ---------- */
+.row{display:flex;flex-wrap:wrap;gap:16px 14px;align-items:flex-start}
+.state{display:grid;gap:8px;justify-items:start}
+.state > small{font:600 11px/1 var(--ff-body);letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font:600 1rem/1.1 var(--ff-body);padding:14px 26px;border-radius:var(--r-pill);border:1.5px solid transparent;cursor:pointer;text-decoration:none;transition:background-color var(--dur-1) var(--ease),color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease),transform var(--dur-1) var(--ease)}
+.btn svg{width:18px;height:18px;transition:transform var(--dur-1) var(--ease)}
+.btn-primary{background:var(--c-accent);color:var(--c-on-accent);box-shadow:var(--shadow-cta)}
+.btn-primary:hover,.btn-primary.is-hover{background:var(--c-accent-strong);transform:translateY(-1px)}
+.btn-primary:active,.btn-primary.is-active{background:var(--c-accent-press);transform:translateY(1px);box-shadow:none}
+.btn-secondary{background:var(--c-surface);color:var(--c-ink);border-color:var(--c-line-strong)}
+.btn-secondary:hover,.btn-secondary.is-hover{border-color:var(--c-accent-strong);color:var(--c-accent-strong)}
+.btn-secondary:active,.btn-secondary.is-active{background:var(--c-sunk);transform:translateY(1px)}
+.btn-ghost{background:none;color:var(--c-ink);padding-inline:4px;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:5px;text-decoration-thickness:1.5px}
+.btn-ghost:hover,.btn-ghost.is-hover{color:var(--c-accent-strong);text-decoration-color:currentColor}
+.btn-ghost:hover svg,.btn-ghost.is-hover svg{transform:translateX(3px)}
+.btn-ghost:active,.btn-ghost.is-active{color:var(--c-accent-press)}
+.btn:focus-visible,.btn.is-focus{outline:2px solid var(--c-ink);outline-offset:3px}
+.btn[disabled],.btn.is-disabled{background:var(--c-sunk);color:var(--c-disabled);border-color:transparent;box-shadow:none;transform:none;cursor:not-allowed;text-decoration:none}
+.btn-ghost[disabled]{background:none}
+.btn-done{background:var(--c-success);color:#fff;box-shadow:none}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgb(255 255 255/.4);border-top-color:#fff;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.on-dark{background:var(--c-forest);border-radius:var(--r-sm);padding:18px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.on-dark .btn-ghost{color:var(--c-on-forest)}
+.on-dark .btn-ghost.is-focus{outline-color:var(--c-focus-dark)}
+.on-dark .btn-primary.is-focus{outline-color:var(--c-focus-dark)}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 var(--fs-xs)/1 var(--ff-body);letter-spacing:.06em;text-transform:uppercase;padding:8px 14px;border-radius:var(--r-pill);background:var(--c-sage);color:var(--c-sage-ink);border:1.5px solid transparent;cursor:pointer}
+.chip svg{width:14px;height:14px}
+.chip--filter{background:var(--c-surface);color:var(--c-ink);border-color:var(--c-line)}
+.chip--filter:hover,.chip--filter.is-hover{border-color:var(--c-line-strong)}
+.chip[aria-pressed="true"]{background:var(--c-accent-soft);color:var(--c-accent-strong);border-color:transparent}
+.chip--level{background:var(--c-sunk);color:var(--c-ink)}
+.chip.is-focus{outline:2px solid var(--c-ink);outline-offset:3px}
+.chip[aria-disabled="true"]{background:var(--c-sunk);color:var(--c-disabled);cursor:not-allowed}
+.field{display:grid;gap:6px;min-width:min(100%,240px);flex:1}
+.field label{font:600 var(--fs-sm)/1.3 var(--ff-body)}
+.field .help{font-size:14px;color:var(--c-muted)}
+.inp{font:400 1rem/1.3 var(--ff-body);color:var(--c-ink);background:var(--c-surface);border:1.5px solid var(--c-line-strong);border-radius:var(--r-sm);height:48px;padding:0 14px;width:100%;transition:border-color var(--dur-1),box-shadow var(--dur-1);appearance:none}
+.inp::placeholder{color:#857D71}
+.inp:hover{border-color:var(--c-ink)}
+.inp:focus-visible,.inp.is-focus{outline:2px solid var(--c-ink);outline-offset:2px;border-color:var(--c-ink)}
+.inp[aria-invalid="true"]{border-color:var(--c-error);background:var(--c-surface)}
+.inp:disabled{background:var(--c-sunk);color:var(--c-disabled);border-color:var(--c-line);cursor:not-allowed}
+select.inp{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2324211E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.err{display:flex;gap:6px;align-items:center;font-size:14px;font-weight:600;color:var(--c-error)}
+.err svg{width:16px;height:16px;flex:none}
+.icons{display:flex;flex-wrap:wrap;gap:10px}
+.icons span{display:grid;justify-items:center;gap:6px;width:84px;padding:12px 4px;border-radius:var(--r-sm);background:var(--c-sunk);font-size:12px;color:var(--c-muted);text-align:center;line-height:1.2}
+.icons svg{width:24px;height:24px;color:var(--c-ink)}
+.toast{display:flex;gap:12px;align-items:center;background:var(--c-surface);border-radius:var(--r-sm);box-shadow:var(--shadow-3);padding:14px 18px;border-left:4px solid var(--c-success);font-weight:600;font-size:var(--fs-sm)}
+.toast--err{border-left-color:var(--c-error)}
+.toast svg{width:20px;height:20px;flex:none}
+.dnav{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.dnav a{font:600 var(--fs-sm)/1 var(--ff-body);color:var(--c-ink);text-decoration:none;padding:8px 0;position:relative}
+.dnav a::after{content:"";position:absolute;left:50%;right:50%;bottom:0;height:2px;background:var(--c-accent-strong);transition:left var(--dur-2) var(--ease),right var(--dur-2) var(--ease)}
+.dnav a:hover,.dnav a.is-hover{color:var(--c-accent-strong)}
+.dnav a:hover::after,.dnav a.is-hover::after{left:0;right:0}
+.dnav a[aria-current="page"]::after{left:0;right:0;background:var(--c-brand)}
+.dnav a.is-focus{outline:2px solid var(--c-ink);outline-offset:4px;border-radius:2px}
+
+/* course card */
+.card{position:relative;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-1);transition:transform var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease);display:flex;flex-direction:column}
+.card:hover,.card.is-hover{transform:translateY(-3px);box-shadow:var(--shadow-3)}
+.card-cover{aspect-ratio:15/8;overflow:hidden}
+.card-cover svg{width:100%;height:100%;transition:transform var(--dur-3) var(--ease)}
+.card:hover .card-cover svg,.card.is-hover .card-cover svg{transform:scale(1.03)}
+.card-body{padding:18px 20px 20px;display:grid;gap:8px;flex:1}
+.card-tags{display:flex;gap:6px;flex-wrap:wrap}
+.card h4{font-size:var(--fs-h3);font-weight:600;line-height:1.25}
+.card .price{font:700 1.125rem/1.2 var(--ff-body);font-variant-numeric:tabular-nums}
+.card .info{font-size:var(--fs-sm);color:var(--c-muted);display:flex;gap:6px;align-items:center}
+.card .info svg{width:16px;height:16px;flex:none}
+.card .btn{margin-top:8px;width:100%}
+
+/* ---------- scene ---------- */
+.scene{width:100%;height:100%;background:linear-gradient(180deg,var(--sc-sky1) 0%,var(--sc-sky2) 42%,var(--sc-sky3) 62%,var(--sc-sky3) 100%)}
+.scene use{transition:transform .9s var(--ease)}
+.clouds{animation:drift 90s linear infinite alternate}
+.birds{animation:glide 20s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translateX(60px)}}
+@keyframes glide{0%{transform:translate(0,0)}50%{transform:translate(-30px,-12px)}100%{transform:translate(-60px,4px)}}
+.mzone rect{fill:rgb(255 253 248/.35);stroke:var(--c-brand);stroke-width:2.5;stroke-dasharray:8 7}
+.mzone text{font:600 15px var(--ff-body);fill:var(--c-brand);letter-spacing:.04em}
+
+/* frames */
+.frame{border-radius:14px;overflow:hidden;border:1px solid var(--c-line);box-shadow:var(--shadow-3);background:var(--c-bg)}
+.frame-bar{height:34px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--c-sunk);border-bottom:1px solid var(--c-line)}
+.frame-bar i{width:10px;height:10px;border-radius:50%;background:#CFC4B4}
+.frame-bar span{margin-left:12px;font:600 12px/1 var(--ff-body);color:var(--c-muted);background:var(--c-surface);padding:5px 14px;border-radius:var(--r-pill)}
+
+/* desktop hero mock (container-scaled) */
+.desk{container-type:inline-size}
+.hero-desk{position:relative;aspect-ratio:1440/940;overflow:hidden}
+.hero-desk .scene{position:absolute;inset:0}
+.mnav{position:absolute;inset:0 0 auto 0;display:flex;align-items:center;justify-content:space-between;padding:2.2cqi 4cqi;z-index:2}
+.mnav .logo{height:4.4cqi;width:auto}
+.mnav nav{display:flex;gap:3cqi;align-items:center}
+.mnav nav a{font:600 1.25cqi/1 var(--ff-body);color:var(--c-ink);text-decoration:none;letter-spacing:.08em;text-transform:uppercase;padding:.6cqi 0;position:relative}
+.mnav nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:.18cqi;min-height:1px;background:var(--c-brand)}
+.mnav .auth{font:600 1.2cqi/1 var(--ff-body);color:var(--c-ink);border:1.5px solid var(--c-line-strong);border-radius:var(--r-pill);padding:1cqi 1.8cqi;background:rgb(255 253 248/.6);display:inline-flex;gap:.7cqi;align-items:center}
+.mnav .auth svg{width:1.4cqi;height:1.4cqi}
+.hero-copy{position:absolute;inset:11cqi 0 auto 0;text-align:center;display:grid;justify-items:center;gap:1.7cqi;padding:0 10cqi;z-index:2}
+.hero-copy .pill{font:600 1.15cqi/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-sage-ink);background:rgb(255 253 248/.7);border:1px solid rgb(52 80 63/.18);padding:.9cqi 1.6cqi;border-radius:var(--r-pill);display:inline-flex;gap:.8cqi;align-items:center}
+.hero-copy .pill::before{content:"";width:.6cqi;height:.6cqi;border-radius:50%;background:var(--c-brand)}
+.hero-copy h1{font-size:5.6cqi;line-height:1.04;font-weight:600;letter-spacing:-.015em;color:var(--c-brand);font-variation-settings:"opsz" 144,"SOFT" 50,"WONK" 0}
+.hero-copy h1 em{font-weight:400}
+.hero-copy p{font-size:1.75cqi;line-height:1.5;color:var(--c-ink);max-width:46ch}
+.hero-ctas{display:flex;gap:1.2cqi;margin-top:.8cqi}
+.hero-ctas .btn{font-size:1.35cqi;padding:1.25cqi 2.4cqi;border-width:.12cqi}
+.hero-ctas .btn svg{width:1.5cqi;height:1.5cqi}
+.landmark{position:absolute;z-index:2;transform:translate(-50%,-100%);font:600 1.05cqi/1 var(--ff-body);letter-spacing:.06em;text-transform:uppercase;color:var(--c-ink);background:var(--c-surface);border-radius:var(--r-pill);padding:.75cqi 1.3cqi;box-shadow:var(--shadow-2);white-space:nowrap;display:inline-flex;align-items:center;gap:.6cqi}
+.landmark::after{content:"";position:absolute;left:50%;bottom:-.9cqi;width:1px;height:1cqi;background:var(--c-ink);opacity:.35}
+.landmark i{width:.7cqi;height:.7cqi;border-radius:50%;background:var(--c-accent)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:2cqi;padding:3.2cqi 8cqi 3.6cqi;background:var(--c-bg)}
+.feat{display:flex;gap:1.2cqi;align-items:center;font:600 1.4cqi/1.3 var(--ff-body)}
+.feat span{flex:none;width:4cqi;height:4cqi;border-radius:50%;background:var(--c-sage);color:var(--c-sage-ink);display:grid;place-items:center}
+.feat svg{width:2cqi;height:2cqi}
+
+/* phones */
+.phones{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+.phone{width:360px;max-width:100%;border-radius:36px;padding:10px;background:#2A2724;box-shadow:var(--shadow-3)}
+.ph{border-radius:28px;overflow:hidden;background:var(--c-bg);height:740px;position:relative;display:flex;flex-direction:column}
+.ph-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--sc-sky1);position:relative;z-index:3}
+.ph-head .logo{height:36px;width:auto}
+.menu-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--c-line-strong);background:var(--c-surface);display:grid;place-items:center;color:var(--c-ink);padding:0;cursor:pointer}
+.menu-btn svg{width:20px;height:20px}
+.ph-hero{background:linear-gradient(180deg,var(--sc-sky1),var(--sc-sky2));padding:14px 16px 20px;display:grid;gap:12px;text-align:center;justify-items:center}
+.ph-hero .pill{font:600 12px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-sage-ink);background:rgb(255 253 248/.7);border:1px solid rgb(52 80 63/.18);padding:8px 12px;border-radius:var(--r-pill)}
+.ph-hero h1{font-size:2.5rem;line-height:1.04;font-weight:600;color:var(--c-brand);letter-spacing:-.015em;font-variation-settings:"opsz" 144,"SOFT" 50,"WONK" 0}
+.ph-hero h1 em{font-weight:400}
+.ph-hero p{font-size:1.0625rem;line-height:1.5}
+.ph-hero .btn{width:100%}
+.ph-hero .ctas{display:grid;gap:10px;width:100%;margin-top:4px}
+.ph-scene{flex:1;min-height:0;position:relative}
+.ph-scene svg{position:absolute;inset:0;height:100%}
+.sheet{position:absolute;inset:72px 0 0 0;background:var(--c-bg);z-index:2;display:flex;flex-direction:column;border-top:1px solid var(--c-line)}
+.sheet ul{list-style:none;margin:0;padding:8px 16px}
+.sheet li a{display:flex;align-items:center;justify-content:space-between;min-height:60px;font:500 1.375rem/1.2 var(--ff-display);color:var(--c-ink);text-decoration:none;border-bottom:1px solid var(--c-line);padding-left:14px;position:relative}
+.sheet li a svg{width:20px;height:20px;color:var(--c-muted)}
+.sheet li a[aria-current="page"]{color:var(--c-brand)}
+.sheet li a[aria-current="page"]::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:2px;background:var(--c-brand)}
+.sheet .auth-area{padding:20px 16px;display:grid;gap:10px}
+.sheet .auth-area .btn{width:100%}
+.sheet-strip{margin-top:auto;height:150px}
+.sheet-strip svg{width:100%;height:100%}
+.ph-cap{text-align:center;font-size:var(--fs-sm);color:var(--c-muted);margin-top:12px;max-width:360px}
+
+/* inner strip */
+.strip{position:relative;height:clamp(220px,26cqi,300px)}
+.strip::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,var(--c-bg) 0%,rgb(246 241 232/.9) 34%,rgb(246 241 232/0) 62%)}
+.strip svg{position:absolute;inset:0;height:100%}
+.strip-copy{position:absolute;inset:0;display:grid;align-content:start;gap:1cqi;padding:3cqi 5cqi;z-index:2}
+.crumbs{font:600 max(12px,1.1cqi)/1 var(--ff-body);color:var(--c-muted);letter-spacing:.06em;text-transform:uppercase}
+.crumbs a{color:var(--c-muted);text-decoration:none}
+.strip-copy h1{font-size:max(26px,3.8cqi);font-weight:600;color:var(--c-brand);line-height:1.1}
+.strip-copy p{font-size:max(14px,1.55cqi);max-width:52ch}
+.strip-nav{display:flex;align-items:center;justify-content:space-between;padding:1.6cqi 5cqi;background:var(--sc-sky1);border-bottom:1px solid var(--c-line)}
+.strip-nav .logo{height:max(28px,3.4cqi);width:auto}
+.strip-nav nav{display:flex;gap:2.6cqi}
+.strip-nav nav a{font:600 max(11px,1.15cqi)/1 var(--ff-body);letter-spacing:.08em;text-transform:uppercase;color:var(--c-ink);text-decoration:none;padding:.5cqi 0}
+.strip-nav nav a[aria-current="page"]{box-shadow:0 2px 0 var(--c-brand)}
+@media (max-width:560px){.strip-nav nav{display:none}}
+.strip-cards{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));padding:28px 5cqi 36px}
+
+/* layers explained */
+.layers{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}
+.layer{border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--c-line);background:var(--c-surface)}
+.layer svg{aspect-ratio:16/9;width:100%;height:auto;background:linear-gradient(180deg,#FBF8F2,#F3EEE5)}
+.layer div{padding:10px 12px;font-size:14px;line-height:1.35}
+.layer b{display:block;font-size:var(--fs-sm)}
+.layer code{font-size:12px;color:var(--c-muted)}
+
+/* footer */
+.foot-scene{height:clamp(120px,15cqi,190px);margin-top:-1px}
+.foot-scene svg{width:100%;height:100%}
+.footer{background:var(--c-forest);color:var(--c-on-forest);padding:3.2cqi 5cqi 0;margin-top:-1px}
+.fcols{display:grid;gap:28px;grid-template-columns:1.4fr repeat(3,1fr);padding-bottom:28px}
+@container (max-width:720px){.fcols{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
+@container (max-width:420px){.fcols{grid-template-columns:1fr}}
+.fbrand .logo{height:44px;width:auto;filter:brightness(0) invert(.93) sepia(.25)}
+.fbrand p{color:var(--c-on-forest-muted);font-size:var(--fs-sm);margin-top:12px;font-family:var(--ff-display);font-style:italic;font-size:1.125rem}
+.fcol h5{font:600 12px/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-on-forest-muted);margin:0 0 12px}
+.fcol ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.fcol a{color:var(--c-on-forest);text-decoration:none;font-size:var(--fs-sm)}
+.fcol a:hover{text-decoration:underline;text-underline-offset:4px}
+.fcol a.is-focus{outline:2px solid var(--c-focus-dark);outline-offset:3px;border-radius:2px}
+.fbar{background:var(--c-forest-2);margin:0 -5cqi;padding:14px 5cqi;display:flex;gap:8px 20px;flex-wrap:wrap;justify-content:space-between;font-size:14px;color:var(--c-on-forest-muted)}
+.fbar a{color:var(--c-on-forest)}
+
+/* tokens visual */
+.space{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.space div{display:grid;gap:6px;justify-items:center;font:600 11px/1 ui-monospace,Consolas,monospace;color:var(--c-muted)}
+.space i{display:block;background:var(--c-accent-soft);border:1px solid #E8C2AD;width:var(--s);height:var(--s)}
+.radii,.shadows{display:flex;gap:14px;flex-wrap:wrap}
+.radii div,.shadows div{width:88px;height:64px;background:var(--c-surface);border:1px solid var(--c-line);display:grid;place-items:center;font:600 11px/1.2 ui-monospace,Consolas,monospace;color:var(--c-muted);text-align:center}
+.shadows div{border:0;border-radius:var(--r-sm)}
+
+/* seasons */
+.seasons{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.season{border-radius:var(--r-md);overflow:hidden;background:var(--c-surface);border:1px solid var(--c-line);box-shadow:var(--shadow-1)}
+.season .sv{aspect-ratio:16/10;position:relative}
+.season .sv svg{position:absolute;inset:0;height:100%}
+.season .sv .btn{position:absolute;left:50%;top:22%;transform:translateX(-50%);font-size:13px;padding:9px 16px;box-shadow:var(--shadow-cta)}
+.season div.txt{padding:14px 16px 16px;font-size:var(--fs-sm);color:var(--c-muted)}
+.season b{display:block;color:var(--c-ink);font-size:1rem;margin-bottom:2px}
+
+.board-foot{padding:56px 0 64px;color:var(--c-muted);font-size:var(--fs-sm)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Shared scene library (one illustration language, reused by every mock) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <symbol id="logo" viewBox="0 0 500 216"><image href="data:image/png;base64,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" width="500" height="216"/></symbol>
+    <symbol id="pine" viewBox="0 0 40 100">
+      <path d="M20 0 L29 20 L24 20 L33 40 L27 40 L37 64 L30 64 L40 86 L23 86 L23 100 L17 100 L17 86 L0 86 L10 64 L3 64 L13 40 L7 40 L16 20 L11 20 Z"/>
+    </symbol>
+
+    <g id="sc-sun" style="opacity:var(--sc-sun-o)">
+      <circle cx="1010" cy="452" r="170" style="fill:var(--sc-sun)" opacity=".22"/>
+      <circle cx="1010" cy="452" r="105" style="fill:var(--sc-sun)" opacity=".35"/>
+      <circle cx="1010" cy="452" r="62" style="fill:var(--sc-sun)"/>
+    </g>
+    <g id="sc-clouds" style="fill:var(--sc-cloud)" opacity=".6">
+      <ellipse cx="230" cy="150" rx="150" ry="16"/><ellipse cx="300" cy="134" rx="80" ry="14"/>
+      <ellipse cx="1180" cy="70" rx="170" ry="15"/><ellipse cx="1110" cy="56" rx="70" ry="12"/>
+      <ellipse cx="760" cy="300" rx="120" ry="9" opacity=".7"/>
+    </g>
+    <g id="sc-birds" style="fill:var(--sc-bird)" opacity=".85" transform="translate(110 100)">
+      <path d="M1180 150 C1188 141 1197 140 1204 147 C1210 139 1220 136 1232 140 C1221 142 1213 148 1208 155 C1201 151 1192 149 1180 150 Z"/>
+      <path d="M1236 188 C1242 181 1249 181 1254 186 C1259 180 1266 178 1275 181 C1267 183 1261 187 1257 192 C1251 189 1244 188 1236 188 Z"/>
+    </g>
+
+    <g id="sc-far">
+      <path style="fill:var(--sc-far)" d="M-60 480 L-60 430 L20 424 L90 410 L150 396 L205 400 L262 368 L300 356 L330 348 L362 358 L398 374 L440 364 L490 384 L560 398 L640 414 L720 432 L800 444 L880 448 L960 452 L1040 456 L1060 480 Z"/>
+      <path style="fill:var(--sc-far2)" d="M640 480 L700 452 L780 440 L860 446 L930 438 L1000 448 L1040 470 L1040 480 Z" opacity=".8"/>
+      <path style="fill:var(--sc-far)" d="M1030 480 L1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 480 Z"/>
+      <path style="fill:var(--sc-chalk)" d="M1030 480 L1056 410 L1066 404 L1080 414 L1074 444 L1082 480 Z M1150 480 L1160 450 L1176 436 L1190 452 L1196 480 Z"/>
+      <!-- windmill (Spain) -->
+      <g style="fill:var(--sc-landmark)">
+        <path d="M323 350 L325 324 L335 324 L337 350 Z"/><path d="M322 325 L330 314 L338 325 Z"/>
+        <g style="stroke:var(--sc-landmark)" stroke-width="2.2" stroke-linecap="round"><path d="M330 322 L318 306 M330 322 L346 310 M330 322 L342 338 M330 322 L314 334"/></g>
+      </g>
+      <!-- lighthouse (England) -->
+      <g>
+        <path style="fill:var(--sc-landmark)" d="M1174 394 L1176 358 L1184 358 L1186 394 Z"/>
+        <path style="fill:var(--sc-chalk)" d="M1175 382 L1185 382 L1185.6 388 L1174.6 388 Z M1176 368 L1184 368 L1184.4 374 L1175.6 374 Z"/>
+        <path style="fill:var(--sc-landmark)" d="M1173 358 L1187 358 L1187 355 L1173 355 Z M1175 355 L1180 347 L1185 355 Z"/>
+        <circle cx="1180" cy="352" r="2.6" style="fill:var(--sc-lamp)"/>
+      </g>
+      <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)">
+        <path d="M250 375 L262 368 L300 356 L330 348 L362 358 L380 366 L364 366 L344 360 L322 362 L300 368 L276 372 Z"/>
+        <path d="M426 370 L440 364 L470 376 L452 375 Z"/>
+        <path d="M1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 398 L1380 394 L1300 402 L1220 399 L1140 404 L1066 408 Z"/>
+      </g>
+    </g>
+
+    <g id="sc-lake">
+      <rect x="-60" y="466" width="1560" height="460" style="fill:var(--sc-lake)"/>
+      <rect x="-60" y="466" width="1560" height="40" fill="url(#haze)" opacity=".7"/>
+      <g style="fill:var(--sc-glint)" opacity=".7">
+        <rect x="960" y="486" width="100" height="2.4" rx="1.2"/><rect x="985" y="498" width="56" height="2" rx="1"/>
+        <rect x="1000" y="511" width="34" height="2" rx="1"/><rect x="900" y="494" width="30" height="1.6" rx=".8"/>
+        <rect x="610" y="520" width="44" height="1.6" rx=".8" opacity=".6"/>
+      </g>
+    </g>
+
+    <g id="sc-mid">
+      <path style="fill:var(--sc-mid)" d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640 L540 926 L-60 926 Z"/>
+      <path style="fill:var(--sc-mid)" d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650 L950 926 L1500 926 Z"/>
+      <rect x="-60" y="462" width="1560" height="60" fill="url(#haze)" opacity=".45"/>
+      <path d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+      <path d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+      <g style="fill:var(--sc-mid2)"><use href="#pine" x="6.8" y="461.6" width="6.4" height="16.0"/><use href="#pine" x="34.9" y="455.8" width="8.0" height="20.0"/><use href="#pine" x="52.6" y="448.4" width="10.5" height="26.2"/><use href="#pine" x="77.2" y="452.6" width="8.2" height="20.6"/><use href="#pine" x="102.5" y="446.1" width="10.6" height="26.6"/><use href="#pine" x="126.3" y="448.9" width="10.2" height="25.6"/><use href="#pine" x="150.8" y="449.1" width="11.0" height="27.4"/><use href="#pine" x="171.5" y="456.8" width="8.5" height="21.2"/><use href="#pine" x="196.5" y="454.6" width="10.3" height="25.8"/><use href="#pine" x="213.3" y="458.1" width="10.2" height="25.6"/><use href="#pine" x="235.1" y="459.3" width="11.6" height="28.9"/><use href="#pine" x="264.7" y="475.9" width="7.1" height="17.7"/><use href="#pine" x="285.6" y="469.9" width="11.6" height="28.9"/><use href="#pine" x="312.1" y="480.3" width="10.0" height="25.0"/><use href="#pine" x="1235.0" y="469.1" width="10.0" height="24.9"/><use href="#pine" x="1268.8" y="469.0" width="7.4" height="18.5"/><use href="#pine" x="1291.1" y="458.8" width="9.6" height="24.0"/><use href="#pine" x="1316.0" y="465.8" width="6.3" height="15.8"/><use href="#pine" x="1338.1" y="462.0" width="7.7" height="19.1"/><use href="#pine" x="1359.6" y="455.5" width="10.1" height="25.2"/><use href="#pine" x="1387.1" y="457.4" width="9.1" height="22.8"/><use href="#pine" x="1420.7" y="464.8" width="5.9" height="14.7"/><use href="#pine" x="1441.9" y="458.4" width="8.3" height="20.7"/></g>
+    </g>
+
+    <g id="sc-near">
+      <path style="fill:var(--sc-near)" d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582 L1500 926 L-60 926 Z"/>
+      <path d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="7"/>
+      <g style="fill:var(--sc-near2)"><use href="#pine" x="-34.6" y="505.2" width="29.1" height="72.8"/><use href="#pine" x="-18.7" y="475.8" width="39.6" height="99.1"/><use href="#pine" x="6.0" y="502.3" width="27.9" height="69.7"/><use href="#pine" x="26.3" y="482.6" width="34.4" height="85.9"/><use href="#pine" x="60.7" y="486.8" width="31.1" height="77.8"/><use href="#pine" x="82.5" y="490.8" width="28.8" height="71.9"/><use href="#pine" x="105.5" y="491.0" width="27.9" height="69.7"/><use href="#pine" x="130.6" y="490.6" width="27.2" height="68.0"/><use href="#pine" x="154.1" y="476.0" width="33.3" height="83.2"/><use href="#pine" x="172.7" y="461.5" width="39.6" height="99.0"/><use href="#pine" x="198.5" y="465.3" width="38.6" height="96.6"/><use href="#pine" x="229.1" y="479.2" width="33.7" height="84.3"/><use href="#pine" x="256.8" y="487.7" width="30.9" height="77.3"/><use href="#pine" x="1031.4" y="532.1" width="37.2" height="93.1"/><use href="#pine" x="1060.7" y="538.2" width="32.8" height="82.0"/><use href="#pine" x="1086.4" y="539.6" width="30.5" height="76.2"/><use href="#pine" x="1115.2" y="547.5" width="25.5" height="63.9"/><use href="#pine" x="1137.8" y="520.7" width="34.5" height="86.1"/><use href="#pine" x="1180.1" y="547.5" width="21.3" height="53.3"/><use href="#pine" x="1344.7" y="529.8" width="23.4" height="58.6"/><use href="#pine" x="1376.8" y="534.3" width="22.0" height="54.9"/><use href="#pine" x="1400.7" y="513.4" width="30.6" height="76.5"/><use href="#pine" x="1420.0" y="498.2" width="36.9" height="92.2"/></g>
+      <!-- cabins with windows that light up in the evening scene -->
+      <g>
+        <circle cx="1238" cy="584" r="22" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+        <circle cx="1312" cy="580" r="18" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+        <path style="fill:var(--sc-cabin)" d="M1222 596 L1222 582 L1238 570 L1254 582 L1254 596 Z M1298 592 L1298 580 L1311 570 L1324 580 L1324 592 Z"/>
+        <path style="fill:var(--sc-snow);opacity:var(--sc-snow-o)" d="M1220 583 L1238 568 L1256 583 L1252 583 L1238 572 L1224 583 Z M1296 581 L1311 568 L1326 581 L1322 581 L1311 572 L1300 581 Z"/>
+        <rect x="1233" y="584" width="7" height="6" style="fill:var(--sc-window)"/><rect x="1307" y="582" width="6" height="5" style="fill:var(--sc-window)"/>
+      </g>
+    </g>
+
+    <g id="sc-path">
+      <path style="fill:var(--sc-path)" d="M262 926 C330 806 420 744 520 712 C600 690 660 672 716 658 L734 659 C690 674 630 694 566 718 C470 754 410 820 396 926 Z"/>
+      <g style="opacity:var(--sc-bunting-o)"><path d="M372 590 L372 700 M760 548 L760 650" stroke="#4A3A2E" stroke-width="4" stroke-linecap="round"/><path d="M372,652 Q540,676 760,606" fill="none" stroke="#5C554D" stroke-width="2"/><path d="M396.3 654.9 L409.8 656.2 L403.1 689.6 Z" fill="#8FB09A"/><path d="M421.1 656.9 L434.9 657.6 L428.0 691.3 Z" fill="#B9B6CC"/><path d="M446.4 658.0 L460.5 658.1 L453.5 692.0 Z" fill="#F3E9D8"/><path d="M472.2 658.0 L486.7 657.7 L479.5 691.9 Z" fill="#B4502A"/><path d="M498.6 657.2 L513.4 656.3 L506.0 690.7 Z" fill="#8FB09A"/><path d="M525.6 655.3 L540.6 653.9 L533.1 688.6 Z" fill="#B9B6CC"/><path d="M553.0 652.5 L568.3 650.5 L560.7 685.5 Z" fill="#F3E9D8"/><path d="M581.0 648.7 L596.6 646.3 L588.8 681.5 Z" fill="#B4502A"/><path d="M609.5 644.0 L625.4 641.0 L617.4 676.5 Z" fill="#8FB09A"/><path d="M638.5 638.3 L654.7 634.8 L646.6 670.6 Z" fill="#B9B6CC"/><path d="M668.1 631.7 L684.6 627.6 L676.3 663.7 Z" fill="#F3E9D8"/><path d="M698.2 624.1 L715.0 619.5 L706.6 655.8 Z" fill="#B4502A"/><path d="M728.8 615.5 L745.9 610.4 L737.4 647.0 Z" fill="#8FB09A"/></g>
+    </g>
+
+    <g id="sc-front">
+      <path style="fill:var(--sc-front)" d="M-60 754 C60 736 170 752 250 796 L300 926 L-60 926 Z"/>
+      <path style="fill:var(--sc-front)" d="M1500 676 C1340 690 1220 748 1136 926 L1500 926 Z"/>
+      <use href="#pine" x="-126.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="-52.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="-10.0" y="505.0" width="160.0" height="400.0" style="fill:var(--sc-front)"/><use href="#pine" x="68.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="126.0" y="655.0" width="100.0" height="250.0" style="fill:var(--sc-front)"/><use href="#pine" x="184.0" y="715.0" width="76.0" height="190.0" style="fill:var(--sc-front)"/><use href="#pine" x="1138.0" y="695.0" width="84.0" height="210.0" style="fill:var(--sc-front)"/><use href="#pine" x="1172.0" y="625.0" width="112.0" height="280.0" style="fill:var(--sc-front)"/><use href="#pine" x="1212.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="1276.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="1304.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="1378.0" y="565.0" width="136.0" height="340.0" style="fill:var(--sc-front)"/><use href="#pine" x="1412.0" y="515.0" width="156.0" height="390.0" style="fill:var(--sc-front)"/><use href="#pine" x="-60.0" y="635.0" width="120.0" height="300.0" style="fill:var(--sc-deep)"/><use href="#pine" x="52.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1212.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1364.0" y="655.0" width="112.0" height="280.0" style="fill:var(--sc-deep)"/>
+      <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)"><circle cx="1282" cy="694" r="3.8"/><circle cx="1096" cy="133" r="1.6"/><circle cx="358" cy="-50" r="1.6"/><circle cx="888" cy="93" r="3.4"/><circle cx="705" cy="513" r="2.2"/><circle cx="1270" cy="96" r="2.5"/><circle cx="1288" cy="-11" r="2.8"/><circle cx="4" cy="720" r="3.1"/><circle cx="1328" cy="-101" r="3.8"/><circle cx="271" cy="771" r="3.0"/><circle cx="978" cy="125" r="2.1"/><circle cx="301" cy="399" r="1.7"/><circle cx="1108" cy="525" r="3.3"/><circle cx="717" cy="-90" r="1.9"/><circle cx="1323" cy="0" r="3.3"/><circle cx="1286" cy="-86" r="3.7"/><circle cx="1240" cy="793" r="3.9"/><circle cx="1101" cy="266" r="2.2"/><circle cx="1048" cy="692" r="2.6"/><circle cx="338" cy="252" r="3.7"/><circle cx="805" cy="203" r="3.1"/><circle cx="1058" cy="188" r="3.3"/><circle cx="609" cy="63" r="2.3"/><circle cx="1419" cy="795" r="3.1"/><circle cx="1256" cy="725" r="2.1"/><circle cx="929" cy="5" r="2.8"/><circle cx="803" cy="590" r="3.9"/><circle cx="694" cy="52" r="2.7"/><circle cx="239" cy="490" r="2.9"/><circle cx="809" cy="346" r="3.4"/><circle cx="522" cy="571" r="1.7"/><circle cx="430" cy="378" r="2.1"/><circle cx="1041" cy="148" r="2.2"/><circle cx="950" cy="275" r="1.8"/><circle cx="1113" cy="637" r="3.8"/><circle cx="1310" cy="506" r="3.9"/><circle cx="36" cy="581" r="3.0"/><circle cx="1043" cy="706" r="1.7"/><circle cx="196" cy="-46" r="1.9"/><circle cx="122" cy="-111" r="3.1"/><circle cx="1362" cy="57" r="1.9"/><circle cx="291" cy="501" r="2.2"/><circle cx="657" cy="794" r="2.6"/><circle cx="970" cy="592" r="2.6"/><circle cx="600" cy="-64" r="2.2"/><circle cx="1163" cy="776" r="2.0"/><circle cx="1333" cy="348" r="1.9"/><circle cx="303" cy="434" r="2.0"/><circle cx="112" cy="131" r="3.2"/><circle cx="801" cy="322" r="4.0"/><circle cx="108" cy="260" r="2.4"/><circle cx="6" cy="-114" r="2.6"/><circle cx="132" cy="96" r="3.8"/><circle cx="1120" cy="583" r="2.6"/><circle cx="1231" cy="765" r="3.5"/><circle cx="953" cy="406" r="2.4"/><circle cx="586" cy="337" r="2.8"/><circle cx="817" cy="544" r="3.2"/><circle cx="911" cy="551" r="3.7"/><circle cx="1217" cy="789" r="2.7"/><circle cx="701" cy="761" r="3.9"/><circle cx="515" cy="-47" r="2.4"/><circle cx="1271" cy="532" r="3.4"/><circle cx="1375" cy="604" r="2.1"/><circle cx="343" cy="615" r="1.8"/><circle cx="1318" cy="616" r="3.1"/><circle cx="1025" cy="373" r="2.7"/><circle cx="1256" cy="398" r="3.7"/><circle cx="390" cy="512" r="2.6"/><circle cx="569" cy="53" r="3.0"/></g>
+    </g>
+  </defs>
+</svg>
+
+<header class="board-head wrap">
+  <div class="board-top">
+    <svg class="logo" viewBox="0 0 500 216" role="img" aria-label="Libertas"><use href="#logo"/></svg>
+    <span class="eyebrow">Stila dēlis · 2. solis · dizaina sistēma</span>
+  </div>
+  <h1 class="board-title">Ceļš uz <em>pasauli</em></h1>
+  <p class="concept">No klusa Baltijas priežu krasta taka vijas pāri ezeram uz tāliem Spānijas kalniem un Anglijas krīta klintīm rītausmas gaismā. <b>Valodas mācīšanās ir mierīgs ceļojums</b>, un ceļu rāda divi putni no Libertas logo.</p>
+  <div class="moods" aria-label="Noskaņa">
+    <span class="chip">mierīgs</span><span class="chip">plašs</span><span class="chip">silta rītausma</span><span class="chip">nostalģisks, bet skaidrs</span><span class="chip">Baltijas klusums</span><span class="chip">logs uz pasauli</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Sadaļas">
+  <ul class="wrap">
+    <li><a href="#sakumlapa">Sākumlapa</a></li><li><a href="#telefons">Telefons</a></li><li><a href="#krasas">Krāsas</a></li>
+    <li><a href="#tipografija">Tipogrāfija</a></li><li><a href="#ilustracija">Ilustrācija</a></li><li><a href="#elementi">Elementi</a></li>
+    <li><a href="#ieksa">Iekšlapa</a></li><li><a href="#kajene">Kājene</a></li><li><a href="#sezonas">Sezonas</a></li><li><a href="#pamati">Atstarpes un kustība</a></li>
+  </ul>
+</nav>
+
+<main>
+<!-- ===== Desktop hero ===== -->
+<section class="blk wrap" id="sakumlapa">
+  <div class="blk-h">
+    <span class="eyebrow">Sākumlapa · dators</span>
+    <h2>Pilna ainava kā <em>skatuve</em></h2>
+    <p>Teksts mierīgajās debesīs, viens akcenta krāsas aicinājums, ainava ved acis no krasta uz tāliem horizontiem. Kustini peli virs ainavas, lai redzētu vieglu paralaksi.</p>
+  </div>
+  <div class="frame desk">
+    <div class="frame-bar"><i></i><i></i><i></i><span>Sākumlapa · 1440 px</span></div>
+    <div class="hero-desk" id="heroDesk">
+      <svg class="scene" viewBox="0 -140 1440 940" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ainava: priežu krasts, ezers, tālumā Spānijas kalni ar vējdzirnavām un Anglijas klintis ar bāku">
+        <use href="#sc-sun" data-d=".02"/>
+        <use href="#sc-clouds" class="clouds"/>
+        <use href="#sc-birds" class="birds"/>
+        <use href="#sc-far" data-d=".04"/>
+        <use href="#sc-lake" data-d=".06"/>
+        <use href="#sc-mid" data-d=".08"/>
+        <use href="#sc-near" data-d=".14"/>
+        <use href="#sc-path" data-d=".14"/>
+        <use href="#sc-front" data-d=".22"/>
+        <g class="mzone"><rect x="306" y="664" width="150" height="128" rx="18"/><text x="381" y="724" text-anchor="middle">EMPANADILLO</text><text x="381" y="746" text-anchor="middle" style="font-weight:400">vieta · 3. solis</text></g>
+        <rect x="-100" y="-300" width="1700" height="1300" filter="url(#grain)" opacity=".07" style="mix-blend-mode:multiply"/>
+      </svg>
+      <header class="mnav">
+        <svg class="logo" viewBox="0 0 500 216" role="img" aria-label="Libertas"><use href="#logo"/></svg>
+        <nav aria-label="Galvenā (makets)"><a href="#" aria-current="page">Sākums</a><a href="#">Kursi</a><a href="#">Noderīgi materiāli</a><a href="#">Par mums</a>
+          <span class="auth"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>Ienākt ar Google</span></nav>
+      </header>
+      <div class="hero-copy">
+        <span class="pill">Spāņu un angļu valoda · A1–B1</span>
+        <h1>Runā, saproti, ceļo, <em>audz!</em></h1>
+        <p>Libertas palīdz atvērt durvis uz pasauli caur valodu spēku.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary" href="#">Izvēlies kursu <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-secondary" href="#">Noderīgi materiāli</a>
+        </div>
+      </div>
+      <span class="landmark" style="left:22.9%;top:44%"><i></i>Spāņu valoda</span>
+      <span class="landmark" style="left:81.9%;top:47.5%"><i></i>Angļu valoda</span>
+    </div>
+    <div class="features">
+      <div class="feat"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.6c2.6.2 4.4 2 5 5.4"/></svg></span>Mazas grupas</div>
+      <div class="feat"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>Dzīvas nodarbības</div>
+      <div class="feat"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>Praktiska valoda jau no pirmās dienas</div>
+    </div>
+  </div>
+  <p class="note"><b>Mascot vieta</b> (punktotā zona): krastā, takas sākumā, ~140×140 px. Šeit 3. solī dzīvos jaunais Empanadillo, nevis fiksētā ekrāna stūrī. <b>Etiķetes</b> virs orientieriem nāk no 3. atsauces (mazi peldoši čipi).</p>
+</section>
+
+<!-- ===== Mobile ===== -->
+<section class="blk wrap" id="telefons">
+  <div class="blk-h">
+    <span class="eyebrow">Telefons · 360 px</span>
+    <h2>Pārkomponēts, nevis <em>samazināts</em></h2>
+    <p>Teksts debesīs virs ainavas, pogas pilnā platumā, ainava apgriezta uz krastu un taku ar vienu orientieri. Izvēlne atveras kā lapa no galvenes.</p>
+  </div>
+  <div class="phones">
+    <div>
+      <div class="phone"><div class="ph">
+        <div class="ph-head"><svg class="logo" viewBox="0 0 500 216" role="img" aria-label="Libertas"><use href="#logo"/></svg><button class="menu-btn" type="button" aria-expanded="false" aria-label="Atvērt izvēlni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button></div>
+        <div class="ph-hero">
+          <span class="pill">Spāņu un angļu valoda</span>
+          <h1>Runā, saproti, ceļo, <em>audz!</em></h1>
+          <p>Libertas palīdz atvērt durvis uz pasauli caur valodu spēku.</p>
+          <div class="ctas"><a class="btn btn-primary" href="#">Izvēlies kursu</a><a class="btn btn-secondary" href="#">Noderīgi materiāli</a></div>
+        </div>
+        <div class="ph-scene">
+          <svg class="scene" viewBox="100 280 720 520" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="background:linear-gradient(180deg,var(--sc-sky2),var(--sc-sky3) 30%)">
+            <use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/><use href="#sc-birds" transform="translate(-700 150)"/>
+            <g class="mzone"><rect x="560" y="660" width="130" height="124" rx="18"/><text x="625" y="730" text-anchor="middle" style="font-size:22px">EMPA</text></g>
+            <rect x="0" y="200" width="1000" height="700" filter="url(#grain)" opacity=".07" style="mix-blend-mode:multiply"/>
+          </svg>
+        </div>
+      </div></div>
+      <p class="ph-cap">Sākums: maskota vieta pārvietojas uz ainavas labo pusi (80×80 px), lai neaizsegtu pogas.</p>
+    </div>
+    <div>
+      <div class="phone"><div class="ph">
+        <div class="ph-head"><svg class="logo" viewBox="0 0 500 216" role="img" aria-label="Libertas"><use href="#logo"/></svg><button class="menu-btn" type="button" aria-expanded="true" aria-label="Aizvērt izvēlni"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+        <div class="sheet">
+          <ul>
+            <li><a href="#" aria-current="page">Kursi <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#">Noderīgi materiāli <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+            <li><a href="#">Par mums <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+          </ul>
+          <div class="auth-area"><a class="btn btn-primary" href="#">Izvēlies kursu</a><a class="btn btn-secondary" href="#">Ienākt ar Google</a></div>
+          <div class="sheet-strip">
+            <svg class="scene" viewBox="0 380 1440 330" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="background:linear-gradient(180deg,var(--c-bg),var(--sc-sky3))">
+              <use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-front"/>
+            </svg>
+          </div>
+        </div>
+      </div></div>
+      <p class="ph-cap">Izvēlne: 60 px rindas, Lora saites, aktīvā lapa ar bordo atzīmi, fokuss iekšā lapā, Esc aizver.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Palette ===== -->
+<section class="blk wrap" id="krasas">
+  <div class="blk-h">
+    <span class="eyebrow">Krāsas · aprēķināts WCAG kontrasts</span>
+    <h2>Klusa pasaule, <em>viens</em> silts akcents</h2>
+    <p>Bordo paliek zīmola tinte (logo, galvenie virsraksti). Visām darbībām ir viena jauna krāsa, ogle (ember), no tās pašas krāsu ģimenes, tikai gaišāka. Zelts vairs nav pastāvīga krāsa, tas paliek tikai svētku gaismām.</p>
+  </div>
+  <div class="swatches">
+    <div class="sw sw--hero"><div class="sw-c" style="background:#6B1D1D;color:#fff"><span>Aa</span><span>11.55 ar baltu</span></div><div class="sw-b"><span class="sw-n">Zīmola bordo</span><span class="sw-hex">#6B1D1D · --c-brand</span><span class="sw-r">Logo, H1 un displeja virsraksti, zīmola atzīmes. Nekad nav poga.</span><div class="cr"><span class="aaa">uz fona 10.26 AAA</span><span class="aaa">uz debesīm 8.70 AAA</span></div></div></div>
+    <div class="sw sw--hero"><div class="sw-c" style="background:#B4502A;color:#fff"><span>Aa</span><span>5.10 ar baltu</span></div><div class="sw-b"><span class="sw-n">Akcents: ogle</span><span class="sw-hex">#B4502A · --c-accent</span><span class="sw-r">Vienīgā darbības krāsa: galvenās pogas, aktīvie stāvokļi. Nekad nav virsraksts.</span><div class="cr"><span class="aa">balts teksts 5.10 AA</span><span class="aa">uz fona 4.53 AA</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#963F20;color:#fff"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Akcents tumšs</span><span class="sw-hex">#963F20 · --c-accent-strong</span><span class="sw-r">Hover, teksta saites</span><div class="cr"><span class="aa">uz fona 6.16 AA</span><span class="aa">balts 6.93</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#F6E1D5;color:#963F20"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Akcenta tonis</span><span class="sw-hex">#F6E1D5 · --c-accent-soft</span><span class="sw-r">Izvēlēts čips, izcēlumi</span><div class="cr"><span class="aa">tumšs akc. 5.50 AA</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#F6F1E8;color:#24211E;border-bottom:1px solid #D9CFC0"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Fons (papīrs)</span><span class="sw-hex">#F6F1E8 · --c-bg</span><span class="sw-r">Lapas fons, debesu augša</span><div class="cr"><span class="aaa">tinte 14.23 AAA</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#FFFDF8;color:#24211E;border-bottom:1px solid #D9CFC0"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Virsma</span><span class="sw-hex">#FFFDF8 · --c-surface</span><span class="sw-r">Kartītes, lauki, izvēlnes</span><div class="cr"><span class="aaa">tinte 15.75 AAA</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#EDE5D8;color:#24211E"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Iegremdēts</span><span class="sw-hex">#EDE5D8 · --c-sunk</span><span class="sw-r">Sekundārās zonas, neaktīvs</span><div class="cr"><span class="aaa">tinte 12.81</span><span class="aa">pelēks 5.87</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#24211E;color:#F6F1E8"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Tinte</span><span class="sw-hex">#24211E · --c-ink</span><span class="sw-r">Teksts, H2–H4, fokusa gredzens</span><div class="cr"><span class="aaa">uz fona 14.23 AAA</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#5C554D;color:#fff"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Sekundārais teksts</span><span class="sw-hex">#5C554D · --c-muted</span><span class="sw-r">Paraksti, meta</span><div class="cr"><span class="aa">uz fona 6.52 AA</span><span class="aa">debesīs 5.53</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#DDE5DA;color:#34503F"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Salvija</span><span class="sw-hex">#DDE5DA / #34503F</span><span class="sw-r">Čipi, birkas, mierīgi paneļi</span><div class="cr"><span class="aa">6.89 AA</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#1E2E29;color:#E9E4D8"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Mežs</span><span class="sw-hex">#1E2E29 · --c-forest</span><span class="sw-r">Kājene, tumšākais slānis</span><div class="cr"><span class="aaa">teksts 11.20 AAA</span><span class="aa">vājš 7.03</span></div></div></div>
+    <div class="sw"><div class="sw-c" style="background:#8C8273;color:#fff"><span>Aa</span></div><div class="sw-b"><span class="sw-n">Līnija stipra</span><span class="sw-hex">#8C8273 · --c-line-strong</span><span class="sw-r">Lauku un kontroļu robežas</span><div class="cr"><span>uz virsmas 3.72 ≥3:1</span></div></div></div>
+  </div>
+  <div class="sem" aria-label="Semantiskās krāsas">
+    <div style="background:#E3EFE5;color:#2E6A47"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg><span>Pareizi! <small>#2E6A47 / #E3EFE5 · 5.43 AA</small></span></div>
+    <div style="background:#F8E3E1;color:#A4282A"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span>Kļūda <small>#A4282A / #F8E3E1 · 5.85 AA</small></span></div>
+    <div style="background:#FAEED3;color:#7F5300"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17v.01"/></svg><span>Uzmanību <small>#7F5300 / #FAEED3 · 5.81 AA</small></span></div>
+    <div style="background:#E2EBF2;color:#2F5878"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg><span>Informācija <small>#2F5878 / #E2EBF2 · 6.24 AA</small></span></div>
+  </div>
+  <div class="landpal" aria-label="Ainavas krāsas (tikai ilustrācijai)">
+    <div style="background:#F2D3B8;color:#5C554D">debesis<br>#F2D3B8</div>
+    <div style="background:#C9C5D6;color:#24211E">tālie<br>#C9C5D6</div>
+    <div style="background:#D7DEDA;color:#24211E">ezers<br>#D7DEDA</div>
+    <div style="background:#8FA3A6;color:#1E2E29">vidus<br>#8FA3A6</div>
+    <div style="background:#5F7C6D;color:#F6F1E8">tuvie<br>#5F7C6D</div>
+    <div style="background:#E9D9C2;color:#5C554D">taka<br>#E9D9C2</div>
+    <div style="background:#2F4A40;color:#E9E4D8">priekšpl.<br>#2F4A40</div>
+    <div style="background:#1E2E29;color:#E9E4D8">dziļums<br>#1E2E29</div>
+  </div>
+  <p class="note">Aizliegts: akcents kā teksts uz debesu gradienta (3.84). Mazām saitēm vienmēr <b>#963F20</b>.</p>
+</section>
+
+<!-- ===== Type ===== -->
+<section class="blk wrap" id="tipografija">
+  <div class="blk-h">
+    <span class="eyebrow">Tipogrāfija · Lora + Source Sans 3</span>
+    <h2>Eleganta antīkva, <em>skaidrs</em> teksts</h2>
+    <p>Abiem fontiem Google Fonts latin-ext apakškopa (U+0100–02BA) sedz latviešu burtus, un garumzīmes pārbaudītas renderējumā (Fraunces un Newsreader garumzīmes nobīda, tāpēc tie atmesti). Rezerves: Georgia un sistēmas sans.</p>
+  </div>
+  <div class="panel spec">
+    <div class="spec-row"><span class="spec-meta">Display<br>Lora 600<br>40→76 px / 1.04</span><p class="t-display">Runā, saproti, ceļo, <em>audz!</em></p></div>
+    <div class="spec-row"><span class="spec-meta">H1<br>Lora 600 · bordo<br>32→52 px / 1.1</span><p class="t-h1">Noderīgi <em>materiāli</em></p></div>
+    <div class="spec-row"><span class="spec-meta">H2<br>Lora 500 · tinte<br>26→38 px / 1.15</span><p class="t-h2">Kursi · Par <em>mums</em></p></div>
+    <div class="spec-row"><span class="spec-meta">H3<br>Lora 600 + cena<br>20→24 px / 1.25</span><p class="t-h3">Spāņu valodas pamati A1 — <span class="price">280,00 EUR</span></p></div>
+    <div class="spec-row"><span class="spec-meta">Lead<br>Source Sans 3 · 400<br>18→21 px / 1.55</span><p class="t-lead">Libertas palīdz atvērt durvis uz pasauli caur valodu spēku.</p></div>
+    <div class="spec-row"><span class="spec-meta">Body<br>Source Sans 3 · 400<br>17 px / 1.6 · 68ch</span><p class="t-body">Interaktīvas nodarbības valodu apguvei mājās — ar izrunu, uzdevumiem un tūlītēju pašpārbaudi. Mazas grupas, dzīvas nodarbības un praktiska valoda jau no pirmās dienas.</p></div>
+    <div class="spec-row"><span class="spec-meta">Eyebrow / nav<br>Source Sans 3 · 600<br>13 px · +0.1em · CAPS</span><p class="t-xs">Bezmaksas · mācies savā tempā</p></div>
+  </div>
+  <div class="diac">
+    <div><small>Lora · latin-ext</small><span class="d1">ā č ē ģ ī ķ ļ ņ š ū ž<br>Ā Č Ē Ģ Ī Ķ Ļ Ņ Š Ū Ž</span></div>
+    <div><small>Source Sans 3 · latin-ext</small><span class="d2">Ģimenē ķērām ļoti šķību ņiprumu — žēl!<br>ā č ē ģ ī ķ ļ ņ š ū ž · 0123456789 €</span></div>
+  </div>
+</section>
+
+<!-- ===== Illustration system ===== -->
+<section class="blk wrap" id="ilustracija">
+  <div class="blk-h">
+    <span class="eyebrow">Ilustrācijas valoda</span>
+    <h2>Plakani slāņi, maigi gradienti, <em>viegls</em> grauds</h2>
+    <p>Četri dziļuma slāņi un debesis. Tālāk = gaišāks, vēsāks, mazāk kontrasta. Bez kontūrām, bez pikseļiem, bez fotoreālisma. Viena gaisma: zema rītausmas saule.</p>
+  </div>
+  <div class="layers">
+    <div class="layer"><svg viewBox="0 220 1440 700" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/></svg><div><b>0 · Debesis</b><code>#F6F1E8 → #F2D3B8</code><br>saule, mākoņi, logo putni</div></div>
+    <div class="layer"><svg viewBox="0 220 1440 700" aria-hidden="true"><use href="#sc-far"/></svg><div><b>1 · Tālie horizonti</b><code>#C9C5D6</code><br>Spānija (dzirnavas) · Anglija (bāka)</div></div>
+    <div class="layer"><svg viewBox="0 220 1440 700" aria-hidden="true"><use href="#sc-lake"/><use href="#sc-mid"/></svg><div><b>2 · Ezers un pakalni</b><code>#D7DEDA · #8FA3A6</code><br>migla, atspīdumi</div></div>
+    <div class="layer"><svg viewBox="0 220 1440 700" aria-hidden="true"><use href="#sc-near"/><use href="#sc-path"/></svg><div><b>3 · Tuvais mežs + taka</b><code>#5F7C6D · #E9D9C2</code><br>ceļš no krasta uz pasauli</div></div>
+    <div class="layer"><svg viewBox="0 220 1440 700" aria-hidden="true"><use href="#sc-front"/></svg><div><b>4 · Priekšplāns</b><code>#2F4A40 → #1E2E29</code><br>priedes, pāriet kājenē</div></div>
+  </div>
+  <p class="note"><b>Grauds:</b> viens SVG feTurbulence slānis, 6–8 % necaurredzamība. <b>Svars:</b> visa aina ≤150 KB SVG. <b>Kursu vāki:</b> tās pašas ainavas 15:8 izgriezumi, līmenis = diennakts laiks (A1 rītausma, A2 rīts, B1 diena).</p>
+</section>
+
+<!-- ===== Components ===== -->
+<section class="blk wrap" id="elementi">
+  <div class="blk-h">
+    <span class="eyebrow">Elementi un stāvokļi</span>
+    <h2>Pogas, čipi, lauki, <em>kartīte</em></h2>
+    <p>Stāvokļi blakus: parasts · hover · fokuss · nospiests · neaktīvs. Fokusa gredzens: 2 px tinte ar 3 px atstarpi (uz tumša: #F0B999).</p>
+  </div>
+  <div class="grid-2">
+    <div class="panel">
+      <h3>Galvenā poga · akcents</h3>
+      <div class="row">
+        <div class="state"><small>Parasts</small><button class="btn btn-primary" type="button">Izvēlies kursu</button></div>
+        <div class="state"><small>Hover</small><button class="btn btn-primary is-hover" type="button">Izvēlies kursu</button></div>
+        <div class="state"><small>Fokuss</small><button class="btn btn-primary is-focus" type="button">Izvēlies kursu</button></div>
+        <div class="state"><small>Nospiests</small><button class="btn btn-primary is-active" type="button">Izvēlies kursu</button></div>
+        <div class="state"><small>Neaktīvs</small><button class="btn btn-primary" type="button" disabled>Izvēlies kursu</button></div>
+        <div class="state"><small>.btn-busy</small><button class="btn btn-primary" type="button" aria-busy="true"><span class="spin" aria-hidden="true"></span>Piesaka…</button></div>
+        <div class="state"><small>.btn-done</small><button class="btn btn-done" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pieteikts</button></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Sekundārā un spoka poga</h3>
+      <div class="row">
+        <div class="state"><small>Parasts</small><button class="btn btn-secondary" type="button">Noderīgi materiāli</button></div>
+        <div class="state"><small>Hover</small><button class="btn btn-secondary is-hover" type="button">Noderīgi materiāli</button></div>
+        <div class="state"><small>Fokuss</small><button class="btn btn-secondary is-focus" type="button">Noderīgi materiāli</button></div>
+        <div class="state"><small>Neaktīvs</small><button class="btn btn-secondary" type="button" disabled>Noderīgi materiāli</button></div>
+      </div>
+      <div class="row" style="margin-top:16px">
+        <div class="state"><small>Spoka</small><a class="btn btn-ghost" href="#">Par mums <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        <div class="state"><small>Spoka hover</small><a class="btn btn-ghost is-hover" href="#">Par mums <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </div>
+      <div class="on-dark" style="margin-top:16px"><button class="btn btn-primary is-focus" type="button">Uz tumša · fokuss</button><a class="btn btn-ghost is-focus" href="#">Noteikumi</a></div>
+    </div>
+    <div class="panel">
+      <h3>Čipi un filtri</h3>
+      <div class="row">
+        <div class="state"><small>Birka</small><span class="chip">Bezmaksas</span></div>
+        <div class="state"><small>Filtrs</small><button class="chip chip--filter" type="button" aria-pressed="false">Visi</button></div>
+        <div class="state"><small>Hover</small><button class="chip chip--filter is-hover" type="button" aria-pressed="false">Spāņu valoda</button></div>
+        <div class="state"><small>Izvēlēts</small><button class="chip chip--filter" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Angļu valoda</button></div>
+        <div class="state"><small>Fokuss</small><button class="chip chip--filter is-focus" type="button" aria-pressed="false">Visi</button></div>
+        <div class="state"><small>Līmenis</small><span class="chip chip--level">A1</span></div>
+        <div class="state"><small>Neaktīvs</small><span class="chip" aria-disabled="true">Drīzumā</span></div>
+      </div>
+      <h3 style="margin-top:24px">Navigācija</h3>
+      <div class="dnav"><a href="#" aria-current="page">Kursi</a><a href="#" class="is-hover">Noderīgi materiāli</a><a href="#" class="is-focus">Par mums</a></div>
+      <p class="note">Aktīvā lapa = bordo līnija (zīmola atzīme), hover = akcenta līnija aug no centra.</p>
+    </div>
+    <div class="panel">
+      <h3>Ievades lauki</h3>
+      <div class="row">
+        <div class="field"><label for="f1">Vārds</label><input class="inp" id="f1" placeholder="Jānis Bērziņš"></div>
+        <div class="field"><label for="f2">Vārds · fokuss</label><input class="inp is-focus" id="f2" value="Līga Ozoliņa"></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="field"><label for="f3">E-pasts</label><input class="inp" id="f3" value="liga@pasts" aria-invalid="true" aria-describedby="f3e"><span class="err" id="f3e"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>Lūdzu, ievadi derīgu e-pasta adresi.</span></div>
+        <div class="field"><label for="f4">Tālrunis · neaktīvs</label><input class="inp" id="f4" value="+371 20 000 000" disabled><span class="help">Mainīt var sadaļā “Mani kursi”.</span></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <div class="field"><label for="f5">Kurss</label><select class="inp" id="f5"><option>Spāņu valodas pamati A1</option><option>Angļu valodas pamati A1</option><option>Spāņu valoda B1.1</option></select></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Ikonas · 24 px, 1.75 px līnija</h3>
+      <div class="icons">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg>Kurss</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>Izruna</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Grafiks</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg>Drukāt</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l6-12 4 7 3-4 5 9z"/><circle cx="17" cy="6" r="2"/></svg>Ceļojums</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Pareizi</span>
+      </div>
+      <h3 style="margin-top:24px">Paziņojums (.toast)</h3>
+      <div class="toast" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="#2E6A47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>Tu esi pieteicies kursam “Spāņu valodas pamati A1”.</div>
+    </div>
+    <div class="panel">
+      <h3>Kursa kartīte · parasts / hover</h3>
+      <div class="grid-2" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:16px">
+        <article class="card">
+          <div class="card-cover"><svg class="scene" viewBox="140 290 600 320" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda A1"><use href="#sc-sun" transform="translate(-560 0)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><rect x="0" y="200" width="900" height="500" filter="url(#grain)" opacity=".07" style="mix-blend-mode:multiply"/></svg></div>
+          <div class="card-body"><div class="card-tags"><span class="chip chip--level">A1</span><span class="chip">Spāņu</span></div><h4>Spāņu valodas pamati A1</h4><p class="price">280,00 EUR</p><p class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>7 nedēļas | Otrdienās un ceturtdienās</p><a href="#" class="btn btn-primary">Pieteikties kursam</a></div>
+        </article>
+        <article class="card is-hover">
+          <div class="card-cover"><svg class="scene" viewBox="880 290 600 320" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Angļu valoda A1"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-170 60)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><rect x="800" y="200" width="800" height="500" filter="url(#grain)" opacity=".07" style="mix-blend-mode:multiply"/></svg></div>
+          <div class="card-body"><div class="card-tags"><span class="chip chip--level">A1</span><span class="chip">Angļu</span></div><h4>Angļu valodas pamati A1</h4><p class="price">280,00 EUR</p><p class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Grafiks kā vietnē</p><a href="#" class="btn btn-primary is-hover">Pieteikties kursam</a></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Inner page strip ===== -->
+<section class="blk wrap" id="ieksa">
+  <div class="blk-h">
+    <span class="eyebrow">Iekšlapa · horizonta josla</span>
+    <h2>Kompakta josla, tas pats <em>horizonts</em></h2>
+    <p>Kursi, materiāli, nodarbības, noteikumi: tikai debesis, tālie kalni un ezers (220–300 px). Virsraksts kreisajā pusē uz papīra miglas, ainava atveras pa labi. Paralakses nav.</p>
+  </div>
+  <div class="frame desk">
+    <div class="frame-bar"><i></i><i></i><i></i><span>Kursi</span></div>
+    <div class="strip-nav"><svg class="logo" viewBox="0 0 500 216" role="img" aria-label="Libertas"><use href="#logo"/></svg><nav aria-label="Iekšlapas navigācija (makets)"><a href="#" aria-current="page">Kursi</a><a href="#">Noderīgi materiāli</a><a href="#">Par mums</a></nav></div>
+    <div class="strip">
+      <svg class="scene" viewBox="0 250 1440 380" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="background:linear-gradient(180deg,var(--sc-sky1) 0%,var(--sc-sky2) 45%,var(--sc-sky3) 70%)">
+        <use href="#sc-sun"/><use href="#sc-birds" transform="translate(-150 60)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/>
+        <rect x="-100" y="0" width="1700" height="800" filter="url(#grain)" opacity=".07" style="mix-blend-mode:multiply"/>
+      </svg>
+      <div class="strip-copy">
+        <span class="crumbs"><a href="#">Sākums</a> / Kursi</span>
+        <h1>Kursu piedāvājums</h1>
+        <p>Mazas grupas, dzīvas nodarbības un praktiska valoda jau no pirmās dienas.</p>
+      </div>
+    </div>
+    <div class="strip-cards">
+      <article class="card"><div class="card-cover"><svg class="scene sc-morning" viewBox="140 290 600 320" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda A2"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><div class="card-tags"><span class="chip chip--level">A2</span></div><h4>Spāņu valodas pamati A2</h4><p class="price">280,00 EUR</p></div></article>
+      <article class="card"><div class="card-cover"><svg class="scene sc-morning" viewBox="880 290 600 320" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Angļu valoda A2"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg></div><div class="card-body"><div class="card-tags"><span class="chip chip--level">A2</span></div><h4>Angļu valodas pamati A2</h4><p class="price">280,00 EUR</p></div></article>
+      <article class="card"><div class="card-cover"><svg class="scene sc-noon" viewBox="220 280 600 320" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda B1.1"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><div class="card-tags"><span class="chip chip--level">B1</span></div><h4>Spāņu valoda B1.1</h4><p class="price">420,00 EUR</p></div></article>
+    </div>
+  </div>
+  <p class="note">Kursu vāki: A1 rītausma · A2 rīts · B1 diena. Tie paši ceļi <code>assets/kursi/*.svg</code> un 15:8 proporcija, tāpēc HTML nemainās.</p>
+</section>
+
+<!-- ===== Footer ===== -->
+<section class="blk wrap" id="kajene">
+  <div class="blk-h">
+    <span class="eyebrow">Kājene · siluets</span>
+    <h2>Lapa “nolaižas” <em>mežā</em></h2>
+    <p>Priedes izaug no papīra fona, tumšākais slānis kļūst par kājenes fonu. Uz kalna stāv skatu tornis (5. atsauce, Latvijas ainavas zīme).</p>
+  </div>
+  <div class="frame desk">
+    <div class="frame-bar"><i></i><i></i><i></i><span>Kājene · visas lapas</span></div>
+    <div style="height:40px;background:var(--c-bg)"></div>
+    <div class="foot-scene">
+      <svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <path d="M-20 150 C160 118 320 126 480 140 C640 154 760 120 920 112 C1080 104 1240 130 1460 118 L1460 240 L-20 240 Z" fill="#8FA3A6" opacity=".55"/>
+        <path d="M-20 178 C200 150 380 160 560 170 C760 182 900 150 1080 146 C1240 142 1340 160 1460 156 L1460 240 L-20 240 Z" fill="#5F7C6D"/>
+        <g fill="#526E60"><use href="#pine" x="-24.8" y="95.0" width="29.5" height="73.8"/><use href="#pine" x="4.6" y="105.4" width="25.9" height="64.7"/><use href="#pine" x="36.0" y="118.5" width="19.6" height="48.9"/><use href="#pine" x="66.4" y="124.5" width="16.6" height="41.5"/><use href="#pine" x="83.2" y="101.2" width="26.0" height="65.1"/><use href="#pine" x="115.8" y="123.2" width="18.0" height="44.9"/><use href="#pine" x="145.4" y="131.0" width="17.3" height="43.4"/><use href="#pine" x="164.4" y="136.8" width="14.7" height="36.7"/><use href="#pine" x="185.6" y="105.6" width="27.0" height="67.5"/><use href="#pine" x="203.7" y="104.0" width="26.4" height="66.0"/><use href="#pine" x="234.1" y="111.9" width="24.3" height="60.7"/><use href="#pine" x="259.8" y="107.6" width="26.7" height="66.8"/><use href="#pine" x="289.9" y="129.3" width="15.2" height="37.9"/><use href="#pine" x="310.0" y="108.3" width="24.2" height="60.4"/><use href="#pine" x="329.2" y="106.6" width="24.8" height="62.0"/><use href="#pine" x="357.2" y="129.7" width="18.4" height="46.1"/><use href="#pine" x="382.1" y="101.6" width="26.0" height="65.0"/><use href="#pine" x="404.0" y="111.8" width="25.5" height="63.7"/><use href="#pine" x="429.1" y="92.6" width="29.8" height="74.6"/><use href="#pine" x="456.3" y="122.0" width="21.5" height="53.8"/><use href="#pine" x="481.9" y="108.9" width="26.6" height="66.5"/><use href="#pine" x="515.1" y="132.3" width="17.6" height="44.0"/><use href="#pine" x="541.7" y="126.6" width="16.5" height="41.3"/><use href="#pine" x="571.6" y="139.1" width="15.3" height="38.4"/><use href="#pine" x="581.2" y="93.6" width="30.2" height="75.5"/><use href="#pine" x="615.0" y="129.8" width="19.1" height="47.6"/><use href="#pine" x="632.1" y="110.6" width="22.3" height="55.7"/><use href="#pine" x="657.2" y="118.1" width="19.8" height="49.6"/><use href="#pine" x="682.2" y="130.4" width="15.3" height="38.3"/><use href="#pine" x="694.0" y="104.7" width="25.0" height="62.4"/><use href="#pine" x="715.7" y="109.1" width="26.6" height="66.6"/><use href="#pine" x="741.7" y="122.1" width="20.9" height="52.3"/><use href="#pine" x="763.1" y="109.2" width="27.3" height="68.4"/><use href="#pine" x="794.0" y="113.2" width="24.5" height="61.3"/><use href="#pine" x="825.7" y="129.3" width="15.5" height="38.7"/><use href="#pine" x="848.8" y="119.7" width="21.6" height="54.1"/><use href="#pine" x="871.9" y="113.9" width="22.7" height="56.8"/><use href="#pine" x="893.1" y="127.5" width="15.7" height="39.3"/><use href="#pine" x="913.0" y="125.7" width="17.8" height="44.4"/><use href="#pine" x="939.2" y="129.3" width="15.3" height="38.2"/><use href="#pine" x="948.4" y="103.5" width="29.0" height="72.5"/><use href="#pine" x="969.7" y="125.9" width="19.7" height="49.4"/><use href="#pine" x="987.3" y="107.4" width="27.8" height="69.5"/><use href="#pine" x="1008.4" y="133.3" width="17.9" height="44.6"/><use href="#pine" x="1034.8" y="133.7" width="15.0" height="37.4"/><use href="#pine" x="1151.5" y="126.4" width="19.7" height="49.4"/><use href="#pine" x="1174.5" y="122.9" width="18.7" height="46.6"/><use href="#pine" x="1199.2" y="112.0" width="25.8" height="64.5"/><use href="#pine" x="1221.0" y="106.0" width="28.2" height="70.4"/><use href="#pine" x="1247.1" y="98.4" width="30.7" height="76.8"/><use href="#pine" x="1275.0" y="103.5" width="26.4" height="65.9"/><use href="#pine" x="1300.1" y="133.5" width="17.1" height="42.8"/><use href="#pine" x="1322.5" y="103.6" width="28.1" height="70.3"/><use href="#pine" x="1344.9" y="104.7" width="28.3" height="70.8"/><use href="#pine" x="1366.8" y="124.6" width="17.7" height="44.2"/><use href="#pine" x="1378.0" y="102.8" width="28.0" height="70.1"/><use href="#pine" x="1402.3" y="103.9" width="28.9" height="72.3"/><use href="#pine" x="1432.3" y="108.9" width="23.8" height="59.6"/></g>
+        <!-- lookout tower (skatu tornis) -->
+        <g fill="none" stroke="#2F4A40" stroke-width="3" stroke-linecap="round">
+          <path d="M1086 150 L1100 40 M1134 150 L1120 40 M1090 120 L1131 96 M1129 120 L1092 96 M1094 90 L1126 68 M1124 90 L1096 68 M1097 62 L1123 46"/>
+        </g>
+        <path d="M1092 40 L1128 40 L1128 26 L1092 26 Z M1088 26 L1110 12 L1132 26 Z" fill="#2F4A40"/>
+        <g fill="#2F4A40"><use href="#pine" x="-28.5" y="120.5" width="37.0" height="92.6"/><use href="#pine" x="-3.4" y="132.0" width="32.8" height="82.1"/><use href="#pine" x="12.2" y="108.1" width="41.5" height="103.8"/><use href="#pine" x="41.6" y="139.1" width="29.3" height="73.3"/><use href="#pine" x="53.7" y="94.6" width="47.9" height="119.8"/><use href="#pine" x="79.1" y="115.7" width="38.7" height="96.8"/><use href="#pine" x="100.4" y="120.3" width="37.9" height="94.8"/><use href="#pine" x="122.5" y="147.6" width="25.6" height="64.0"/><use href="#pine" x="130.2" y="99.6" width="46.2" height="115.5"/><use href="#pine" x="159.1" y="133.5" width="31.8" height="79.6"/><use href="#pine" x="180.5" y="144.5" width="26.6" height="66.5"/><use href="#pine" x="192.1" y="132.3" width="32.6" height="81.6"/><use href="#pine" x="206.8" y="131.6" width="33.4" height="83.4"/><use href="#pine" x="220.4" y="97.7" width="45.3" height="113.1"/><use href="#pine" x="247.4" y="148.2" width="25.7" height="64.3"/><use href="#pine" x="262.8" y="143.9" width="27.8" height="69.6"/><use href="#pine" x="276.6" y="107.4" width="42.9" height="107.3"/><use href="#pine" x="298.5" y="99.0" width="46.0" height="115.0"/><use href="#pine" x="324.0" y="112.5" width="39.4" height="98.4"/><use href="#pine" x="347.4" y="121.7" width="38.2" height="95.4"/><use href="#pine" x="367.4" y="88.7" width="49.5" height="123.6"/><use href="#pine" x="391.2" y="133.9" width="30.8" height="76.9"/><use href="#pine" x="409.8" y="112.0" width="42.1" height="105.2"/><use href="#pine" x="432.9" y="119.6" width="36.9" height="92.4"/><use href="#pine" x="452.5" y="100.3" width="44.5" height="111.2"/><use href="#pine" x="472.8" y="94.0" width="48.3" height="120.7"/><use href="#pine" x="493.4" y="104.3" width="42.4" height="106.0"/><use href="#pine" x="514.1" y="111.9" width="41.2" height="103.1"/><use href="#pine" x="536.1" y="106.3" width="41.6" height="104.0"/><use href="#pine" x="562.3" y="114.5" width="40.9" height="102.2"/><use href="#pine" x="583.7" y="112.9" width="39.5" height="98.8"/><use href="#pine" x="612.8" y="156.0" width="23.0" height="57.5"/><use href="#pine" x="624.2" y="92.8" width="49.0" height="122.4"/><use href="#pine" x="642.4" y="96.2" width="47.9" height="119.8"/><use href="#pine" x="673.3" y="145.5" width="27.8" height="69.5"/><use href="#pine" x="687.0" y="128.2" width="34.2" height="85.4"/><use href="#pine" x="696.9" y="105.4" width="43.6" height="109.1"/><use href="#pine" x="727.4" y="133.9" width="30.7" height="76.8"/><use href="#pine" x="748.6" y="135.8" width="31.0" height="77.6"/><use href="#pine" x="765.4" y="129.5" width="32.4" height="81.1"/><use href="#pine" x="782.8" y="124.8" width="36.1" height="90.3"/><use href="#pine" x="801.7" y="115.1" width="39.3" height="98.4"/><use href="#pine" x="828.6" y="130.1" width="35.0" height="87.4"/><use href="#pine" x="850.1" y="117.7" width="40.0" height="100.1"/><use href="#pine" x="877.0" y="155.4" width="23.8" height="59.6"/><use href="#pine" x="883.8" y="97.1" width="45.3" height="113.2"/><use href="#pine" x="901.5" y="110.6" width="40.5" height="101.3"/><use href="#pine" x="925.3" y="146.6" width="26.2" height="65.6"/><use href="#pine" x="941.8" y="114.0" width="39.4" height="98.5"/><use href="#pine" x="962.2" y="98.0" width="44.8" height="112.1"/><use href="#pine" x="985.3" y="95.3" width="48.3" height="120.9"/><use href="#pine" x="1012.7" y="152.8" width="23.5" height="58.6"/><use href="#pine" x="1035.2" y="139.0" width="29.9" height="74.8"/><use href="#pine" x="1049.6" y="112.5" width="41.7" height="104.1"/><use href="#pine" x="1081.2" y="146.3" width="25.5" height="63.8"/><use href="#pine" x="1103.0" y="154.0" width="24.8" height="62.0"/><use href="#pine" x="1111.1" y="104.9" width="43.3" height="108.4"/><use href="#pine" x="1141.6" y="148.4" width="26.7" height="66.7"/><use href="#pine" x="1160.5" y="119.9" width="39.2" height="98.0"/><use href="#pine" x="1179.5" y="94.8" width="46.6" height="116.5"/><use href="#pine" x="1198.0" y="109.4" width="41.4" height="103.4"/><use href="#pine" x="1213.1" y="90.7" width="49.2" height="123.0"/><use href="#pine" x="1236.9" y="113.5" width="40.4" height="100.9"/><use href="#pine" x="1258.6" y="142.8" width="27.4" height="68.5"/><use href="#pine" x="1271.6" y="89.0" width="49.5" height="123.7"/><use href="#pine" x="1299.2" y="122.5" width="35.4" height="88.5"/><use href="#pine" x="1318.4" y="117.3" width="37.1" height="92.8"/><use href="#pine" x="1346.7" y="143.1" width="28.2" height="70.4"/><use href="#pine" x="1358.5" y="129.5" width="34.3" height="85.6"/><use href="#pine" x="1379.7" y="159.3" width="23.0" height="57.4"/><use href="#pine" x="1392.8" y="99.2" width="46.6" height="116.5"/><use href="#pine" x="1415.5" y="102.3" width="45.3" height="113.2"/><use href="#pine" x="1437.9" y="127.7" width="35.1" height="87.7"/></g>
+        <path d="M-20 214 C240 196 520 210 760 206 C1000 202 1220 196 1460 204 L1460 240 L-20 240 Z" fill="#1E2E29"/>
+        <g fill="#1E2E29"><use href="#pine" x="-16.8" y="201.8" width="13.7" height="34.2"/><use href="#pine" x="7.2" y="204.0" width="12.8" height="32.0"/><use href="#pine" x="38.1" y="201.9" width="13.6" height="34.1"/><use href="#pine" x="62.4" y="193.7" width="16.9" height="42.3"/><use href="#pine" x="97.0" y="197.7" width="15.3" height="38.3"/><use href="#pine" x="120.2" y="181.7" width="21.7" height="54.3"/><use href="#pine" x="156.0" y="182.9" width="21.3" height="53.1"/><use href="#pine" x="196.9" y="199.9" width="14.5" height="36.1"/><use href="#pine" x="221.4" y="187.4" width="19.4" height="48.6"/><use href="#pine" x="250.4" y="185.9" width="20.1" height="50.1"/><use href="#pine" x="280.0" y="187.3" width="19.5" height="48.7"/><use href="#pine" x="315.7" y="177.0" width="23.6" height="59.0"/><use href="#pine" x="348.4" y="193.8" width="16.9" height="42.2"/><use href="#pine" x="385.4" y="180.9" width="22.1" height="55.1"/><use href="#pine" x="427.6" y="197.9" width="15.2" height="38.1"/><use href="#pine" x="462.3" y="174.6" width="24.6" height="61.4"/><use href="#pine" x="499.5" y="186.7" width="19.7" height="49.3"/><use href="#pine" x="531.0" y="175.6" width="24.2" height="60.4"/><use href="#pine" x="559.1" y="189.6" width="18.5" height="46.4"/><use href="#pine" x="587.0" y="179.8" width="22.5" height="56.2"/><use href="#pine" x="623.0" y="182.5" width="21.4" height="53.5"/><use href="#pine" x="660.7" y="205.8" width="12.1" height="30.2"/><use href="#pine" x="682.9" y="180.2" width="22.3" height="55.8"/><use href="#pine" x="720.0" y="204.9" width="12.5" height="31.1"/><use href="#pine" x="745.8" y="174.5" width="24.6" height="61.5"/><use href="#pine" x="767.8" y="173.6" width="25.0" height="62.4"/><use href="#pine" x="804.6" y="187.4" width="19.4" height="48.6"/><use href="#pine" x="839.6" y="174.9" width="24.4" height="61.1"/><use href="#pine" x="884.0" y="204.1" width="12.8" height="31.9"/><use href="#pine" x="917.4" y="193.7" width="16.9" height="42.3"/><use href="#pine" x="953.9" y="203.0" width="13.2" height="33.0"/><use href="#pine" x="983.4" y="203.3" width="13.1" height="32.7"/><use href="#pine" x="1008.9" y="193.4" width="17.0" height="42.6"/><use href="#pine" x="1036.4" y="192.8" width="17.3" height="43.2"/><use href="#pine" x="1058.6" y="192.5" width="17.4" height="43.5"/><use href="#pine" x="1085.3" y="178.8" width="22.9" height="57.2"/><use href="#pine" x="1127.2" y="204.2" width="12.7" height="31.8"/><use href="#pine" x="1153.6" y="186.6" width="19.8" height="49.4"/><use href="#pine" x="1190.0" y="201.4" width="13.8" height="34.6"/><use href="#pine" x="1212.3" y="192.3" width="17.5" height="43.7"/><use href="#pine" x="1236.0" y="196.6" width="15.8" height="39.4"/><use href="#pine" x="1270.5" y="199.7" width="14.5" height="36.3"/><use href="#pine" x="1305.2" y="175.9" width="24.0" height="60.1"/><use href="#pine" x="1342.2" y="200.6" width="14.2" height="35.4"/><use href="#pine" x="1368.1" y="182.2" width="21.5" height="53.8"/><use href="#pine" x="1397.0" y="191.2" width="17.9" height="44.8"/><use href="#pine" x="1424.9" y="192.7" width="17.3" height="43.3"/><use href="#pine" x="1453.0" y="205.8" width="12.1" height="30.2"/></g>
+      </svg>
+    </div>
+    <footer class="footer">
+      <div class="fcols">
+        <div class="fbrand"><svg class="logo" viewBox="0 0 500 216" role="img" aria-label="Libertas"><use href="#logo"/></svg><p>Runā, saproti, ceļo, audz!</p></div>
+        <div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Spāņu valoda A1–B1</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Kursu piedāvājums</a></li></ul></div>
+        <div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#" class="is-focus">Ziemassvētki angļu valodā</a></li></ul></div>
+        <div class="fcol"><h5>Libertas</h5><ul><li><a href="#">Par mums</a></li><li><a href="#">Mani kursi</a></li><li><a href="#">Noteikumi un privātuma politika</a></li></ul></div>
+      </div>
+      <div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div>
+    </footer>
+  </div>
+  <p class="note">Logo uz tumša fona šeit ir pārkrāsots ar CSS filtru. Īstajā vietnē vajadzēs gaišu logo versiju (ieteicams SVG).</p>
+</section>
+
+<!-- ===== Seasons ===== -->
+<section class="blk wrap" id="sezonas">
+  <div class="blk-h">
+    <span class="eyebrow">Sezonas varianti · tikai noteikumi, zīmējumi vēlāk</span>
+    <h2>Mainās aina, <em>ne</em> saskarne</h2>
+    <p>Decembrī aina kļūst par ziemas vakaru: sniegs uz slāņiem, siltas logu gaismas, putni gaiši. Akcenta krāsa un pogas paliek tādas pašas. 5. decembrī pāri takai karogu virtene.</p>
+  </div>
+  <div class="seasons">
+    <div class="season"><div class="sv"><svg class="scene" viewBox="0 100 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/></svg><span class="btn btn-primary">Izvēlies kursu</span></div><div class="txt"><b>Diena (pamata)</b>Rītausma, visu gadu.</div></div>
+    <div class="season"><div class="sv sc-winter"><svg class="scene" viewBox="0 100 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/></svg><span class="btn btn-primary">Izvēlies kursu</span></div><div class="txt"><b>Ziemas vakars · decembris</b><code>html.ziemassvetki</code>: krēsla, sniegs, logu gaismas #F2C46A.</div></div>
+    <div class="season"><div class="sv sc-birthday"><svg class="scene" viewBox="0 100 1440 820" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/></svg><span class="btn btn-primary">Izvēlies kursu</span></div><div class="txt"><b>Dzimšanas diena · 5. decembris</b>Karodziņu virtene pāri takai (akcents, salvija, lavanda, krēms). Decembrī uz ziemas vakara ainas.</div></div>
+  </div>
+</section>
+
+<!-- ===== Tokens ===== -->
+<section class="blk wrap" id="pamati">
+  <div class="blk-h">
+    <span class="eyebrow">Atstarpes · rādiusi · ēnas · kustība</span>
+    <h2>Daudz <em>gaisa</em>, mīkstas formas</h2>
+  </div>
+  <div class="grid-3">
+    <div class="panel"><h3>Atstarpes (4 px solis)</h3><div class="space">
+      <div><i style="--s:4px"></i>4</div><div><i style="--s:8px"></i>8</div><div><i style="--s:12px"></i>12</div><div><i style="--s:16px"></i>16</div><div><i style="--s:24px"></i>24</div><div><i style="--s:32px"></i>32</div><div><i style="--s:48px"></i>48</div><div><i style="--s:64px"></i>64</div>
+    </div><p class="note">Sadaļas: 64→128 px · konteiners 1180 px</p></div>
+    <div class="panel"><h3>Rādiusi</h3><div class="radii">
+      <div style="border-radius:6px">6<br>birkas</div><div style="border-radius:12px">12<br>lauki</div><div style="border-radius:20px">20<br>kartītes</div><div style="border-radius:28px">28<br>paneļi</div><div style="border-radius:999px">pill<br>pogas</div>
+    </div></div>
+    <div class="panel"><h3>Ēnas (siltas, zemas)</h3><div class="shadows">
+      <div style="box-shadow:var(--shadow-1)">shadow-1</div><div style="box-shadow:var(--shadow-2)">shadow-2</div><div style="box-shadow:var(--shadow-3)">shadow-3</div><div style="box-shadow:var(--shadow-cta);background:#B4502A;color:#fff">cta</div>
+    </div></div>
+  </div>
+  <div class="panel" style="margin-top:20px">
+    <h3>Kustība</h3>
+    <p class="t-body">Hover 150 ms · izvēlnes 250 ms · parādīšanās 450 ms (opacity + 12 px), līkne <code>cubic-bezier(.2,.7,.2,1)</code>. Paralakse tikai sākumlapas ainavā (slāņi 0.04×–0.2×, maks. 40 px). Mākoņi dreifē 90 s, putni slīd 20 s, nekas nemirgo. Ar <code>prefers-reduced-motion</code> viss iesaldēts, paliek tikai īsas caurspīdības pārejas.</p>
+  </div>
+</section>
+</main>
+
+<footer class="board-foot wrap">Libertas · 2. solis · dizaina sistēma. Pilnā specifikācija: <code>docs/redesign/design-system.md</code>.</footer>
+
+<script>
+(function(){
+  var hero=document.getElementById('heroDesk');
+  if(!hero||!window.matchMedia||matchMedia('(prefers-reduced-motion: reduce)').matches||!matchMedia('(hover: hover)').matches)return;
+  var uses=hero.querySelectorAll('use[data-d]'),raf=0,px=0,py=0;
+  hero.addEventListener('pointermove',function(e){
+    var r=hero.getBoundingClientRect();px=(e.clientX-r.left)/r.width-.5;py=(e.clientY-r.top)/r.height-.5;
+    if(!raf)raf=requestAnimationFrame(function(){raf=0;uses.forEach(function(u){var d=+u.dataset.d;u.style.transform='translate('+(-px*d*180)+'px,'+(-py*d*90)+'px)';});});
+  });
+  hero.addEventListener('pointerleave',function(){uses.forEach(function(u){u.style.transform='';});});
+})();
+</script>
+</body>
+</html>
