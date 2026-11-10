@@ -300,7 +300,14 @@
         e.burbulis.hidden = false;
         maj(e);
         clearTimeout(e.taimeris);
-        e.taimeris = setTimeout(function () { kluset(e); }, 9000);
+        // Šaurā ekrānā stūra burbulis var aizsegt pogas: īsāks laiks un pazūd, sākot ritināt
+        var saurs = !platsEkrans.matches;
+        e.taimeris = setTimeout(function () { kluset(e); }, saurs ? 5000 : 9000);
+        if (saurs && e === sturis) {
+            setTimeout(function () {
+                root.addEventListener('scroll', function () { kluset(e); }, { once: true, passive: true });
+            }, 400);
+        }
     }
 
     function kluset(e) {

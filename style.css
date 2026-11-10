@@ -2084,6 +2084,8 @@ html.ziemassvetki .lapas-josla {
 }
 
 .ielades-stavoklis .register-intro { margin: 0; }
+/* Rezervē vietu, kamēr konts ielādējas, lai kājene nelēktu */
+.account-card[aria-busy="true"] { min-height: 22rem; }
 
 #admin > .register-intro { text-align: center; }
 
