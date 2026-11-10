@@ -4452,6 +4452,31 @@ html.svetku-dienas .svetku-sveiciens::before {
     clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
 }
 
+/* 5. decembris (html.ballite): karodziņu virtene pāri takai (ainavas --sc-bunting-o) */
+html.ballite .hero-section { --sc-bunting-o: 1; }
+
+.ainava-ballite { display: none; }
+html.ballite .ainava-ballite { display: inline; }
+
+/* vienīgā kustība: papīra laternas lēni šūpojas (samazinātas kustības režīmā — nekustīgas) */
+.ballites-laterna {
+    transform-box: fill-box;
+    transform-origin: 50% 0;
+    animation: laterna-supojas 4.5s ease-in-out infinite alternate;
+}
+
+.ballites-laterna:nth-child(3) { animation-delay: -1.5s; }
+.ballites-laterna:nth-child(4) { animation-delay: -3s; }
+
+@keyframes laterna-supojas {
+    from { transform: rotate(-4deg); }
+    to { transform: rotate(4deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ballites-laterna { animation: none; }
+}
+
 /* Kājene: ziemas kārta virs silueta (assets/ziemassvetki/kajene-sniegs.svg, tās pašas koordinātas kā kajene-mezs.svg;
    background cover + 76% 100% = tas pats apgriezums kā img object-fit/object-position) */
 html.ziemassvetki .site-footer { position: relative; }
