@@ -4,28 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ziemassvētki spāņu valodā (A1) — Noderīgi materiāli — Libertas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
 </head>
-<body class="mat-lapa">
+<body class="mat-lapa mat-nodarbiba">
 
     <!-- Galvene / Navigācija -->
     <header class="site-header">
         <div class="container nav-wrapper">
             <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
-                <img src="assets/libertas.png" alt="LIBERTAS Logo">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
             </a>
-            <nav class="main-nav">
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
                 <a href="kursi.html">Kursi</a>
                 <a href="materiali.html" aria-current="page">Noderīgi materiāli</a>
-                <a href="index.html#par-mums">Par mums</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
             </nav>
         </div>
     </header>
 
     <!-- Materiāla virsraksts -->
-    <section class="mat-hero mat-vaks--ziemassvetki">
-        <div class="container mat-hero-iekssa">
-            <a href="materiali.html" class="mat-atpakal">← Visi materiāli</a>
+    <section class="mat-hero lapas-josla lapas-josla--augsta">
+        <div class="lapas-josla-ainava" aria-hidden="true">
+            <svg viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-clouds"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+        </div>
+        <div class="container mat-hero-iekssa lapas-josla-saturs">
+            <a href="materiali.html" class="mat-atpakal"><svg class="mat-atpakal-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Visi materiāli</a>
             <div class="mat-birkas">
                 <span class="mat-limenis">A1</span>
                 <span class="mat-valoda">Spāņu valoda</span>
@@ -33,7 +46,7 @@
             <h1><span lang="es" class="mat-hero-es">¡Feliz Navidad!</span> Ziemassvētki spāņu valodā</h1>
             <p class="mat-hero-teksts">
                 Pamatvārdi, apsveikumi un tradīcijas, lai tu varētu apsveikt draugus spāniski un saprast,
-                kā svētkus svin Spānijā. Spied 🔊, lai dzirdētu izrunu.
+                kā svētkus svin Spānijā. Spied <svg class="ikona-skana" viewBox="0 0 24 24" role="img" aria-label="skaļruņa pogu" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none"/></svg>, lai dzirdētu izrunu.
             </p>
             <ul class="mat-statistika">
                 <li><strong>20</strong> vārdi</li>
@@ -42,8 +55,8 @@
                 <li><strong>~30</strong> min</li>
             </ul>
             <div class="mat-hero-pogas">
-                <a href="#vardi" class="btn-cta mat-poga-gaisa">Sākt nodarbību</a>
-                <button type="button" class="mat-poga-caurspid" onclick="window.print()">🖨️ Drukāt</button>
+                <a href="#vardi" class="btn-cta">Sākt nodarbību</a>
+                <button type="button" class="btn-secondary mat-poga-druka" onclick="window.print()"><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><path d="M7 14h10v6H7z"/></svg>Drukāt</button>
             </div>
         </div>
     </section>
@@ -243,7 +256,7 @@
             <section class="mat-sadala" id="dialogs">
                 <h2><span class="mat-nr">4</span> Dialogs: dāvanu apmaiņa</h2>
                 <div class="dialoga-riki">
-                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden>▶ Klausīties visu dialogu</button>
+                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg>Klausīties visu dialogu</button>
                     <label class="mat-sledzis"><input type="checkbox" id="radit-tulkojumu"> Rādīt tulkojumu</label>
                 </div>
                 <div class="cats">
@@ -416,24 +429,64 @@
 
             <!-- Aicinājums -->
             <aside class="mat-cta">
-                <span class="mat-cta-emoji" aria-hidden="true">💬</span>
                 <div>
                     <h2>Gribi runāt spāniski droši?</h2>
                     <p>7 nedēļu kurss “Spāņu valodas pamati (A1)” — ar dzīvu sarunu praksi.</p>
                 </div>
-                <a href="kursi.html" class="btn-cta mat-poga-gaisa">Apskatīt kursu</a>
+                <a href="kursi.html#spanu" class="btn-cta">Apskatīt kursu</a>
             </aside>
         </main>
     </div>
 
     <!-- Kājene -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Libertas. Visas tiesības aizsargātas. · <a href="noteikumi.html">Noteikumi un privātuma politika</a></p>
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
     <script src="materiali.js"></script>
+    <script src="empanadillo.js"></script>
 </body>
 </html>

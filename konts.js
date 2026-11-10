@@ -11,7 +11,7 @@
 
     function render(me) {
         root.textContent = '';
-        root.appendChild(el('h1', 'section-title', 'Mani kursi'));
+        root.removeAttribute('aria-busy'); // virsraksts "Mani kursi" ir lapas joslā (konts.html)
 
         if (!me || !me.user) {
             root.appendChild(el('p', 'register-intro', 'Lai redzētu savus kursus, lūdzu, ienāciet.'));
@@ -54,7 +54,9 @@
         root.appendChild(el('h2', 'account-h2', 'Mani pieteikumi'));
         var list = me.enrollments || [];
         if (!list.length) {
-            var p = el('p', 'muted', 'Jums vēl nav pieteikumu. ');
+            var p = el('p', 'muted tukss-stavoklis', 'Jums vēl nav pieteikumu. ');
+            p.appendChild(el('em', '', '¡Vamos!')).lang = 'es';
+            p.appendChild(document.createTextNode(' Pirmais solis — izvēlēties kursu. '));
             var l = el('a', '', 'Skatīt kursus'); l.href = 'kursi.html';
             p.appendChild(l);
             root.appendChild(p);

@@ -1,0 +1,1203 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Libertas izkārtojumi</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-bg:#F6F1E8;--c-surface:#FFFDF8;--c-sunk:#EDE5D8;--c-line:#D9CFC0;--c-line-strong:#8C8273;
+  --c-ink:#24211E;--c-muted:#5C554D;--c-disabled:#8F877B;
+  --c-brand:#6B1D1D;--c-accent:#B4502A;--c-accent-strong:#963F20;--c-accent-press:#7E341A;--c-accent-soft:#F6E1D5;
+  --c-sage:#DDE5DA;--c-sage-ink:#34503F;
+  --c-forest:#1E2E29;--c-forest-2:#2B4038;--c-on-forest:#E9E4D8;--c-on-forest-muted:#AFB9B0;--c-focus-dark:#F0B999;
+  --c-success:#2E6A47;--c-success-bg:#E3EFE5;--c-error:#A4282A;--c-error-bg:#F8E3E1;--c-warn:#7F5300;--c-warn-bg:#FAEED3;--c-info:#2F5878;--c-info-bg:#E2EBF2;
+  --ff-display:"Lora","Iowan Old Style",Georgia,serif;
+  --ff-body:"Source Sans 3",system-ui,"Segoe UI",Roboto,Arial,sans-serif;
+  --r-sm:12px;--r-md:20px;--r-lg:28px;--r-pill:999px;
+  --shadow-1:0 1px 2px rgb(36 33 30/.06),0 2px 8px -2px rgb(36 33 30/.08);
+  --shadow-2:0 2px 4px rgb(36 33 30/.05),0 12px 32px -12px rgb(36 33 30/.18);
+  --shadow-3:0 4px 8px rgb(36 33 30/.05),0 28px 56px -24px rgb(30 46 41/.32);
+  --shadow-cta:0 8px 20px -8px rgb(180 80 42/.55);
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --sc-sky1:#F6F1E8;--sc-sky2:#F4E3D0;--sc-sky3:#F2D3B8;--sc-sun:#F7C9A3;--sc-sun-o:1;--sc-cloud:#FFFDF8;
+  --sc-far:#C9C5D6;--sc-far2:#B9B6CC;--sc-chalk:#E7E2EA;--sc-landmark:#A39EBA;--sc-lamp:#FFF3E2;
+  --sc-lake:#D7DEDA;--sc-glint:#FFFFFF;--sc-mid:#8FA3A6;--sc-mid2:#7E9497;
+  --sc-near:#5F7C6D;--sc-near2:#526E60;--sc-cabin:#486255;--sc-window:#3B5348;--sc-lights-o:0;
+  --sc-path:#E9D9C2;--sc-front:#2F4A40;--sc-deep:#1E2E29;--sc-snow:#F4F1EA;--sc-snow-o:0;--sc-bunting-o:0;--sc-bird:#6B1D1D;
+}
+.sc-winter{
+  --sc-sky1:#2A3550;--sc-sky2:#6E5A73;--sc-sky3:#D88A6A;--sc-sun:#F0A27E;--sc-sun-o:.55;--sc-cloud:#9A8AA6;
+  --sc-far:#6E6C8A;--sc-far2:#615F7D;--sc-chalk:#8F8BA8;--sc-landmark:#4F4D69;--sc-lamp:#F2C46A;
+  --sc-lake:#7E8399;--sc-glint:#F2C46A;--sc-mid:#4F6070;--sc-mid2:#46566A;
+  --sc-near:#3A5047;--sc-near2:#33473F;--sc-cabin:#2C3E36;--sc-window:#F2C46A;--sc-lights-o:1;
+  --sc-path:#C9C1C0;--sc-front:#22332D;--sc-deep:#17231F;--sc-snow-o:1;--sc-bird:#E8A598;
+}
+.sc-dusk{ /* vakara variants bez sniega */
+  --sc-sky1:#1A2230;--sc-sky2:#4A4560;--sc-sky3:#B87A68;--sc-sun:#E59A78;--sc-sun-o:.5;--sc-cloud:#6E6880;
+  --sc-far:#5E5C7A;--sc-far2:#54526F;--sc-chalk:#7E7A98;--sc-landmark:#45435E;--sc-lamp:#F2C46A;
+  --sc-lake:#5F6680;--sc-glint:#F2C46A;--sc-mid:#3F4F5E;--sc-mid2:#384757;
+  --sc-near:#2E4039;--sc-near2:#283932;--sc-cabin:#22322B;--sc-window:#F2C46A;--sc-lights-o:1;
+  --sc-path:#8E8790;--sc-front:#1C2A25;--sc-deep:#121A17;--sc-bird:#E8A598;
+}
+.sc-morning{--sc-sky1:#EFEDE6;--sc-sky2:#F3E7D8;--sc-sky3:#F2DBC3;--sc-sun:#F9D9B5}
+.sc-noon{--sc-sky1:#E9EFEC;--sc-sky2:#EEF0E8;--sc-sky3:#F3E6D3;--sc-sun:#FBE7C8}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#EAE3D7;color:var(--c-ink);font:400 17px/1.6 var(--ff-body);overflow-x:hidden}
+img,svg{display:block;max-width:100%}
+h1,h2,h3,h4,h5{font-family:var(--ff-display);margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+ul{margin:0;padding:0;list-style:none}
+a{color:var(--c-accent-strong)}
+:focus-visible{outline:2px solid var(--c-ink);outline-offset:3px}
+.i{width:18px;height:18px;flex:none}
+.scene{width:100%;height:100%;background:linear-gradient(180deg,var(--sc-sky1) 0%,var(--sc-sky2) 42%,var(--sc-sky3) 62%,var(--sc-sky3) 100%)}
+
+/* ---------- presentation chrome ---------- */
+.wrap{width:min(1320px,100% - 32px);margin-inline:auto}
+.doc-head{padding:48px 0 8px}
+.doc-head .row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.doc-head img{height:46px;width:auto}
+.eyebrow{font:600 13px/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted);display:inline-flex;align-items:center;gap:8px}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-brand)}
+.doc-title{font:600 clamp(2rem,1.5rem + 2.2vw,3.25rem)/1.1 var(--ff-display);color:var(--c-brand);margin:16px 0 10px}
+.doc-title em{font-weight:400}
+.doc-lead{max-width:72ch;font-size:19px;line-height:1.55}
+.doc-lead small{display:block;font-size:15px;color:var(--c-muted);font-style:italic;margin-top:6px}
+.toc{position:sticky;top:0;z-index:60;background:rgb(234 227 215/.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--c-line);margin-top:24px}
+.toc .wrap{display:flex;gap:4px 20px;align-items:center;padding:10px 0;overflow-x:auto;scrollbar-width:none}
+.toc a{font:600 15px/1 var(--ff-body);color:var(--c-muted);text-decoration:none;white-space:nowrap;padding:8px 0}
+.toc a:hover{color:var(--c-accent-strong)}
+.toggle{margin-left:auto;font:600 14px/1 var(--ff-body);border:1.5px solid var(--c-line-strong);background:var(--c-surface);border-radius:var(--r-pill);padding:10px 16px;min-height:40px;cursor:pointer;white-space:nowrap;color:var(--c-ink)}
+.toggle[aria-pressed="true"]{background:var(--c-info-bg);border-color:var(--c-info);color:var(--c-info)}
+.blk{padding:64px 0 0}
+.blk-h{display:grid;gap:6px;margin-bottom:20px;max-width:80ch}
+.blk-h h2{font:500 clamp(1.625rem,1.3rem + 1.4vw,2.375rem)/1.15 var(--ff-display)}
+.blk-h h2 em{color:var(--c-brand);font-weight:400}
+.blk-h p{color:var(--c-muted)}
+.en{font-style:italic;color:var(--c-muted);font-size:15px}
+.frame{border-radius:14px;overflow:hidden;border:1px solid var(--c-line);box-shadow:var(--shadow-3);background:var(--c-bg);width:max-content;max-width:100%;margin-inline:auto}
+.frame-bar{height:34px;display:flex;align-items:center;gap:7px;padding:0 14px;background:var(--c-sunk);border-bottom:1px solid var(--c-line)}
+.frame-bar i{width:10px;height:10px;border-radius:50%;background:#CFC4B4}
+.frame-bar span{margin-left:12px;font:600 12px/1 var(--ff-body);color:var(--c-muted);background:var(--c-surface);padding:5px 14px;border-radius:var(--r-pill)}
+.vp{width:1280px;background:var(--c-bg);position:relative;overflow:hidden}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px;margin-top:16px}
+.notes div{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-sm);padding:12px 14px;font-size:15px;line-height:1.45}
+.notes b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--c-brand);margin-bottom:2px}
+.phones{display:flex;gap:32px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+.phone{width:380px;max-width:100%;border-radius:40px;padding:10px;background:#2A2724;box-shadow:var(--shadow-3);flex:none}
+.ph{width:360px;border-radius:30px;overflow:hidden;background:var(--c-bg);position:relative}
+.ph--fixed{height:760px}
+.ph-cap{text-align:center;font-size:15px;color:var(--c-muted);margin-top:12px;max-width:380px}
+.ph-cap i{display:block}
+.doc-foot{padding:64px 0;color:var(--c-muted);font-size:15px}
+/* class annotations */
+.show-k [data-k]{outline:1.5px dashed var(--c-info);outline-offset:-1px}
+.show-k [data-k]:not([data-abs]){position:relative}
+.show-k [data-k]::after{content:attr(data-k);position:absolute;top:0;left:0;z-index:40;font:600 10.5px/1 ui-monospace,Consolas,monospace;background:var(--c-info);color:#fff;padding:3px 5px;border-radius:0 0 4px 0;white-space:nowrap;pointer-events:none;letter-spacing:0;text-transform:none;font-style:normal}
+
+/* ---------- shared UI (mock) ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;font:600 16px/1.1 var(--ff-body);min-height:48px;padding:0 26px;border-radius:var(--r-pill);border:1.5px solid transparent;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn-primary{background:var(--c-accent);color:#fff;box-shadow:var(--shadow-cta)}
+.btn-primary:hover{background:var(--c-accent-strong)}
+.btn-secondary{background:var(--c-surface);color:var(--c-ink);border-color:var(--c-line-strong)}
+.btn-secondary:hover{border-color:var(--c-accent-strong);color:var(--c-accent-strong)}
+.btn-ghost{background:none;color:var(--c-ink);padding:0 4px;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:5px}
+.btn-ghost:hover{color:var(--c-accent-strong);text-decoration-color:currentColor}
+.btn-done{background:var(--c-success);color:#fff}
+.btn-busy{background:var(--c-accent-strong);color:#fff}
+.spin{width:16px;height:16px;border-radius:50%;border:2px solid rgb(255 255 255/.4);border-top-color:#fff;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 13px/1 var(--ff-body);letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border-radius:var(--r-pill);background:var(--c-sage);color:var(--c-sage-ink)}
+.chip--level{background:var(--c-sunk);color:var(--c-ink)}
+.chip--on-dark{background:rgb(255 253 248/.16);color:#FFFDF8}
+.pill{font:600 13px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-sage-ink);background:rgb(255 253 248/.75);border:1px solid rgb(52 80 63/.18);padding:9px 14px;border-radius:var(--r-pill);display:inline-flex;gap:8px;align-items:center}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-brand)}
+.sec-eyebrow{font:600 13px/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted);display:inline-flex;gap:8px;align-items:center}
+.sec-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-brand)}
+.h2{font:500 38px/1.15 var(--ff-display)}
+.h2 em{color:var(--c-brand);font-weight:400}
+
+/* mascot */
+.spr{display:inline-block;line-height:0}
+.spr svg{display:block;overflow:visible;image-rendering:pixelated}
+.empa-kadrs-1{visibility:hidden}
+.anim .empa-kadrs-0{animation:k0 .72s steps(1) infinite}
+.anim .empa-kadrs-1{animation:k1 .72s steps(1) infinite}
+.anim.slow .empa-kadrs-0{animation-duration:.6s}.anim.slow .empa-kadrs-1{animation-duration:.6s}
+@keyframes k0{0%{visibility:visible}50%{visibility:hidden}}
+@keyframes k1{0%{visibility:hidden}50%{visibility:visible}}
+.blink .empa-acis{transform-box:view-box;transform-origin:17px 13.5px;animation:blink 4.5s steps(1) infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.2)}}
+.mascot{position:absolute;transform:translate(-52.88%,-100%);z-index:3}
+.mascot.mazais{transform:translate(-51.56%,-100%)}
+.bubble{position:absolute;z-index:4;background:var(--c-surface);color:var(--c-ink);border:1px solid var(--c-line);border-radius:14px;box-shadow:0 10px 28px -12px rgb(36 33 30/.35);padding:12px 36px 12px 14px;font-size:15px;line-height:1.45;max-width:260px}
+.bubble b{color:var(--c-brand)}
+.bubble::after{content:"";position:absolute;bottom:-7px;left:var(--tail,24px);width:12px;height:12px;background:var(--c-surface);border-right:1px solid var(--c-line);border-bottom:1px solid var(--c-line);transform:rotate(45deg)}
+.bubble .x{position:absolute;top:4px;right:4px;width:28px;height:28px;border:0;border-radius:6px;background:none;color:var(--c-muted);font-size:18px;line-height:1;cursor:pointer}
+
+/* ---------- desktop header ---------- */
+.hd{display:flex;align-items:center;gap:40px;padding:14px 56px;position:relative;z-index:5}
+.hd--over{position:absolute;inset:0 0 auto 0}
+.hd--solid{background:var(--c-bg);border-bottom:1px solid var(--c-line)}
+.hd .logo img{height:52px;width:auto}
+.hd nav{display:flex;gap:32px;margin-left:auto}
+.hd nav a{font:600 13px/1 var(--ff-body);letter-spacing:.09em;text-transform:uppercase;color:var(--c-ink);text-decoration:none;padding:16px 0;position:relative}
+.hd nav a::after{content:"";position:absolute;left:50%;right:50%;bottom:8px;height:2px;background:var(--c-accent-strong);transition:left .25s var(--ease),right .25s var(--ease)}
+.hd nav a:hover{color:var(--c-accent-strong)}
+.hd nav a:hover::after{left:0;right:0}
+.hd nav a[aria-current="page"]::after{left:0;right:0;background:var(--c-brand)}
+.auth{display:inline-flex;align-items:center;gap:8px;font:600 15px/1 var(--ff-body);color:var(--c-ink);border:1.5px solid var(--c-line-strong);border-radius:var(--r-pill);min-height:44px;padding:0 18px;background:rgb(255 253 248/.7);text-decoration:none;min-width:190px;justify-content:center}
+
+/* ---------- home hero (desktop) ---------- */
+.hero{position:relative;height:800px;overflow:hidden}
+.hero>.scene{position:absolute;inset:0}
+.hero-copy{position:absolute;top:126px;left:50%;transform:translateX(-50%);width:940px;text-align:center;display:grid;justify-items:center;gap:18px;z-index:2}
+.hero-copy h1{font:600 68px/1.04 var(--ff-display);letter-spacing:-.015em;color:var(--c-brand)}
+.hero-copy h1 em{font-weight:400}
+.hero-copy .lead{font-size:21px;line-height:1.5;max-width:60ch}
+.ctas{display:flex;gap:12px;margin-top:8px}
+.landmark{position:absolute;z-index:2;transform:translate(-50%,-100%);font:600 12px/1 var(--ff-body);letter-spacing:.06em;text-transform:uppercase;color:var(--c-ink);background:var(--c-surface);border-radius:var(--r-pill);padding:8px 13px;box-shadow:var(--shadow-2);white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+.landmark::after{content:"";position:absolute;left:50%;bottom:-10px;width:1px;height:10px;background:var(--c-ink);opacity:.35}
+.landmark i{width:7px;height:7px;border-radius:50%;background:var(--c-accent)}
+.feats{display:flex;justify-content:center;padding:26px 56px;background:var(--c-bg);border-bottom:1px solid var(--c-line)}
+.feat{display:flex;gap:12px;align-items:center;font:600 17px/1.3 var(--ff-body);padding:0 36px}
+.feat+.feat{border-left:1px solid var(--c-line)}
+.feat span{flex:none;width:44px;height:44px;border-radius:50%;background:var(--c-sage);color:var(--c-sage-ink);display:grid;place-items:center}
+.feat svg{width:22px;height:22px}
+
+/* sections */
+.sec{padding:96px 56px}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:36px}
+.sec-h>div{display:grid;gap:10px}
+.sec-h p{max-width:44ch;color:var(--c-muted)}
+
+/* course teaser */
+.tracks{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.track{display:grid;grid-template-columns:240px 1fr;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-1)}
+.track .cov{min-height:100%}
+.track .cov svg{height:100%}
+.track-b{padding:24px 26px;display:grid;gap:12px;align-content:start}
+.track h3{font:600 24px/1.25 var(--ff-display)}
+.steps{display:flex;align-items:center;gap:0;margin:2px 0 4px}
+.steps span{font:700 13px/1 var(--ff-body);color:var(--c-sage-ink);background:var(--c-sage);border-radius:var(--r-pill);padding:7px 10px;white-space:nowrap}
+.steps i{flex:1;min-width:14px;height:2px;background:repeating-linear-gradient(90deg,var(--c-line-strong) 0 4px,transparent 4px 8px);opacity:.6}
+.price{font:700 18px/1.2 var(--ff-body);font-variant-numeric:tabular-nums}
+.price small{font-weight:600;color:var(--c-muted);font-size:15px}
+.info{font-size:15px;color:var(--c-muted);display:flex;gap:8px;align-items:center}
+.info svg{width:16px;height:16px}
+
+/* bento restyled */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+.bento-hub{grid-column:1/-1;background:#EFE8DC;border:1px solid var(--c-line);border-radius:var(--r-lg);padding:18px;display:grid;grid-template-columns:7fr 5fr;gap:18px}
+.bento-hub-galva{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding:2px 6px}
+.bento-hub-etikete{font:600 13px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-brand);display:inline-flex;gap:8px;align-items:center}
+.bento-hub-etikete::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c-accent)}
+.bento-hub-saturs{font-size:15px;color:var(--c-muted)}
+.bento-hub-saturs b{color:var(--c-ink);font-weight:600}
+.flize{position:relative;display:flex;flex-direction:column;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;color:var(--c-ink);text-decoration:none;box-shadow:var(--shadow-1);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.flize:hover{transform:translateY(-3px);box-shadow:var(--shadow-3)}
+.flize .bulta{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:var(--c-surface);display:grid;place-items:center;box-shadow:var(--shadow-1);color:var(--c-ink)}
+.flize .bulta svg{width:18px;height:18px}
+.galvena .cov{height:300px;position:relative}
+.galvena .cov svg{height:100%}
+.galvena .tags{position:absolute;top:16px;left:16px;display:flex;gap:6px}
+.ui-card{position:absolute;left:28px;bottom:26px;background:rgb(255 253 248/.94);border-radius:16px;padding:14px 18px 14px 14px;display:flex;gap:12px;align-items:center;box-shadow:var(--shadow-2);max-width:300px}
+.ui-card .play{width:40px;height:40px;border-radius:50%;background:var(--c-accent);color:#fff;display:grid;place-items:center;flex:none}
+.ui-card .play svg{width:16px;height:16px;fill:currentColor}
+.ui-card b{display:block;font:600 19px/1.2 var(--ff-display);font-style:italic;color:var(--c-brand)}
+.ui-card small{font-size:14px;color:var(--c-muted)}
+.ui-word{position:absolute;right:30px;top:62px;background:rgb(255 253 248/.9);border-radius:12px;padding:8px 14px;box-shadow:var(--shadow-1);font-size:14px;color:var(--c-muted)}
+.ui-word b{display:block;font:600 16px/1.2 var(--ff-display);color:var(--c-ink);font-style:italic}
+.ftxt{padding:20px 24px 22px;display:grid;gap:8px}
+.ftxt h3{font:600 24px/1.25 var(--ff-display)}
+.ftxt p{color:var(--c-muted);font-size:16px}
+.stats{display:flex;gap:20px;margin-top:6px;font-size:15px;color:var(--c-muted)}
+.stats strong{font:700 18px/1 var(--ff-body);color:var(--c-ink);margin-right:3px;font-variant-numeric:tabular-nums}
+.riki{display:grid;gap:18px;position:relative;padding-left:22px}
+.riki::before{content:"";position:absolute;left:6px;top:28px;bottom:28px;width:2px;background:repeating-linear-gradient(180deg,var(--c-line-strong) 0 5px,transparent 5px 10px);opacity:.55}
+.riks{flex-direction:row;align-items:stretch}
+.riks::before{content:"";position:absolute;left:-22px;top:50%;width:16px;height:2px;background:var(--c-line-strong);opacity:.55}
+.riks .tool{flex:none;width:180px;background:var(--c-sunk);display:grid;place-items:center;position:relative}
+.riks .ftxt{padding:18px 20px;align-content:center}
+.riks h3{font-size:21px}
+.tagnr{font:600 12px/1 var(--ff-body);letter-spacing:.08em;text-transform:uppercase;color:var(--c-muted);display:flex;gap:8px;align-items:center}
+.tagnr b{font:700 12px/1 var(--ff-body);color:var(--c-accent-strong)}
+.riks-saite{font:600 15px/1 var(--ff-body);color:var(--c-accent-strong);display:inline-flex;gap:6px;align-items:center;margin-top:4px}
+.riks-saite svg{width:16px;height:16px}
+.player{background:var(--c-surface);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-1)}
+.player .play{width:30px;height:30px;border-radius:50%;background:var(--c-accent);display:grid;place-items:center;color:#fff}
+.player .play svg{width:12px;height:12px;fill:currentColor}
+.vilni{display:flex;gap:3px;align-items:center;height:26px}
+.vilni i{width:3px;border-radius:2px;background:var(--c-sage-ink);opacity:.7}
+.ex{display:grid;gap:10px;justify-items:center}
+.ex-s{background:var(--c-surface);border-radius:12px;padding:8px 12px;font:italic 500 15px/1.2 var(--ff-display);box-shadow:var(--shadow-1)}
+.ex-s u{text-decoration:none;color:var(--c-success);border-bottom:2px solid var(--c-success)}
+.ring{width:54px;height:54px;border-radius:50%;background:conic-gradient(var(--c-success) 75%,var(--c-line) 0);display:grid;place-items:center}
+.ring span{width:42px;height:42px;border-radius:50%;background:var(--c-sunk);display:grid;place-items:center;font:700 14px/1 var(--ff-body)}
+.druka{grid-column:span 8;flex-direction:row;align-items:center;justify-content:space-between;padding-right:60px;min-height:200px}
+.druka .ftxt{max-width:440px;padding:28px}
+.stack{position:relative;width:200px;height:150px;flex:none}
+.stack i{position:absolute;width:118px;height:150px;background:var(--c-surface);border:1px solid var(--c-line);border-radius:6px;box-shadow:var(--shadow-1)}
+.stack i:nth-child(1){transform:rotate(-8deg);left:30px;background:#F2EBDF}
+.stack i:nth-child(2){transform:rotate(5deg);left:62px;background:#F7F2E9}
+.stack i:nth-child(3){left:44px;padding:16px 14px;display:grid;gap:8px;align-content:start}
+.stack i:nth-child(3) b{display:block;height:8px;border-radius:4px;background:var(--c-line)}
+.stack i:nth-child(3) b:first-child{width:70%;background:var(--c-brand);opacity:.7;height:9px}
+.stack i:nth-child(3) em{position:absolute;bottom:10px;right:10px;font:700 11px/1 var(--ff-body);font-style:normal;color:var(--c-muted)}
+.visi{grid-column:span 4;background:var(--c-forest);border-color:var(--c-forest);color:var(--c-on-forest);justify-content:space-between;padding:28px;min-height:200px;overflow:hidden}
+.visi small{font:600 13px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-on-forest-muted)}
+.visi b{font:500 34px/1.1 var(--ff-display);display:block;margin-top:10px}
+.visi .go{width:52px;height:52px;border-radius:50%;background:var(--c-accent);color:#fff;display:grid;place-items:center;align-self:flex-end;position:relative;z-index:1}
+.visi svg.pines{position:absolute;left:0;right:0;bottom:0;height:70px;width:100%;opacity:.5}
+
+/* placeholder section */
+.ph-section{border:2px dashed #C9A86A;background:var(--c-warn-bg);border-radius:var(--r-lg);padding:32px 36px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center}
+.ph-section p{color:var(--c-warn);font-size:16px;max-width:70ch}
+.ph-badge{font:700 12px/1 var(--ff-body);letter-spacing:.08em;text-transform:uppercase;background:var(--c-warn);color:#fff;border-radius:var(--r-pill);padding:7px 12px}
+
+/* footer */
+.foot-scene{height:180px;margin-top:-1px}
+.foot-scene svg{width:100%;height:100%}
+.footer{background:var(--c-forest);color:var(--c-on-forest);padding:40px 56px 0;margin-top:-1px}
+.fcols{display:grid;gap:32px;grid-template-columns:1.5fr repeat(3,1fr);padding-bottom:36px}
+.logo-light{height:44px;width:auto;filter:brightness(0) invert(.93) sepia(.25)}
+.fbrand p{color:var(--c-on-forest-muted);margin-top:12px;font:italic 400 18px/1.4 var(--ff-display)}
+.fbrand small{display:block;color:var(--c-on-forest-muted);font-size:15px;margin-top:6px}
+.fcol h5{font:600 12px/1.3 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-on-forest-muted);margin:0 0 10px}
+.fcol ul{display:grid;gap:2px}
+.fcol a{color:var(--c-on-forest);text-decoration:none;font-size:15px;display:inline-flex;align-items:center;min-height:32px}
+.fcol a:hover{text-decoration:underline;text-underline-offset:4px}
+.fcol a.flag::after{content:"?";margin-left:6px;width:16px;height:16px;border-radius:50%;background:#C9A86A;color:var(--c-forest);font:700 11px/16px var(--ff-body);text-align:center}
+.fbar{background:var(--c-forest-2);margin:0 -56px;padding:14px 56px;display:flex;gap:8px 20px;flex-wrap:wrap;justify-content:space-between;font-size:14px;color:var(--c-on-forest-muted)}
+.fbar a{color:var(--c-on-forest)}
+
+/* inner strip */
+.strip{position:relative;height:280px;overflow:hidden}
+.strip>.scene{position:absolute;inset:0}
+.strip::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,var(--c-bg) 0%,rgb(246 241 232/.92) 36%,rgb(246 241 232/0) 64%)}
+.strip-copy{position:absolute;inset:0;z-index:2;display:grid;align-content:center;gap:12px;padding:0 56px;max-width:720px}
+.crumbs{font:600 13px/1 var(--ff-body);color:var(--c-muted);letter-spacing:.06em;text-transform:uppercase;display:flex;gap:8px}
+.crumbs a{color:var(--c-muted);text-decoration:none}
+.strip-copy h1{font:600 52px/1.1 var(--ff-display);color:var(--c-brand)}
+.strip-copy h1 em{font-weight:400}
+.strip-copy p{font-size:19px;line-height:1.5;max-width:48ch}
+
+/* kursi */
+.group{padding:56px 56px 0}
+.group-h{display:flex;align-items:baseline;gap:16px;margin-bottom:22px;border-bottom:1px solid var(--c-line);padding-bottom:14px}
+.group-h h2{font:500 32px/1.15 var(--ff-display)}
+.group-h span{color:var(--c-muted);font-size:16px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{position:relative;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-1);display:flex;flex-direction:column}
+.card-cover{aspect-ratio:15/8;overflow:hidden}
+.card-cover svg{height:100%}
+.card-body{padding:16px 18px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:1}
+.card h3{font:600 20px/1.25 var(--ff-display)}
+.card .btn{width:100%;margin-top:6px}
+.card-body .cta-wrap{margin-top:auto;padding-top:6px;width:100%}
+.howto{grid-column:span 2;background:#EFE8DC;border:1px solid var(--c-line);border-radius:var(--r-md);padding:24px 26px;display:grid;gap:14px;align-content:start}
+.howto h3{font:600 22px/1.25 var(--ff-display)}
+.howto ol{margin:0;padding:0;list-style:none;display:grid;gap:12px;counter-reset:s}
+.howto li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;font-size:16px;counter-increment:s}
+.howto li::before{content:counter(s);width:34px;height:34px;border-radius:50%;background:var(--c-surface);border:1.5px solid var(--c-line-strong);display:grid;place-items:center;font:700 15px/1 var(--ff-body)}
+.howto li b{display:block}
+.howto li>span>span{display:block;color:var(--c-muted);font-size:15px}
+.consent-note{font-size:14px;color:var(--c-muted)}
+.consent-note a{color:var(--c-accent-strong)}
+
+/* materials list */
+.toolbar{display:flex;justify-content:space-between;align-items:center;padding:28px 56px 0}
+.seg{display:inline-flex;background:var(--c-sunk);border-radius:var(--r-pill);padding:4px;gap:2px}
+.seg button{font:600 15px/1 var(--ff-body);border:0;background:none;border-radius:var(--r-pill);padding:0 18px;min-height:40px;display:inline-flex;align-items:center;gap:8px;color:var(--c-ink);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--c-surface);box-shadow:var(--shadow-1);color:var(--c-accent-strong)}
+.seg em{font-style:normal;font:700 12px/1 var(--ff-body);background:rgb(36 33 30/.08);border-radius:var(--r-pill);padding:4px 7px}
+.seg button[aria-pressed="true"] em{background:var(--c-accent-soft)}
+.count{font-size:15px;color:var(--c-muted)}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding:24px 56px 0}
+.mcard .card-cover{position:relative}
+.mcard .greet{position:absolute;left:18px;bottom:16px;z-index:1;display:grid;gap:4px}
+.mcard .greet b{font:italic 500 26px/1.1 var(--ff-display);color:#FFFDF8;text-shadow:0 1px 12px rgb(23 35 31/.5)}
+.mcard .greet small{font:600 12px/1 var(--ff-body);letter-spacing:.12em;text-transform:uppercase;color:#FFFDF8;opacity:.9}
+.meta{display:flex;gap:8px;align-items:center;font-size:14px;color:var(--c-muted)}
+.mcard h2{font:600 22px/1.25 var(--ff-display)}
+.mcard h2 a{color:var(--c-ink);text-decoration:none}
+.mcard h2 a::after{content:"";position:absolute;inset:0;z-index:2}
+.mcard p{font-size:16px;color:var(--c-muted)}
+.mcard .card-body{align-items:stretch}
+.mcard .card-body .meta{align-self:flex-start}
+.mcard .card-cover::after{content:"";position:absolute;inset:45% 0 0 0;background:linear-gradient(180deg,rgb(23 35 31/0),rgb(23 35 31/.55))}
+.inc{font-size:14px;color:var(--c-muted)}
+.inc b{color:var(--c-ink);font-weight:600}
+.dati{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--c-line);border-bottom:1px solid var(--c-line);margin:4px 0;padding:10px 0}
+.dati div{display:grid;justify-items:start}
+.dati dd{margin:0;font:700 20px/1.1 var(--ff-body);font-variant-numeric:tabular-nums;order:-1}
+.dati dt{font-size:13px;color:var(--c-muted)}
+.mfoot{display:flex;justify-content:space-between;align-items:center;font:600 16px/1 var(--ff-body);color:var(--c-accent-strong)}
+.mfoot span{width:38px;height:38px;border-radius:50%;background:var(--c-accent-soft);display:grid;place-items:center}
+.mfoot svg{width:16px;height:16px}
+.soon>.chip{align-self:flex-start}
+.soon{border-style:dashed;background:transparent;box-shadow:none;padding:28px;justify-content:center;gap:10px;min-height:100%}
+.soon h2{font:600 22px/1.25 var(--ff-display)}
+.soon p{color:var(--c-muted)}
+
+/* lesson */
+.lstrip{height:380px}
+.lstrip .strip-copy{gap:12px;max-width:780px}
+.back{font:600 15px/1 var(--ff-body);color:var(--c-accent-strong);text-decoration:none;display:inline-flex;gap:6px;align-items:center;min-height:32px}
+.back svg{width:16px;height:16px}
+.es-line{display:block;font:italic 400 30px/1.1 var(--ff-display);color:var(--c-brand);margin-bottom:4px}
+.lstrip h1{font-size:46px}
+.lstats{display:flex;gap:22px;font-size:16px;color:var(--c-muted)}
+.lstats strong{font:700 19px/1 var(--ff-body);color:var(--c-ink);margin-right:4px}
+.lbtns{display:flex;gap:10px;margin-top:4px}
+.lay{display:grid;grid-template-columns:230px 1fr;gap:48px;padding:40px 56px 64px;align-items:start}
+.ltoc{position:sticky;top:20px;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);padding:16px 12px;display:grid;gap:2px}
+.ltoc .lbl{font:600 12px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted);padding:4px 10px 10px}
+.ltoc a{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:10px;color:var(--c-ink);text-decoration:none;font-weight:600;font-size:16px;position:relative}
+.ltoc a span{width:26px;height:26px;border-radius:50%;background:var(--c-sunk);display:grid;place-items:center;font:700 13px/1 var(--ff-body);color:var(--c-muted)}
+.ltoc a:hover{background:var(--c-sunk)}
+.ltoc a.aktivs{background:var(--c-accent-soft);color:var(--c-accent-strong)}
+.ltoc a.aktivs span{background:var(--c-accent);color:#fff}
+.sadala h2{font:500 32px/1.2 var(--ff-display);display:flex;gap:14px;align-items:center}
+.mat-nr{width:40px;height:40px;border-radius:50%;background:var(--c-brand);color:#fff;font:600 19px/1 var(--ff-display);display:grid;place-items:center;flex:none}
+.sadala .intro{color:var(--c-muted);margin:10px 0 22px;max-width:70ch}
+.art-el{color:var(--c-info);font-weight:700}
+.art-la{color:var(--c-accent-strong);font-weight:700}
+.vgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.vk{position:relative;background:var(--c-surface);border:1px solid var(--c-line);border-radius:16px;min-height:132px;display:grid;place-items:center;text-align:center;padding:18px 14px;box-shadow:var(--shadow-1);gap:6px;align-content:center}
+.vk .em{font-size:28px;line-height:1}
+.vk .w{font:500 19px/1.25 var(--ff-display)}
+.vk.flip{background:var(--c-sage);border-color:transparent}
+.vk.flip .w{font-family:var(--ff-body);font-weight:600;font-size:17px;color:var(--c-sage-ink)}
+.vk .snd{position:absolute;top:8px;right:8px;width:36px;height:36px;border-radius:50%;background:var(--c-sunk);display:grid;place-items:center;color:var(--c-ink)}
+.vk .snd svg{width:16px;height:16px}
+
+/* 404 */
+.nf{padding:64px 56px 24px;display:grid;justify-items:center;text-align:center;gap:14px}
+.nf h1{font:600 48px/1.1 var(--ff-display);color:var(--c-brand);max-width:20ch}
+.nf h1 em{font-weight:400}
+.nf p{font-size:19px;max-width:52ch;color:var(--c-ink)}
+.nf .code{font:600 13px/1 var(--ff-body);letter-spacing:.14em;text-transform:uppercase;color:var(--c-muted)}
+
+/* states */
+.states{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px}
+.state{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);padding:24px 22px;display:grid;justify-items:center;text-align:center;gap:10px;box-shadow:var(--shadow-1);align-content:start}
+.state .tag{font:600 12px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:var(--c-muted)}
+.state h4{font:600 20px/1.25 var(--ff-display)}
+.state p{font-size:15px;color:var(--c-muted)}
+.state .es{font-style:italic;color:var(--c-brand);font-family:var(--ff-display)}
+.toasts{grid-column:span 2}
+@media (max-width:700px){.toasts{grid-column:auto}}
+.toastx{display:flex;gap:12px;align-items:center;background:var(--c-surface);border-radius:var(--r-sm);box-shadow:var(--shadow-3);padding:14px 18px;border-left:4px solid var(--c-success);font-weight:600;font-size:15px;text-align:left}
+.toastx.err{border-left-color:var(--c-error)}
+.toastx svg{width:20px;height:20px;flex:none}
+
+/* ---------- MOBILE (inside .ph) ---------- */
+.mh{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--c-bg);position:relative;z-index:5}
+.mh.over{background:transparent}
+.mh .logo img{height:38px;width:auto}
+.mh .sp{flex:1}
+.icon-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--c-line-strong);background:var(--c-surface);display:grid;place-items:center;color:var(--c-ink);padding:0}
+.icon-btn svg{width:20px;height:20px}
+.icon-btn.on{background:var(--c-ink);border-color:var(--c-ink);color:var(--c-bg)}
+.m-hero{background:linear-gradient(180deg,var(--sc-sky1),var(--sc-sky2));padding:14px 16px 22px;display:grid;gap:14px;text-align:center;justify-items:center}
+.m-hero h1{font:600 40px/1.04 var(--ff-display);letter-spacing:-.015em;color:var(--c-brand)}
+.m-hero h1 em{font-weight:400}
+.m-hero .lead{font-size:18px;line-height:1.5}
+.m-hero .stack-ctas{display:grid;gap:10px;width:100%;margin-top:2px}
+.m-hero .btn{width:100%}
+.m-scene{position:relative;height:270px}
+.m-scene>svg{position:absolute;inset:0;height:100%}
+.m-feats{display:grid;gap:0;padding:8px 16px;border-bottom:1px solid var(--c-line)}
+.m-feats .feat{padding:12px 0;font-size:16px;border:0}
+.m-feats .feat+.feat{border-top:1px solid var(--c-line);border-left:0}
+.m-sec{padding:56px 16px}
+.m-sec .h2{font-size:30px;margin:8px 0 10px}
+.m-sec>p{color:var(--c-muted);margin-bottom:20px}
+.m-track{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow-1);margin-bottom:16px}
+.m-track .cov{aspect-ratio:15/6}
+.m-track .cov svg{height:100%}
+.m-track .track-b{padding:16px 18px 18px}
+.m-track h3{font-size:22px}
+.m-track .steps span{padding:6px 8px;font-size:12px}
+.m-bento{display:grid;gap:14px}
+.m-bento .bento-hub{grid-template-columns:1fr;padding:12px;gap:12px;border-radius:24px}
+.m-bento .bento-hub-galva{flex-direction:column;align-items:flex-start;gap:6px;padding:4px}
+.m-bento .galvena .cov{height:190px}
+.m-bento .ui-card{left:14px;bottom:14px;padding:10px 14px 10px 10px}
+.m-bento .ui-card b{font-size:17px}
+.m-bento .ui-word{display:none}
+.m-bento .ftxt{padding:16px 16px 18px}
+.m-bento .ftxt h3{font-size:21px}
+.m-bento .stats{gap:10px;flex-wrap:wrap;font-size:14px}
+.m-bento .stats strong{font-size:16px}
+.m-bento .riki{padding-left:18px;gap:12px}
+.m-bento .riki::before{left:5px}
+.m-bento .riks::before{left:-18px;width:13px}
+.m-bento .riks{flex-direction:column}
+.m-bento .riks .tool{width:auto;height:96px}
+.m-bento .druka,.m-bento .visi{grid-column:auto}
+.m-bento .druka{flex-direction:column;align-items:stretch;padding:0;min-height:0}
+.m-bento .druka .stack{display:none}
+.m-bento .druka .ftxt{padding:20px}
+.m-bento .visi{min-height:150px;flex-direction:row;align-items:flex-end}
+.m-bento .visi b{font-size:28px}
+.m-ph-section{grid-template-columns:1fr;padding:22px 18px}
+.m-foot-scene{height:120px}
+.m-foot-scene svg{width:100%;height:100%}
+.m-footer{background:var(--c-forest);color:var(--c-on-forest);padding:28px 16px 0;margin-top:-1px}
+.m-footer .fcols{grid-template-columns:1fr 1fr;gap:24px 16px;padding-bottom:24px}
+.m-footer .fbrand{grid-column:1/-1}
+.m-footer .fcol a{min-height:44px;font-size:16px}
+.m-footer .fcol.wide{grid-column:1/-1}
+.m-footer .fbar{margin:0 -16px;padding:14px 16px;flex-direction:column}
+.m-strip-title{padding:16px 16px 18px;display:grid;gap:10px}
+.m-strip-title h1{font:600 34px/1.1 var(--ff-display);color:var(--c-brand)}
+.m-strip-title h1 em{font-weight:400}
+.m-strip-title p{font-size:17px}
+.m-band{height:120px;position:relative}
+.m-band svg{position:absolute;inset:0;height:100%}
+.m-group{padding:32px 16px 0}
+.m-group .group-h{flex-direction:column;gap:2px;align-items:flex-start}
+.m-group .group-h h2{font-size:26px}
+.m-group .cards{grid-template-columns:1fr;gap:16px}
+.m-group .card-cover{aspect-ratio:12/5}
+.m-group .howto{grid-column:auto;padding:20px}
+.sheet{position:absolute;inset:64px 0 0 0;background:var(--c-bg);z-index:6;display:flex;flex-direction:column;border-top:1px solid var(--c-line)}
+.sheet ul{padding:8px 16px}
+.sheet li a{display:flex;align-items:center;justify-content:space-between;min-height:60px;font:500 22px/1.2 var(--ff-display);color:var(--c-ink);text-decoration:none;border-bottom:1px solid var(--c-line);padding-left:16px;position:relative}
+.sheet li a svg{width:20px;height:20px;color:var(--c-muted)}
+.sheet li a[aria-current="page"]{color:var(--c-brand)}
+.sheet li a[aria-current="page"]::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:2px;background:var(--c-brand)}
+.sheet .sheet-cta{padding:20px 16px;display:grid;gap:10px}
+.sheet .sheet-cta .btn{width:100%}
+.sheet .sheet-cta small{font-size:14px;color:var(--c-muted);text-align:center}
+.sheet-strip{margin-top:auto;height:150px}
+.sheet-strip svg{width:100%;height:100%}
+.dim{position:absolute;inset:0;background:rgb(30 46 41/.0)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:1ms!important}
+  .empa-kadrs-0{visibility:visible}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-diag" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></g></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></g></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></g></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></g></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-groups" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.6c2.6.2 4.4 2 5 5.4"/></g></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></g></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></g></symbol>
+    <symbol id="i-ok" viewBox="0 0 24 24"><g fill="none" stroke="#2E6A47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/></g></symbol>
+    <symbol id="i-err" viewBox="0 0 24 24"><g fill="none" stroke="#A4282A" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></g></symbol>
+    <symbol id="pine" viewBox="0 0 40 100">
+      <path d="M20 0 L29 20 L24 20 L33 40 L27 40 L37 64 L30 64 L40 86 L23 86 L23 100 L17 100 L17 86 L0 86 L10 64 L3 64 L13 40 L7 40 L16 20 L11 20 Z"/>
+    </symbol>
+
+    <g id="sc-sun" style="opacity:var(--sc-sun-o)">
+      <circle cx="1010" cy="452" r="170" style="fill:var(--sc-sun)" opacity=".22"/>
+      <circle cx="1010" cy="452" r="105" style="fill:var(--sc-sun)" opacity=".35"/>
+      <circle cx="1010" cy="452" r="62" style="fill:var(--sc-sun)"/>
+    </g>
+    <g id="sc-clouds" style="fill:var(--sc-cloud)" opacity=".6">
+      <ellipse cx="230" cy="150" rx="150" ry="16"/><ellipse cx="300" cy="134" rx="80" ry="14"/>
+      <ellipse cx="1180" cy="70" rx="170" ry="15"/><ellipse cx="1110" cy="56" rx="70" ry="12"/>
+      <ellipse cx="760" cy="300" rx="120" ry="9" opacity=".7"/>
+    </g>
+    <g id="sc-birds" style="fill:var(--sc-bird)" opacity=".85" transform="translate(110 100)">
+      <path d="M1180 150 C1188 141 1197 140 1204 147 C1210 139 1220 136 1232 140 C1221 142 1213 148 1208 155 C1201 151 1192 149 1180 150 Z"/>
+      <path d="M1236 188 C1242 181 1249 181 1254 186 C1259 180 1266 178 1275 181 C1267 183 1261 187 1257 192 C1251 189 1244 188 1236 188 Z"/>
+    </g>
+
+    <g id="sc-far">
+      <path style="fill:var(--sc-far)" d="M-60 480 L-60 430 L20 424 L90 410 L150 396 L205 400 L262 368 L300 356 L330 348 L362 358 L398 374 L440 364 L490 384 L560 398 L640 414 L720 432 L800 444 L880 448 L960 452 L1040 456 L1060 480 Z"/>
+      <path style="fill:var(--sc-far2)" d="M640 480 L700 452 L780 440 L860 446 L930 438 L1000 448 L1040 470 L1040 480 Z" opacity=".8"/>
+      <path style="fill:var(--sc-far)" d="M1030 480 L1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 480 Z"/>
+      <path style="fill:var(--sc-chalk)" d="M1030 480 L1056 410 L1066 404 L1080 414 L1074 444 L1082 480 Z M1150 480 L1160 450 L1176 436 L1190 452 L1196 480 Z"/>
+      <!-- windmill (Spain) -->
+      <g style="fill:var(--sc-landmark)">
+        <path d="M323 350 L325 324 L335 324 L337 350 Z"/><path d="M322 325 L330 314 L338 325 Z"/>
+        <g style="stroke:var(--sc-landmark)" stroke-width="2.2" stroke-linecap="round"><path d="M330 322 L318 306 M330 322 L346 310 M330 322 L342 338 M330 322 L314 334"/></g>
+      </g>
+      <!-- lighthouse (England) -->
+      <g>
+        <path style="fill:var(--sc-landmark)" d="M1174 394 L1176 358 L1184 358 L1186 394 Z"/>
+        <path style="fill:var(--sc-chalk)" d="M1175 382 L1185 382 L1185.6 388 L1174.6 388 Z M1176 368 L1184 368 L1184.4 374 L1175.6 374 Z"/>
+        <path style="fill:var(--sc-landmark)" d="M1173 358 L1187 358 L1187 355 L1173 355 Z M1175 355 L1180 347 L1185 355 Z"/>
+        <circle cx="1180" cy="352" r="2.6" style="fill:var(--sc-lamp)"/>
+      </g>
+      <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)">
+        <path d="M250 375 L262 368 L300 356 L330 348 L362 358 L380 366 L364 366 L344 360 L322 362 L300 368 L276 372 Z"/>
+        <path d="M426 370 L440 364 L470 376 L452 375 Z"/>
+        <path d="M1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 398 L1380 394 L1300 402 L1220 399 L1140 404 L1066 408 Z"/>
+      </g>
+    </g>
+
+    <g id="sc-lake">
+      <rect x="-60" y="466" width="1560" height="460" style="fill:var(--sc-lake)"/>
+      <rect x="-60" y="466" width="1560" height="40" fill="url(#haze)" opacity=".7"/>
+      <g style="fill:var(--sc-glint)" opacity=".7">
+        <rect x="960" y="486" width="100" height="2.4" rx="1.2"/><rect x="985" y="498" width="56" height="2" rx="1"/>
+        <rect x="1000" y="511" width="34" height="2" rx="1"/><rect x="900" y="494" width="30" height="1.6" rx=".8"/>
+        <rect x="610" y="520" width="44" height="1.6" rx=".8" opacity=".6"/>
+      </g>
+    </g>
+
+    <g id="sc-mid">
+      <path style="fill:var(--sc-mid)" d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640 L540 926 L-60 926 Z"/>
+      <path style="fill:var(--sc-mid)" d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650 L950 926 L1500 926 Z"/>
+      <rect x="-60" y="462" width="1560" height="60" fill="url(#haze)" opacity=".45"/>
+      <path d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+      <path d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+      <g style="fill:var(--sc-mid2)"><use href="#pine" x="6.8" y="461.6" width="6.4" height="16.0"/><use href="#pine" x="34.9" y="455.8" width="8.0" height="20.0"/><use href="#pine" x="52.6" y="448.4" width="10.5" height="26.2"/><use href="#pine" x="77.2" y="452.6" width="8.2" height="20.6"/><use href="#pine" x="102.5" y="446.1" width="10.6" height="26.6"/><use href="#pine" x="126.3" y="448.9" width="10.2" height="25.6"/><use href="#pine" x="150.8" y="449.1" width="11.0" height="27.4"/><use href="#pine" x="171.5" y="456.8" width="8.5" height="21.2"/><use href="#pine" x="196.5" y="454.6" width="10.3" height="25.8"/><use href="#pine" x="213.3" y="458.1" width="10.2" height="25.6"/><use href="#pine" x="235.1" y="459.3" width="11.6" height="28.9"/><use href="#pine" x="264.7" y="475.9" width="7.1" height="17.7"/><use href="#pine" x="285.6" y="469.9" width="11.6" height="28.9"/><use href="#pine" x="312.1" y="480.3" width="10.0" height="25.0"/><use href="#pine" x="1235.0" y="469.1" width="10.0" height="24.9"/><use href="#pine" x="1268.8" y="469.0" width="7.4" height="18.5"/><use href="#pine" x="1291.1" y="458.8" width="9.6" height="24.0"/><use href="#pine" x="1316.0" y="465.8" width="6.3" height="15.8"/><use href="#pine" x="1338.1" y="462.0" width="7.7" height="19.1"/><use href="#pine" x="1359.6" y="455.5" width="10.1" height="25.2"/><use href="#pine" x="1387.1" y="457.4" width="9.1" height="22.8"/><use href="#pine" x="1420.7" y="464.8" width="5.9" height="14.7"/><use href="#pine" x="1441.9" y="458.4" width="8.3" height="20.7"/></g>
+    </g>
+
+    <g id="sc-near">
+      <path style="fill:var(--sc-near)" d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582 L1500 926 L-60 926 Z"/>
+      <path d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="7"/>
+      <g style="fill:var(--sc-near2)"><use href="#pine" x="-34.6" y="505.2" width="29.1" height="72.8"/><use href="#pine" x="-18.7" y="475.8" width="39.6" height="99.1"/><use href="#pine" x="6.0" y="502.3" width="27.9" height="69.7"/><use href="#pine" x="26.3" y="482.6" width="34.4" height="85.9"/><use href="#pine" x="60.7" y="486.8" width="31.1" height="77.8"/><use href="#pine" x="82.5" y="490.8" width="28.8" height="71.9"/><use href="#pine" x="105.5" y="491.0" width="27.9" height="69.7"/><use href="#pine" x="130.6" y="490.6" width="27.2" height="68.0"/><use href="#pine" x="154.1" y="476.0" width="33.3" height="83.2"/><use href="#pine" x="172.7" y="461.5" width="39.6" height="99.0"/><use href="#pine" x="198.5" y="465.3" width="38.6" height="96.6"/><use href="#pine" x="229.1" y="479.2" width="33.7" height="84.3"/><use href="#pine" x="256.8" y="487.7" width="30.9" height="77.3"/><use href="#pine" x="1031.4" y="532.1" width="37.2" height="93.1"/><use href="#pine" x="1060.7" y="538.2" width="32.8" height="82.0"/><use href="#pine" x="1086.4" y="539.6" width="30.5" height="76.2"/><use href="#pine" x="1115.2" y="547.5" width="25.5" height="63.9"/><use href="#pine" x="1137.8" y="520.7" width="34.5" height="86.1"/><use href="#pine" x="1180.1" y="547.5" width="21.3" height="53.3"/><use href="#pine" x="1344.7" y="529.8" width="23.4" height="58.6"/><use href="#pine" x="1376.8" y="534.3" width="22.0" height="54.9"/><use href="#pine" x="1400.7" y="513.4" width="30.6" height="76.5"/><use href="#pine" x="1420.0" y="498.2" width="36.9" height="92.2"/></g>
+      <!-- cabins with windows that light up in the evening scene -->
+      <g>
+        <circle cx="1238" cy="584" r="22" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+        <circle cx="1312" cy="580" r="18" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+        <path style="fill:var(--sc-cabin)" d="M1222 596 L1222 582 L1238 570 L1254 582 L1254 596 Z M1298 592 L1298 580 L1311 570 L1324 580 L1324 592 Z"/>
+        <path style="fill:var(--sc-snow);opacity:var(--sc-snow-o)" d="M1220 583 L1238 568 L1256 583 L1252 583 L1238 572 L1224 583 Z M1296 581 L1311 568 L1326 581 L1322 581 L1311 572 L1300 581 Z"/>
+        <rect x="1233" y="584" width="7" height="6" style="fill:var(--sc-window)"/><rect x="1307" y="582" width="6" height="5" style="fill:var(--sc-window)"/>
+      </g>
+    </g>
+
+    <g id="sc-path">
+      <path style="fill:var(--sc-path)" d="M262 926 C330 806 420 744 520 712 C600 690 660 672 716 658 L734 659 C690 674 630 694 566 718 C470 754 410 820 396 926 Z"/>
+      <g style="opacity:var(--sc-bunting-o)"><path d="M372 590 L372 700 M760 548 L760 650" stroke="#4A3A2E" stroke-width="4" stroke-linecap="round"/><path d="M372,652 Q540,676 760,606" fill="none" stroke="#5C554D" stroke-width="2"/><path d="M396.3 654.9 L409.8 656.2 L403.1 689.6 Z" fill="#8FB09A"/><path d="M421.1 656.9 L434.9 657.6 L428.0 691.3 Z" fill="#B9B6CC"/><path d="M446.4 658.0 L460.5 658.1 L453.5 692.0 Z" fill="#F3E9D8"/><path d="M472.2 658.0 L486.7 657.7 L479.5 691.9 Z" fill="#B4502A"/><path d="M498.6 657.2 L513.4 656.3 L506.0 690.7 Z" fill="#8FB09A"/><path d="M525.6 655.3 L540.6 653.9 L533.1 688.6 Z" fill="#B9B6CC"/><path d="M553.0 652.5 L568.3 650.5 L560.7 685.5 Z" fill="#F3E9D8"/><path d="M581.0 648.7 L596.6 646.3 L588.8 681.5 Z" fill="#B4502A"/><path d="M609.5 644.0 L625.4 641.0 L617.4 676.5 Z" fill="#8FB09A"/><path d="M638.5 638.3 L654.7 634.8 L646.6 670.6 Z" fill="#B9B6CC"/><path d="M668.1 631.7 L684.6 627.6 L676.3 663.7 Z" fill="#F3E9D8"/><path d="M698.2 624.1 L715.0 619.5 L706.6 655.8 Z" fill="#B4502A"/><path d="M728.8 615.5 L745.9 610.4 L737.4 647.0 Z" fill="#8FB09A"/></g>
+    </g>
+
+    <g id="sc-front">
+      <path style="fill:var(--sc-front)" d="M-60 754 C60 736 170 752 250 796 L300 926 L-60 926 Z"/>
+      <path style="fill:var(--sc-front)" d="M1500 676 C1340 690 1220 748 1136 926 L1500 926 Z"/>
+      <use href="#pine" x="-126.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="-52.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="-10.0" y="505.0" width="160.0" height="400.0" style="fill:var(--sc-front)"/><use href="#pine" x="68.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="126.0" y="655.0" width="100.0" height="250.0" style="fill:var(--sc-front)"/><use href="#pine" x="184.0" y="715.0" width="76.0" height="190.0" style="fill:var(--sc-front)"/><use href="#pine" x="1138.0" y="695.0" width="84.0" height="210.0" style="fill:var(--sc-front)"/><use href="#pine" x="1172.0" y="625.0" width="112.0" height="280.0" style="fill:var(--sc-front)"/><use href="#pine" x="1212.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="1276.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="1304.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="1378.0" y="565.0" width="136.0" height="340.0" style="fill:var(--sc-front)"/><use href="#pine" x="1412.0" y="515.0" width="156.0" height="390.0" style="fill:var(--sc-front)"/><use href="#pine" x="-60.0" y="635.0" width="120.0" height="300.0" style="fill:var(--sc-deep)"/><use href="#pine" x="52.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1212.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1364.0" y="655.0" width="112.0" height="280.0" style="fill:var(--sc-deep)"/>
+      <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)"><circle cx="1282" cy="694" r="3.8"/><circle cx="1096" cy="133" r="1.6"/><circle cx="358" cy="-50" r="1.6"/><circle cx="888" cy="93" r="3.4"/><circle cx="705" cy="513" r="2.2"/><circle cx="1270" cy="96" r="2.5"/><circle cx="1288" cy="-11" r="2.8"/><circle cx="4" cy="720" r="3.1"/><circle cx="1328" cy="-101" r="3.8"/><circle cx="271" cy="771" r="3.0"/><circle cx="978" cy="125" r="2.1"/><circle cx="301" cy="399" r="1.7"/><circle cx="1108" cy="525" r="3.3"/><circle cx="717" cy="-90" r="1.9"/><circle cx="1323" cy="0" r="3.3"/><circle cx="1286" cy="-86" r="3.7"/><circle cx="1240" cy="793" r="3.9"/><circle cx="1101" cy="266" r="2.2"/><circle cx="1048" cy="692" r="2.6"/><circle cx="338" cy="252" r="3.7"/><circle cx="805" cy="203" r="3.1"/><circle cx="1058" cy="188" r="3.3"/><circle cx="609" cy="63" r="2.3"/><circle cx="1419" cy="795" r="3.1"/><circle cx="1256" cy="725" r="2.1"/><circle cx="929" cy="5" r="2.8"/><circle cx="803" cy="590" r="3.9"/><circle cx="694" cy="52" r="2.7"/><circle cx="239" cy="490" r="2.9"/><circle cx="809" cy="346" r="3.4"/><circle cx="522" cy="571" r="1.7"/><circle cx="430" cy="378" r="2.1"/><circle cx="1041" cy="148" r="2.2"/><circle cx="950" cy="275" r="1.8"/><circle cx="1113" cy="637" r="3.8"/><circle cx="1310" cy="506" r="3.9"/><circle cx="36" cy="581" r="3.0"/><circle cx="1043" cy="706" r="1.7"/><circle cx="196" cy="-46" r="1.9"/><circle cx="122" cy="-111" r="3.1"/><circle cx="1362" cy="57" r="1.9"/><circle cx="291" cy="501" r="2.2"/><circle cx="657" cy="794" r="2.6"/><circle cx="970" cy="592" r="2.6"/><circle cx="600" cy="-64" r="2.2"/><circle cx="1163" cy="776" r="2.0"/><circle cx="1333" cy="348" r="1.9"/><circle cx="303" cy="434" r="2.0"/><circle cx="112" cy="131" r="3.2"/><circle cx="801" cy="322" r="4.0"/><circle cx="108" cy="260" r="2.4"/><circle cx="6" cy="-114" r="2.6"/><circle cx="132" cy="96" r="3.8"/><circle cx="1120" cy="583" r="2.6"/><circle cx="1231" cy="765" r="3.5"/><circle cx="953" cy="406" r="2.4"/><circle cx="586" cy="337" r="2.8"/><circle cx="817" cy="544" r="3.2"/><circle cx="911" cy="551" r="3.7"/><circle cx="1217" cy="789" r="2.7"/><circle cx="701" cy="761" r="3.9"/><circle cx="515" cy="-47" r="2.4"/><circle cx="1271" cy="532" r="3.4"/><circle cx="1375" cy="604" r="2.1"/><circle cx="343" cy="615" r="1.8"/><circle cx="1318" cy="616" r="3.1"/><circle cx="1025" cy="373" r="2.7"/><circle cx="1256" cy="398" r="3.7"/><circle cx="390" cy="512" r="2.6"/><circle cx="569" cy="53" r="3.0"/></g>
+    </g>
+
+<g id="foot-scene">
+        <path d="M-20 150 C160 118 320 126 480 140 C640 154 760 120 920 112 C1080 104 1240 130 1460 118 L1460 240 L-20 240 Z" fill="#8FA3A6" opacity=".55"/>
+        <path d="M-20 178 C200 150 380 160 560 170 C760 182 900 150 1080 146 C1240 142 1340 160 1460 156 L1460 240 L-20 240 Z" fill="#5F7C6D"/>
+        <g fill="#526E60"><use href="#pine" x="-24.8" y="95.0" width="29.5" height="73.8"/><use href="#pine" x="4.6" y="105.4" width="25.9" height="64.7"/><use href="#pine" x="36.0" y="118.5" width="19.6" height="48.9"/><use href="#pine" x="66.4" y="124.5" width="16.6" height="41.5"/><use href="#pine" x="83.2" y="101.2" width="26.0" height="65.1"/><use href="#pine" x="115.8" y="123.2" width="18.0" height="44.9"/><use href="#pine" x="145.4" y="131.0" width="17.3" height="43.4"/><use href="#pine" x="164.4" y="136.8" width="14.7" height="36.7"/><use href="#pine" x="185.6" y="105.6" width="27.0" height="67.5"/><use href="#pine" x="203.7" y="104.0" width="26.4" height="66.0"/><use href="#pine" x="234.1" y="111.9" width="24.3" height="60.7"/><use href="#pine" x="259.8" y="107.6" width="26.7" height="66.8"/><use href="#pine" x="289.9" y="129.3" width="15.2" height="37.9"/><use href="#pine" x="310.0" y="108.3" width="24.2" height="60.4"/><use href="#pine" x="329.2" y="106.6" width="24.8" height="62.0"/><use href="#pine" x="357.2" y="129.7" width="18.4" height="46.1"/><use href="#pine" x="382.1" y="101.6" width="26.0" height="65.0"/><use href="#pine" x="404.0" y="111.8" width="25.5" height="63.7"/><use href="#pine" x="429.1" y="92.6" width="29.8" height="74.6"/><use href="#pine" x="456.3" y="122.0" width="21.5" height="53.8"/><use href="#pine" x="481.9" y="108.9" width="26.6" height="66.5"/><use href="#pine" x="515.1" y="132.3" width="17.6" height="44.0"/><use href="#pine" x="541.7" y="126.6" width="16.5" height="41.3"/><use href="#pine" x="571.6" y="139.1" width="15.3" height="38.4"/><use href="#pine" x="581.2" y="93.6" width="30.2" height="75.5"/><use href="#pine" x="615.0" y="129.8" width="19.1" height="47.6"/><use href="#pine" x="632.1" y="110.6" width="22.3" height="55.7"/><use href="#pine" x="657.2" y="118.1" width="19.8" height="49.6"/><use href="#pine" x="682.2" y="130.4" width="15.3" height="38.3"/><use href="#pine" x="694.0" y="104.7" width="25.0" height="62.4"/><use href="#pine" x="715.7" y="109.1" width="26.6" height="66.6"/><use href="#pine" x="741.7" y="122.1" width="20.9" height="52.3"/><use href="#pine" x="763.1" y="109.2" width="27.3" height="68.4"/><use href="#pine" x="794.0" y="113.2" width="24.5" height="61.3"/><use href="#pine" x="825.7" y="129.3" width="15.5" height="38.7"/><use href="#pine" x="848.8" y="119.7" width="21.6" height="54.1"/><use href="#pine" x="871.9" y="113.9" width="22.7" height="56.8"/><use href="#pine" x="893.1" y="127.5" width="15.7" height="39.3"/><use href="#pine" x="913.0" y="125.7" width="17.8" height="44.4"/><use href="#pine" x="939.2" y="129.3" width="15.3" height="38.2"/><use href="#pine" x="948.4" y="103.5" width="29.0" height="72.5"/><use href="#pine" x="969.7" y="125.9" width="19.7" height="49.4"/><use href="#pine" x="987.3" y="107.4" width="27.8" height="69.5"/><use href="#pine" x="1008.4" y="133.3" width="17.9" height="44.6"/><use href="#pine" x="1034.8" y="133.7" width="15.0" height="37.4"/><use href="#pine" x="1151.5" y="126.4" width="19.7" height="49.4"/><use href="#pine" x="1174.5" y="122.9" width="18.7" height="46.6"/><use href="#pine" x="1199.2" y="112.0" width="25.8" height="64.5"/><use href="#pine" x="1221.0" y="106.0" width="28.2" height="70.4"/><use href="#pine" x="1247.1" y="98.4" width="30.7" height="76.8"/><use href="#pine" x="1275.0" y="103.5" width="26.4" height="65.9"/><use href="#pine" x="1300.1" y="133.5" width="17.1" height="42.8"/><use href="#pine" x="1322.5" y="103.6" width="28.1" height="70.3"/><use href="#pine" x="1344.9" y="104.7" width="28.3" height="70.8"/><use href="#pine" x="1366.8" y="124.6" width="17.7" height="44.2"/><use href="#pine" x="1378.0" y="102.8" width="28.0" height="70.1"/><use href="#pine" x="1402.3" y="103.9" width="28.9" height="72.3"/><use href="#pine" x="1432.3" y="108.9" width="23.8" height="59.6"/></g>
+        <!-- lookout tower (skatu tornis) -->
+        <g fill="none" stroke="#2F4A40" stroke-width="3" stroke-linecap="round">
+          <path d="M1086 150 L1100 40 M1134 150 L1120 40 M1090 120 L1131 96 M1129 120 L1092 96 M1094 90 L1126 68 M1124 90 L1096 68 M1097 62 L1123 46"/>
+        </g>
+        <path d="M1092 40 L1128 40 L1128 26 L1092 26 Z M1088 26 L1110 12 L1132 26 Z" fill="#2F4A40"/>
+        <g fill="#2F4A40"><use href="#pine" x="-28.5" y="120.5" width="37.0" height="92.6"/><use href="#pine" x="-3.4" y="132.0" width="32.8" height="82.1"/><use href="#pine" x="12.2" y="108.1" width="41.5" height="103.8"/><use href="#pine" x="41.6" y="139.1" width="29.3" height="73.3"/><use href="#pine" x="53.7" y="94.6" width="47.9" height="119.8"/><use href="#pine" x="79.1" y="115.7" width="38.7" height="96.8"/><use href="#pine" x="100.4" y="120.3" width="37.9" height="94.8"/><use href="#pine" x="122.5" y="147.6" width="25.6" height="64.0"/><use href="#pine" x="130.2" y="99.6" width="46.2" height="115.5"/><use href="#pine" x="159.1" y="133.5" width="31.8" height="79.6"/><use href="#pine" x="180.5" y="144.5" width="26.6" height="66.5"/><use href="#pine" x="192.1" y="132.3" width="32.6" height="81.6"/><use href="#pine" x="206.8" y="131.6" width="33.4" height="83.4"/><use href="#pine" x="220.4" y="97.7" width="45.3" height="113.1"/><use href="#pine" x="247.4" y="148.2" width="25.7" height="64.3"/><use href="#pine" x="262.8" y="143.9" width="27.8" height="69.6"/><use href="#pine" x="276.6" y="107.4" width="42.9" height="107.3"/><use href="#pine" x="298.5" y="99.0" width="46.0" height="115.0"/><use href="#pine" x="324.0" y="112.5" width="39.4" height="98.4"/><use href="#pine" x="347.4" y="121.7" width="38.2" height="95.4"/><use href="#pine" x="367.4" y="88.7" width="49.5" height="123.6"/><use href="#pine" x="391.2" y="133.9" width="30.8" height="76.9"/><use href="#pine" x="409.8" y="112.0" width="42.1" height="105.2"/><use href="#pine" x="432.9" y="119.6" width="36.9" height="92.4"/><use href="#pine" x="452.5" y="100.3" width="44.5" height="111.2"/><use href="#pine" x="472.8" y="94.0" width="48.3" height="120.7"/><use href="#pine" x="493.4" y="104.3" width="42.4" height="106.0"/><use href="#pine" x="514.1" y="111.9" width="41.2" height="103.1"/><use href="#pine" x="536.1" y="106.3" width="41.6" height="104.0"/><use href="#pine" x="562.3" y="114.5" width="40.9" height="102.2"/><use href="#pine" x="583.7" y="112.9" width="39.5" height="98.8"/><use href="#pine" x="612.8" y="156.0" width="23.0" height="57.5"/><use href="#pine" x="624.2" y="92.8" width="49.0" height="122.4"/><use href="#pine" x="642.4" y="96.2" width="47.9" height="119.8"/><use href="#pine" x="673.3" y="145.5" width="27.8" height="69.5"/><use href="#pine" x="687.0" y="128.2" width="34.2" height="85.4"/><use href="#pine" x="696.9" y="105.4" width="43.6" height="109.1"/><use href="#pine" x="727.4" y="133.9" width="30.7" height="76.8"/><use href="#pine" x="748.6" y="135.8" width="31.0" height="77.6"/><use href="#pine" x="765.4" y="129.5" width="32.4" height="81.1"/><use href="#pine" x="782.8" y="124.8" width="36.1" height="90.3"/><use href="#pine" x="801.7" y="115.1" width="39.3" height="98.4"/><use href="#pine" x="828.6" y="130.1" width="35.0" height="87.4"/><use href="#pine" x="850.1" y="117.7" width="40.0" height="100.1"/><use href="#pine" x="877.0" y="155.4" width="23.8" height="59.6"/><use href="#pine" x="883.8" y="97.1" width="45.3" height="113.2"/><use href="#pine" x="901.5" y="110.6" width="40.5" height="101.3"/><use href="#pine" x="925.3" y="146.6" width="26.2" height="65.6"/><use href="#pine" x="941.8" y="114.0" width="39.4" height="98.5"/><use href="#pine" x="962.2" y="98.0" width="44.8" height="112.1"/><use href="#pine" x="985.3" y="95.3" width="48.3" height="120.9"/><use href="#pine" x="1012.7" y="152.8" width="23.5" height="58.6"/><use href="#pine" x="1035.2" y="139.0" width="29.9" height="74.8"/><use href="#pine" x="1049.6" y="112.5" width="41.7" height="104.1"/><use href="#pine" x="1081.2" y="146.3" width="25.5" height="63.8"/><use href="#pine" x="1103.0" y="154.0" width="24.8" height="62.0"/><use href="#pine" x="1111.1" y="104.9" width="43.3" height="108.4"/><use href="#pine" x="1141.6" y="148.4" width="26.7" height="66.7"/><use href="#pine" x="1160.5" y="119.9" width="39.2" height="98.0"/><use href="#pine" x="1179.5" y="94.8" width="46.6" height="116.5"/><use href="#pine" x="1198.0" y="109.4" width="41.4" height="103.4"/><use href="#pine" x="1213.1" y="90.7" width="49.2" height="123.0"/><use href="#pine" x="1236.9" y="113.5" width="40.4" height="100.9"/><use href="#pine" x="1258.6" y="142.8" width="27.4" height="68.5"/><use href="#pine" x="1271.6" y="89.0" width="49.5" height="123.7"/><use href="#pine" x="1299.2" y="122.5" width="35.4" height="88.5"/><use href="#pine" x="1318.4" y="117.3" width="37.1" height="92.8"/><use href="#pine" x="1346.7" y="143.1" width="28.2" height="70.4"/><use href="#pine" x="1358.5" y="129.5" width="34.3" height="85.6"/><use href="#pine" x="1379.7" y="159.3" width="23.0" height="57.4"/><use href="#pine" x="1392.8" y="99.2" width="46.6" height="116.5"/><use href="#pine" x="1415.5" y="102.3" width="45.3" height="113.2"/><use href="#pine" x="1437.9" y="127.7" width="35.1" height="87.7"/></g>
+        <path d="M-20 214 C240 196 520 210 760 206 C1000 202 1220 196 1460 204 L1460 240 L-20 240 Z" fill="#1E2E29"/>
+        <g fill="#1E2E29"><use href="#pine" x="-16.8" y="201.8" width="13.7" height="34.2"/><use href="#pine" x="7.2" y="204.0" width="12.8" height="32.0"/><use href="#pine" x="38.1" y="201.9" width="13.6" height="34.1"/><use href="#pine" x="62.4" y="193.7" width="16.9" height="42.3"/><use href="#pine" x="97.0" y="197.7" width="15.3" height="38.3"/><use href="#pine" x="120.2" y="181.7" width="21.7" height="54.3"/><use href="#pine" x="156.0" y="182.9" width="21.3" height="53.1"/><use href="#pine" x="196.9" y="199.9" width="14.5" height="36.1"/><use href="#pine" x="221.4" y="187.4" width="19.4" height="48.6"/><use href="#pine" x="250.4" y="185.9" width="20.1" height="50.1"/><use href="#pine" x="280.0" y="187.3" width="19.5" height="48.7"/><use href="#pine" x="315.7" y="177.0" width="23.6" height="59.0"/><use href="#pine" x="348.4" y="193.8" width="16.9" height="42.2"/><use href="#pine" x="385.4" y="180.9" width="22.1" height="55.1"/><use href="#pine" x="427.6" y="197.9" width="15.2" height="38.1"/><use href="#pine" x="462.3" y="174.6" width="24.6" height="61.4"/><use href="#pine" x="499.5" y="186.7" width="19.7" height="49.3"/><use href="#pine" x="531.0" y="175.6" width="24.2" height="60.4"/><use href="#pine" x="559.1" y="189.6" width="18.5" height="46.4"/><use href="#pine" x="587.0" y="179.8" width="22.5" height="56.2"/><use href="#pine" x="623.0" y="182.5" width="21.4" height="53.5"/><use href="#pine" x="660.7" y="205.8" width="12.1" height="30.2"/><use href="#pine" x="682.9" y="180.2" width="22.3" height="55.8"/><use href="#pine" x="720.0" y="204.9" width="12.5" height="31.1"/><use href="#pine" x="745.8" y="174.5" width="24.6" height="61.5"/><use href="#pine" x="767.8" y="173.6" width="25.0" height="62.4"/><use href="#pine" x="804.6" y="187.4" width="19.4" height="48.6"/><use href="#pine" x="839.6" y="174.9" width="24.4" height="61.1"/><use href="#pine" x="884.0" y="204.1" width="12.8" height="31.9"/><use href="#pine" x="917.4" y="193.7" width="16.9" height="42.3"/><use href="#pine" x="953.9" y="203.0" width="13.2" height="33.0"/><use href="#pine" x="983.4" y="203.3" width="13.1" height="32.7"/><use href="#pine" x="1008.9" y="193.4" width="17.0" height="42.6"/><use href="#pine" x="1036.4" y="192.8" width="17.3" height="43.2"/><use href="#pine" x="1058.6" y="192.5" width="17.4" height="43.5"/><use href="#pine" x="1085.3" y="178.8" width="22.9" height="57.2"/><use href="#pine" x="1127.2" y="204.2" width="12.7" height="31.8"/><use href="#pine" x="1153.6" y="186.6" width="19.8" height="49.4"/><use href="#pine" x="1190.0" y="201.4" width="13.8" height="34.6"/><use href="#pine" x="1212.3" y="192.3" width="17.5" height="43.7"/><use href="#pine" x="1236.0" y="196.6" width="15.8" height="39.4"/><use href="#pine" x="1270.5" y="199.7" width="14.5" height="36.3"/><use href="#pine" x="1305.2" y="175.9" width="24.0" height="60.1"/><use href="#pine" x="1342.2" y="200.6" width="14.2" height="35.4"/><use href="#pine" x="1368.1" y="182.2" width="21.5" height="53.8"/><use href="#pine" x="1397.0" y="191.2" width="17.9" height="44.8"/><use href="#pine" x="1424.9" y="192.7" width="17.3" height="43.3"/><use href="#pine" x="1453.0" y="205.8" width="12.1" height="30.2"/></g>
+</g>
+
+  </defs>
+</svg>
+
+<header class="doc-head wrap">
+  <div class="row">
+    <img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216">
+    <span class="eyebrow">4.–5. solis · izkārtojums un responsīvais dizains</span>
+  </div>
+  <h1 class="doc-title">Lapu <em>izkārtojumi</em></h1>
+  <p class="doc-lead">Visas lapas ar īsto vietnes saturu jaunajā stilā “Ceļš uz pasauli”. Struktūra katrai sadaļai: āķis → vērtība → pierādījums → darbība. Pilns apraksts: <code>layout.md</code>.
+    <small>Page layouts with real site copy in the approved style. Toggle “Rādīt klases” to see which existing class/id each block maps to.</small></p>
+</header>
+
+<nav class="toc" aria-label="Maketi">
+  <div class="wrap">
+    <a href="#sakums">Sākums</a><a href="#sakums-m">Sākums 360</a><a href="#kursi">Kursi</a><a href="#materiali">Materiāli</a><a href="#nodarbiba">Nodarbība</a><a href="#e404">404</a><a href="#izvelne">Izvēlne</a><a href="#kajene">Kājene</a><a href="#stavokli">Stāvokļi</a><a href="#vakars">Vakars</a>
+    <button class="toggle" type="button" aria-pressed="false" id="kToggle">Rādīt klases</button>
+  </div>
+</nav>
+
+<main>
+<!-- =================== HOME DESKTOP =================== -->
+<section class="blk wrap" id="sakums">
+  <div class="blk-h">
+    <span class="eyebrow">Sākumlapa · dators 1280 px</span>
+    <h2>Sākums: no ainavas līdz <em>kursam</em></h2>
+    <p>Hero (āķis) → 3 priekšrocības (vērtība) → kursu taka ar īstām cenām (pierādījums) → materiāli (darbība bez riska) → Par mums (vieta klienta saturam) → kājene.</p>
+    <p class="en">Home, full page. Hero hook, value strip, course path, restyled bento, About placeholder, footer.</p>
+  </div>
+  <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>index.html</span></div>
+  <div class="vp fit">
+    <section class="hero" data-k="section.hero-section">
+      <svg class="scene" viewBox="0 -100 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/>
+      </svg>
+      <header class="hd hd--over" data-k="header.site-header > .nav-wrapper" data-abs>
+        <a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a>
+        <nav data-k="nav.main-nav"><a href="#">Kursi</a><a href="#">Noderīgi materiāli</a><a href="#">Par mums</a></nav>
+        <a class="auth" href="#" data-k=".auth-box > .btn-signin"><svg class="i"><use href="#i-user"/></svg>Ienākt ar Google</a>
+      </header>
+      <div class="hero-copy" data-k=".hero-text" data-abs>
+        <span class="pill">Spāņu un angļu valoda · A1–B1</span>
+        <h1>Runā, saproti, ceļo, <em>audz!</em></h1>
+        <p class="lead" data-k=".hero-subtitle">Libertas palīdz atvērt durvis uz pasauli caur valodu spēku.</p>
+        <div class="ctas" data-k=".hero-cta-box">
+          <a class="btn btn-primary" href="#" data-k="#exploreBtn">Izvēlies kursu <svg class="i"><use href="#i-arrow"/></svg></a>
+          <a class="btn btn-secondary" href="#">Noderīgi materiāli</a>
+        </div>
+      </div>
+      <span class="landmark" style="left:22.9%;top:43.2%"><i></i>Spāņu valoda</span>
+      <span class="landmark" style="left:81.9%;top:47.6%"><i></i>Angļu valoda</span>
+      <span class="mascot spr anim blink" data-poza="vicina" data-s="4" style="left:29.86%;top:96.9%" data-k=".empanadillo (hero)" data-abs></span>
+      <div class="bubble" style="left:calc(29.86% + 36px);top:calc(96.9% - 236px)" data-abs><button class="x" type="button" aria-label="Aizvērt">&times;</button>¡Hola! Es esmu <b>Empanadillo</b>. Laipni lūdzam Libertas!</div>
+    </section>
+    <div class="feats" data-k="NEW .hero-priekšrocības">
+      <div class="feat"><span><svg><use href="#i-groups"/></svg></span>Mazas grupas</div>
+      <div class="feat"><span><svg><use href="#i-chat"/></svg></span>Dzīvas nodarbības</div>
+      <div class="feat"><span><svg><use href="#i-pin"/></svg></span>Praktiska valoda jau no pirmās dienas</div>
+    </div>
+
+    <section class="sec" data-k="NEW section.kursu-taka">
+      <div class="sec-h">
+        <div><span class="sec-eyebrow">Kursu piedāvājums</span><h2 class="h2">Izvēlies savu <em>taku</em></h2></div>
+        <p>Spāņu valoda no A1 līdz B1.2, angļu valoda A1 un A2.</p>
+      </div>
+      <div class="tracks">
+        <article class="track">
+          <div class="cov"><svg class="scene" viewBox="160 270 420 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun" transform="translate(-640 -40)"/><use href="#sc-birds" transform="translate(-930 40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div>
+          <div class="track-b">
+            <h3>Spāņu valoda</h3>
+            <div class="steps"><span>A1</span><i></i><span>A2</span><i></i><span>B1.1</span><i></i><span>B1.2</span></div>
+            <p class="price">no 280,00 EUR <small>· B1 — 420,00 EUR</small></p>
+            <p class="info"><svg><use href="#i-cal"/></svg>A1: 7 nedēļas, otrdienās un ceturtdienās</p>
+            <a class="btn btn-secondary" href="#" style="justify-self:start">Spāņu kursi <svg class="i"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+        <article class="track">
+          <div class="cov"><svg class="scene sc-morning" viewBox="960 270 420 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-200 40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg></div>
+          <div class="track-b">
+            <h3>Angļu valoda</h3>
+            <div class="steps"><span>A1</span><i></i><span>A2</span></div>
+            <p class="price">280,00 EUR</p>
+            <p class="info"><svg><use href="#i-cal"/></svg>A1: 7 nedēļas, pirmdienās un trešdienās</p>
+            <a class="btn btn-secondary" href="#" style="justify-self:start">Angļu kursi <svg class="i"><use href="#i-arrow"/></svg></a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="sec" style="padding-top:0" data-k="section#materiali.bento-sadala">
+      <div class="sec-h" data-k=".bento-galva">
+        <div><span class="sec-eyebrow" data-k=".bento-zime">Bezmaksas · mācies savā tempā</span><h2 class="h2" data-k="h2.bento-virsraksts">Noderīgi <em>materiāli</em></h2></div>
+        <p data-k=".bento-ievads">Interaktīvas nodarbības valodu apguvei mājās — ar izrunu, uzdevumiem un tūlītēju pašpārbaudi.</p>
+      </div>
+      <div class="bento" data-k=".bento">
+        <article class="bento-hub" data-k="article.bento-hub">
+          <div class="bento-hub-galva"><span class="bento-hub-etikete">Jaunākā nodarbība</span><span class="bento-hub-saturs">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></span></div>
+          <a class="flize galvena" href="#" data-k="a.bento-flize--galvena">
+            <div class="cov">
+              <svg class="scene sc-winter" viewBox="120 250 900 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-700 20)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg>
+              <span class="tags"><span class="chip chip--on-dark">Spāņu valoda</span><span class="chip chip--on-dark">A1</span></span>
+              <span class="ui-word"><b lang="es">la estrella</b>zvaigzne</span>
+              <span class="ui-card"><span class="play"><svg><use href="#i-play"/></svg></span><span><b lang="es">¡Feliz Navidad!</b><small>Priecīgus Ziemassvētkus!</small></span></span>
+            </div>
+            <div class="ftxt">
+              <h3>Ziemassvētki spāņu valodā</h3>
+              <p>Apsveikumi, svētku vārdi un dialogs par spāņu tradīcijām.</p>
+              <span class="stats"><span><strong>20</strong> vārdi</span><span><strong>10</strong> frāzes</span><span><strong>4</strong> uzdevumi</span><span><strong>~30</strong> min</span></span>
+            </div>
+            <span class="bulta"><svg><use href="#i-diag"/></svg></span>
+          </a>
+          <div class="riki" data-k=".bento-hub-riki">
+            <a class="flize riks" href="#" data-k="--riks--izruna">
+              <span class="tool"><span class="player"><span class="play"><svg><use href="#i-play"/></svg></span><span class="vilni"><i style="height:30%"></i><i style="height:70%"></i><i style="height:45%"></i><i style="height:95%"></i><i style="height:60%"></i><i style="height:80%"></i><i style="height:35%"></i><i style="height:65%"></i><i style="height:50%"></i><i style="height:25%"></i></span></span></span>
+              <div class="ftxt"><span class="tagnr"><b>01</b>Izruna</span><h3>Klausies un atkārto</h3><p>Katru vārdu un frāzi vari noklausīties ar vienu klikšķi.</p><span class="riks-saite">Uz vārdnīcu <svg><use href="#i-arrow"/></svg></span></div>
+            </a>
+            <a class="flize riks" href="#" data-k="--riks--uzdevumi">
+              <span class="tool"><span class="ex"><span class="ex-s" lang="es">Yo <u>quiero</u> turrón.</span><span class="ring"><span>3/4</span></span></span></span>
+              <div class="ftxt"><span class="tagnr"><b>02</b>Uzdevumi</span><h3>Pārbaudi sevi</h3><p>Atbildes tiek pārbaudītas uzreiz — bez skolotāja.</p><span class="riks-saite">Uz uzdevumiem <svg><use href="#i-arrow"/></svg></span></div>
+            </a>
+          </div>
+        </article>
+        <a class="flize druka" href="#" data-k="a.bento-flize--druka">
+          <div class="ftxt"><span class="chip" style="justify-self:start">Drukāšanai</span><h3>Drukājami materiāli</h3><p>Izdrukā lapu un mācies arī bez ekrāna — mājās vai ceļā.</p></div>
+          <span class="stack" aria-hidden="true"><i></i><i></i><i><b></b><b></b><b></b><b style="width:60%"></b><b></b><em>A4</em></i></span>
+          <span class="bulta"><svg><use href="#i-diag"/></svg></span>
+        </a>
+        <a class="flize visi" href="#" data-k="a.bento-flize--visi">
+          <span><small>Visa kolekcija</small><b>Visi materiāli</b></span>
+          <span class="go"><svg class="i"><use href="#i-arrow"/></svg></span>
+          <svg class="pines" viewBox="0 0 400 70" preserveAspectRatio="none" aria-hidden="true"><g fill="#2F4A40"><use href="#pine" x="10" y="14" width="22" height="56"/><use href="#pine" x="36" y="26" width="18" height="44"/><use href="#pine" x="230" y="20" width="20" height="50"/><use href="#pine" x="300" y="6" width="26" height="64"/><use href="#pine" x="330" y="24" width="18" height="46"/><use href="#pine" x="352" y="12" width="22" height="58"/></g></svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="sec" style="padding-top:0" data-k="NEW section#par-mums">
+      <div class="ph-section">
+        <div style="display:grid;gap:10px">
+          <span class="sec-eyebrow">Par mums</span>
+          <h2 class="h2">Par <em>mums</em></h2>
+          <p>Vieta īsam stāstam par Libertas, skolotājiem un mācību pieeju. <b>Saturs vēl nav</b> — tekstu un foto sniedz klients (skat. jautājumus layout.md). Līdz tam izvēlnes saite “Par mums” ved uz šo enkuru vai tiek paslēpta.</p>
+        </div>
+        <span class="ph-badge">Gaida klienta saturu</span>
+      </div>
+    </section>
+
+    <div class="foot-scene"><svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="footer" data-k="footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer>
+  </div></div>
+  <div class="notes">
+    <div><b>Hero</b>Otrā poga vairs nedublē “Kursi”: “Izvēlies kursu” (#exploreBtn) → kursi.html, “Noderīgi materiāli” → materiali.html. <i class="en">No duplicate CTA.</i></div>
+    <div><b>Kursu taka · jauna</b>Sākumlapa līdz šim neparādīja, ko skola pārdod. Dati ņemti no kursi.html (cenas, grafiki), nekas nav izdomāts. <i class="en">New teaser built from existing course data.</i></div>
+    <div><b>Bento</b>Visas klases paliek; stikls un tumšā flīze → papīra kartes un ainavas vinjete. <i class="en">Same markup hooks, new skin.</i></div>
+    <div><b>Maskots</b>Ceļotājs ×4 krastā takas sākumā (vicina → miera). Stūra palīgs parādās tikai, kad hero izritināts. <i class="en">One mascot per screen.</i></div>
+  </div>
+</section>
+
+<!-- =================== HOME MOBILE =================== -->
+<section class="blk wrap" id="sakums-m">
+  <div class="blk-h">
+    <span class="eyebrow">Sākumlapa · telefons 360 px</span>
+    <h2>Pārkomponēts, nevis <em>samazināts</em></h2>
+    <p>Teksts debesīs, pogas pilnā platumā, ainava apgriezta uz krastu un taku, maskots ×2 ainavas labajā pusē (nesedz pogas). Bento kļūst par vienu kolonnu, rīki zem galvenās flīzes.</p>
+    <p class="en">Home at 360 px, full page.</p>
+  </div>
+  <div class="phones">
+    <div><div class="phone"><div class="ph">
+      <div class="mh"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><span class="sp"></span><button class="icon-btn" type="button" aria-label="Ienākt ar Google"><svg><use href="#i-user"/></svg></button><button class="icon-btn" type="button" aria-expanded="false" aria-label="Atvērt izvēlni"><svg><use href="#i-menu"/></svg></button></div>
+      <div class="m-hero">
+        <span class="pill">Spāņu un angļu valoda</span>
+        <h1>Runā, saproti, ceļo, <em>audz!</em></h1>
+        <p class="lead">Libertas palīdz atvērt durvis uz pasauli caur valodu spēku.</p>
+        <div class="stack-ctas"><a class="btn btn-primary" href="#">Izvēlies kursu <svg class="i"><use href="#i-arrow"/></svg></a><a class="btn btn-secondary" href="#">Noderīgi materiāli</a></div>
+      </div>
+      <div class="m-scene">
+        <svg class="scene" viewBox="100 300 720 500" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="background:linear-gradient(180deg,var(--sc-sky2),var(--sc-sky3) 30%)"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/><use href="#sc-birds" transform="translate(-700 170)"/></svg>
+        <span class="mascot spr anim blink" data-poza="vicina" data-s="2" style="left:72.9%;top:96%"></span>
+      </div>
+      <div class="m-feats">
+        <div class="feat"><span><svg><use href="#i-groups"/></svg></span>Mazas grupas</div>
+        <div class="feat"><span><svg><use href="#i-chat"/></svg></span>Dzīvas nodarbības</div>
+        <div class="feat"><span><svg><use href="#i-pin"/></svg></span>Praktiska valoda jau no pirmās dienas</div>
+      </div>
+      <section class="m-sec">
+        <span class="sec-eyebrow">Kursu piedāvājums</span>
+        <h2 class="h2">Izvēlies savu <em>taku</em></h2>
+        <p>Spāņu valoda no A1 līdz B1.2, angļu valoda A1 un A2.</p>
+        <article class="m-track">
+          <div class="cov"><svg class="scene" viewBox="160 300 500 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun" transform="translate(-640 -40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div>
+          <div class="track-b"><h3>Spāņu valoda</h3><div class="steps"><span>A1</span><i></i><span>A2</span><i></i><span>B1.1</span><i></i><span>B1.2</span></div><p class="price">no 280,00 EUR</p><a class="btn btn-secondary" href="#">Spāņu kursi <svg class="i"><use href="#i-arrow"/></svg></a></div>
+        </article>
+        <article class="m-track">
+          <div class="cov"><svg class="scene sc-morning" viewBox="980 300 500 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg></div>
+          <div class="track-b"><h3>Angļu valoda</h3><div class="steps"><span>A1</span><i></i><span>A2</span></div><p class="price">280,00 EUR</p><a class="btn btn-secondary" href="#">Angļu kursi <svg class="i"><use href="#i-arrow"/></svg></a></div>
+        </article>
+      </section>
+      <section class="m-sec" style="padding-top:0">
+        <span class="sec-eyebrow">Bezmaksas · mācies savā tempā</span>
+        <h2 class="h2">Noderīgi <em>materiāli</em></h2>
+        <p>Interaktīvas nodarbības valodu apguvei mājās — ar izrunu, uzdevumiem un tūlītēju pašpārbaudi.</p>
+        <div class="m-bento">
+          <article class="bento-hub">
+            <div class="bento-hub-galva"><span class="bento-hub-etikete">Jaunākā nodarbība</span><span class="bento-hub-saturs">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></span></div>
+            <a class="flize galvena" href="#">
+              <div class="cov"><svg class="scene sc-winter" viewBox="160 280 640 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg>
+                <span class="tags"><span class="chip chip--on-dark">Spāņu valoda</span><span class="chip chip--on-dark">A1</span></span>
+                <span class="ui-card"><span class="play"><svg><use href="#i-play"/></svg></span><span><b lang="es">¡Feliz Navidad!</b><small>Priecīgus Ziemassvētkus!</small></span></span></div>
+              <div class="ftxt"><h3>Ziemassvētki spāņu valodā</h3><p>Apsveikumi, svētku vārdi un dialogs par spāņu tradīcijām.</p><span class="stats"><span><strong>20</strong> vārdi</span><span><strong>10</strong> frāzes</span><span><strong>4</strong> uzdevumi</span><span><strong>~30</strong> min</span></span></div>
+              <span class="bulta"><svg><use href="#i-diag"/></svg></span>
+            </a>
+            <div class="riki">
+              <a class="flize riks" href="#"><span class="tool"><span class="player"><span class="play"><svg><use href="#i-play"/></svg></span><span class="vilni"><i style="height:30%"></i><i style="height:70%"></i><i style="height:45%"></i><i style="height:95%"></i><i style="height:60%"></i><i style="height:80%"></i><i style="height:35%"></i><i style="height:65%"></i></span></span></span><div class="ftxt"><span class="tagnr"><b>01</b>Izruna</span><h3>Klausies un atkārto</h3><span class="riks-saite">Uz vārdnīcu <svg><use href="#i-arrow"/></svg></span></div></a>
+              <a class="flize riks" href="#"><span class="tool"><span class="ex" style="grid-auto-flow:column;align-items:center"><span class="ex-s" lang="es">Yo <u>quiero</u> turrón.</span><span class="ring"><span>3/4</span></span></span></span><div class="ftxt"><span class="tagnr"><b>02</b>Uzdevumi</span><h3>Pārbaudi sevi</h3><span class="riks-saite">Uz uzdevumiem <svg><use href="#i-arrow"/></svg></span></div></a>
+            </div>
+          </article>
+          <a class="flize druka" href="#"><div class="ftxt"><span class="chip" style="justify-self:start">Drukāšanai</span><h3>Drukājami materiāli</h3><p>Izdrukā lapu un mācies arī bez ekrāna — mājās vai ceļā.</p></div><span class="bulta"><svg><use href="#i-diag"/></svg></span></a>
+          <a class="flize visi" href="#"><span><small>Visa kolekcija</small><b>Visi materiāli</b></span><span class="go"><svg class="i"><use href="#i-arrow"/></svg></span></a>
+        </div>
+      </section>
+      <section class="m-sec" style="padding-top:0">
+        <div class="ph-section m-ph-section"><div style="display:grid;gap:8px"><span class="sec-eyebrow">Par mums</span><p>Vieta klienta saturam (stāsts, skolotāji, pieeja).</p></div><span class="ph-badge" style="justify-self:start">Gaida saturu</span></div>
+      </section>
+      <div class="m-foot-scene"><svg viewBox="560 0 720 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="m-footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol wide"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer>
+    </div></div>
+    <p class="ph-cap">Pilna lapa 360 px. Stūra palīgs (mazais ×2, 64 px) parādās tikai pēc hero; virs kājenes tas paceļas, lai nesegtu saites.<i class="en">Full page at 360 px.</i></p></div>
+  </div>
+</section>
+
+<!-- =================== KURSI =================== -->
+<section class="blk wrap" id="kursi">
+  <div class="blk-h">
+    <span class="eyebrow">Kursi · dators + 360 px</span>
+    <h2>Kursi pēc valodas, ceļš <em>A1 → B1</em></h2>
+    <p>Kartītes sagrupētas zem h2 “Spāņu valoda” / “Angļu valoda” (labo h1 → h3 lēcienu, kārtība seko līmeņiem). Brīvajā vietā — pieteikšanās soļi no esošās plūsmas un piekrišanas teksts.</p>
+    <p class="en">Courses grouped by language; enrollment steps derived from the existing flow (no new facts).</p>
+  </div>
+  <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>kursi.html</span></div>
+  <div class="vp fit">
+    <header class="hd hd--solid" data-k="header.site-header (sticky, papīrs)"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><nav><a href="#" aria-current="page">Kursi</a><a href="#">Noderīgi materiāli</a><a href="#">Par mums</a></nav><a class="auth" href="#"><svg class="i"><use href="#i-user"/></svg>Ienākt ar Google</a></header>
+    <div class="strip" data-k="section#kursi.courses-section (galva)">
+      <svg class="scene" viewBox="0 250 1440 380" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-150 60)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg>
+      <div class="strip-copy">
+        <span class="crumbs"><a href="#">Sākums</a>/<span>Kursi</span></span>
+        <h1 data-k="h1.section-title">Kursu piedāvājums</h1>
+        <p data-k=".sakums-ievads">Mazas grupas, dzīvas nodarbības un praktiska valoda jau no pirmās dienas.</p>
+      </div>
+    </div>
+    <div class="group" id="g-es" data-k="NEW .kursu-grupa#spanu">
+      <div class="group-h"><h2>Spāņu valoda</h2><span>4 kursi · A1 → B1.2</span></div>
+      <div class="cards" data-k=".courses-grid">
+        <article class="card" data-k="article.course-card"><div class="card-cover"><svg class="scene " viewBox="150 270 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valodas pamati A1"><use href="#sc-sun" transform="translate(-640 -60)"/><use href="#sc-birds" transform="translate(-930 30)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A1</span><h3>Spāņu valodas pamati A1</h3><p class="price" data-k=".course-price">280,00 EUR</p><p class="info" data-k=".course-info"><svg><use href="#i-cal"/></svg>7 nedēļas · Otrdienās un ceturtdienās</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-a1" data-k="a.btn-cta.btn-card[data-course=spain-a1]">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-morning" viewBox="90 300 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valodas pamati A2"><use href="#sc-sun" transform="translate(-560 -40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A2</span><h3>Spāņu valodas pamati A2</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-a2">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-noon" viewBox="240 290 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda B1.1"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">B1</span><h3>Spāņu valoda B1.1</h3><p class="price">420,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-b1-1">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-noon" viewBox="20 400 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda B1.2"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">B1</span><h3>Spāņu valoda B1.2</h3><p class="price">420,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-b1-2">Pieteikties kursam</a></div></div></article>
+      </div>
+    </div>
+    <div class="group" id="g-en" style="padding-bottom:72px" data-k="NEW .kursu-grupa#anglu">
+      <div class="group-h"><h2>Angļu valoda</h2><span>2 kursi · A1 → A2</span></div>
+      <div class="cards">
+        <article class="card"><div class="card-cover"><svg class="scene " viewBox="960 270 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Angļu valodas pamati A1"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-260 30)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A1</span><h3>Angļu valodas pamati A1</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>7 nedēļas · Pirmdienās un trešdienās</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="english-a1">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-morning" viewBox="880 300 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Angļu valodas pamati A2"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A2</span><h3>Angļu valodas pamati A2</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="english-a2">Pieteikties kursam</a></div></div></article>
+        <aside class="howto" data-k="NEW aside.pieteiksanas-soli">
+          <h3>Kā pieteikties</h3>
+          <ol>
+            <li><span><b>Izvēlies kursu</b><span>Spied “Pieteikties kursam” pie vajadzīgā līmeņa.</span></span></li>
+            <li><span><b>Ienāc ar Google</b><span>Ja vēl neesi ienācis, pieteikums tevi sagaidīs pēc ienākšanas.</span></span></li>
+            <li><span><b>Seko pieteikumam</b><span>Statusu redzi sadaļā “Mani kursi”; tur vari arī atteikties, kamēr pieteikums nav apstiprināts.</span></span></li>
+          </ol>
+          <p class="consent-note" data-k="p.consent-note">Ienākot ar Google, jūs piekrītat <a href="#">noteikumiem un privātuma politikai</a>.</p>
+        </aside>
+      </div>
+    </div>
+    <div class="foot-scene"><svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="footer" data-k="footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer>
+  </div></div>
+
+  <div class="phones" style="margin-top:32px">
+    <div><div class="phone"><div class="ph">
+      <div class="mh"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><span class="sp"></span><button class="icon-btn" type="button" aria-label="Ienākt ar Google"><svg><use href="#i-user"/></svg></button><button class="icon-btn" type="button" aria-expanded="false" aria-label="Atvērt izvēlni"><svg><use href="#i-menu"/></svg></button></div>
+      <div class="m-strip-title"><span class="crumbs"><a href="#">Sākums</a>/<span>Kursi</span></span><h1>Kursu piedāvājums</h1><p>Mazas grupas, dzīvas nodarbības un praktiska valoda jau no pirmās dienas.</p></div>
+      <div class="m-band"><svg class="scene" viewBox="700 340 740 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg></div>
+      <div class="m-group"><div class="group-h"><h2>Spāņu valoda</h2><span>4 kursi · A1 → B1.2</span></div><div class="cards">
+        <article class="card"><div class="card-cover"><svg class="scene " viewBox="150 270 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valodas pamati A1"><use href="#sc-sun" transform="translate(-640 -60)"/><use href="#sc-birds" transform="translate(-930 30)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A1</span><h3>Spāņu valodas pamati A1</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>7 nedēļas · Otrdienās un ceturtdienās</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-a1">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-morning" viewBox="90 300 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valodas pamati A2"><use href="#sc-sun" transform="translate(-560 -40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A2</span><h3>Spāņu valodas pamati A2</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-a2">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-noon" viewBox="240 290 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda B1.1"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">B1</span><h3>Spāņu valoda B1.1</h3><p class="price">420,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-b1-1">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-noon" viewBox="20 400 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Spāņu valoda B1.2"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">B1</span><h3>Spāņu valoda B1.2</h3><p class="price">420,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="spain-b1-2">Pieteikties kursam</a></div></div></article>
+      </div></div>
+      <div class="m-group" style="padding-bottom:48px"><div class="group-h"><h2>Angļu valoda</h2><span>2 kursi · A1 → A2</span></div><div class="cards">
+        <article class="card"><div class="card-cover"><svg class="scene " viewBox="960 270 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Angļu valodas pamati A1"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-260 30)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A1</span><h3>Angļu valodas pamati A1</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>7 nedēļas · Pirmdienās un trešdienās</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="english-a1">Pieteikties kursam</a></div></div></article>
+        <article class="card"><div class="card-cover"><svg class="scene sc-morning" viewBox="880 300 480 256" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Angļu valodas pamati A2"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg></div><div class="card-body"><span class="chip chip--level" style="justify-self:start">A2</span><h3>Angļu valodas pamati A2</h3><p class="price">280,00 EUR</p><p class="info"><svg><use href="#i-cal"/></svg>Grafiks tiks precizēts</p><div class="cta-wrap"><a class="btn btn-primary" href="#" data-course="english-a2">Pieteikties kursam</a></div></div></article>
+        <aside class="howto"><h3>Kā pieteikties</h3><ol><li><span><b>Izvēlies kursu</b><span>Spied “Pieteikties kursam”.</span></span></li><li><span><b>Ienāc ar Google</b><span>Pieteikums tevi sagaidīs.</span></span></li><li><span><b>Seko pieteikumam</b><span>Sadaļā “Mani kursi”.</span></span></li></ol><p class="consent-note">Ienākot ar Google, jūs piekrītat <a href="#">noteikumiem un privātuma politikai</a>.</p></aside>
+      </div></div>
+      <div class="m-foot-scene"><svg viewBox="560 0 720 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="m-footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol wide"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer>
+    </div></div>
+    <p class="ph-cap">Kursi 360 px: virsraksts uz papīra, zem tā 120 px ainavas josla; kartītes vienā kolonnā, poga pilnā platumā (48 px).<i class="en">Courses at 360 px.</i></p></div>
+  </div>
+  <div class="notes">
+    <div><b>Āķis → darbība</b>Josla (virsraksts) → valodas grupa → kartīte ar cenu un grafiku → “Pieteikties kursam”. <i class="en">Hook to action in one scan.</i></div>
+    <div><b>Saglabāts</b><code>article.course-card</code>, <code>.course-body</code>, <code>.course-price</code>, <code>.course-info</code>, <code>a.btn-cta.btn-card[data-course]</code>, stāvokļi <code>.btn-busy</code>/<code>.btn-done</code>.</div>
+    <div><b>Kārtība</b>Šobrīd ES A1, A2, EN A1, A2, ES B1.1, B1.2 → tagad ES A1–B1.2, tad EN A1–A2. <i class="en">Reordered by language and level.</i></div>
+  </div>
+</section>
+
+<!-- =================== MATERIALI =================== -->
+<section class="blk wrap" id="materiali">
+  <div class="blk-h">
+    <span class="eyebrow">Noderīgi materiāli · dators</span>
+    <h2>Saraksts ar <em>vinjetēm</em>, ne emocijzīmēm</h2>
+    <p>Josla ar lasošu Empanadillo (×2, dekoratīvs) → segmentētais filtrs + skaits → kartītes. Vāks = ainavas vinjete (svētku tēmai ziemas vakars), sveiciens uz tās. Emocijzīmju disks noņemts no vāka.</p>
+    <p class="en">Materials list. Scene vignette covers, same filter and card hooks.</p>
+  </div>
+  <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>materiali.html</span></div>
+  <div class="vp fit">
+    <header class="hd hd--solid"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><nav><a href="#">Kursi</a><a href="#" aria-current="page">Noderīgi materiāli</a><a href="#">Par mums</a></nav><a class="auth" href="#"><svg class="i"><use href="#i-user"/></svg>Ienākt ar Google</a></header>
+    <div class="strip" data-k="section.mat-saraksta-lapa > .mat-galva">
+      <svg class="scene" viewBox="0 250 1440 380" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-150 60)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg>
+      <div class="strip-copy">
+        <span class="pill" style="justify-self:start" data-k=".mat-zime">Bezmaksas · Drukājami · Ar izrunu</span>
+        <h1>Noderīgi <em>materiāli</em></h1>
+        <p data-k=".mat-galva-ievads">Īsas, krāsainas nodarbības valodu apguvei mājās. Klausies izrunu, pildi uzdevumus un pārbaudi sevi — viss vienā lapā.</p>
+      </div>
+      <span class="mascot spr blink" data-poza="lasa" data-s="2" style="left:64%;top:97%;z-index:2"></span>
+    </div>
+    <div class="toolbar" data-k=".mat-rikjosla">
+      <div class="seg" role="group" aria-label="Filtrēt pēc valodas" data-k=".mat-filtri">
+        <button type="button" aria-pressed="true">Visi <em>2</em></button>
+        <button type="button" aria-pressed="false">Spāņu valoda <em>1</em></button>
+        <button type="button" aria-pressed="false">Angļu valoda <em>1</em></button>
+      </div>
+      <p class="count" data-k=".mat-skaits">2 materiāli</p>
+    </div>
+    <div class="mgrid" style="padding-bottom:80px" data-k=".mat-rezgis">
+      <article class="card mcard" data-k="article.mat-karte[data-valoda]">
+        <div class="card-cover"><svg class="scene sc-winter" viewBox="180 280 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun" transform="translate(-660 -60)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg>
+          <span class="greet"><b lang="es">¡Feliz Navidad!</b><small>Español</small></span></div>
+        <div class="card-body">
+          <div class="meta"><span class="chip chip--level">A1</span>Spāņu valoda · Svētki</div>
+          <h2><a href="#">Ziemassvētki spāņu valodā</a></h2>
+          <p>Apsveikumi, svētku vārdi, artikuli, dialogs un tas, kāpēc spāņi Vecgada naktī ēd 12 vīnogas.</p>
+          <p class="inc">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></p>
+          <dl class="dati"><div><dt>vārdi</dt><dd>20</dd></div><div><dt>uzdevumi</dt><dd>4</dd></div><div><dt>minūtes</dt><dd>30′</dd></div></dl>
+          <div class="mfoot">Sākt nodarbību <span><svg><use href="#i-diag"/></svg></span></div>
+        </div>
+      </article>
+      <article class="card mcard">
+        <div class="card-cover"><svg class="scene sc-winter" viewBox="880 280 600 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg>
+          <span class="greet"><b lang="en">Merry Christmas!</b><small>English</small></span></div>
+        <div class="card-body">
+          <div class="meta"><span class="chip chip--level">A1</span>Angļu valoda · Svētki</div>
+          <h2><a href="#">Ziemassvētki angļu valodā</a></h2>
+          <p>Apsveikumi, svētku vārdi, artikuli a/an, dialogs un tas, kas ir Boxing Day un Christmas crackers.</p>
+          <p class="inc">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></p>
+          <dl class="dati"><div><dt>vārdi</dt><dd>20</dd></div><div><dt>uzdevumi</dt><dd>4</dd></div><div><dt>minūtes</dt><dd>30′</dd></div></dl>
+          <div class="mfoot">Sākt nodarbību <span><svg><use href="#i-diag"/></svg></span></div>
+        </div>
+      </article>
+      <article class="card soon" aria-label="Drīzumā vairāk materiālu" data-k=".mat-karte--drizuma">
+        <span class="chip chip--level" style="justify-self:start">Drīzumā</span>
+        <h2>Jauni materiāli ceļā</h2>
+        <p>Gatavojam nākamās nodarbības spāņu un angļu valodā.</p>
+      </article>
+    </div>
+    <div class="foot-scene"><svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="footer" data-k="footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer>
+  </div></div>
+</section>
+
+<!-- =================== LESSON =================== -->
+<section class="blk wrap" id="nodarbiba">
+  <div class="blk-h">
+    <span class="eyebrow">Nodarbības lapa · augša · dators</span>
+    <h2>Horizonta josla + <em>satura rādītājs</em></h2>
+    <p>Krāsainais hero → augstāka horizonta josla (380 px) ar atpakaļ saiti, birkām, virsrakstu, statistiku un pogām. Zemāk: lipīgs TOC kreisajā pusē (aktīvā sadaļa = akcenta tonis), saturs 68ch. Emocijzīmes paliek tikai mācību saturā kā atmiņas palīgs.</p>
+    <p class="en">Lesson page top: horizon strip, sticky TOC, first section with flip cards.</p>
+  </div>
+  <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>materiali-spanu-ziemassvetki.html</span></div>
+  <div class="vp fit">
+    <header class="hd hd--solid"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><nav><a href="#">Kursi</a><a href="#" aria-current="page">Noderīgi materiāli</a><a href="#">Par mums</a></nav><a class="auth" href="#"><svg class="i"><use href="#i-user"/></svg>Ienākt ar Google</a></header>
+    <div class="strip lstrip" data-k="section.mat-hero">
+      <svg class="scene" viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds" transform="translate(-150 60)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg>
+      <div class="strip-copy">
+        <a class="back" href="#" data-k=".mat-atpakal"><svg><use href="#i-back"/></svg>Visi materiāli</a>
+        <div style="display:flex;gap:6px" data-k=".mat-birkas"><span class="chip chip--level">A1</span><span class="chip">Spāņu valoda</span></div>
+        <h1><span class="es-line" lang="es" data-k=".mat-hero-es">¡Feliz Navidad!</span>Ziemassvētki spāņu valodā</h1>
+        <p style="font-size:17px" data-k=".mat-hero-teksts">Pamatvārdi, apsveikumi un tradīcijas, lai tu varētu apsveikt draugus spāniski un saprast, kā svētkus svin Spānijā. Spied <svg class="i" style="display:inline;vertical-align:-3px"><use href="#i-sound"/></svg>, lai dzirdētu izrunu.</p>
+        <ul class="lstats" data-k="ul.mat-statistika"><li><strong>20</strong>vārdi</li><li><strong>10</strong>frāzes</li><li><strong>4</strong>uzdevumi</li><li><strong>~30</strong>min</li></ul>
+        <div class="lbtns" data-k=".mat-hero-pogas"><a class="btn btn-primary" href="#">Sākt nodarbību</a><button class="btn btn-secondary" type="button"><svg class="i"><use href="#i-print"/></svg>Drukāt</button></div>
+      </div>
+    </div>
+    <div class="lay" data-k=".mat-izkartojums">
+      <nav class="ltoc" aria-label="Saturs" data-k="nav.mat-saturs">
+        <span class="lbl">Saturs</span>
+        <a href="#" class="aktivs"><span>1</span>Vārdi</a><a href="#"><span>2</span>Frāzes</a><a href="#"><span>3</span>Gramatika</a><a href="#"><span>4</span>Dialogs</a><a href="#"><span>5</span>Tradīcijas</a><a href="#"><span>6</span>Uzdevumi</a>
+      </nav>
+      <div class="sadala" data-k="section.mat-sadala#vardi">
+        <h2><span class="mat-nr">1</span>Ziemassvētku vārdi</h2>
+        <p class="intro">Uzklikšķini uz kartītes, lai redzētu tulkojumu. Mācies vārdu kopā ar artikulu: <span class="art-el">el / los</span> — vīriešu dzimte, <span class="art-la">la / las</span> — sieviešu dzimte.</p>
+        <ul class="vgrid" data-k="ul.vardu-rezgis">
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">🎄</span><span class="w" lang="es"><span class="art-la">la</span> Navidad</span></li>
+          <li class="vk flip"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="w">Ziemassvētku vakars (24.12.)</span></li>
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">🌲</span><span class="w" lang="es"><span class="art-el">el</span> árbol de Navidad</span></li>
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">🐑</span><span class="w" lang="es"><span class="art-el">el</span> belén</span></li>
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">🎁</span><span class="w" lang="es"><span class="art-el">el</span> regalo</span></li>
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">⭐</span><span class="w" lang="es"><span class="art-la">la</span> estrella</span></li>
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">🕯️</span><span class="w" lang="es"><span class="art-la">la</span> vela</span></li>
+          <li class="vk"><span class="snd"><svg><use href="#i-sound"/></svg></span><span class="em" aria-hidden="true">🔔</span><span class="w" lang="es"><span class="art-la">la</span> campana</span></li>
+        </ul>
+      </div>
+    </div>
+  </div></div>
+  <div class="notes">
+    <div><b>Telefons</b>TOC kļūst par horizontālu, lipīgu čipu joslu zem galvenes (44 px čipi, ritina uz sāniem); josla 160 px, statistika 2×2. <i class="en">TOC becomes a sticky chip bar on phones.</i></div>
+    <div><b>Saglabāts</b><code>.mat-saturs a</code> (<code>.aktivs</code>), <code>.mat-sadala[id]</code>, <code>.vards-karte</code>, <code>[data-es]</code>, <code>.runat-poga</code>, <code>onclick="window.print()"</code>, print CSS.</div>
+    <div><b>Pogas</b>🖨️ → ikona “Drukāt”; 🔊 poga (<code>.runat-poga</code>) iegūst SVG ikonu caur CSS, JS teksts paliek kā rezerves. <i class="en">Emoji out of UI chrome.</i></div>
+  </div>
+</section>
+
+<!-- =================== 404 =================== -->
+<section class="blk wrap" id="e404">
+  <div class="blk-h">
+    <span class="eyebrow">404 · jauna lapa</span>
+    <h2>Apjucis ceļotājs, <em>skaidra</em> izeja</h2>
+    <p>Empanadillo “apjucis” ×4 centrā, īss teksts viņa divvalodīgajā balsī, trīs izejas. Kājenes siluets dod ainavu bez smagas hero.</p>
+    <p class="en">New 404 page with the confused mascot and three ways out.</p>
+  </div>
+  <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>404.html</span></div>
+  <div class="vp fit">
+    <header class="hd hd--solid"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><nav><a href="#">Kursi</a><a href="#">Noderīgi materiāli</a><a href="#">Par mums</a></nav><a class="auth" href="#"><svg class="i"><use href="#i-user"/></svg>Ienākt ar Google</a></header>
+    <section class="nf">
+      <span class="spr blink" data-poza="apjucis" data-s="4" data-label="Empanadillo — Libertas talismans, apjucis"></span>
+      <span class="code">Kļūda 404</span>
+      <h1><span lang="es">¡Ay, caramba!</span><br>Šī taka ved <em>nekurienē</em>.</h1>
+      <p>Lapa, ko meklē, nav atrasta — varbūt tā ir pārcelta vai adresē ieviesusies drukas kļūda.</p>
+      <div class="ctas"><a class="btn btn-primary" href="#">Uz sākumlapu</a><a class="btn btn-secondary" href="#">Kursi</a><a class="btn btn-secondary" href="#">Noderīgi materiāli</a></div>
+    </section>
+    <div class="foot-scene"><svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="footer" data-k="footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer>
+  </div></div>
+</section>
+
+<!-- =================== MOBILE MENU =================== -->
+<section class="blk wrap" id="izvelne">
+  <div class="blk-h">
+    <span class="eyebrow">Mobilā izvēlne · ≤768 px</span>
+    <h2>Izvēlne kā <em>lapa</em> no galvenes</h2>
+    <p>Tā pati <code>nav.main-nav</code> kļūst par lapu (saites netiek dublētas). Poga 44×44 ar <code>aria-expanded</code>/<code>aria-controls</code>, fokuss lapā, Esc aizver, fons neritinās. Pieteikšanās (<code>.auth-box</code>) paliek galvenē kā 44 px ikona; lietotāja izvēlne krīt no tās.</p>
+    <p class="en">Mobile menu sheet: closed vs open; signed-in variant.</p>
+  </div>
+  <div class="phones">
+    <div><div class="phone"><div class="ph ph--fixed">
+      <div class="mh"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><span class="sp"></span><button class="icon-btn" type="button" aria-label="Ienākt ar Google"><svg><use href="#i-user"/></svg></button><button class="icon-btn on" type="button" aria-expanded="true" aria-controls="galvena-izvelne" aria-label="Aizvērt izvēlni"><svg><use href="#i-x"/></svg></button></div>
+      <nav class="sheet" id="galvena-izvelne" aria-label="Galvenā">
+        <ul>
+          <li><a href="#" aria-current="page">Kursi <svg><use href="#i-chev"/></svg></a></li>
+          <li><a href="#">Noderīgi materiāli <svg><use href="#i-chev"/></svg></a></li>
+          <li><a href="#">Par mums <svg><use href="#i-chev"/></svg></a></li>
+        </ul>
+        <div class="sheet-cta"><a class="btn btn-primary" href="#">Izvēlies kursu <svg class="i"><use href="#i-arrow"/></svg></a><small>Noteikumi un privātuma politika</small></div>
+        <div class="sheet-strip"><svg class="scene" viewBox="0 380 1440 330" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="background:linear-gradient(180deg,var(--c-bg),var(--sc-sky3))"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-front"/></svg></div>
+      </nav>
+    </div></div><p class="ph-cap">Atvērta (viesis). Rindas 60 px, Lora 22 px, aktīvā lapa ar bordo atzīmi.<i class="en">Open, guest.</i></p></div>
+    <div><div class="phone"><div class="ph ph--fixed">
+      <div class="mh"><a class="logo" href="#"><img src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"></a><span class="sp"></span><button class="icon-btn" type="button" aria-label="Lietotāja izvēlne" style="background:var(--c-sage);border-color:var(--c-sage);font:700 15px/1 var(--ff-body);color:var(--c-sage-ink)">L</button><button class="icon-btn on" type="button" aria-expanded="true" aria-label="Aizvērt izvēlni"><svg><use href="#i-x"/></svg></button></div>
+      <nav class="sheet" aria-label="Galvenā">
+        <ul>
+          <li><a href="#">Kursi <svg><use href="#i-chev"/></svg></a></li>
+          <li><a href="#" aria-current="page">Noderīgi materiāli <svg><use href="#i-chev"/></svg></a></li>
+          <li><a href="#">Par mums <svg><use href="#i-chev"/></svg></a></li>
+          <li><a href="#" style="font-family:var(--ff-body);font-weight:600;font-size:17px">Mani kursi <svg><use href="#i-chev"/></svg></a></li>
+        </ul>
+        <div class="sheet-cta"><a class="btn btn-primary" href="#">Izvēlies kursu <svg class="i"><use href="#i-arrow"/></svg></a></div>
+        <div class="sheet-strip"><svg class="scene" viewBox="0 380 1440 330" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="background:linear-gradient(180deg,var(--c-bg),var(--sc-sky3))"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-front"/></svg></div>
+      </nav>
+    </div></div><p class="ph-cap">Atvērta (ienācis). Avatārs = <code>.user-chip</code>; “Mani kursi” dublē lietotāja izvēlni ērtībai (tikai ar JS, kad <code>LIB.me</code> zināms).<i class="en">Open, signed in.</i></p></div>
+  </div>
+</section>
+
+<!-- =================== FOOTER =================== -->
+<section class="blk wrap" id="kajene">
+  <div class="blk-h">
+    <span class="eyebrow">Kājene · dators + 360 px</span>
+    <h2>Lapa “nolaižas” <em>mežā</em></h2>
+    <p>Siluets 180 → 120 px, priedes izaug no papīra, skatu tornis uz kalna. Kolonnas: zīmols · Kursi · Materiāli · Libertas. Visas saites ved uz esošām lapām/enkuriem; “Par mums” iezīmēts kā atvērts jautājums. Gaišais logo — CSS filtrs maketā, īstenībā SVG versija.</p>
+    <p class="en">Footer desktop and mobile. Only existing pages/anchors are linked.</p>
+  </div>
+  <div class="frame"><div class="frame-bar"><i></i><i></i><i></i><span>Visas lapas</span></div>
+  <div class="vp fit"><div style="height:40px"></div><div class="foot-scene"><svg viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="footer" data-k="footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer></div></div>
+  <div class="phones" style="margin-top:28px"><div><div class="phone"><div class="ph"><div style="height:24px"></div><div class="m-foot-scene"><svg viewBox="560 0 720 240" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><use href="#foot-scene"/></svg></div><footer class="m-footer"><div class="fcols"><div class="fbrand"><img class="logo-light" src="../../../assets/libertas.png" alt="Libertas" width="500" height="216"><p>Runā, saproti, ceļo, audz!</p><small>Spāņu un angļu valodas kursi</small></div><div class="fcol"><h5>Kursi</h5><ul><li><a href="#">Kursu piedāvājums</a></li><li><a href="#">Spāņu valoda A1–B1.2</a></li><li><a href="#">Angļu valoda A1–A2</a></li><li><a href="#">Mani kursi</a></li></ul></div>
+<div class="fcol"><h5>Materiāli</h5><ul><li><a href="#">Noderīgi materiāli</a></li><li><a href="#">Ziemassvētki spāņu valodā</a></li><li><a href="#">Ziemassvētki angļu valodā</a></li></ul></div>
+<div class="fcol wide"><h5>Libertas</h5><ul><li><a href="#" class="flag">Par mums</a></li><li><a href="#">Noteikumi un privātuma politika</a></li><li><a href="#">Sīkdatnes</a></li><li><a href="#">Kontakti</a></li></ul></div></div><div class="fbar"><span>© 2026 Libertas. Visas tiesības aizsargātas.</span><a href="#">Noteikumi un privātuma politika</a></div></footer></div></div><p class="ph-cap">Kājene 360 px: saites 44 px augstas, 2 kolonnas.<i class="en">Footer at 360 px.</i></p></div></div>
+</section>
+
+<!-- =================== STATES =================== -->
+<section class="blk wrap" id="stavokli">
+  <div class="blk-h">
+    <span class="eyebrow">Stāvokļi un mikroteksti</span>
+    <h2>Tukšs, ielāde, kļūda — ar <em>sirdi</em></h2>
+    <p>Esošie teksti paliek (formālais “jūs” paziņojumos); Empanadillo runā ar “tu”, sāk ar spāņu izsaucienu. Sprite vienmēr tikai dekors — ziņa ir tekstā.</p>
+    <p class="en">Empty, loading and error states with microcopy.</p>
+  </div>
+  <div class="states">
+    <div class="state" aria-busy="true"><span class="tag">Ielāde · konts.html</span><span class="spr anim slow" data-poza="ielade" data-s="2"></span><h4><span class="es">Momentito…</span> Ielādējam tavus kursus.</h4><p>Aizvieto “Ielādē…” (<code>.register-intro</code>), <code>aria-busy</code> uz <code>#konts</code>.</p></div>
+    <div class="state"><span class="tag">Tukšs · Mani kursi</span><span class="spr blink" data-poza="rada" data-s="2"></span><h4>Jums vēl nav pieteikumu.</h4><p><span class="es">¡Vamos!</span> Pirmais solis — izvēlēties kursu.</p><a class="btn btn-primary" href="#">Skatīt kursus</a></div>
+    <div class="state"><span class="tag">Kļūda · API / tīkls</span><span class="spr blink" data-poza="apjucis" data-s="2"></span><h4><span class="es">¡Uy!</span> Neizdevās ielādēt.</h4><p>Pārbaudi interneta savienojumu un mēģini vēlreiz.</p><button class="btn btn-secondary" type="button">Mēģināt vēlreiz</button></div>
+    <div class="state"><span class="tag">Tukšs filtrs · materiāli</span><span class="spr blink" data-poza="lasa" data-s="2"></span><h4><span class="es">¡Vaya!</span> Šajā valodā materiālu vēl nav.</h4><p>Jaunas nodarbības jau ceļā.</p><button class="btn btn-secondary" type="button">Rādīt visus</button></div>
+    <div class="state toasts" style="justify-items:stretch"><span class="tag" style="justify-self:center">Paziņojumi (.toast) · esošie teksti</span>
+      <div class="toastx"><svg><use href="#i-ok"/></svg>Paldies! Jūsu pieteikums ir saņemts.</div>
+      <div class="toastx"><svg><use href="#i-ok"/></svg>Tālrunis saglabāts.</div>
+      <div class="toastx err"><svg><use href="#i-err"/></svg>Neizdevās pieteikties</div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px"><span class="btn btn-busy"><span class="spin"></span>Piesaka…</span><span class="btn btn-done"><svg class="i"><use href="#i-check"/></svg>Pieteikts</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== EVENING =================== -->
+<section class="blk wrap" id="vakars">
+  <div class="blk-h">
+    <span class="eyebrow">Vakara variants · priekšlikums</span>
+    <h2>Tā pati taka <em>krēslā</em></h2>
+    <p>Pa kreisi: decembra ziemas vakars (tikai aina mainās, saskarne gaiša). Pa labi: pilns tumšais režīms <code>[data-theme="vakars"]</code> nākotnei — vajadzīgs gaišais SVG logo.</p>
+    <p class="en">Evening/dark proposal: December scene vs full dark theme.</p>
+  </div>
+  <div class="states" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))">
+    <div class="state" style="padding:0;overflow:hidden;justify-items:stretch;text-align:left">
+      <div style="position:relative;aspect-ratio:16/9"><svg class="scene sc-winter" viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" aria-hidden="true" style="position:absolute;inset:0"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/></svg>
+        <div style="position:absolute;top:16%;left:0;right:0;text-align:center;display:grid;justify-items:center;gap:10px"><span class="pill" style="background:var(--c-accent-soft);color:var(--c-accent-strong)">Priecīgus Ziemassvētkus!</span><b style="font:600 34px/1.05 var(--ff-display);color:#F6F1E8">Runā, saproti, ceļo, <em style="font-weight:400">audz!</em></b><span class="btn btn-primary" style="min-height:40px;font-size:14px;padding:0 18px">Izvēlies kursu</span></div>
+        <span class="mascot spr" data-poza="miera" data-s="2" data-hat="santa" style="left:29.86%;top:93%"></span>
+      </div>
+      <p style="padding:14px 18px 18px"><b style="color:var(--c-ink)">Ziemas vakars · <code>html.ziemassvetki</code></b><br>Teksts uz krēslas debesīm = #F6F1E8 (≈ 9:1 uz #2A3550). Akcents un pogas nemainās; Santa cepure no sprites.</p>
+    </div>
+    <div class="state" style="padding:0;overflow:hidden;justify-items:stretch;text-align:left;background:#1A2230;border-color:#2C3747">
+      <div style="padding:22px 22px 0;display:grid;gap:12px">
+        <span style="font:600 12px/1 var(--ff-body);letter-spacing:.1em;text-transform:uppercase;color:#B3AC9F">[data-theme="vakars"]</span>
+        <b style="font:600 30px/1.1 var(--ff-display);color:#E8A598">Noderīgi <em style="font-weight:400">materiāli</em></b>
+        <p style="color:#ECE6DA;font-size:15px">Interaktīvas nodarbības valodu apguvei mājās — ar izrunu, uzdevumiem un tūlītēju pašpārbaudi.</p>
+        <div style="background:#232D3D;border:1px solid #2F3B4E;border-radius:16px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center"><span><b style="display:block;font:600 18px/1.2 var(--ff-display);color:#ECE6DA">Ziemassvētki spāņu valodā</b><small style="color:#B3AC9F">A1 · 20 vārdi · ~30 min</small></span><span class="btn" style="background:#E07A4E;color:#1A2230;min-height:44px">Sākt</span></div>
+      </div>
+      <div style="height:120px;margin-top:18px;position:relative"><svg class="scene sc-dusk" viewBox="0 400 1440 330" preserveAspectRatio="xMidYMax slice" aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(180deg,#1A2230,var(--sc-sky3))"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-front"/></svg></div>
+      <p style="padding:14px 18px 18px;color:#B3AC9F;background:#121A17">Tinte #ECE6DA (12.9:1), virsraksti #E8A598 (7.8:1), akcents #E07A4E ar tumšu tekstu (5.4:1). Ieteikums: 2. fāze, pēc gaišā SVG logo.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="doc-foot wrap">Libertas · 4.–5. solis. Apraksts: <code>docs/redesign/layouts/layout.md</code> · Maskots: <code>../mascot-final/sprites.js</code> · Ainava: <code>../preview/style-board.html</code>.</footer>
+
+<script src="../mascot-final/sprites.js"></script>
+<script>
+(function () {
+  var E = window.EMPA_SPRITES;
+  if (E) document.querySelectorAll('.spr').forEach(function (el) {
+    var s = +el.dataset.s || 2, maz = el.hasAttribute('data-mazais');
+    el.innerHTML = E.svg(el.dataset.poza, { mazais: maz, animate: el.classList.contains('anim'), hat: el.dataset.hat, label: el.dataset.label });
+    var p = (maz ? E.VIEWBOX_MAZAIS : E.VIEWBOX).split(' ').map(Number), svg = el.firstChild;
+    svg.setAttribute('width', p[2] * s); svg.setAttribute('height', p[3] * s);
+  });
+  // Desktop viewports (1280 px) are scaled down to fit narrow screens.
+  function fit() {
+    document.querySelectorAll('.fit').forEach(function (vp) {
+      var avail = vp.closest('.wrap').clientWidth - 2;
+      vp.style.zoom = avail < 1280 ? (avail / 1280).toFixed(4) : '';
+    });
+    document.querySelectorAll('.phone').forEach(function (ph) {
+      var avail = ph.parentElement.clientWidth;
+      ph.style.zoom = avail < 380 ? (avail / 380).toFixed(4) : '';
+    });
+  }
+  fit(); addEventListener('resize', fit);
+  var t = document.getElementById('kToggle');
+  t.addEventListener('click', function () {
+    var on = t.getAttribute('aria-pressed') !== 'true';
+    t.setAttribute('aria-pressed', on); document.body.classList.toggle('show-k', on);
+  });
+})();
+</script>
+</body>
+</html>

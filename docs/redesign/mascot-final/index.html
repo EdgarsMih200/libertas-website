@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empanadillo ceļotājs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --c-bg:#F6F1E8;--c-surface:#FFFDF8;--c-sunk:#EDE5D8;--c-line:#D9CFC0;--c-line-strong:#8C8273;
+  --c-ink:#24211E;--c-muted:#5C554D;--c-brand:#6B1D1D;--c-accent:#B4502A;--c-accent-strong:#963F20;
+  --c-accent-soft:#F6E1D5;--c-sage:#DDE5DA;--c-sage-ink:#34503F;--c-forest:#1E2E29;--c-on-forest:#E9E4D8;
+  --c-sage-mid:#5F7C6D;
+  --r-card:14px;--shadow-1:0 1px 2px rgb(36 33 30/.06),0 6px 18px -8px rgb(36 33 30/.18);
+  /* scene: day (dawn), from ../preview/style-board.html */
+  --sc-sky1:#F6F1E8;--sc-sky2:#F4E3D0;--sc-sky3:#F2D3B8;--sc-sun:#F7C9A3;--sc-sun-o:1;--sc-cloud:#FFFDF8;
+  --sc-far:#C9C5D6;--sc-far2:#B9B6CC;--sc-chalk:#E7E2EA;--sc-landmark:#A39EBA;--sc-lamp:#FFF3E2;
+  --sc-lake:#D7DEDA;--sc-glint:#FFFFFF;--sc-mid:#8FA3A6;--sc-mid2:#7E9497;
+  --sc-near:#5F7C6D;--sc-near2:#526E60;--sc-cabin:#486255;--sc-window:#3B5348;--sc-lights-o:0;
+  --sc-path:#E9D9C2;--sc-front:#2F4A40;--sc-deep:#1E2E29;--sc-snow:#F4F1EA;--sc-snow-o:0;--sc-bunting-o:0;--sc-bird:#6B1D1D;
+}
+*{box-sizing:border-box}
+html{background:var(--c-bg)}
+body{margin:0;background:var(--c-bg);color:var(--c-ink);font:400 1.0625rem/1.6 "Source Sans 3",system-ui,"Segoe UI",Roboto,Arial,sans-serif}
+h1,h2,h3{font-family:Lora,Georgia,serif;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,1.5rem + 2.2vw,3.25rem);font-weight:600;color:var(--c-brand);line-height:1.1}
+h2{font-size:clamp(1.625rem,1.3rem + 1.4vw,2.375rem);font-weight:500;line-height:1.15}
+h2 em{color:var(--c-brand)}
+h3{font-size:1.125rem;font-weight:600;line-height:1.25}
+p{margin:0;text-wrap:pretty}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{font:600 .8125rem/1.3 "Source Sans 3",sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--c-muted);display:flex;gap:8px;align-items:center}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c-brand)}
+header.top{padding:48px 24px 24px;display:grid;gap:12px}
+header.top p{color:var(--c-muted);max-width:68ch}
+section{padding:40px 0;border-top:1px solid var(--c-line)}
+section > .wrap > h2{margin:8px 0 8px}
+section > .wrap > p.lead{color:var(--c-muted);max-width:70ch;margin-bottom:24px}
+.grid{display:grid;gap:16px}
+.card{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-card);box-shadow:var(--shadow-1);padding:20px;display:grid;gap:12px;align-content:start}
+.card .stage{display:grid;place-items:end center;min-height:140px;background:var(--c-bg);border-radius:10px;padding:12px;overflow:hidden}
+.card .cap{font-size:.9375rem;color:var(--c-muted);line-height:1.45}
+.card code,.mono{font:500 .8125rem/1.4 ui-monospace,Consolas,monospace;color:var(--c-sage-ink);background:var(--c-sage);padding:1px 5px;border-radius:4px}
+.cols-2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.cols-3{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
+.cols-4{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.spr{display:inline-block;line-height:0}
+.spr svg{display:block;overflow:visible;image-rendering:pixelated}
+
+/* ---- Animācija: kadri pārslēdzas soļos (pikseļu stils), bez griešanas ---- */
+.empa-kadrs-1,.empa-kadrs-2{visibility:hidden}
+.anim .empa-kadrs-0{animation:k0 var(--t,.72s) steps(1) infinite}
+.anim .empa-kadrs-1{animation:k1 var(--t,.72s) steps(1) infinite}
+@keyframes k0{0%{visibility:visible}50%{visibility:hidden}}
+@keyframes k1{0%{visibility:hidden}50%{visibility:visible}}
+.blink .empa-acis{transform-box:view-box;transform-origin:17px 13.5px;animation:blink 4.5s steps(1) infinite}
+.blink.mazais .empa-acis{transform-origin:15px 9.5px}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.2)}}
+.bob .empa-figura{animation:bob 1.6s steps(1) infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1px)}}
+/* hover = vicina (kā šodien: .empanadillo.maj) */
+.hoverwave .empa-kadrs-1{visibility:hidden}
+.hoverwave:hover .empa-kadrs-0,.hoverwave:focus-visible .empa-kadrs-0{animation:k0 .36s steps(1) 4}
+.hoverwave:hover .empa-kadrs-1,.hoverwave:focus-visible .empa-kadrs-1{animation:k1 .36s steps(1) 4}
+@media (prefers-reduced-motion:reduce){
+  .anim .empa-kadrs-0,.anim .empa-kadrs-1,.blink .empa-acis,.bob .empa-figura,
+  .hoverwave:hover .empa-kadrs-0,.hoverwave:hover .empa-kadrs-1{animation:none}
+  .empa-kadrs-0{visibility:visible}
+}
+
+/* ---- salīdzinājums ---- */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.vs .stage{min-height:200px}
+@media (max-width:640px){.vs{grid-template-columns:1fr}}
+
+/* ---- palete ---- */
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{display:grid;grid-template-columns:28px auto;gap:4px 8px;align-items:center;font-size:.8125rem;line-height:1.2;background:var(--c-surface);border:1px solid var(--c-line);border-radius:10px;padding:6px 10px 6px 6px}
+.sw i{width:28px;height:28px;border-radius:6px;grid-row:span 2;box-shadow:inset 0 0 0 1px rgb(0 0 0/.12)}
+.sw b{font-weight:700}
+.sw span{color:var(--c-muted);font-family:ui-monospace,Consolas,monospace}
+
+/* ---- mazais uz fonos ---- */
+.bgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px}
+.bg{border-radius:var(--r-card);padding:36px 16px 16px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:center;min-height:150px;position:relative}
+.bg .lbl{position:absolute;top:10px;left:14px;font-size:.8125rem;font-weight:600}
+.bg-paper{background:#F6F1E8;border:1px solid var(--c-line)}
+.bg-sage{background:#5F7C6D;color:#fff}
+.bg-forest{background:#1E2E29;color:var(--c-on-forest)}
+.slot{display:grid;place-items:center;gap:6px;font-size:.75rem}
+.btn-corner{display:grid;place-items:center;border:0;background:none;padding:0;cursor:pointer;border-radius:12px}
+.btn-corner:focus-visible{outline:3px solid var(--c-ink);outline-offset:4px}
+.bg-sage .btn-corner:focus-visible,.bg-forest .btn-corner:focus-visible{outline-color:#F0B999}
+.s64{width:64px}.s40{width:40px;height:40px}
+.slot small{opacity:.8}
+
+/* ---- runas burbulis (jaunā sistēma) ---- */
+.bubble{position:relative;background:var(--c-surface);color:var(--c-ink);border:1px solid var(--c-line);border-radius:14px;box-shadow:0 10px 28px -12px rgb(36 33 30/.35);padding:12px 36px 12px 14px;font-size:.9375rem;line-height:1.45;max-width:260px}
+.bubble b{color:var(--c-brand);font-weight:700}
+.bubble::after{content:"";position:absolute;bottom:-7px;left:var(--tail,28px);width:12px;height:12px;background:var(--c-surface);border-right:1px solid var(--c-line);border-bottom:1px solid var(--c-line);transform:rotate(45deg)}
+.bubble .x{position:absolute;top:6px;right:6px;width:24px;height:24px;border:0;border-radius:6px;background:none;color:var(--c-muted);font-size:18px;line-height:1;cursor:pointer}
+.bubble .x:hover{background:var(--c-sunk);color:var(--c-ink)}
+
+/* ---- hero ---- */
+.hero{position:relative;width:100%;max-width:1440px;margin:0 auto;aspect-ratio:1440/840;overflow:hidden;background:linear-gradient(180deg,var(--sc-sky1) 0%,var(--sc-sky2) 42%,var(--sc-sky3) 62%,var(--sc-sky3) 100%)}
+.hero svg.scene,.ph-scene svg.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hero-copy{position:absolute;left:50%;top:12%;transform:translateX(-50%);text-align:center;display:grid;gap:14px;justify-items:center;width:min(760px,90%)}
+.hero-copy h1{font-size:clamp(2.2rem,1.2rem + 3.4vw,4.4rem);line-height:1.04;letter-spacing:-.015em}
+.hero-copy h1 em{font-style:italic;font-weight:500}
+.hero-copy p{color:var(--c-muted);font-size:clamp(1rem,.95rem + .35vw,1.3rem)}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font:600 1rem/1 "Source Sans 3",sans-serif;text-decoration:none}
+.btn-primary{background:var(--c-accent);color:#fff;box-shadow:0 8px 20px -8px rgb(180 80 42/.55)}
+.btn-ghost{background:rgb(255 253 248/.75);color:var(--c-ink);box-shadow:inset 0 0 0 1px var(--c-line-strong)}
+.mascot{position:absolute;transform:translate(-52.88%,-100%)}
+.mascot.mazais{transform:translate(-51.56%,-100%)}
+.hero .mascot{left:29.86%;top:96.67%}
+.hero .bubble{position:absolute;left:calc(29.86% + 60px);top:calc(96.67% - 230px);--tail:22px}
+@media (max-width:900px){.hero .bubble{display:none}}
+@media (max-width:760px){.hero-copy{display:none}.hero-note{display:block!important}}
+.cropnote{font-size:.875rem;color:var(--c-muted);margin-top:10px}
+
+/* ---- mobilais ---- */
+.phone{width:360px;max-width:100%;margin:0 auto;border-radius:28px;overflow:hidden;box-shadow:0 0 0 10px #24211E,0 30px 60px -20px rgb(36 33 30/.5);background:var(--sc-sky1)}
+.ph-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;font:600 1rem/1 Lora,serif;color:var(--c-brand)}
+.ph-head span{font:600 .8125rem/1 "Source Sans 3",sans-serif;color:var(--c-ink)}
+.ph-hero{padding:8px 16px 18px;display:grid;gap:12px;text-align:center;justify-items:center;background:linear-gradient(180deg,var(--sc-sky1),var(--sc-sky2))}
+.ph-hero h1{font-size:2.25rem;line-height:1.05}
+.ph-hero p{font-size:1rem;color:var(--c-muted)}
+.ph-hero .btn{width:100%;justify-content:center}
+.ph-scene{position:relative;aspect-ratio:720/520;background:linear-gradient(180deg,var(--sc-sky2),var(--sc-sky3) 30%)}
+.ph-scene .mascot{left:72.9%;top:97%}
+.mob-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:32px;align-items:start}
+
+/* ---- slāņu lapa ---- */
+.layers{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.layer{background:var(--c-surface);border:1px solid var(--c-line);border-radius:10px;padding:10px;display:grid;gap:8px;justify-items:center;font-size:.75rem;color:var(--c-muted)}
+.layer .spr{background-image:linear-gradient(45deg,#EDE5D8 25%,transparent 25%,transparent 75%,#EDE5D8 75%),linear-gradient(45deg,#EDE5D8 25%,transparent 25%,transparent 75%,#EDE5D8 75%);background-size:8px 8px;background-position:0 0,4px 4px;padding:4px}
+.layer b{font:600 .75rem/1.2 ui-monospace,Consolas,monospace;color:var(--c-ink)}
+footer{padding:32px 0 56px;color:var(--c-muted);font-size:.9375rem;border-top:1px solid var(--c-line)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <symbol id="pine" viewBox="0 0 40 100">
+      <path d="M20 0 L29 20 L24 20 L33 40 L27 40 L37 64 L30 64 L40 86 L23 86 L23 100 L17 100 L17 86 L0 86 L10 64 L3 64 L13 40 L7 40 L16 20 L11 20 Z"/>
+    </symbol>
+
+    <g id="sc-sun" style="opacity:var(--sc-sun-o)">
+      <circle cx="1010" cy="452" r="170" style="fill:var(--sc-sun)" opacity=".22"/>
+      <circle cx="1010" cy="452" r="105" style="fill:var(--sc-sun)" opacity=".35"/>
+      <circle cx="1010" cy="452" r="62" style="fill:var(--sc-sun)"/>
+    </g>
+    <g id="sc-clouds" style="fill:var(--sc-cloud)" opacity=".6">
+      <ellipse cx="230" cy="150" rx="150" ry="16"/><ellipse cx="300" cy="134" rx="80" ry="14"/>
+      <ellipse cx="1180" cy="70" rx="170" ry="15"/><ellipse cx="1110" cy="56" rx="70" ry="12"/>
+      <ellipse cx="760" cy="300" rx="120" ry="9" opacity=".7"/>
+    </g>
+    <g id="sc-birds" style="fill:var(--sc-bird)" opacity=".85" transform="translate(110 100)">
+      <path d="M1180 150 C1188 141 1197 140 1204 147 C1210 139 1220 136 1232 140 C1221 142 1213 148 1208 155 C1201 151 1192 149 1180 150 Z"/>
+      <path d="M1236 188 C1242 181 1249 181 1254 186 C1259 180 1266 178 1275 181 C1267 183 1261 187 1257 192 C1251 189 1244 188 1236 188 Z"/>
+    </g>
+
+    <g id="sc-far">
+      <path style="fill:var(--sc-far)" d="M-60 480 L-60 430 L20 424 L90 410 L150 396 L205 400 L262 368 L300 356 L330 348 L362 358 L398 374 L440 364 L490 384 L560 398 L640 414 L720 432 L800 444 L880 448 L960 452 L1040 456 L1060 480 Z"/>
+      <path style="fill:var(--sc-far2)" d="M640 480 L700 452 L780 440 L860 446 L930 438 L1000 448 L1040 470 L1040 480 Z" opacity=".8"/>
+      <path style="fill:var(--sc-far)" d="M1030 480 L1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 480 Z"/>
+      <path style="fill:var(--sc-chalk)" d="M1030 480 L1056 410 L1066 404 L1080 414 L1074 444 L1082 480 Z M1150 480 L1160 450 L1176 436 L1190 452 L1196 480 Z"/>
+      <!-- windmill (Spain) -->
+      <g style="fill:var(--sc-landmark)">
+        <path d="M323 350 L325 324 L335 324 L337 350 Z"/><path d="M322 325 L330 314 L338 325 Z"/>
+        <g style="stroke:var(--sc-landmark)" stroke-width="2.2" stroke-linecap="round"><path d="M330 322 L318 306 M330 322 L346 310 M330 322 L342 338 M330 322 L314 334"/></g>
+      </g>
+      <!-- lighthouse (England) -->
+      <g>
+        <path style="fill:var(--sc-landmark)" d="M1174 394 L1176 358 L1184 358 L1186 394 Z"/>
+        <path style="fill:var(--sc-chalk)" d="M1175 382 L1185 382 L1185.6 388 L1174.6 388 Z M1176 368 L1184 368 L1184.4 374 L1175.6 374 Z"/>
+        <path style="fill:var(--sc-landmark)" d="M1173 358 L1187 358 L1187 355 L1173 355 Z M1175 355 L1180 347 L1185 355 Z"/>
+        <circle cx="1180" cy="352" r="2.6" style="fill:var(--sc-lamp)"/>
+      </g>
+      <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)">
+        <path d="M250 375 L262 368 L300 356 L330 348 L362 358 L380 366 L364 366 L344 360 L322 362 L300 368 L276 372 Z"/>
+        <path d="M426 370 L440 364 L470 376 L452 375 Z"/>
+        <path d="M1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 398 L1380 394 L1300 402 L1220 399 L1140 404 L1066 408 Z"/>
+      </g>
+    </g>
+
+    <g id="sc-lake">
+      <rect x="-60" y="466" width="1560" height="460" style="fill:var(--sc-lake)"/>
+      <rect x="-60" y="466" width="1560" height="40" fill="url(#haze)" opacity=".7"/>
+      <g style="fill:var(--sc-glint)" opacity=".7">
+        <rect x="960" y="486" width="100" height="2.4" rx="1.2"/><rect x="985" y="498" width="56" height="2" rx="1"/>
+        <rect x="1000" y="511" width="34" height="2" rx="1"/><rect x="900" y="494" width="30" height="1.6" rx=".8"/>
+        <rect x="610" y="520" width="44" height="1.6" rx=".8" opacity=".6"/>
+      </g>
+    </g>
+
+    <g id="sc-mid">
+      <path style="fill:var(--sc-mid)" d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640 L540 926 L-60 926 Z"/>
+      <path style="fill:var(--sc-mid)" d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650 L950 926 L1500 926 Z"/>
+      <rect x="-60" y="462" width="1560" height="60" fill="url(#haze)" opacity=".45"/>
+      <path d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+      <path d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+      <g style="fill:var(--sc-mid2)"><use href="#pine" x="6.8" y="461.6" width="6.4" height="16.0"/><use href="#pine" x="34.9" y="455.8" width="8.0" height="20.0"/><use href="#pine" x="52.6" y="448.4" width="10.5" height="26.2"/><use href="#pine" x="77.2" y="452.6" width="8.2" height="20.6"/><use href="#pine" x="102.5" y="446.1" width="10.6" height="26.6"/><use href="#pine" x="126.3" y="448.9" width="10.2" height="25.6"/><use href="#pine" x="150.8" y="449.1" width="11.0" height="27.4"/><use href="#pine" x="171.5" y="456.8" width="8.5" height="21.2"/><use href="#pine" x="196.5" y="454.6" width="10.3" height="25.8"/><use href="#pine" x="213.3" y="458.1" width="10.2" height="25.6"/><use href="#pine" x="235.1" y="459.3" width="11.6" height="28.9"/><use href="#pine" x="264.7" y="475.9" width="7.1" height="17.7"/><use href="#pine" x="285.6" y="469.9" width="11.6" height="28.9"/><use href="#pine" x="312.1" y="480.3" width="10.0" height="25.0"/><use href="#pine" x="1235.0" y="469.1" width="10.0" height="24.9"/><use href="#pine" x="1268.8" y="469.0" width="7.4" height="18.5"/><use href="#pine" x="1291.1" y="458.8" width="9.6" height="24.0"/><use href="#pine" x="1316.0" y="465.8" width="6.3" height="15.8"/><use href="#pine" x="1338.1" y="462.0" width="7.7" height="19.1"/><use href="#pine" x="1359.6" y="455.5" width="10.1" height="25.2"/><use href="#pine" x="1387.1" y="457.4" width="9.1" height="22.8"/><use href="#pine" x="1420.7" y="464.8" width="5.9" height="14.7"/><use href="#pine" x="1441.9" y="458.4" width="8.3" height="20.7"/></g>
+    </g>
+
+    <g id="sc-near">
+      <path style="fill:var(--sc-near)" d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582 L1500 926 L-60 926 Z"/>
+      <path d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="7"/>
+      <g style="fill:var(--sc-near2)"><use href="#pine" x="-34.6" y="505.2" width="29.1" height="72.8"/><use href="#pine" x="-18.7" y="475.8" width="39.6" height="99.1"/><use href="#pine" x="6.0" y="502.3" width="27.9" height="69.7"/><use href="#pine" x="26.3" y="482.6" width="34.4" height="85.9"/><use href="#pine" x="60.7" y="486.8" width="31.1" height="77.8"/><use href="#pine" x="82.5" y="490.8" width="28.8" height="71.9"/><use href="#pine" x="105.5" y="491.0" width="27.9" height="69.7"/><use href="#pine" x="130.6" y="490.6" width="27.2" height="68.0"/><use href="#pine" x="154.1" y="476.0" width="33.3" height="83.2"/><use href="#pine" x="172.7" y="461.5" width="39.6" height="99.0"/><use href="#pine" x="198.5" y="465.3" width="38.6" height="96.6"/><use href="#pine" x="229.1" y="479.2" width="33.7" height="84.3"/><use href="#pine" x="256.8" y="487.7" width="30.9" height="77.3"/><use href="#pine" x="1031.4" y="532.1" width="37.2" height="93.1"/><use href="#pine" x="1060.7" y="538.2" width="32.8" height="82.0"/><use href="#pine" x="1086.4" y="539.6" width="30.5" height="76.2"/><use href="#pine" x="1115.2" y="547.5" width="25.5" height="63.9"/><use href="#pine" x="1137.8" y="520.7" width="34.5" height="86.1"/><use href="#pine" x="1180.1" y="547.5" width="21.3" height="53.3"/><use href="#pine" x="1344.7" y="529.8" width="23.4" height="58.6"/><use href="#pine" x="1376.8" y="534.3" width="22.0" height="54.9"/><use href="#pine" x="1400.7" y="513.4" width="30.6" height="76.5"/><use href="#pine" x="1420.0" y="498.2" width="36.9" height="92.2"/></g>
+      <!-- cabins with windows that light up in the evening scene -->
+      <g>
+        <circle cx="1238" cy="584" r="22" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+        <circle cx="1312" cy="580" r="18" fill="#F2C46A" style="opacity:calc(var(--sc-lights-o) * .28)"/>
+        <path style="fill:var(--sc-cabin)" d="M1222 596 L1222 582 L1238 570 L1254 582 L1254 596 Z M1298 592 L1298 580 L1311 570 L1324 580 L1324 592 Z"/>
+        <path style="fill:var(--sc-snow);opacity:var(--sc-snow-o)" d="M1220 583 L1238 568 L1256 583 L1252 583 L1238 572 L1224 583 Z M1296 581 L1311 568 L1326 581 L1322 581 L1311 572 L1300 581 Z"/>
+        <rect x="1233" y="584" width="7" height="6" style="fill:var(--sc-window)"/><rect x="1307" y="582" width="6" height="5" style="fill:var(--sc-window)"/>
+      </g>
+    </g>
+
+    <g id="sc-path">
+      <path style="fill:var(--sc-path)" d="M262 926 C330 806 420 744 520 712 C600 690 660 672 716 658 L734 659 C690 674 630 694 566 718 C470 754 410 820 396 926 Z"/>
+      <g style="opacity:var(--sc-bunting-o)"><path d="M372 590 L372 700 M760 548 L760 650" stroke="#4A3A2E" stroke-width="4" stroke-linecap="round"/><path d="M372,652 Q540,676 760,606" fill="none" stroke="#5C554D" stroke-width="2"/><path d="M396.3 654.9 L409.8 656.2 L403.1 689.6 Z" fill="#8FB09A"/><path d="M421.1 656.9 L434.9 657.6 L428.0 691.3 Z" fill="#B9B6CC"/><path d="M446.4 658.0 L460.5 658.1 L453.5 692.0 Z" fill="#F3E9D8"/><path d="M472.2 658.0 L486.7 657.7 L479.5 691.9 Z" fill="#B4502A"/><path d="M498.6 657.2 L513.4 656.3 L506.0 690.7 Z" fill="#8FB09A"/><path d="M525.6 655.3 L540.6 653.9 L533.1 688.6 Z" fill="#B9B6CC"/><path d="M553.0 652.5 L568.3 650.5 L560.7 685.5 Z" fill="#F3E9D8"/><path d="M581.0 648.7 L596.6 646.3 L588.8 681.5 Z" fill="#B4502A"/><path d="M609.5 644.0 L625.4 641.0 L617.4 676.5 Z" fill="#8FB09A"/><path d="M638.5 638.3 L654.7 634.8 L646.6 670.6 Z" fill="#B9B6CC"/><path d="M668.1 631.7 L684.6 627.6 L676.3 663.7 Z" fill="#F3E9D8"/><path d="M698.2 624.1 L715.0 619.5 L706.6 655.8 Z" fill="#B4502A"/><path d="M728.8 615.5 L745.9 610.4 L737.4 647.0 Z" fill="#8FB09A"/></g>
+    </g>
+
+    <g id="sc-front">
+      <path style="fill:var(--sc-front)" d="M-60 754 C60 736 170 752 250 796 L300 926 L-60 926 Z"/>
+      <path style="fill:var(--sc-front)" d="M1500 676 C1340 690 1220 748 1136 926 L1500 926 Z"/>
+      <use href="#pine" x="-126.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="-52.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="-10.0" y="505.0" width="160.0" height="400.0" style="fill:var(--sc-front)"/><use href="#pine" x="68.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="126.0" y="655.0" width="100.0" height="250.0" style="fill:var(--sc-front)"/><use href="#pine" x="184.0" y="715.0" width="76.0" height="190.0" style="fill:var(--sc-front)"/><use href="#pine" x="1138.0" y="695.0" width="84.0" height="210.0" style="fill:var(--sc-front)"/><use href="#pine" x="1172.0" y="625.0" width="112.0" height="280.0" style="fill:var(--sc-front)"/><use href="#pine" x="1212.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="1276.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="1304.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="1378.0" y="565.0" width="136.0" height="340.0" style="fill:var(--sc-front)"/><use href="#pine" x="1412.0" y="515.0" width="156.0" height="390.0" style="fill:var(--sc-front)"/><use href="#pine" x="-60.0" y="635.0" width="120.0" height="300.0" style="fill:var(--sc-deep)"/><use href="#pine" x="52.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1212.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1364.0" y="655.0" width="112.0" height="280.0" style="fill:var(--sc-deep)"/>
+      <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)"><circle cx="1282" cy="694" r="3.8"/><circle cx="1096" cy="133" r="1.6"/><circle cx="358" cy="-50" r="1.6"/><circle cx="888" cy="93" r="3.4"/><circle cx="705" cy="513" r="2.2"/><circle cx="1270" cy="96" r="2.5"/><circle cx="1288" cy="-11" r="2.8"/><circle cx="4" cy="720" r="3.1"/><circle cx="1328" cy="-101" r="3.8"/><circle cx="271" cy="771" r="3.0"/><circle cx="978" cy="125" r="2.1"/><circle cx="301" cy="399" r="1.7"/><circle cx="1108" cy="525" r="3.3"/><circle cx="717" cy="-90" r="1.9"/><circle cx="1323" cy="0" r="3.3"/><circle cx="1286" cy="-86" r="3.7"/><circle cx="1240" cy="793" r="3.9"/><circle cx="1101" cy="266" r="2.2"/><circle cx="1048" cy="692" r="2.6"/><circle cx="338" cy="252" r="3.7"/><circle cx="805" cy="203" r="3.1"/><circle cx="1058" cy="188" r="3.3"/><circle cx="609" cy="63" r="2.3"/><circle cx="1419" cy="795" r="3.1"/><circle cx="1256" cy="725" r="2.1"/><circle cx="929" cy="5" r="2.8"/><circle cx="803" cy="590" r="3.9"/><circle cx="694" cy="52" r="2.7"/><circle cx="239" cy="490" r="2.9"/><circle cx="809" cy="346" r="3.4"/><circle cx="522" cy="571" r="1.7"/><circle cx="430" cy="378" r="2.1"/><circle cx="1041" cy="148" r="2.2"/><circle cx="950" cy="275" r="1.8"/><circle cx="1113" cy="637" r="3.8"/><circle cx="1310" cy="506" r="3.9"/><circle cx="36" cy="581" r="3.0"/><circle cx="1043" cy="706" r="1.7"/><circle cx="196" cy="-46" r="1.9"/><circle cx="122" cy="-111" r="3.1"/><circle cx="1362" cy="57" r="1.9"/><circle cx="291" cy="501" r="2.2"/><circle cx="657" cy="794" r="2.6"/><circle cx="970" cy="592" r="2.6"/><circle cx="600" cy="-64" r="2.2"/><circle cx="1163" cy="776" r="2.0"/><circle cx="1333" cy="348" r="1.9"/><circle cx="303" cy="434" r="2.0"/><circle cx="112" cy="131" r="3.2"/><circle cx="801" cy="322" r="4.0"/><circle cx="108" cy="260" r="2.4"/><circle cx="6" cy="-114" r="2.6"/><circle cx="132" cy="96" r="3.8"/><circle cx="1120" cy="583" r="2.6"/><circle cx="1231" cy="765" r="3.5"/><circle cx="953" cy="406" r="2.4"/><circle cx="586" cy="337" r="2.8"/><circle cx="817" cy="544" r="3.2"/><circle cx="911" cy="551" r="3.7"/><circle cx="1217" cy="789" r="2.7"/><circle cx="701" cy="761" r="3.9"/><circle cx="515" cy="-47" r="2.4"/><circle cx="1271" cy="532" r="3.4"/><circle cx="1375" cy="604" r="2.1"/><circle cx="343" cy="615" r="1.8"/><circle cx="1318" cy="616" r="3.1"/><circle cx="1025" cy="373" r="2.7"/><circle cx="1256" cy="398" r="3.7"/><circle cx="390" cy="512" r="2.6"/><circle cx="569" cy="53" r="3.0"/></g>
+    </g>
+  </defs>
+</svg>
+
+<header class="top wrap">
+  <span class="eyebrow">Libertas · pārdizains · 3. solis (gala variants)</span>
+  <h1>Empanadillo ceļotājs</h1>
+  <p>Klienta izvēle: variants <b>B “Traveller”</b>, bet uzzīmēts tajā pašā pikseļu stilā kā oriģinālais Empanadillo. Burtu režģi + palete (<span class="mono">sprites.js</span>), tie paši SVG <span class="mono">&lt;rect&gt;</span>, <span class="mono">crispEdges</span>, mērogs tikai veselos skaitļos. Ķermenis, seja, kājas un māšanas roka ir pārkopētas no <span class="mono">empanadillo.js</span> pikseli pa pikselim.</p>
+</header>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">1 · Salīdzinājums</span>
+    <h2>Oriģināls un <em>ceļotājs</em></h2>
+    <p class="lead">Abi ×4. Jaunais pievieno ādas mugursomu ar salvijas guļammaisu un siksnu pāri plecam, tievu spieķi kreisajā ķepā un plakanu ēnu zem kājām. Palete saskaņota: mute = zīmola bordo, acu baltums = papīrs, mēle apvienota ar vaigiem.</p>
+    <div class="vs">
+      <div class="card"><div class="stage"><span class="spr anim blink bob" data-orig data-s="4"></span></div><h3>Oriģināls (šodien)</h3><p class="cap">39×31 audekls, 18 krāsas (ar cepurēm). Roka ROKA_A/B, acis mirkšķina.</p></div>
+      <div class="card"><div class="stage"><span class="spr anim blink bob" data-poza="vicina" data-s="4"></span></div><h3>Ceļotājs</h3><p class="cap">52×35 audekls (ķermenis tajā pašā vietā, soma/nūja negatīvos x), 13 bāzes krāsas + 5 rekvizītiem.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">2 · Pozas</span>
+    <h2>Sešas <em>pozas</em></h2>
+    <p class="lead">Visas ×3, vienā kopīgā audeklā, lai kadri un cepures nelēkātu. Divkadru animācijas pārslēdzas ar <span class="mono">steps(1)</span>; ar <span class="mono">prefers-reduced-motion</span> paliek 1. kadrs.</p>
+    <div class="grid cols-3">
+      <div class="card"><div class="stage"><span class="spr blink" data-poza="miera" data-s="3"></span></div><h3>Miera stāvoklis</h3><p class="cap"><code>miera</code> · spieķis atbalstīts, ķepa pie sāna. Mirkšķina.</p></div>
+      <div class="card"><div class="stage"><span class="spr anim blink" data-poza="vicina" data-s="3"></span></div><h3>Māj (2 kadri)</h3><p class="cap"><code>vicina</code> · ROKA_A ↔ ROKA_B, tieši kā šodien.</p></div>
+      <div class="card"><div class="stage"><span class="spr" data-poza="lasa" data-s="3"></span></div><h3>Lasa karti</h3><p class="cap"><code>lasa</code> · acis uz leju, abas ķepas tur atvērtu karti ar bordo maršrutu; spieķis nolikts.</p></div>
+      <div class="card"><div class="stage"><span class="spr blink" data-poza="rada" data-s="3"></span></div><h3>Rāda uz pogu</h3><p class="cap"><code>rada</code> · roka izstiepta pa labi, acis skatās turp.</p></div>
+      <div class="card"><div class="stage"><span class="spr" data-poza="apjucis" data-s="3"></span></div><h3>Apjucis / 404</h3><p class="cap"><code>apjucis</code> · uzacis uz augšu, “o” mute, sviedru lāse, bordo “?”.</p></div>
+      <div class="card"><div class="stage"><span class="spr anim" style="--t:.6s" data-poza="ielade" data-s="3"></span></div><h3>Ielāde (2 kadri)</h3><p class="cap"><code>ielade</code> · iet uz vietas: pēdas pārmaiņus, spieķis paceļas ar kreiso soli.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">3 · Sezonas</span>
+    <h2>Cepures <em>ar somu</em></h2>
+    <p class="lead">Ziemassvētku cepure (decembris, <span class="mono">html.ziemassvetki</span>) un ballītes cepure (5. decembris). Cepures sēž tajā pašā vietā kā oriģinālā; guļammaiss beidzas pie x 4, cepures mala sākas pie x 7, tāpēc tās nekad nepārklājas (pārbaudīts skriptā visām pozām).</p>
+    <div class="grid cols-4">
+      <div class="card"><div class="stage"><span class="spr anim blink" data-poza="vicina" data-hat="santa" data-s="3"></span></div><h3>Ziemassvētki</h3><p class="cap"><code>hat: 'santa'</code></p></div>
+      <div class="card"><div class="stage"><span class="spr anim blink" data-poza="vicina" data-hat="ballite" data-s="3"></span></div><h3>5. decembris</h3><p class="cap"><code>hat: 'ballite'</code></p></div>
+      <div class="card"><div class="stage"><span class="spr" data-poza="lasa" data-hat="santa" data-s="3"></span></div><h3>Lasa + cepure</h3><p class="cap">Cepure der visām pozām.</p></div>
+      <div class="card"><div class="stage" style="gap:20px;display:flex;align-items:flex-end;justify-content:center"><span class="spr anim blink mazais" data-poza="vicina" data-mazais data-hat="santa" data-s="2"></span><span class="spr anim blink mazais" data-poza="vicina" data-mazais data-hat="ballite" data-s="2"></span></div><h3>Mazais + cepures</h3><p class="cap">Pārzīmētas mazākas cepures (19×9, 12×10).</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">4 · Mazais variants</span>
+    <h2>Stūra poga <em>64 un 40 px</em></h2>
+    <p class="lead">Atsevišķi uzzīmēts 30×19 ķermenis ar tām pašām 4×5 acīm, bez spieķa, tikai guļammaiss un somas mala virs pleca. 64 px = ×2; 40 px poga = ×1 (32 px) ar 4 px atkāpi, lai pikseļi paliek asi. Uzbrauc ar peli vai Tab, lai pamātu.</p>
+    <div class="bgs">
+      <div class="bg bg-paper"><span class="lbl">Papīrs #F6F1E8</span>
+        <div class="slot"><button class="btn-corner hoverwave blink mazais s64" type="button" aria-label="Empanadillo — Libertas talismans: parunāt"><span class="spr" data-poza="vicina" data-mazais data-s="2"></span></button><small>64 px · ×2</small></div>
+        <div class="slot"><button class="btn-corner hoverwave blink mazais s40" type="button" aria-label="Empanadillo — Libertas talismans: parunāt"><span class="spr" data-poza="vicina" data-mazais data-s="1"></span></button><small>40 px · ×1</small></div>
+        <div class="slot"><span class="spr anim blink" data-poza="vicina" data-s="2"></span><small>pilnais ×2</small></div>
+      </div>
+      <div class="bg bg-sage"><span class="lbl">Salvija #5F7C6D</span>
+        <div class="slot"><button class="btn-corner hoverwave blink mazais s64" type="button" aria-label="Empanadillo — Libertas talismans: parunāt"><span class="spr" data-poza="vicina" data-mazais data-s="2"></span></button><small>64 px · ×2</small></div>
+        <div class="slot"><button class="btn-corner hoverwave blink mazais s40" type="button" aria-label="Empanadillo — Libertas talismans: parunāt"><span class="spr" data-poza="vicina" data-mazais data-s="1"></span></button><small>40 px · ×1</small></div>
+        <div class="slot"><span class="spr anim blink" data-poza="vicina" data-s="2"></span><small>pilnais ×2</small></div>
+      </div>
+      <div class="bg bg-forest"><span class="lbl">Mežs #1E2E29</span>
+        <div class="slot"><button class="btn-corner hoverwave blink mazais s64" type="button" aria-label="Empanadillo — Libertas talismans: parunāt"><span class="spr" data-poza="vicina" data-mazais data-s="2"></span></button><small>64 px · ×2</small></div>
+        <div class="slot"><button class="btn-corner hoverwave blink mazais s40" type="button" aria-label="Empanadillo — Libertas talismans: parunāt"><span class="spr" data-poza="vicina" data-mazais data-s="1"></span></button><small>40 px · ×1</small></div>
+        <div class="slot"><span class="spr anim blink" data-poza="vicina" data-s="2"></span><small>pilnais ×2</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">5 · Ainavā</span>
+    <h2>Uz krasta <em>takas</em></h2>
+    <p class="lead">Datora hero: ceļotājs ×4 (208 px audekls, ķermenis 136 px) stāv takas sākumā drošības zonā; plakana ēna piesien viņu vektora ainavai. Zem 900 px platuma ×2.</p>
+  </div>
+  <div class="hero">
+    <svg class="scene" viewBox="0 -40 1440 840" aria-hidden="true">
+      <use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/>
+    </svg>
+    <div class="hero-copy">
+      <span class="eyebrow">Spāņu un angļu valoda · A1–B1</span>
+      <h1>Runā, saproti, <em>ceļo</em>, audz!</h1>
+      <p>Valodu kursi tiešsaistē nelielās grupās.</p>
+      <div class="cta-row"><a class="btn btn-primary" href="#">Apskatīt kursus</a><a class="btn btn-ghost" href="#">Noderīgi materiāli</a></div>
+    </div>
+    <span class="mascot spr anim blink hero-s" data-poza="vicina" data-s="4" data-shadow></span>
+    <div class="bubble" role="status"><button class="x" type="button" aria-label="Aizvērt">&times;</button>¡Hola! Es esmu <b>Empanadillo</b>. Laipni lūdzam Libertas!</div>
+  </div>
+  <div class="wrap">
+    <p class="cropnote hero-note" style="display:none">Šaurā ekrānā datora hero teksts paslēpts — mobilo kompozīciju skat. telefona maketos zemāk.</p>
+    <p class="cropnote">Ainava ņemta no <span class="mono">../preview/style-board.html</span> (bez graudu filtra, lai lapa paliek viegla).</p>
+    <div class="mob-row" style="margin-top:32px">
+      <div>
+        <h3 style="margin-bottom:14px">Telefons 360 px · māj</h3>
+        <div class="phone">
+          <div class="ph-head">Libertas <span>☰ Izvēlne</span></div>
+          <div class="ph-hero">
+            <h1>Runā, saproti, <em>ceļo</em>, audz!</h1>
+            <p>Valodu kursi tiešsaistē nelielās grupās.</p>
+            <a class="btn btn-primary" href="#">Apskatīt kursus</a>
+          </div>
+          <div class="ph-scene">
+            <svg class="scene" viewBox="100 280 720 520" aria-hidden="true"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/><use href="#sc-birds" transform="translate(-700 150)"/></svg>
+            <span class="mascot spr anim blink" data-poza="vicina" data-s="2" data-shadow></span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h3 style="margin-bottom:14px">Telefons 360 px · lasa karti (materiāli)</h3>
+        <div class="phone">
+          <div class="ph-head">Libertas <span>☰ Izvēlne</span></div>
+          <div class="ph-hero">
+            <h1 style="font-size:1.9rem">Noderīgi materiāli</h1>
+            <p>Bezmaksas nodarbības un vingrinājumi.</p>
+          </div>
+          <div class="ph-scene">
+            <svg class="scene" viewBox="100 280 720 520" aria-hidden="true"><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/><use href="#sc-front"/></svg>
+            <span class="mascot spr" data-poza="lasa" data-s="2" data-shadow></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">6 · Izstrādātājiem</span>
+    <h2>Palete un <em>slāņi</em></h2>
+    <p class="lead">Katrs burts režģī = viena krāsa. Slāņu secība (aizmugure → priekša): MUGURSOMA → NUJA → ROKA_K → labā roka → KERMENIS → SIKSNA → ACIS → sejas ielāpi → KARTE → cepure.</p>
+    <div class="swatches" id="swatches"></div>
+    <div class="layers" id="layers" style="margin-top:20px"></div>
+  </div>
+</section>
+
+<footer><div class="wrap">Nekas šeit vēl nav pieslēgts lapai. Lietošanas noteikumi: <span class="mono">usage.md</span>.</div></footer>
+
+<script src="./sprites.js"></script>
+<script>
+(function () {
+  var E = window.EMPA_SPRITES;
+  // Oriģinālā palete (empanadillo.js) salīdzinājumam
+  var ORIG = { O:'#4A2810',D:'#A8652A',M:'#D9963F',L:'#F0BE62',H:'#FBE3A0',S:'#B8742E',W:'#FFFFFF',K:'#2A1A10',P:'#E8796B',R:'#7A1A14',T:'#E0605A',F:'#8A5020' };
+  var R = E.REZGI;
+  function size(svg, vb, s) {
+    var p = vb.split(' ').map(Number);
+    svg.setAttribute('width', p[2] * s); svg.setAttribute('height', p[3] * s);
+  }
+  document.querySelectorAll('.spr').forEach(function (el) {
+    var s = +el.dataset.s || 3, vb, html;
+    if (el.hasAttribute('data-orig')) {
+      vb = '0 -6 39 31';
+      var kerm = R.KERMENIS.map(function (r, y) { return y === 17 ? r.replace('PP', 'TT') : r; });
+      html = '<svg viewBox="' + vb + '" shape-rendering="crispEdges" aria-hidden="true"><g class="empa-figura">' +
+        '<g class="empa-kadrs empa-kadrs-0">' + E.pikseli(R.ROKA_A, 29, 6, ORIG) + E.pikseli(kerm, 0, 0, ORIG) + '<g class="empa-acis">' + E.pikseli(R.ACIS, 10, 11, ORIG) + '</g></g>' +
+        '<g class="empa-kadrs empa-kadrs-1">' + E.pikseli(R.ROKA_B, 29, 6, ORIG) + E.pikseli(kerm, 0, 0, ORIG) + '<g class="empa-acis">' + E.pikseli(R.ACIS, 10, 11, ORIG) + '</g></g>' +
+        '</g></svg>';
+    } else {
+      var maz = el.hasAttribute('data-mazais');
+      vb = maz ? E.VIEWBOX_MAZAIS : E.VIEWBOX;
+      html = E.svg(el.dataset.poza, { mazais: maz, animate: true, hat: el.dataset.hat });
+    }
+    el.innerHTML = html;
+    size(el.firstChild, vb, s);
+  });
+  // Hero: ×4 virs 900 px, citādi ×2
+  var hero = document.querySelector('.hero-s svg');
+  function heroScale() { size(hero, E.VIEWBOX, window.innerWidth >= 900 ? 4 : 2); }
+  heroScale(); window.addEventListener('resize', heroScale);
+
+  // palete
+  var NOS = { O:'kontūra',F:'kājas, nūja',D:'garoza',S:'uzacis',M:'mīkla vid.',L:'mīkla',H:'izgaismojums',W:'acis, karte',K:'zīlītes',P:'vaigi, mēle',R:'mute (bordo)',A:'āda (soma)',V:'salvija',Z:'sviedri',X:'cepure',B:'cepures ēna',G:'kažoks ēna',Y:'ballīte' };
+  document.getElementById('swatches').innerHTML = Object.keys(E.KRASAS).map(function (k) {
+    return '<div class="sw"><i style="background:' + E.KRASAS[k] + '"></i><b>' + k + ' · ' + NOS[k] + '</b><span>' + E.KRASAS[k] + '</span></div>';
+  }).join('');
+  // slāņi
+  var LIST = ['MUGURSOMA','SIKSNA','NUJA','ROKA_K','ROKA_A','ROKA_B','ROKA_MIERS','ROKA_RADA','ACIS_LEJA','ACIS_PA_LABI','UZACIS_APJUKUSI','MUTE_O','KARTE','KEPAS_KARTE','SVIEDRI','JAUTAJUMS','KAJAS_SOLIS_A','KAJAS_SOLIS_B','CEPURE','BALLITES_CEPURE','MAZAIS_KERMENIS','MAZA_SOMA','MAZA_SIKSNA','MAZA_ROKA_A','MAZA_ROKA_B','MAZA_CEPURE','MAZA_BALLITE'];
+  document.getElementById('layers').innerHTML = LIST.map(function (n) {
+    var g = R[n], w = Math.max.apply(null, g.map(function (r) { return r.length; })), h = g.length;
+    var sc = Math.max(2, Math.min(6, Math.floor(120 / Math.max(w, h))));
+    return '<div class="layer"><span class="spr"><svg viewBox="0 0 ' + w + ' ' + h + '" width="' + w * sc + '" height="' + h * sc + '" shape-rendering="crispEdges" aria-hidden="true">' + E.pikseli(g, 0, 0) + '</svg></span><b>' + n + '</b>' + w + '×' + h + '</div>';
+  }).join('');
+})();
+</script>
+</body>
+</html>

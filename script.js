@@ -46,7 +46,7 @@
         if (!wrap) return;
         var box = el('div', 'auth-box');
         if (!me || !me.user) {
-            var a = el('a', 'btn-cta btn-signin', 'Ienākt ar Google');
+            var a = el('a', 'btn-secondary btn-signin', 'Ienākt ar Google');
             a.href = signInUrl();
             box.appendChild(a);
         } else {
@@ -130,20 +130,18 @@
             });
         });
 
-        // Hero "REĢISTRĒTIES": neienākušam — uz Google, citādi uz kursiem
-        var hero = document.getElementById('exploreBtn');
-        if (hero) {
-            hero.addEventListener('click', function(e) {
-                if (!logged) { e.preventDefault(); location.href = signInUrl('/kursi.html'); }
-            });
-            if (!logged) {
-                var note = el('p', 'consent-note');
-                note.appendChild(document.createTextNode('Ienākot ar Google, jūs piekrītat '));
-                var na = el('a', '', 'noteikumiem un privātuma politikai'); na.href = 'noteikumi.html';
-                note.appendChild(na);
-                note.appendChild(document.createTextNode('.'));
-                hero.parentNode.appendChild(note);
-            }
+        // Piekrišanas piezīme viesiem — kursu lapā pie pieteikšanās (hero poga "Izvēlies kursu" vairs neved uz Google)
+        // vieta: [data-consent-vieta] (kursi.html "Kā pieteikties"), citādi aiz ievada teksta
+        var vieta = document.querySelector('[data-consent-vieta]');
+        var ievads = vieta || document.querySelector('.courses-section .sakums-ievads');
+        if (!logged && ievads) {
+            var note = el('p', 'consent-note');
+            note.appendChild(document.createTextNode('Piesakoties kursam, jūs ienāksiet ar Google un piekrītat '));
+            var na = el('a', '', 'noteikumiem un privātuma politikai'); na.href = 'noteikumi.html';
+            note.appendChild(na);
+            note.appendChild(document.createTextNode('.'));
+            if (vieta) vieta.appendChild(note);
+            else ievads.parentNode.insertBefore(note, ievads.nextSibling);
         }
 
         // Gaidošais pieteikums pēc ienākšanas
@@ -169,6 +167,54 @@
     });
 })();
 
+// Mobilā izvēlne (≤768px): .izvelnes-poga atver nav.main-nav kā lapu zem galvenes.
+// Esc aizver un atdod fokusu pogai; kamēr atvērta, Tab paliek izvēlnē, fons neritinās (CSS: body.izvelne-atverta).
+(function() {
+    var poga = document.querySelector('.izvelnes-poga');
+    var nav = poga && document.getElementById(poga.getAttribute('aria-controls'));
+    if (!nav) return;
+    var galvene = poga.closest('.site-header') || document.body;
+
+    function atverta() { return poga.getAttribute('aria-expanded') === 'true'; }
+
+    function iestatit(atvert, fokussUzPogu) {
+        poga.setAttribute('aria-expanded', String(atvert));
+        poga.setAttribute('aria-label', atvert ? 'Aizvērt izvēlni' : 'Atvērt izvēlni');
+        galvene.classList.toggle('izvelne-atverta', atvert);
+        document.body.classList.toggle('izvelne-atverta', atvert);
+        if (atvert) {
+            var pirma = nav.querySelector('a[href]');
+            if (pirma) pirma.focus();
+        } else if (fokussUzPogu) {
+            poga.focus();
+        }
+    }
+
+    poga.addEventListener('click', function() { iestatit(!atverta(), false); });
+
+    // Saite izvēlnē: aizver (svarīgi enkuriem tajā pašā lapā)
+    nav.addEventListener('click', function(e) {
+        if (atverta() && e.target.closest('a')) iestatit(false, false);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (!atverta()) return;
+        if (e.key === 'Escape') { iestatit(false, true); return; }
+        if (e.key !== 'Tab') return;
+        // Fokusa slazds: poga + izvēlnes saites
+        var vietas = [poga].concat([].slice.call(nav.querySelectorAll('a[href], button')));
+        var i = vietas.indexOf(document.activeElement);
+        if (i === -1) { e.preventDefault(); vietas[0].focus(); }
+        else if (e.shiftKey && i === 0) { e.preventDefault(); vietas[vietas.length - 1].focus(); }
+        else if (!e.shiftKey && i === vietas.length - 1) { e.preventDefault(); vietas[0].focus(); }
+    });
+
+    // Pārejot uz plato ekrānu, izvēlne aizveras (citādi paliktu bloķēta ritināšana)
+    var mq = window.matchMedia('(max-width: 768px)');
+    function mainita() { if (!mq.matches && atverta()) iestatit(false, false); }
+    if (mq.addEventListener) mq.addEventListener('change', mainita); else if (mq.addListener) mq.addListener(mainita);
+})();
+
 // Sākumlapas bento flīzes: gaismas plankums seko kursoram + ieejas animācija, kad sadaļa parādās ekrānā
 (function() {
     var bento = document.querySelector('.bento');
@@ -189,4 +235,29 @@
         io.disconnect();
     }, { rootMargin: '0px 0px -10% 0px' });
     io.observe(bento);
+})();
+
+// Sākumlapas hero: maiga paralakse (tikai pele, bez samazinātas kustības, ≥1024px). Slāņus pārvieto CSS pēc --px/--py.
+(function() {
+    var ainava = document.querySelector('.hero-ainava');
+    if (!ainava || !window.matchMedia) return;
+    var mq = window.matchMedia('(pointer: fine) and (prefers-reduced-motion: no-preference) and (min-width: 1024px)');
+    var mx = 0, my = 0, x = 0, y = 0, rafId = 0;
+    function solis() {
+        x += (mx - x) * 0.08;
+        y += (my - y) * 0.08;
+        ainava.style.setProperty('--px', x.toFixed(3));
+        ainava.style.setProperty('--py', y.toFixed(3));
+        rafId = (Math.abs(mx - x) > 0.002 || Math.abs(my - y) > 0.002) ? requestAnimationFrame(solis) : 0;
+    }
+    function sakt() { if (!rafId) rafId = requestAnimationFrame(solis); }
+    var hero = ainava.parentNode;
+    hero.addEventListener('pointermove', function(e) {
+        if (!mq.matches) return;
+        var r = hero.getBoundingClientRect();
+        mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        my = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        sakt();
+    });
+    hero.addEventListener('pointerleave', function() { mx = 0; my = 0; sakt(); });
 })();

@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Libertas — Runā, saproti, ceļo, audz!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
 </head>
 <body>
 
@@ -12,82 +16,228 @@
     <header class="site-header">
         <div class="container nav-wrapper">
             <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
-                <img src="assets/libertas.png" alt="LIBERTAS Logo">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
             </a>
-            <nav class="main-nav">
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
                 <a href="kursi.html">Kursi</a>
                 <a href="materiali.html">Noderīgi materiāli</a>
-                <a href="#par-mums">Par mums</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
             </nav>
         </div>
     </header>
 
-    <!-- Hero Sadaļa -->
+    <!-- Ainavas slāņi (vienreiz; tos ar <use> izmanto hero un kursu takas vāki). Krāsas = --sc-* mainīgie style.css -->
+    <svg class="ainavas-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+        <radialGradient id="glow"><stop offset="0" stop-color="#F2C46A" stop-opacity=".65"/><stop offset=".45" stop-color="#F2C46A" stop-opacity=".22"/><stop offset="1" stop-color="#F2C46A" stop-opacity="0"/></radialGradient>
+        <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff" stop-opacity=".55"/>
+          <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+        <symbol id="pine" viewBox="0 0 40 100">
+          <path d="M20 0 L29 20 L24 20 L33 40 L27 40 L37 64 L30 64 L40 86 L23 86 L23 100 L17 100 L17 86 L0 86 L10 64 L3 64 L13 40 L7 40 L16 20 L11 20 Z"/>
+        </symbol>
+
+        <g id="sc-sun" style="opacity:var(--sc-sun-o)">
+          <circle cx="1010" cy="452" r="170" style="fill:var(--sc-sun)" opacity=".22"/>
+          <circle cx="1010" cy="452" r="105" style="fill:var(--sc-sun)" opacity=".35"/>
+          <circle cx="1010" cy="452" r="62" style="fill:var(--sc-sun)"/>
+        </g>
+        <g id="sc-clouds" style="fill:var(--sc-cloud)" opacity=".6">
+          <ellipse cx="230" cy="150" rx="150" ry="16"/><ellipse cx="300" cy="134" rx="80" ry="14"/>
+          <ellipse cx="1180" cy="70" rx="170" ry="15"/><ellipse cx="1110" cy="56" rx="70" ry="12"/>
+          <ellipse cx="760" cy="300" rx="120" ry="9" opacity=".7"/>
+        </g>
+        <g id="sc-birds" style="fill:var(--sc-bird)" opacity=".85" transform="translate(110 100)">
+          <path d="M1180 150 C1188 141 1197 140 1204 147 C1210 139 1220 136 1232 140 C1221 142 1213 148 1208 155 C1201 151 1192 149 1180 150 Z"/>
+          <path d="M1236 188 C1242 181 1249 181 1254 186 C1259 180 1266 178 1275 181 C1267 183 1261 187 1257 192 C1251 189 1244 188 1236 188 Z"/>
+        </g>
+
+        <g id="sc-far">
+          <path style="fill:var(--sc-far)" d="M-60 480 L-60 430 L20 424 L90 410 L150 396 L205 400 L262 368 L300 356 L330 348 L362 358 L398 374 L440 364 L490 384 L560 398 L640 414 L720 432 L800 444 L880 448 L960 452 L1040 456 L1060 480 Z"/>
+          <path style="fill:var(--sc-far2)" d="M640 480 L700 452 L780 440 L860 446 L930 438 L1000 448 L1040 470 L1040 480 Z" opacity=".8"/>
+          <path style="fill:var(--sc-far)" d="M1030 480 L1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 480 Z"/>
+          <path style="fill:var(--sc-chalk)" d="M1030 480 L1056 410 L1066 404 L1080 414 L1074 444 L1082 480 Z M1150 480 L1160 450 L1176 436 L1190 452 L1196 480 Z"/>
+          <g style="fill:var(--sc-landmark)">
+            <path d="M323 350 L325 324 L335 324 L337 350 Z"/><path d="M322 325 L330 314 L338 325 Z"/>
+            <g style="stroke:var(--sc-landmark)" stroke-width="2.2" stroke-linecap="round"><path d="M330 322 L318 306 M330 322 L346 310 M330 322 L342 338 M330 322 L314 334"/></g>
+          </g>
+          <g>
+            <path style="fill:var(--sc-landmark)" d="M1174 394 L1176 358 L1184 358 L1186 394 Z"/>
+            <path style="fill:var(--sc-chalk)" d="M1175 382 L1185 382 L1185.6 388 L1174.6 388 Z M1176 368 L1184 368 L1184.4 374 L1175.6 374 Z"/>
+            <path style="fill:var(--sc-landmark)" d="M1173 358 L1187 358 L1187 355 L1173 355 Z M1175 355 L1180 347 L1185 355 Z"/>
+            <circle cx="1180" cy="352" r="2.6" style="fill:var(--sc-lamp)"/>
+          </g>
+          <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)">
+            <path d="M250 375 L262 368 L300 356 L330 348 L362 358 L380 366 L364 366 L344 360 L322 362 L300 368 L276 372 Z"/>
+            <path d="M426 370 L440 364 L470 376 L452 375 Z"/>
+            <path d="M1056 410 L1064 402 L1140 398 L1220 393 L1300 396 L1380 388 L1500 392 L1500 398 L1380 394 L1300 402 L1220 399 L1140 404 L1066 408 Z"/>
+          </g>
+        </g>
+
+        <g id="sc-lake">
+          <rect x="-60" y="466" width="1560" height="460" style="fill:var(--sc-lake)"/>
+          <rect x="-60" y="466" width="1560" height="40" fill="url(#haze)" opacity=".7"/>
+          <g style="fill:var(--sc-glint)" opacity=".7">
+            <rect x="960" y="486" width="100" height="2.4" rx="1.2"/><rect x="985" y="498" width="56" height="2" rx="1"/>
+            <rect x="1000" y="511" width="34" height="2" rx="1"/><rect x="900" y="494" width="30" height="1.6" rx=".8"/>
+            <rect x="610" y="520" width="44" height="1.6" rx=".8" opacity=".6"/>
+          </g>
+        </g>
+
+        <g id="sc-mid">
+          <path style="fill:var(--sc-mid)" d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640 L540 926 L-60 926 Z"/>
+          <path style="fill:var(--sc-mid)" d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650 L950 926 L1500 926 Z"/>
+          <rect x="-60" y="462" width="1560" height="60" fill="url(#haze)" opacity=".45"/>
+          <path d="M-60 476 C70 462 190 468 280 490 C360 510 440 548 540 640" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+          <path d="M1500 472 C1370 468 1260 480 1190 498 C1110 520 1030 572 950 650" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="5"/>
+          <g style="fill:var(--sc-mid2)"><use href="#pine" x="6.8" y="461.6" width="6.4" height="16.0"/><use href="#pine" x="34.9" y="455.8" width="8.0" height="20.0"/><use href="#pine" x="52.6" y="448.4" width="10.5" height="26.2"/><use href="#pine" x="77.2" y="452.6" width="8.2" height="20.6"/><use href="#pine" x="102.5" y="446.1" width="10.6" height="26.6"/><use href="#pine" x="126.3" y="448.9" width="10.2" height="25.6"/><use href="#pine" x="150.8" y="449.1" width="11.0" height="27.4"/><use href="#pine" x="171.5" y="456.8" width="8.5" height="21.2"/><use href="#pine" x="196.5" y="454.6" width="10.3" height="25.8"/><use href="#pine" x="213.3" y="458.1" width="10.2" height="25.6"/><use href="#pine" x="235.1" y="459.3" width="11.6" height="28.9"/><use href="#pine" x="264.7" y="475.9" width="7.1" height="17.7"/><use href="#pine" x="285.6" y="469.9" width="11.6" height="28.9"/><use href="#pine" x="312.1" y="480.3" width="10.0" height="25.0"/><use href="#pine" x="1235.0" y="469.1" width="10.0" height="24.9"/><use href="#pine" x="1268.8" y="469.0" width="7.4" height="18.5"/><use href="#pine" x="1291.1" y="458.8" width="9.6" height="24.0"/><use href="#pine" x="1316.0" y="465.8" width="6.3" height="15.8"/><use href="#pine" x="1338.1" y="462.0" width="7.7" height="19.1"/><use href="#pine" x="1359.6" y="455.5" width="10.1" height="25.2"/><use href="#pine" x="1387.1" y="457.4" width="9.1" height="22.8"/><use href="#pine" x="1420.7" y="464.8" width="5.9" height="14.7"/><use href="#pine" x="1441.9" y="458.4" width="8.3" height="20.7"/></g>
+        </g>
+
+        <g id="sc-near">
+          <path style="fill:var(--sc-near)" d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582 L1500 926 L-60 926 Z"/>
+          <path d="M-60 574 C120 538 290 552 410 588 C510 618 600 646 720 654 C860 662 980 628 1100 606 C1220 586 1340 578 1500 582" fill="none" style="stroke:var(--sc-snow);opacity:var(--sc-snow-o)" stroke-width="7"/>
+          <g style="fill:var(--sc-near2)"><use href="#pine" x="-34.6" y="505.2" width="29.1" height="72.8"/><use href="#pine" x="-18.7" y="475.8" width="39.6" height="99.1"/><use href="#pine" x="6.0" y="502.3" width="27.9" height="69.7"/><use href="#pine" x="26.3" y="482.6" width="34.4" height="85.9"/><use href="#pine" x="60.7" y="486.8" width="31.1" height="77.8"/><use href="#pine" x="82.5" y="490.8" width="28.8" height="71.9"/><use href="#pine" x="105.5" y="491.0" width="27.9" height="69.7"/><use href="#pine" x="130.6" y="490.6" width="27.2" height="68.0"/><use href="#pine" x="154.1" y="476.0" width="33.3" height="83.2"/><use href="#pine" x="172.7" y="461.5" width="39.6" height="99.0"/><use href="#pine" x="198.5" y="465.3" width="38.6" height="96.6"/><use href="#pine" x="229.1" y="479.2" width="33.7" height="84.3"/><use href="#pine" x="256.8" y="487.7" width="30.9" height="77.3"/><use href="#pine" x="1031.4" y="532.1" width="37.2" height="93.1"/><use href="#pine" x="1060.7" y="538.2" width="32.8" height="82.0"/><use href="#pine" x="1086.4" y="539.6" width="30.5" height="76.2"/><use href="#pine" x="1115.2" y="547.5" width="25.5" height="63.9"/><use href="#pine" x="1137.8" y="520.7" width="34.5" height="86.1"/><use href="#pine" x="1180.1" y="547.5" width="21.3" height="53.3"/><use href="#pine" x="1344.7" y="529.8" width="23.4" height="58.6"/><use href="#pine" x="1376.8" y="534.3" width="22.0" height="54.9"/><use href="#pine" x="1400.7" y="513.4" width="30.6" height="76.5"/><use href="#pine" x="1420.0" y="498.2" width="36.9" height="92.2"/></g>
+          <g>
+            <circle cx="1238" cy="584" r="28" fill="url(#glow)" style="opacity:var(--sc-lights-o)"/>
+            <circle cx="1312" cy="580" r="24" fill="url(#glow)" style="opacity:var(--sc-lights-o)"/>
+            <path style="fill:var(--sc-cabin)" d="M1222 596 L1222 582 L1238 570 L1254 582 L1254 596 Z M1298 592 L1298 580 L1311 570 L1324 580 L1324 592 Z"/>
+            <path style="fill:var(--sc-snow);opacity:var(--sc-snow-o)" d="M1220 583 L1238 568 L1256 583 L1252 583 L1238 572 L1224 583 Z M1296 581 L1311 568 L1326 581 L1322 581 L1311 572 L1300 581 Z"/>
+            <rect x="1233" y="584" width="7" height="6" style="fill:var(--sc-window)"/><rect x="1307" y="582" width="6" height="5" style="fill:var(--sc-window)"/>
+          </g>
+        </g>
+
+        <g id="sc-path">
+          <path style="fill:var(--sc-path)" d="M262 926 C330 806 420 744 520 712 C600 690 660 672 716 658 L734 659 C690 674 630 694 566 718 C470 754 410 820 396 926 Z"/>
+          <g style="opacity:var(--sc-bunting-o)"><path d="M372 590 L372 700 M760 548 L760 650" stroke="#4A3A2E" stroke-width="4" stroke-linecap="round"/><path d="M372,652 Q540,676 760,606" fill="none" stroke="#5C554D" stroke-width="2"/><path d="M396.3 654.9 L409.8 656.2 L403.1 689.6 Z" fill="#8FB09A"/><path d="M421.1 656.9 L434.9 657.6 L428.0 691.3 Z" fill="#B9B6CC"/><path d="M446.4 658.0 L460.5 658.1 L453.5 692.0 Z" fill="#F3E9D8"/><path d="M472.2 658.0 L486.7 657.7 L479.5 691.9 Z" fill="#B4502A"/><path d="M498.6 657.2 L513.4 656.3 L506.0 690.7 Z" fill="#8FB09A"/><path d="M525.6 655.3 L540.6 653.9 L533.1 688.6 Z" fill="#B9B6CC"/><path d="M553.0 652.5 L568.3 650.5 L560.7 685.5 Z" fill="#F3E9D8"/><path d="M581.0 648.7 L596.6 646.3 L588.8 681.5 Z" fill="#B4502A"/><path d="M609.5 644.0 L625.4 641.0 L617.4 676.5 Z" fill="#8FB09A"/><path d="M638.5 638.3 L654.7 634.8 L646.6 670.6 Z" fill="#B9B6CC"/><path d="M668.1 631.7 L684.6 627.6 L676.3 663.7 Z" fill="#F3E9D8"/><path d="M698.2 624.1 L715.0 619.5 L706.6 655.8 Z" fill="#B4502A"/><path d="M728.8 615.5 L745.9 610.4 L737.4 647.0 Z" fill="#8FB09A"/></g>
+        </g>
+
+        <g id="sc-front">
+          <path style="fill:var(--sc-front)" d="M-60 754 C60 736 170 752 250 796 L300 926 L-60 926 Z"/>
+          <path style="fill:var(--sc-front)" d="M1500 676 C1340 690 1220 748 1136 926 L1500 926 Z"/>
+          <use href="#pine" x="-126.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="-52.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="-10.0" y="505.0" width="160.0" height="400.0" style="fill:var(--sc-front)"/><use href="#pine" x="68.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="126.0" y="655.0" width="100.0" height="250.0" style="fill:var(--sc-front)"/><use href="#pine" x="184.0" y="715.0" width="76.0" height="190.0" style="fill:var(--sc-front)"/><use href="#pine" x="1138.0" y="695.0" width="84.0" height="210.0" style="fill:var(--sc-front)"/><use href="#pine" x="1172.0" y="625.0" width="112.0" height="280.0" style="fill:var(--sc-front)"/><use href="#pine" x="1212.0" y="545.0" width="144.0" height="360.0" style="fill:var(--sc-front)"/><use href="#pine" x="1276.0" y="605.0" width="120.0" height="300.0" style="fill:var(--sc-front)"/><use href="#pine" x="1304.0" y="475.0" width="172.0" height="430.0" style="fill:var(--sc-front)"/><use href="#pine" x="1378.0" y="565.0" width="136.0" height="340.0" style="fill:var(--sc-front)"/><use href="#pine" x="1412.0" y="515.0" width="156.0" height="390.0" style="fill:var(--sc-front)"/><use href="#pine" x="-60.0" y="635.0" width="120.0" height="300.0" style="fill:var(--sc-deep)"/><use href="#pine" x="52.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1212.0" y="695.0" width="96.0" height="240.0" style="fill:var(--sc-deep)"/><use href="#pine" x="1364.0" y="655.0" width="112.0" height="280.0" style="fill:var(--sc-deep)"/>
+          <g style="fill:var(--sc-snow);opacity:var(--sc-snow-o)"><circle cx="1282" cy="694" r="3.8"/><circle cx="1096" cy="133" r="1.6"/><circle cx="358" cy="-50" r="1.6"/><circle cx="888" cy="93" r="3.4"/><circle cx="705" cy="513" r="2.2"/><circle cx="1270" cy="96" r="2.5"/><circle cx="1288" cy="-11" r="2.8"/><circle cx="4" cy="720" r="3.1"/><circle cx="1328" cy="-101" r="3.8"/><circle cx="271" cy="771" r="3.0"/><circle cx="978" cy="125" r="2.1"/><circle cx="301" cy="399" r="1.7"/><circle cx="1108" cy="525" r="3.3"/><circle cx="717" cy="-90" r="1.9"/><circle cx="1323" cy="0" r="3.3"/><circle cx="1286" cy="-86" r="3.7"/><circle cx="1240" cy="793" r="3.9"/><circle cx="1101" cy="266" r="2.2"/><circle cx="1048" cy="692" r="2.6"/><circle cx="338" cy="252" r="3.7"/><circle cx="805" cy="203" r="3.1"/><circle cx="1058" cy="188" r="3.3"/><circle cx="609" cy="63" r="2.3"/><circle cx="1419" cy="795" r="3.1"/><circle cx="1256" cy="725" r="2.1"/><circle cx="929" cy="5" r="2.8"/><circle cx="803" cy="590" r="3.9"/><circle cx="694" cy="52" r="2.7"/><circle cx="239" cy="490" r="2.9"/><circle cx="809" cy="346" r="3.4"/><circle cx="522" cy="571" r="1.7"/><circle cx="430" cy="378" r="2.1"/><circle cx="1041" cy="148" r="2.2"/><circle cx="950" cy="275" r="1.8"/><circle cx="1113" cy="637" r="3.8"/><circle cx="1310" cy="506" r="3.9"/><circle cx="36" cy="581" r="3.0"/><circle cx="1043" cy="706" r="1.7"/><circle cx="196" cy="-46" r="1.9"/><circle cx="122" cy="-111" r="3.1"/><circle cx="1362" cy="57" r="1.9"/><circle cx="291" cy="501" r="2.2"/><circle cx="657" cy="794" r="2.6"/><circle cx="970" cy="592" r="2.6"/><circle cx="600" cy="-64" r="2.2"/><circle cx="1163" cy="776" r="2.0"/><circle cx="1333" cy="348" r="1.9"/><circle cx="303" cy="434" r="2.0"/><circle cx="112" cy="131" r="3.2"/><circle cx="801" cy="322" r="4.0"/><circle cx="108" cy="260" r="2.4"/><circle cx="6" cy="-114" r="2.6"/><circle cx="132" cy="96" r="3.8"/><circle cx="1120" cy="583" r="2.6"/><circle cx="1231" cy="765" r="3.5"/><circle cx="953" cy="406" r="2.4"/><circle cx="586" cy="337" r="2.8"/><circle cx="817" cy="544" r="3.2"/><circle cx="911" cy="551" r="3.7"/><circle cx="1217" cy="789" r="2.7"/><circle cx="701" cy="761" r="3.9"/><circle cx="515" cy="-47" r="2.4"/><circle cx="1271" cy="532" r="3.4"/><circle cx="1375" cy="604" r="2.1"/><circle cx="343" cy="615" r="1.8"/><circle cx="1318" cy="616" r="3.1"/><circle cx="1025" cy="373" r="2.7"/><circle cx="1256" cy="398" r="3.7"/><circle cx="390" cy="512" r="2.6"/><circle cx="569" cy="53" r="3.0"/></g>
+        </g>
+        </defs>
+    </svg>
+
+    <!-- Hero: ainava (inline SVG, fiksētas proporcijas = bez nobīdes) + teksts. Ceļotājs Empanadillo stāv takas sākumā (empanadillo.js) -->
     <section class="hero-section">
-        <div class="hero-overlay"></div>
-        <!-- Ziemassvētku zvaniņi uz egles zariem (redzami nov./dec.); uzbraucot ar peli, tie zvana (zvani.js) -->
+        <!-- Ziemassvētku zvaniņa forma (plakana; html.ziemassvetki). Zvani karājas pie priežu zariem ainavā (.hero-zvani), zvani.js -->
         <svg class="zvana-defs" aria-hidden="true" focusable="false">
             <defs>
-                <linearGradient id="zvana-zelts" x1="0" x2="1">
-                    <stop offset="0" stop-color="#9C7418"/>
-                    <stop offset=".35" stop-color="#F6D879"/>
-                    <stop offset=".6" stop-color="#D4A537"/>
-                    <stop offset="1" stop-color="#8A6512"/>
-                </linearGradient>
                 <symbol id="zvana-forma" viewBox="0 0 40 70">
-                    <line x1="20" y1="0" x2="20" y2="24" stroke="#C9A24A" stroke-width="1.2"/>
-                    <path d="M20 22 C14 16 9 18 11 22 C13 25 17 24 20 22Z M20 22 C26 16 31 18 29 22 C27 25 23 24 20 22Z" fill="#B3261E"/>
-                    <circle cx="20" cy="22.5" r="2.2" fill="#8E1C17"/>
-                    <path d="M20 24 C27 24 30 31 30.5 42 C31 50 33 54 37 57 L3 57 C7 54 9 50 9.5 42 C10 31 13 24 20 24Z" fill="url(#zvana-zelts)" stroke="#8A6512" stroke-width="1"/>
-                    <rect x="2.5" y="55.5" width="35" height="4" rx="2" fill="#B8891F" stroke="#8A6512" stroke-width=".8"/>
-                    <path d="M14 30 C12 36 12 44 12 50" stroke="#FFF3C4" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/>
-                    <circle cx="20" cy="63" r="4" fill="#B8891F" stroke="#8A6512" stroke-width=".8"/>
+                    <path d="M20 0 V25" stroke="#2F4A40" stroke-width="1.4"/>
+                    <path d="M20 22 C15 15 9 17 10.5 21.5 C12 25 16.5 24 20 22 Z M20 22 C25 15 31 17 29.5 21.5 C28 25 23.5 24 20 22 Z" fill="#B4502A"/>
+                    <path d="M18.6 22.6 L15 30 L17.6 29.4 L19.2 31 L20 23 Z M21.4 22.6 L25 30 L22.4 29.4 L20.8 31 L20 23 Z" fill="#963F20"/>
+                    <circle cx="20" cy="22.4" r="2.4" fill="#963F20"/>
+                    <circle cx="20" cy="62" r="4" fill="#8F5E22"/>
+                    <path d="M20 25 C27 25 30 32 30.5 42 C31 50 33 54 37 57 L3 57 C7 54 9 50 9.5 42 C10 32 13 25 20 25 Z" fill="#F2C46A"/>
+                    <path d="M20 25 C27 25 30 32 30.5 42 C31 50 33 54 37 57 L20 57 Z" fill="#E3AA4E"/>
+                    <rect x="2" y="55" width="36" height="4.6" rx="2.3" fill="#C98F3A"/>
+                    <rect x="13" y="33" width="3" height="15" rx="1.5" fill="#FFF3D6" opacity=".8"/>
                 </symbol>
             </defs>
         </svg>
-        <div class="zvanu-zars zvanu-zars-k" aria-hidden="true">
-            <span class="zvans zvans-1" data-nots="1046.5"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
-            <span class="zvans zvans-2" data-nots="1318.5"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
-        </div>
-        <div class="zvanu-zars zvanu-zars-l" aria-hidden="true">
-            <span class="zvans zvans-1" data-nots="1174.7"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
-            <span class="zvans zvans-2" data-nots="1568"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
-        </div>
         <div class="container hero-container">
             <div class="hero-text">
                 <p class="svetku-sveiciens">Priecīgus Ziemassvētkus!</p>
-                <h1>Runā, saproti, ceļo, audz!</h1>
+                <p class="hero-zime"><span class="hero-zime-punkts" aria-hidden="true"></span>Spāņu un angļu valoda · A1–B1</p>
+                <h1>Runā, saproti, ceļo, <em>audz!</em></h1>
                 <p class="hero-subtitle">Libertas palīdz atvērt durvis uz pasauli caur valodu spēku.</p>
             </div>
-            
+
             <div class="hero-cta-box">
-                <!-- Ziemassvētku bantīte (redzama nov./dec.); cilpas plivinās, uzbraucot ar peli -->
-                <span class="cta-bantite" aria-hidden="true">
-                    <svg viewBox="0 0 120 70">
-                        <path class="lente" d="M56 34 L30 68 L40 66 L46 70 L60 38Z" fill="#8E1C17"/>
-                        <path class="lente lente-l" d="M64 34 L90 68 L80 66 L74 70 L60 38Z" fill="#8E1C17"/>
-                        <g class="cilpa cilpa-k">
-                            <path d="M60 32 C40 4 8 6 10 24 C12 40 40 40 60 32Z" fill="#B3261E"/>
-                            <path d="M58 31 C42 14 22 14 22 24 C22 32 40 34 58 31Z" fill="#8E1C17" opacity=".55"/>
-                            <path d="M20 16 C28 10 40 12 48 20" stroke="#E2675E" stroke-width="2" fill="none" stroke-linecap="round" opacity=".7"/>
-                        </g>
-                        <g class="cilpa cilpa-l">
-                            <path d="M60 32 C80 4 112 6 110 24 C108 40 80 40 60 32Z" fill="#B3261E"/>
-                            <path d="M62 31 C78 14 98 14 98 24 C98 32 80 34 62 31Z" fill="#8E1C17" opacity=".55"/>
-                        </g>
-                        <rect x="51" y="24" width="18" height="17" rx="5" fill="#C8352B"/>
-                        <rect x="54" y="27" width="6" height="4" rx="2" fill="#E2675E" opacity=".7"/>
-                    </svg>
-                </span>
-                <a href="kursi.html" class="btn-cta btn-large" id="exploreBtn">
-                    <span class="btn-title">REĢISTRĒTIES</span>
-                    <span class="btn-sub">Pievienojies mūsu valodu kopienai</span>
-                </a>
-                <a href="kursi.html" class="btn-secondary">
-                    <span class="btn-title">KURSI</span>
-                    <span class="btn-sub">Atklāj savu nākamo piedzīvojumu</span>
-                </a>
+                <a href="kursi.html" class="btn-cta btn-hero" id="exploreBtn">Izvēlies kursu <svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                <a href="materiali.html" class="btn-secondary btn-hero">Noderīgi materiāli</a>
             </div>
+        </div>
+        <!-- Ainava DOM pēc teksta: tabulēšanas secība teksts → pogas → ceļotājs -->
+        <div class="hero-ainava">
+            <div class="hero-ainava-kadrs">
+                <svg class="hero-ainava-svg" viewBox="0 -100 1440 900" aria-hidden="true" focusable="false">
+                    <g class="ainava-slanis ainava-slanis--debesis"><use href="#sc-sun"/><use href="#sc-clouds"/><use href="#sc-birds"/></g>
+                    <g class="ainava-slanis ainava-slanis--talu"><use href="#sc-far"/></g>
+                    <use href="#sc-lake"/>
+                    <g class="ainava-slanis ainava-slanis--vidus"><use href="#sc-mid"/></g>
+                    <use href="#sc-near"/><use href="#sc-path"/>
+                    <!-- Ziemas vakars (html.ziemassvetki): rotāta egle krastā un laternas gar taku -->
+                    <g class="ainava-ziema ainava-egle"><use href="#pine" x="934" y="506" width="52" height="130" fill="#22332D"/><path d="M960 506 L967.8 522.9 L963.9 521.6 L960 524.2 L956.1 521.6 L952.2 522.9 Z" fill="#F4F1EA"/><path d="M949.6 542.4 Q960 550.2 970.4 541.1 M945.7 571 Q961.3 581.4 976.9 569.7 M940.5 603.5 Q960 615.2 980.8 602.2" fill="none" stroke="#F2C46A" stroke-width="1" opacity=".55"/><circle cx="952.2" cy="544.7" r="6" fill="url(#glow)"/><circle cx="952.2" cy="544.7" r="2.1" fill="#F2C46A"/><circle cx="960" cy="546.3" r="6" fill="url(#glow)"/><circle cx="960" cy="546.3" r="2.1" fill="#FFF3D6"/><circle cx="967.8" cy="543.2" r="6" fill="url(#glow)"/><circle cx="967.8" cy="543.2" r="2.1" fill="#F2C46A"/><circle cx="948.3" cy="573.6" r="6" fill="url(#glow)"/><circle cx="948.3" cy="573.6" r="2.1" fill="#F2C46A"/><circle cx="956.1" cy="577.5" r="6" fill="url(#glow)"/><circle cx="956.1" cy="577.5" r="2.1" fill="#FFF3D6"/><circle cx="963.9" cy="578.1" r="6" fill="url(#glow)"/><circle cx="963.9" cy="578.1" r="2.1" fill="#F2C46A"/><circle cx="971.7" cy="574.2" r="6" fill="url(#glow)"/><circle cx="971.7" cy="574.2" r="2.1" fill="#F2C46A"/><circle cx="944.4" cy="606.1" r="6" fill="url(#glow)"/><circle cx="944.4" cy="606.1" r="2.1" fill="#FFF3D6"/><circle cx="952.2" cy="610.5" r="6" fill="url(#glow)"/><circle cx="952.2" cy="610.5" r="2.1" fill="#F2C46A"/><circle cx="960" cy="611.8" r="6" fill="url(#glow)"/><circle cx="960" cy="611.8" r="2.1" fill="#F2C46A"/><circle cx="967.8" cy="610.6" r="6" fill="url(#glow)"/><circle cx="967.8" cy="610.6" r="2.1" fill="#FFF3D6"/><circle cx="975.6" cy="606.5" r="6" fill="url(#glow)"/><circle cx="975.6" cy="606.5" r="2.1" fill="#F2C46A"/><circle cx="960" cy="503.4" r="22" fill="url(#glow)"/><path d="M960 495.4 L962 500.6 L967.6 500.9 L963.2 504.5 L964.7 509.9 L960 506.8 L955.3 509.9 L956.8 504.5 L952.4 500.9 L958 500.6 Z" fill="#F2C46A"/></g>
+                    <g class="ainava-ziema ainava-laternas"><circle cx="612" cy="680" r="18.1" fill="url(#glow)"/><rect x="610.9" y="674.6" width="2.2" height="34.4" fill="#1E2E29"/><rect x="607.7" y="674.6" width="8.6" height="10.8" rx="1.6" fill="#F2C46A"/><path d="M605.5 675.1 L612 670.1 L618.5 675.1 Z" fill="#1E2E29"/><rect x="606.8" y="684.9" width="10.4" height="1.5" fill="#1E2E29"/><circle cx="684" cy="661.5" r="14.2" fill="url(#glow)"/><rect x="683" y="657.3" width="2" height="26.7" fill="#1E2E29"/><rect x="680.6" y="657.3" width="6.7" height="8.4" rx="1.2" fill="#F2C46A"/><path d="M679 657.8 L684 653.7 L689 657.8 Z" fill="#1E2E29"/><rect x="680" y="665.2" width="8.1" height="1.5" fill="#1E2E29"/><circle cx="749" cy="645.1" r="10.6" fill="url(#glow)"/><rect x="748" y="641.9" width="2" height="20.1" fill="#1E2E29"/><rect x="746.5" y="641.9" width="5" height="6.3" rx=".9" fill="#F2C46A"/><path d="M745.2 642.4 L749 639.3 L752.8 642.4 Z" fill="#1E2E29"/><rect x="746" y="647.7" width="6" height="1.5" fill="#1E2E29"/></g>
+                    <!-- 5. decembris (html.ballite): trīs papīra laternas virs karodziņu virtenes (virtene pati = #sc-path, --sc-bunting-o) -->
+                    <g class="ainava-ballite"><path d="M372 592 Q566 622 760 550" fill="none" stroke="#5C554D" stroke-width="1.6"/><g class="ballites-laterna"><path d="M566 596.5 V604.5" stroke="#4A3A2E" stroke-width="1.2"/><ellipse cx="566" cy="616.5" rx="10" ry="12" fill="#B4502A"/><path d="M566 604.5 C561 610.5 561 622.5 566 628.5 M566 604.5 C571 610.5 571 622.5 566 628.5" fill="none" stroke="#963F20" stroke-width="1.2"/><rect x="561" y="603.5" width="10" height="3" rx="1" fill="#4A3A2E"/><rect x="561" y="626.5" width="10" height="3" rx="1" fill="#4A3A2E"/><path d="M566 629.5 v6" stroke="#963F20" stroke-width="1.6" stroke-linecap="round"/></g><g class="ballites-laterna"><path d="M636 585.6 V593.6" stroke="#4A3A2E" stroke-width="1.2"/><ellipse cx="636" cy="605.6" rx="10" ry="12" fill="#F3E9D8"/><path d="M636 593.6 C631 599.6 631 611.6 636 617.6 M636 593.6 C641 599.6 641 611.6 636 617.6" fill="none" stroke="#D9CBB4" stroke-width="1.2"/><rect x="631" y="592.6" width="10" height="3" rx="1" fill="#4A3A2E"/><rect x="631" y="615.6" width="10" height="3" rx="1" fill="#4A3A2E"/><path d="M636 618.6 v6" stroke="#D9CBB4" stroke-width="1.6" stroke-linecap="round"/></g><g class="ballites-laterna"><path d="M702 569.2 V577.2" stroke="#4A3A2E" stroke-width="1.2"/><ellipse cx="702" cy="589.2" rx="10" ry="12" fill="#8FB09A"/><path d="M702 577.2 C697 583.2 697 595.2 702 601.2 M702 577.2 C707 583.2 707 595.2 702 601.2" fill="none" stroke="#6F927B" stroke-width="1.2"/><rect x="697" y="576.2" width="10" height="3" rx="1" fill="#4A3A2E"/><rect x="697" y="599.2" width="10" height="3" rx="1" fill="#4A3A2E"/><path d="M702 602.2 v6" stroke="#6F927B" stroke-width="1.6" stroke-linecap="round"/></g></g>
+                    <g class="ainava-slanis ainava-slanis--prieksa"><use href="#sc-front"/>
+                        <g class="ainava-ziema ainava-laternas"><circle cx="572" cy="746.4" r="37.3" fill="url(#glow)"/><rect x="569.8" y="735.3" width="4.4" height="70.7" fill="#1E2E29"/><rect x="563.1" y="735.3" width="17.8" height="22.2" rx="3.2" fill="#F2C46A"/><path d="M558.7 735.8 L572 726 L585.3 735.8 Z" fill="#1E2E29"/><rect x="561.3" y="757" width="21.3" height="3.1" fill="#1E2E29"/></g>
+                    </g>
+                </svg>
+                <span class="hero-orientieris hero-orientieris--es" aria-hidden="true">Spāņu valoda</span>
+                <span class="hero-orientieris hero-orientieris--en" aria-hidden="true">Angļu valoda</span>
+                <!-- Zvaniņi pie priekšplāna priežu zariem (html.ziemassvetki); uzbraucot/pieskaroties šūpojas un zvana (zvani.js) -->
+                <div class="hero-zvani" aria-hidden="true">
+                    <span class="zvans zvans-1" data-nots="1046.5"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+                    <span class="zvans zvans-2" data-nots="1318.5"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+                    <span class="zvans zvans-3" data-nots="1174.7"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+                    <span class="zvans zvans-4" data-nots="1568"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
+                </div>
+                <!-- Šeit empanadillo.js ieliek lielo ceļotāju (×4 / ×3 / ×2) -->
+                <div class="hero-empa" data-empa-hero></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Priekšrocības (tie paši vārdi kā kursi.html ievadā) -->
+    <div class="hero-prieksrocibas">
+        <ul class="container prieksrocibas-saraksts">
+            <li class="prieksrociba"><span class="prieksrociba-ikona" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.6c2.6.2 4.4 2 5 5.4"/></svg></span>Mazas grupas</li>
+            <li class="prieksrociba"><span class="prieksrociba-ikona" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg></span>Dzīvas nodarbības</li>
+            <li class="prieksrociba"><span class="prieksrociba-ikona" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>Praktiska valoda jau no pirmās dienas</li>
+        </ul>
+    </div>
+
+    <!-- Kursu taka: īss ieskats kursi.html piedāvājumā. Cenas un grafiki dublē kursi.html — mainot tur, jāmaina arī šeit -->
+    <section class="kursu-taka container" aria-labelledby="kursu-taka-virsraksts">
+        <header class="sadalas-galva">
+            <div>
+                <p class="sadalas-zime">Kursu piedāvājums</p>
+                <h2 id="kursu-taka-virsraksts" class="sadalas-virsraksts">Izvēlies savu <em>taku</em></h2>
+            </div>
+            <p class="sadalas-ievads">Spāņu valoda no A1 līdz B1.2, angļu valoda A1 un A2.</p>
+        </header>
+        <div class="takas">
+            <article class="taka">
+                <div class="taka-vaks" aria-hidden="true">
+                    <svg viewBox="160 270 420 330" preserveAspectRatio="xMidYMid slice" focusable="false"><use href="#sc-sun" transform="translate(-640 -40)"/><use href="#sc-birds" transform="translate(-930 40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg>
+                </div>
+                <div class="taka-saturs">
+                    <h3>Spāņu valoda</h3>
+                    <ol class="taka-limeni" aria-label="Līmeņi">
+                        <li>A1</li><li>A2</li><li>B1.1</li><li>B1.2</li>
+                    </ol>
+                    <p class="taka-cena">no 280,00 EUR <small>· B1 — 420,00 EUR</small></p>
+                    <p class="taka-info"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>A1: 7 nedēļas, otrdienās un ceturtdienās</p>
+                    <a href="kursi.html#spanu" class="btn-secondary taka-poga">Spāņu kursi <svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </div>
+            </article>
+            <article class="taka">
+                <div class="taka-vaks sc-rits" aria-hidden="true">
+                    <svg viewBox="960 270 420 330" preserveAspectRatio="xMidYMid slice" focusable="false"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-200 40)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/></svg>
+                </div>
+                <div class="taka-saturs">
+                    <h3>Angļu valoda</h3>
+                    <ol class="taka-limeni" aria-label="Līmeņi">
+                        <li>A1</li><li>A2</li>
+                    </ol>
+                    <p class="taka-cena">280,00 EUR</p>
+                    <p class="taka-info"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>A1: 7 nedēļas, pirmdienās un trešdienās</p>
+                    <a href="kursi.html#anglu" class="btn-secondary taka-poga">Angļu kursi <svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+                </div>
+            </article>
         </div>
     </section>
 
@@ -114,7 +264,8 @@
                         <span class="tags tags--gaiss">A1</span>
                     </span>
 
-                    <span class="bento-skats" aria-hidden="true">
+                    <span class="bento-skats sc-ziema" aria-hidden="true">
+                        <svg class="bento-ainava" viewBox="120 250 900 420" preserveAspectRatio="xMidYMid slice" focusable="false"><use href="#sc-sun"/><use href="#sc-birds" transform="translate(-700 20)"/><use href="#sc-far"/><use href="#sc-lake"/><use href="#sc-mid"/><use href="#sc-near"/><use href="#sc-path"/></svg>
                         <span class="stikls stikls--aizmugure">
                             <span class="stikls-mazs">la estrella</span>
                             <span class="stikls-tulk">zvaigzne</span>
@@ -129,7 +280,6 @@
                             </span>
                             <span class="stikls-josla"><span></span></span>
                         </span>
-                        <svg class="bento-zvaigzne" viewBox="0 0 40 40"><path d="M20 0c1.3 10.6 8.8 18.1 20 20-11.2 1.9-18.7 9.4-20 20-1.3-10.6-8.8-18.1-20-20C11.2 18.1 18.7 10.6 20 0z"/></svg>
                     </span>
 
                     <div class="bento-teksts">
@@ -212,9 +362,49 @@
     </section>
 
     <!-- Kājene -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2026 Libertas. Visas tiesības aizsargātas. · <a href="noteikumi.html">Noteikumi un privātuma politika</a></p>
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
         </div>
     </footer>
 
