@@ -91,7 +91,7 @@
         </div>
     </section>
 
-    <!-- Noderīgi materiāli: bento režģis (visas flīzes ved uz materiali.html) -->
+    <!-- Noderīgi materiāli: bento režģis (nodarbības čaula ved uz nodarbību, pārējās uz materiali.html) -->
     <section id="materiali" class="bento-sadala container" aria-labelledby="bento-virsraksts">
         <header class="bento-galva">
             <div>
@@ -102,78 +102,85 @@
         </header>
 
         <div class="bento">
-            <!-- 1. Galvenā flīze: Ziemassvētku nodarbība -->
-            <a href="materiali.html" class="bento-flize bento-flize--galvena">
-                <span class="bento-tags">
-                    <span class="tags tags--gaiss"><span class="tags-punkts" aria-hidden="true"></span>Jauns</span>
-                    <span class="tags tags--gaiss">Spāņu valoda</span>
-                    <span class="tags tags--gaiss">A1</span>
-                </span>
-
-                <span class="bento-skats" aria-hidden="true">
-                    <span class="stikls stikls--aizmugure">
-                        <span class="stikls-mazs">la estrella</span>
-                        <span class="stikls-tulk">zvaigzne</span>
+            <!-- 1–3. Viena nodarbība: galvenā flīze + tās iekšējie rīki (izruna, uzdevumi) kopīgā čaulā -->
+            <article class="bento-hub" aria-labelledby="hub-virsraksts">
+                <div class="bento-hub-galva">
+                    <span class="bento-hub-etikete"><span class="tags-punkts" aria-hidden="true"></span>Jaunākā nodarbība</span>
+                    <span class="bento-hub-saturs">Iekļauts: <b>vārdnīca</b> · <b>izruna</b> · <b>dialogs</b> · <b>pašpārbaude</b></span>
+                </div>
+                <a href="materiali-spanu-ziemassvetki.html" class="bento-flize bento-flize--galvena">
+                    <span class="bento-tags">
+                        <span class="tags tags--gaiss">Spāņu valoda</span>
+                        <span class="tags tags--gaiss">A1</span>
                     </span>
-                    <span class="stikls stikls--prieksa">
-                        <span class="stikls-rinda">
-                            <span class="stikls-poga"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-                            <span>
-                                <span class="stikls-frase" lang="es">¡Feliz Navidad!</span>
-                                <span class="stikls-tulk">Priecīgus Ziemassvētkus!</span>
-                            </span>
+
+                    <span class="bento-skats" aria-hidden="true">
+                        <span class="stikls stikls--aizmugure">
+                            <span class="stikls-mazs">la estrella</span>
+                            <span class="stikls-tulk">zvaigzne</span>
                         </span>
-                        <span class="stikls-josla"><span></span></span>
+                        <span class="stikls stikls--prieksa">
+                            <span class="stikls-rinda">
+                                <span class="stikls-poga"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                                <span>
+                                    <span class="stikls-frase" lang="es">¡Feliz Navidad!</span>
+                                    <span class="stikls-tulk">Priecīgus Ziemassvētkus!</span>
+                                </span>
+                            </span>
+                            <span class="stikls-josla"><span></span></span>
+                        </span>
+                        <svg class="bento-zvaigzne" viewBox="0 0 40 40"><path d="M20 0c1.3 10.6 8.8 18.1 20 20-11.2 1.9-18.7 9.4-20 20-1.3-10.6-8.8-18.1-20-20C11.2 18.1 18.7 10.6 20 0z"/></svg>
                     </span>
-                    <svg class="bento-zvaigzne" viewBox="0 0 40 40"><path d="M20 0c1.3 10.6 8.8 18.1 20 20-11.2 1.9-18.7 9.4-20 20-1.3-10.6-8.8-18.1-20-20C11.2 18.1 18.7 10.6 20 0z"/></svg>
-                </span>
 
-                <div class="bento-teksts">
-                    <h3>Ziemassvētki spāņu valodā</h3>
-                    <p>Apsveikumi, svētku vārdi un dialogs par spāņu tradīcijām.</p>
-                    <span class="bento-skaitli">
-                        <span><strong>20</strong> vārdi</span>
-                        <span><strong>10</strong> frāzes</span>
-                        <span><strong>4</strong> uzdevumi</span>
-                        <span><strong>~30</strong> min</span>
-                    </span>
-                </div>
-                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-            </a>
+                    <div class="bento-teksts">
+                        <h3 id="hub-virsraksts">Ziemassvētki spāņu valodā</h3>
+                        <p>Apsveikumi, svētku vārdi un dialogs par spāņu tradīcijām.</p>
+                        <span class="bento-skaitli">
+                            <span><strong>20</strong> vārdi</span>
+                            <span><strong>10</strong> frāzes</span>
+                            <span><strong>4</strong> uzdevumi</span>
+                            <span><strong>~30</strong> min</span>
+                        </span>
+                    </div>
+                    <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+                </a>
 
-            <!-- 2. Izruna: stikla atskaņotājs ar skaņas viļņiem -->
-            <a href="materiali.html" class="bento-flize bento-flize--izruna">
-                <span class="tags">Izruna</span>
-                <span class="bento-skats" aria-hidden="true">
-                    <span class="stikls stikls--atskanotajs">
-                        <span class="stikls-poga"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-                        <span class="vilni"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-                        <span class="stikls-laiks">0:02</span>
-                    </span>
-                    <span class="izruna-frase"><span lang="es">Buenos días</span> <span class="izruna-ipa">/ˈbwe.nos ˈði.as/</span></span>
-                </span>
-                <div class="bento-teksts">
-                    <h3>Klausies un atkārto</h3>
-                    <p>Katru vārdu un frāzi vari noklausīties ar vienu klikšķi.</p>
+                <div class="bento-hub-riki" role="group" aria-label="Šajā nodarbībā">
+                    <!-- 2. Izruna: stikla atskaņotājs ar skaņas viļņiem -->
+                    <a href="materiali-spanu-ziemassvetki.html#vardi" class="bento-flize bento-flize--riks bento-flize--izruna">
+                        <span class="tags tags--riks"><span class="riks-nr">01</span>Izruna</span>
+                        <span class="bento-skats" aria-hidden="true">
+                            <span class="stikls stikls--atskanotajs">
+                                <span class="stikls-poga"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+                                <span class="vilni"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                                <span class="stikls-laiks">0:02</span>
+                            </span>
+                            <span class="izruna-frase"><span lang="es">Buenos días</span> <span class="izruna-ipa">/ˈbwe.nos ˈði.as/</span></span>
+                        </span>
+                        <div class="bento-teksts">
+                            <h3>Klausies un atkārto</h3>
+                            <p>Katru vārdu un frāzi vari noklausīties ar vienu klikšķi.</p>
+                            <span class="riks-saite">Uz vārdnīcu <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                        </div>
+                    </a>
+    
+                    <!-- 3. Uzdevumi: aizpildīts lauks ar atzīmi un progresa aplis -->
+                    <a href="materiali-spanu-ziemassvetki.html#uzdevumi" class="bento-flize bento-flize--riks bento-flize--uzdevumi">
+                        <span class="tags tags--riks"><span class="riks-nr">02</span>Uzdevumi</span>
+                        <span class="bento-skats" aria-hidden="true">
+                            <span class="stikls stikls--uzdevums">
+                                <span class="uzd-teikums" lang="es">Yo <span class="uzd-lauks-demo">quiero<svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span> turrón.</span>
+                            </span>
+                            <span class="progresa-aplis" style="--p: 75"><span>3/4</span></span>
+                        </span>
+                        <div class="bento-teksts">
+                            <h3>Pārbaudi sevi</h3>
+                            <p>Atbildes tiek pārbaudītas uzreiz — bez skolotāja.</p>
+                            <span class="riks-saite">Uz uzdevumiem <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                        </div>
+                    </a>
                 </div>
-                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-            </a>
-
-            <!-- 3. Uzdevumi: aizpildīts lauks ar atzīmi un progresa aplis -->
-            <a href="materiali.html" class="bento-flize bento-flize--uzdevumi">
-                <span class="tags">Uzdevumi</span>
-                <span class="bento-skats" aria-hidden="true">
-                    <span class="stikls stikls--uzdevums">
-                        <span class="uzd-teikums" lang="es">Yo <span class="uzd-lauks-demo">quiero<svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span> turrón.</span>
-                    </span>
-                    <span class="progresa-aplis" style="--p: 75"><span>3/4</span></span>
-                </span>
-                <div class="bento-teksts">
-                    <h3>Pārbaudi sevi</h3>
-                    <p>Atbildes tiek pārbaudītas uzreiz — bez skolotāja.</p>
-                </div>
-                <span class="bento-bulta" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
-            </a>
+            </article>
 
             <!-- 4. Drukāšanai: lapu kaudzīte -->
             <a href="materiali.html" class="bento-flize bento-flize--druka">
