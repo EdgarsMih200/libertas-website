@@ -784,6 +784,267 @@ button.chip:hover { border-color: var(--c-line-strong); }
     .hero-empa { left: 43.4%; top: 97.78%; }
 }
 
+/* Ainavas toņu varianti (vākiem): rīts un ziemas vakars */
+.sc-rits { --sc-sky1: #EFEDE6; --sc-sky2: #F3E7D8; --sc-sky3: #F2DBC3; --sc-sun: #F9D9B5; }
+.sc-ziema {
+    --sc-sky1: #2A3550; --sc-sky2: #6E5A73; --sc-sky3: #D88A6A; --sc-sun: #F0A27E; --sc-sun-o: .55; --sc-cloud: #9A8AA6;
+    --sc-far: #6E6C8A; --sc-far2: #615F7D; --sc-chalk: #8F8BA8; --sc-landmark: #4F4D69; --sc-lamp: #F2C46A;
+    --sc-lake: #7E8399; --sc-glint: #F2C46A; --sc-mid: #4F6070; --sc-mid2: #46566A;
+    --sc-near: #3A5047; --sc-near2: #33473F; --sc-cabin: #2C3E36; --sc-window: #F2C46A; --sc-lights-o: 1;
+    --sc-path: #C9C1C0; --sc-front: #22332D; --sc-deep: #17231F; --sc-snow-o: 1; --sc-bird: #E8A598;
+}
+
+/* PRIEKŠROCĪBAS (josla zem hero) */
+.hero-prieksrocibas {
+    background: var(--c-bg);
+    border-bottom: 1px solid var(--c-line);
+}
+
+.prieksrocibas-saraksts {
+    display: flex;
+    justify-content: center;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    list-style: none;
+}
+
+.prieksrociba {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 36px;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.prieksrociba + .prieksrociba { border-left: 1px solid var(--c-line); }
+
+.prieksrociba-ikona {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--c-sage);
+    color: var(--c-sage-ink);
+}
+
+.prieksrociba-ikona svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* SADAĻAS GALVA (sākumlapa: kursu taka, materiāli): kreisajā virsraksts, labajā ievads */
+.sadalas-galva,
+.bento-galva {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--sp-4) var(--sp-7);
+    margin-bottom: 36px;
+}
+
+.sadalas-galva > div,
+.bento-galva > div {
+    display: grid;
+    justify-items: start;
+    gap: 10px;
+}
+
+.sadalas-zime,
+.bento-zime {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+}
+
+.sadalas-zime::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--c-brand);
+}
+
+.sadalas-virsraksts,
+.bento-virsraksts {
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--c-ink);
+}
+
+.sadalas-virsraksts em,
+.bento-virsraksts em {
+    font-weight: 400;
+    color: var(--c-brand);
+}
+
+.sadalas-ievads,
+.bento-ievads {
+    max-width: 44ch;
+    color: var(--c-muted);
+}
+
+/* KURSU TAKA (sākumlapa): divas kartītes ar līmeņu "taku". Dati = kursi.html */
+.kursu-taka {
+    padding-top: var(--sp-section);
+    padding-bottom: var(--sp-section);
+}
+
+.takas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5);
+}
+
+.taka {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+}
+
+.taka-vaks { min-height: 100%; }
+
+.taka-vaks svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky2) 42%, var(--sc-sky3) 62%, var(--sc-sky3) 100%);
+}
+
+.taka-saturs {
+    display: grid;
+    align-content: start;
+    justify-items: start;
+    gap: 12px;
+    padding: 24px 26px;
+}
+
+.taka-saturs h3 { font-size: var(--fs-h3); }
+
+.taka-limeni {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    margin: 2px 0 4px;
+    list-style: none;
+}
+
+.taka-limeni li {
+    padding: 7px 10px;
+    border-radius: var(--r-pill);
+    background: var(--c-sage);
+    color: var(--c-sage-ink);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* punktota taka starp līmeņiem */
+.taka-limeni li + li {
+    position: relative;
+    margin-left: 26px;
+}
+
+.taka-limeni li + li::before {
+    content: "";
+    position: absolute;
+    right: calc(100% + 4px);
+    top: 50%;
+    width: 18px;
+    height: 2px;
+    margin-top: -1px;
+    background: repeating-linear-gradient(90deg, var(--c-line-strong) 0 4px, transparent 4px 8px);
+    opacity: .6;
+}
+
+.taka-cena {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+}
+
+.taka-cena small {
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--c-muted);
+}
+
+.taka-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--fs-sm);
+    color: var(--c-muted);
+}
+
+.taka-info svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.taka-poga {
+    flex-direction: row;
+    gap: .5em;
+    width: auto;
+    margin-top: 4px;
+    padding: 12px 24px;
+}
+
+@media (max-width: 1023px) {
+    .takas { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+    .prieksrocibas-saraksts {
+        flex-direction: column;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .prieksrociba { padding: 12px 0; font-size: 1rem; }
+    .prieksrociba + .prieksrociba { border-left: 0; border-top: 1px solid var(--c-line); }
+
+    .sadalas-galva,
+    .bento-galva {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 24px;
+    }
+
+    .taka { grid-template-columns: 1fr; }
+    .taka-vaks svg { min-height: 0; height: auto; aspect-ratio: 15 / 6; }
+    .taka-saturs { padding: 16px 18px 18px; }
+    .taka-poga { width: 100%; }
+}
+
 /* KURSU IZKĀRTOJUMS */
 .courses-section {
     padding: 60px 20px;
