@@ -324,6 +324,17 @@
         heroRedzams = true; // līdz pirmajam IntersectionObserver ziņojumam (hero ir lapas augšā)
     }
 
+    // Statiskas figūras lapā (404, ielāde, materiālu josla): <span data-empa-poza='apjucis' data-empa-merogs='4' data-empa-label='…'>.
+    // Bez data-empa-label figūra ir dekoratīva (aria-hidden). Kamēr kāda no tām redzama, stūra palīgs paslēpts (viens Empanadillo ekrānā)
+    var statiskas = [].slice.call(document.querySelectorAll('[data-empa-poza]'));
+    var redzamasStatiskas = [];
+    statiskas.forEach(function (v) {
+        v.innerHTML = svg(v.getAttribute('data-empa-poza'), {
+            scale: parseInt(v.getAttribute('data-empa-merogs'), 10) || 2,
+            label: v.getAttribute('data-empa-label') || ''
+        });
+    });
+
     var ieradies = false;
     var jaSveicina = false;
     try { jaSveicina = sessionStorage.getItem('empaSveiciens') !== '1'; } catch (e) {}
@@ -337,13 +348,13 @@
 
     // Stūra palīgs redzams tikai tad, kad hero ceļotājs nav ekrānā
     function atjaunot() {
-        var radit = ieradies && !heroRedzams;
+        var radit = ieradies && !heroRedzams && !redzamasStatiskas.length;
         sturis.el.classList.toggle('ieradies', radit);
         if (!radit) kluset(sturis);
         if (!ieradies) return;
         if (heroRedzams) {
             if (platsEkrans.matches) sveicinat(hero); // šaurā ekrānā sveiciens gaida stūra palīgu
-        } else {
+        } else if (radit) {
             sveicinat(sturis);
         }
     }
@@ -356,6 +367,18 @@
         }).observe(heroVieta);
     } else if (hero) {
         heroRedzams = false; // vecs pārlūks: rāda abus, bet sveic stūrī
+    }
+
+    if (statiskas.length && 'IntersectionObserver' in root) {
+        var statNov = new IntersectionObserver(function (ieraksti) {
+            ieraksti.forEach(function (i) {
+                var k = redzamasStatiskas.indexOf(i.target);
+                if (i.isIntersecting && k < 0) redzamasStatiskas.push(i.target);
+                if (!i.isIntersecting && k >= 0) redzamasStatiskas.splice(k, 1);
+            });
+            atjaunot();
+        });
+        statiskas.forEach(function (v) { statNov.observe(v); });
     }
 
     setTimeout(function () {

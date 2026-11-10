@@ -1777,6 +1777,158 @@ button.chip:hover { border-color: var(--c-line-strong); }
     .bento-flize:hover, .bento.redzams .bento-flize:hover { transform: none; }
 }
 
+/* LAPAS JOSLA (iekšlapu galva, layout.md Step 5 "Inner strip"): ainava no ārēja spraita assets/scene/ainava.svg (<use>),
+   kreisajā pusē virsraksts uz papīra miglas. Fiksēts augstums / proporcijas = bez nobīdes.
+   .lapas-josla--augsta = nodarbība (380px), --kompakta = noteikumi (220px), --maza = konts/admin (160px) */
+.lapas-josla {
+    --josla-h: clamp(280px, 19.45vw, 340px);
+    --josla-migla: 64%;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
+    min-height: var(--josla-h);
+    overflow: hidden;
+    background: var(--c-bg);
+    border-bottom: 1px solid var(--c-line);
+}
+
+.lapas-josla--augsta { --josla-h: clamp(380px, 26.4vw, 440px); }
+.lapas-josla--kompakta { --josla-h: 220px; }
+.lapas-josla--maza { --josla-h: 160px; }
+
+.lapas-josla-ainava {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--sc-near);
+}
+
+.lapas-josla-ainava svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky2) 42%, var(--sc-sky3) 62%, var(--sc-sky3) 100%);
+}
+
+/* papīra migla: teksts vienmēr uz gaiša fona (kontrasts), ainava atveras pa labi */
+.lapas-josla::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, var(--c-bg) 0%, color-mix(in srgb, var(--c-bg) 92%, transparent) calc(var(--josla-migla) * .56), transparent var(--josla-migla));
+}
+
+.lapas-josla-saturs {
+    display: grid;
+    align-content: center;
+    justify-items: start;
+    gap: var(--sp-3);
+    padding-top: var(--sp-6);
+    padding-bottom: var(--sp-6);
+}
+
+.lapas-josla-saturs > * { max-width: 640px; }
+
+.lapas-josla h1 {
+    font-size: var(--fs-h1);
+    line-height: 1.1;
+    color: var(--c-brand);
+    text-align: left;
+    margin: 0;
+}
+
+.lapas-josla h1 em { font-weight: 400; }
+
+.lapas-josla-ievads {
+    font-size: var(--fs-lead);
+    line-height: 1.5;
+    max-width: 48ch;
+    color: var(--c-ink);
+}
+
+/* Ceļš: Sākums / Kursi */
+.lapas-cels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+}
+
+.lapas-cels a {
+    color: var(--c-muted);
+    text-decoration: none;
+}
+
+.lapas-cels a:hover { color: var(--c-accent-strong); text-decoration: underline; }
+
+/* Dekoratīvs talismans uz joslas zemes (materiāli: 'lasa' ×2). Kājas = punkts (left, top) */
+.lapas-josla-empa {
+    position: absolute;
+    left: var(--empa-x, 64%);
+    top: var(--empa-y, 97%);
+    z-index: 1;
+    line-height: 0;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
+}
+
+.lapas-josla-empa svg { display: block; overflow: visible; image-rendering: pixelated; }
+
+/* Planšete: zemāka josla, migla plašāka */
+@media (max-width: 1023px) {
+    .lapas-josla { --josla-h: 240px; --josla-migla: 75%; }
+    .lapas-josla--augsta { --josla-h: 360px; }
+    .lapas-josla--kompakta { --josla-h: 200px; }
+    .lapas-josla--maza { --josla-h: 150px; }
+    .lapas-josla-empa { display: none; }
+}
+
+/* Telefons: virsraksts uz papīra, zem tā ainavas josla (apgriezums x 700–1440, y 340–580: saule + bāka).
+   Joslas SVG viewBox: parastā "0 220 1440 390", augstā (nodarbība) "0 200 1440 430" */
+@media (max-width: 767px) {
+    .lapas-josla {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: stretch;
+        min-height: 0;
+    }
+
+    .lapas-josla::before { display: none; }
+
+    .lapas-josla-saturs { padding-top: var(--sp-4); padding-bottom: var(--sp-5); }
+
+    .lapas-josla-ainava {
+        position: relative;
+        inset: auto;
+        z-index: 0;
+        aspect-ratio: 740 / 240;
+        overflow: hidden;
+        border-top: 1px solid var(--c-line);
+    }
+
+    .lapas-josla--augsta .lapas-josla-ainava { aspect-ratio: 740 / 280; }
+    .lapas-josla--kompakta .lapas-josla-ainava,
+    .lapas-josla--maza .lapas-josla-ainava { aspect-ratio: 740 / 160; }
+
+    .lapas-josla-ainava svg {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 194.6%;
+        height: auto;
+        aspect-ratio: 1440 / 390;
+        transform: translateY(-30.77%);
+    }
+
+    .lapas-josla--augsta .lapas-josla-ainava svg { aspect-ratio: 1440 / 430; transform: translateY(-32.56%); }
+}
+
 /* SATURA KARTĪTE */
 .register-section {
     padding: 60px 20px;
