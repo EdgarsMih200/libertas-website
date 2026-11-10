@@ -74,7 +74,15 @@ body {
     background-color: var(--c-bg);
     color: var(--c-ink);
     -webkit-font-smoothing: antialiased;
+    /* Lipīga kājene: īsās lapās (konts, admin) kājene paliek ekrāna apakšā, zem tās nav tukša papīra */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
+
+body > * { flex-shrink: 0; }
+body > .site-footer { margin-top: auto; }
 
 /* Pamata virsraksti (zema specifiskuma :where, lai klašu noteikumi tos pārraksta) */
 :where(h1, h2, h3, h4) {
@@ -111,6 +119,7 @@ footer :focus-visible {
 }
 
 .container {
+    width: 100%;   /* flex kolonnā (body) auto malas citādi saspiestu konteineru līdz saturam */
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
@@ -3277,6 +3286,7 @@ button.chip:hover { border-color: var(--c-line-strong); }
 
 .btn-signin {
     flex-direction: row;
+    width: auto;
     min-height: 44px;
     padding: 10px 20px;
     font-size: .9375rem;

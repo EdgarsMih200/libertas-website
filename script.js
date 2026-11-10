@@ -46,7 +46,7 @@
         if (!wrap) return;
         var box = el('div', 'auth-box');
         if (!me || !me.user) {
-            var a = el('a', 'btn-cta btn-signin', 'Ienākt ar Google');
+            var a = el('a', 'btn-secondary btn-signin', 'Ienākt ar Google');
             a.href = signInUrl();
             box.appendChild(a);
         } else {
