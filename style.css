@@ -4421,9 +4421,16 @@ html.ziemassvetki .site-header.izvelne-atverta::after {
     display: none;
 }
 
-/* telefonā hero teksts nedaudz zemāk, lai virtene neskartu pirmo "pill" */
+/* telefonā hero teksts / joslas ceļš nedaudz zemāk, lai virtene tos neskartu */
 @media (max-width: 767px) {
     html.ziemassvetki .hero-container { padding-top: calc(var(--sp-4) + 10px); }
+    html.ziemassvetki .lapas-josla-saturs { padding-top: calc(var(--sp-4) + 12px); }
+}
+
+/* nodarbībās ≤900px zem galvenes ir lipīgā satura josla — tur virteni nerāda */
+@media (max-width: 900px) {
+    html.ziemassvetki .mat-nodarbiba .site-header::before,
+    html.ziemassvetki .mat-nodarbiba .site-header::after { display: none; }
 }
 
 /* Sveiciens 22.–26. dec.: tāda pati "pill" kā .hero-zime, bet akcenta maigajā tonī */
