@@ -116,65 +116,232 @@ footer :focus-visible {
     padding: 0 20px;
 }
 
-/* NAVIGĀCIJA */
+/* NAVIGĀCIJA (layout.md §0): lipīga papīra galvene, logo pa kreisi, saites + pieteikšanās pa labi.
+   ≤768px: saites kļūst par lapu zem galvenes, ko atver .izvelnes-poga (skat. script.js) */
 .site-header {
-    background: rgba(249, 245, 240, 0.95);
-    backdrop-filter: blur(5px);
+    --header-h: 76px;
     position: sticky;
     top: 0;
     z-index: 1000;
-    border-bottom: 1px solid var(--border-light);
-    padding: 4px 0;
+    background: rgb(246 241 232 / .92);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--c-line);
 }
 
 .nav-wrapper {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: var(--sp-6);
+    min-height: var(--header-h);
+    padding-top: var(--sp-2);
+    padding-bottom: var(--sp-2);
+}
+
+.logo {
+    display: block;
+    flex-shrink: 0;
+    border-radius: var(--r-xs);
 }
 
 .logo img {
-    height: 72px;
     display: block;
+    height: 52px;
+    width: auto;
 }
 
-/* Izvēlnes pogas: "tabletes" ar maigu fonu, aktīvā — bordo */
 .main-nav {
     display: flex;
-    gap: 6px;
-    padding: 5px;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid var(--border-light);
-    border-radius: 999px;
-    box-shadow: 0 2px 10px rgba(107, 29, 29, 0.06);
+    align-items: center;
+    gap: var(--sp-6);
+    margin-left: auto;
 }
 
 .main-nav a {
-    text-decoration: none;
-    color: var(--text-dark);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--c-ink);
+    font-family: var(--ff-body);
+    font-size: var(--fs-xs);
     font-weight: 600;
-    font-size: 15px;
-    letter-spacing: 0.2px;
-    padding: 8px 18px;
-    border-radius: 999px;
-    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color var(--dur-1) var(--ease);
+}
+
+/* pasvītrojums aug no centra; aktīvajai lapai — bordo (zīmola zīme, nevis darbība) */
+.main-nav a::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    bottom: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--c-accent-strong);
+    transition: left var(--dur-2) var(--ease), right var(--dur-2) var(--ease);
 }
 
 .main-nav a:hover {
-    color: var(--primary-bordo);
-    background: #F3EAE0;
+    color: var(--c-accent-strong);
+}
+
+.main-nav a:hover::after {
+    left: 0;
+    right: 0;
 }
 
 .main-nav a.active,
 .main-nav a[aria-current="page"] {
-    color: #fff;
-    background: var(--primary-bordo);
-    box-shadow: 0 3px 10px rgba(107, 29, 29, 0.28);
+    color: var(--c-brand);
+}
+
+.main-nav a.active::after,
+.main-nav a[aria-current="page"]::after {
+    left: 0;
+    right: 0;
+    background: var(--c-brand);
 }
 
 .main-nav a:focus-visible {
-    outline: 2px solid var(--accent-gold);
+    outline: 2px solid var(--c-focus);
     outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Izvēlnes poga (tikai mobilajā) */
+.izvelnes-poga {
+    display: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    padding: 0;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    cursor: pointer;
+    transition: border-color var(--dur-1) var(--ease), background-color var(--dur-1) var(--ease);
+}
+
+.izvelnes-poga:hover {
+    border-color: var(--c-ink);
+}
+
+.izvelnes-poga:active {
+    background: var(--c-sunk);
+}
+
+.izvelnes-ikona {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.izvelnes-poga .ikona-aizvert,
+.izvelnes-poga[aria-expanded="true"] .ikona-atvert {
+    display: none;
+}
+
+.izvelnes-poga[aria-expanded="true"] .ikona-aizvert {
+    display: inline;
+}
+
+@media (max-width: 768px) {
+    .site-header {
+        --header-h: 64px;
+    }
+
+    .nav-wrapper {
+        gap: var(--sp-2);
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .izvelnes-poga {
+        display: grid;
+        order: 3;
+    }
+
+    .nav-wrapper .auth-box {
+        order: 2;
+        margin-left: auto;
+    }
+
+    /* Lapa zem galvenes; aizvērta — paslēpta (saites nav fokusējamas) */
+    .main-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        height: calc(100vh - var(--header-h));
+        height: calc(100dvh - var(--header-h));
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        margin: 0;
+        padding: var(--sp-2) var(--gutter) 0;
+        overflow-y: auto;
+        background: var(--c-bg);
+        border-top: 1px solid var(--c-line);
+    }
+
+    .site-header.izvelne-atverta .main-nav {
+        display: flex;
+        animation: izvelne-iebrauc var(--dur-2) var(--ease);
+    }
+
+    .main-nav a {
+        min-height: 60px;
+        padding-left: var(--sp-4);
+        border-bottom: 1px solid var(--c-line);
+        font-family: var(--ff-display);
+        font-size: 1.375rem;
+        font-weight: 500;
+        letter-spacing: 0;
+        text-transform: none;
+    }
+
+    /* mobilajā: bordo marķieris kreisajā malā pasvītrojuma vietā */
+    .main-nav a::after {
+        display: none;
+    }
+
+    .main-nav a.active::before,
+    .main-nav a[aria-current="page"]::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 18px;
+        bottom: 18px;
+        width: 3px;
+        border-radius: 2px;
+        background: var(--c-brand);
+    }
+
+    body.izvelne-atverta {
+        overflow: hidden;
+    }
+
+    /* talismans neaizsedz izvēlni */
+    body.izvelne-atverta .empanadillo {
+        display: none;
+    }
+}
+
+@keyframes izvelne-iebrauc {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: none; }
 }
 
 /* POGAS (design-system.md §5): primārā = terakota (--c-accent), nekad bordo */
@@ -2951,10 +3118,6 @@ footer {
         font-size: 34px;
     }
 
-    .main-nav {
-        display: none;
-    }
-
     .register-card {
         padding: 24px;
     }
@@ -2968,18 +3131,21 @@ footer {
 
 .btn-signin {
     flex-direction: row;
-    padding: 10px 18px;
-    font-size: 15px;
+    min-height: 44px;
+    padding: 10px 20px;
+    font-size: .9375rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .user-chip {
     display: flex;
     align-items: center;
     gap: 8px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    border-radius: 999px;
+    min-height: 44px;
+    background: var(--c-surface);
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: var(--r-pill);
     padding: 4px 14px 4px 4px;
     cursor: pointer;
     font: inherit;
@@ -2987,7 +3153,7 @@ footer {
 }
 
 .user-chip:hover {
-    border-color: var(--primary-bordo);
+    border-color: var(--c-ink);
 }
 
 .user-name {
@@ -3026,10 +3192,10 @@ footer {
     right: 0;
     top: calc(100% + 8px);
     min-width: 190px;
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-sm);
+    box-shadow: var(--shadow-3);
     padding: 6px;
     z-index: 1100;
 }
@@ -3056,8 +3222,8 @@ footer {
 
 .user-menu a:hover,
 .user-menu button:hover {
-    background: var(--bg-warm-light);
-    color: var(--primary-bordo);
+    background: var(--c-sunk);
+    color: var(--c-accent-strong);
 }
 
 .consent-note {
@@ -3315,9 +3481,9 @@ body {
 }
 
 @media (max-width: 768px) {
-    .logo img { height: 60px; }
     .user-name { display: none; }
-    .user-chip { padding: 4px; }
+    .user-chip { padding: 4px; min-height: 44px; min-width: 44px; justify-content: center; }
+    .btn-signin { min-height: 44px; padding: 8px 14px; font-size: .9375rem; box-shadow: none; }
     .admin-section { padding: 24px 12px; }
 }
 

@@ -16,12 +16,18 @@
     <header class="site-header">
         <div class="container nav-wrapper">
             <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
-                <img src="assets/libertas.png" alt="LIBERTAS Logo">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
             </a>
-            <nav class="main-nav">
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
                 <a href="kursi.html">Kursi</a>
                 <a href="materiali.html">Noderīgi materiāli</a>
-                <a href="index.html#par-mums">Par mums</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
             </nav>
         </div>
     </header>

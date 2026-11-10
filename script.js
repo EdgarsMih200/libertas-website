@@ -169,6 +169,54 @@
     });
 })();
 
+// Mobilā izvēlne (≤768px): .izvelnes-poga atver nav.main-nav kā lapu zem galvenes.
+// Esc aizver un atdod fokusu pogai; kamēr atvērta, Tab paliek izvēlnē, fons neritinās (CSS: body.izvelne-atverta).
+(function() {
+    var poga = document.querySelector('.izvelnes-poga');
+    var nav = poga && document.getElementById(poga.getAttribute('aria-controls'));
+    if (!nav) return;
+    var galvene = poga.closest('.site-header') || document.body;
+
+    function atverta() { return poga.getAttribute('aria-expanded') === 'true'; }
+
+    function iestatit(atvert, fokussUzPogu) {
+        poga.setAttribute('aria-expanded', String(atvert));
+        poga.setAttribute('aria-label', atvert ? 'Aizvērt izvēlni' : 'Atvērt izvēlni');
+        galvene.classList.toggle('izvelne-atverta', atvert);
+        document.body.classList.toggle('izvelne-atverta', atvert);
+        if (atvert) {
+            var pirma = nav.querySelector('a[href]');
+            if (pirma) pirma.focus();
+        } else if (fokussUzPogu) {
+            poga.focus();
+        }
+    }
+
+    poga.addEventListener('click', function() { iestatit(!atverta(), false); });
+
+    // Saite izvēlnē: aizver (svarīgi enkuriem tajā pašā lapā)
+    nav.addEventListener('click', function(e) {
+        if (atverta() && e.target.closest('a')) iestatit(false, false);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (!atverta()) return;
+        if (e.key === 'Escape') { iestatit(false, true); return; }
+        if (e.key !== 'Tab') return;
+        // Fokusa slazds: poga + izvēlnes saites
+        var vietas = [poga].concat([].slice.call(nav.querySelectorAll('a[href], button')));
+        var i = vietas.indexOf(document.activeElement);
+        if (i === -1) { e.preventDefault(); vietas[0].focus(); }
+        else if (e.shiftKey && i === 0) { e.preventDefault(); vietas[vietas.length - 1].focus(); }
+        else if (!e.shiftKey && i === vietas.length - 1) { e.preventDefault(); vietas[0].focus(); }
+    });
+
+    // Pārejot uz plato ekrānu, izvēlne aizveras (citādi paliktu bloķēta ritināšana)
+    var mq = window.matchMedia('(max-width: 768px)');
+    function mainita() { if (!mq.matches && atverta()) iestatit(false, false); }
+    if (mq.addEventListener) mq.addEventListener('change', mainita); else if (mq.addListener) mq.addListener(mainita);
+})();
+
 // Sākumlapas bento flīzes: gaismas plankums seko kursoram + ieejas animācija, kad sadaļa parādās ekrānā
 (function() {
     var bento = document.querySelector('.bento');
