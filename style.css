@@ -3660,6 +3660,60 @@ button.chip:hover { border-color: var(--c-line-strong); }
     }
 }
 
+/* 404 LAPA (404.html, layout.md §7): apjucis Empanadillo ×4 (×3 telefonā), divvalodīgs teksts, trīs izejas */
+.kluda {
+    display: grid;
+    justify-items: center;
+    gap: var(--sp-3);
+    padding-top: var(--sp-8);
+    padding-bottom: var(--sp-8);
+    text-align: center;
+}
+
+.kluda-empa { line-height: 0; margin-bottom: var(--sp-2); }
+
+.kluda-empa svg { display: block; overflow: visible; image-rendering: pixelated; }
+
+.kluda-kods {
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--c-muted);
+}
+
+.kluda h1 {
+    max-width: 20ch;
+    font-size: var(--fs-h1);
+    line-height: 1.1;
+    color: var(--c-brand);
+}
+
+.kluda h1 em { font-weight: 400; }
+
+.kluda-teksts {
+    max-width: 52ch;
+    font-size: var(--fs-lead);
+}
+
+.kluda-pogas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--sp-3);
+    margin-top: var(--sp-3);
+}
+
+.kluda-pogas .btn-secondary { width: auto; }
+
+@media (max-width: 767px) {
+    .kluda { padding-top: var(--sp-6); padding-bottom: var(--sp-7); }
+    .kluda-empa svg { width: 156px; height: 105px; }
+    .kluda-pogas { flex-direction: column; width: 100%; }
+    .kluda-pogas .btn-cta,
+    .kluda-pogas .btn-secondary { width: 100%; }
+}
+
 /* KĀJENE (layout.md §0): priežu siluets ar skatu torni pāriet meža krāsas kājenē */
 .site-footer {
     margin-top: var(--sp-8);
