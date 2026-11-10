@@ -26,7 +26,7 @@ Short reference so work can start without re-reading every file.
 | `zvani.js` | Home page only (December): golden bells `.zvans` on the hero pine branches swing (`.zvana`) and ring on hover/tap. Sound synthesized with Web Audio (pitch in `data-nots`); browsers allow sound only after the visitor's first click/tap/key |
 | `empanadillo.js` | Home page: mascot **Empanadillo** (pixel-art empanada: letter-grid sprites `KERMENIS`, `ACIS`, `ROKA_A/B`, `CEPURE` + palette `KRASAS`, turned into SVG rects in JS; 88px, 64px on mobile) fixed bottom-right. Slides in, greets once per session (sessionStorage `empaSveiciens`) in a speech bubble; click = first his filling (`PILDIJUMI`: per signed-in user by hash of `LIB.me.user.id`, for guests random and kept in localStorage `empaPildijums`), then the other phrases (`frazes`), hover = waves (two arm frames `.empa-roka-a/-b`). Wears a Santa hat under `html.ziemassvetki`, but on 5 December (owner's birthday) a pixel party hat `BALLITES_CEPURE` instead (test with `?ballite=1`). Load after `snow.js` |
 | `style.css` | Shared styles (see sections below) |
-| `assets/` | `libertas.png` (logo), `ziemassvetki/` (Christmas decorations: `zars.svg` pine branch, `ilekss.svg` holly, `bumba.svg` bauble), `kursi/*.svg` (course cover illustrations, 600×320, drawn in SVG: `spanu-a1`, `spanu-a2`, `spanu-b1-1`, `spanu-b1-2`, `anglu-a1`, `anglu-a2`); old `spain-a1.png`, `english-a1.jpg` no longer used |
+| `assets/` | `libertas.png` (logo, bordo), `libertas-light.svg` (vector trace of the logo in paper `#F6F1E8`, for dark backgrounds: footer), `ilustracijas/kajene-mezs.svg` (footer silhouette: pines + skatu tornis, 1440×240, bottom band = `--c-forest`), `ziemassvetki/` (Christmas decorations: `zars.svg` pine branch, `ilekss.svg` holly, `bumba.svg` bauble), `kursi/*.svg` (course cover illustrations, 600×320, drawn in SVG: `spanu-a1`, `spanu-a2`, `spanu-b1-1`, `spanu-b1-2`, `anglu-a1`, `anglu-a2`); old `spain-a1.png`, `english-a1.jpg` no longer used |
 | `konts.html` + `konts.js` | "Mani kursi": own profile (phone editable), own enrollments, cancel while `pieteicies` |
 | `admin.html` + `admin.js` | Admin panel (users: data, last login/visit; enrollments: status, paid, notes, add/delete). noindex |
 | `worker/index.js` | Cloudflare Worker: Google OAuth, sessions, JSON API (runs first for `/api/*`, `/auth/*`) |
@@ -36,13 +36,17 @@ Short reference so work can start without re-reading every file.
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
 
 ## Shared page skeleton (all pages)
-`header.site-header > .container.nav-wrapper` → `a.logo` (img), `nav.main-nav` (Kursi → `kursi.html`, Noderīgi materiāli, Par mums); the logo links to `index.html` (no separate "Sākums" item),
-(no register button in the header). Then `<section>`s, then `footer > .container > p` (© 2026 Libertas).
-Footer also links to `noteikumi.html`.
-Header/footer are duplicated in each HTML file: **change every page** when editing them.
-
-Nav anchor `#par-mums` does **not exist yet** (planned section). BJU (`#faq`) was removed from the menu.
-
+- `<head>`: Google Fonts (preconnect + Lora 400–700/italic + Source Sans 3 400/600/700, `display=swap`) before `style.css`.
+- `header.site-header > .container.nav-wrapper` → `a.logo` (img 500×216, 52px tall / 40px ≤768px),
+  `button.izvelnes-poga` (44×44, `aria-expanded`, `aria-controls="galvena-izvelne"`, `aria-label` "Atvērt izvēlni"/"Aizvērt izvēlni", icons `.ikona-atvert`/`.ikona-aizvert`),
+  `nav.main-nav#galvena-izvelne` (Kursi → `kursi.html`, Noderīgi materiāli → `materiali.html`; current page `aria-current="page"`).
+  `script.js` appends `.auth-box` at the end of `.nav-wrapper`.
+- **"Par mums" is hidden** (HTML comment in the nav of every page) until `#par-mums` content exists. BJU (`#faq`) also not in menu.
+- `footer.site-footer` → `img.kajene-ainava` (silhouette SVG) → `.kajene-saturs` (forest): `.container.kajene-kolonnas` with
+  `.kajene-zimols` (`a.kajene-logo` light SVG, `.kajene-sauklis`, `.kajene-apraksts`) + 3 `nav.kajene-kolonna` (`h2.kajene-virsraksts`):
+  Kursi (kursi.html, konts.html), Materiāli (materiali + both lessons), Libertas (noteikumi.html, `#sikdatnes`); then `.kajene-josla`
+  (© 2026 Libertas + legal link). No contacts / Par mums in the footer (comment marks where they go).
+- Header/footer are duplicated static HTML in each of the 8 files: **change every page** when editing them.
 ## Courses
 | id | Name | Price | Schedule | Image |
 |---|---|---|---|---|
@@ -69,16 +73,31 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - Local dev: `npx wrangler d1 migrations apply libertas-db --local`, then `npx wrangler dev`. Remote schema: `--remote`.
 
 ## script.js
+- Mobile menu (≤768px): `.izvelnes-poga` toggles `aria-expanded`/label, `.site-header.izvelne-atverta` (shows the sheet) and
+  `body.izvelne-atverta` (scroll lock, hides `.empanadillo`); focus goes to the first link, Tab trapped (button + links), Esc closes and
+  returns focus, link click closes, closes when the viewport grows past 768px.
 - Calls `/api/me`, injects sign-in button or user chip/menu (Mani kursi, Administrācija, Iziet) into `.nav-wrapper`.
 - Exposes `window.LIB` (`api`, `el`, `toast`, `signInUrl`, `STATUSI`, `me`) and fires `lib:me`; used by `konts.js`/`admin.js`.
 - Course buttons (`data-course`): enroll, or sign in first (pending course kept in sessionStorage).
 - Home bento: sets `--mx/--my` on `.bento-flize` for the cursor spotlight; reveal-on-scroll (`.bento.gaida` → `.redzams`) via IntersectionObserver.
 
 ## style.css (by section, line numbers approx.)
-- `:root` variables (l.2): `--primary-bordo #6B1D1D`, `--primary-bordo-hover #521515`, `--bg-warm-light #F9F5F0`,
-  `--bg-card #FFF`, `--text-dark #2C2C2C`, `--border-light #E8E2D9`, `--accent-green #2F5D3A`, `--accent-gold #D4A537`, `--accent-blue #1F5FA8`, `--font-heading Georgia`, `--font-body` system stack
-- NAVIGĀCIJA (l.37): `.site-header` (sticky, slim: 4px padding), `.nav-wrapper`, `.logo img` (72px high), `.main-nav` (white pill bar) with pill links `.main-nav a`; current page `a[aria-current="page"]` / `.active` = filled bordo
-- POGAS (l.79): `.btn-cta` (bordo), `.btn-large`, `.btn-secondary` (beige), `.btn-title`, `.btn-sub`
+- DIZAINA SISTĒMA `:root` (top, see `docs/redesign/design-system.md` §8): colours `--c-bg #F6F1E8`, `--c-surface`, `--c-sunk`, `--c-line(-strong)`,
+  `--c-ink #24211E`, `--c-muted`, `--c-disabled`, `--c-brand #6B1D1D` (logo/headings only), `--c-accent #B4502A` (the one CTA colour) + `-strong`/`-soft`,
+  `--c-sage(-ink)`, `--c-forest(-2)`, `--c-on-forest(-muted)`, `--c-focus(-dark)`, semantic `--c-success/error/warn/info(-bg)`, scene `--scene-*`, `--c-season-glow/-snow`;
+  type `--ff-display` (Lora), `--ff-body` (Source Sans 3), `--fs-display/h1/h2/h3/lead/body/sm/xs` (clamp); `--sp-1…10`, `--sp-section`, `--gutter`;
+  `--r-xs/sm/md/lg/pill`; `--shadow-1/2/3/cta`; `--ease`, `--dur-1…4`.
+  **Old names are aliases** (`--primary-bordo`→brand, `--bg-warm-light`→bg, `--bg-card`→surface, `--text-dark`→ink, `--border-light`→line,
+  `--accent-green`→success, `--accent-gold`→season-glow, `--accent-blue`→info, `--font-heading/-body`); migrate rules to the new names over time.
+  Base: body 17px Source Sans; `:where(h1–h4)` Lora + fluid sizes (no colour: inherit); global `:focus-visible` ink ring (forest: `--c-focus-dark`);
+  global `prefers-reduced-motion` rule kills animations/transitions.
+- NAVIGĀCIJA: `.site-header` (sticky paper 92% + blur, `--header-h` 76/64px), `.nav-wrapper` (flex), `.logo img` 52px, `.main-nav` uppercase 13px links,
+  underline grows on hover (accent-strong), `aria-current`/`.active` = bordo underline; `.izvelnes-poga` (hidden >768px).
+  ≤768px: order logo · `.auth-box` · menu button; `.main-nav` = absolute sheet under the header (60px Lora rows, bordo left marker on the current page,
+  footer silhouette strip via `.main-nav::after`), shown with `.site-header.izvelne-atverta`
+- POGAS: `.btn-cta` (terracotta pill, 48px, hover/active/focus/disabled), `.btn-large`, `.btn-secondary` (outlined pill), `.btn-title`, `.btn-sub`;
+  `.chip` (sage; `[aria-pressed=true]` accent-soft + ✓; `.chip--limenis`) and `.lauks` (48px input, `aria-invalid`) helpers for new markup;
+  shared input styles also cover `.account-form input`, `.admin-filters`, `.admin-add select`
 - HERO SADAĻA (l.136): `.hero-section`, `.hero-container`, `.hero-text h1`, `.hero-subtitle`, `.hero-cta-box`
 - KURSU IZKĀRTOJUMS (l.175): `.courses-section`, `.section-title`, `.courses-grid`, `.course-card`, `.course-body`,
   `.course-price`, `.course-info`, `.btn-card`
@@ -86,15 +105,18 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - SATURA KARTĪTE: `.register-section`, `.register-card`, `.register-intro` (centered card, reused by `noteikumi.html`)
 - JURIDISKĀ LAPA: `.legal-card`, `.legal-toc`, `.legal-table`, `.placeholder`
 - MATERIĀLU LAPAS (`mat-*` prefix, before KĀJENE): see `materiali*.html` rows above; own responsive rules (900px / 640px), reduced-motion and `@media print` (print shows both flip-card sides and translations, hides UI). List page block `/* MATERIĀLU SARAKSTS (materiali.html) */` sits inside it, with its own 900px / 640px rules (filter count badges hidden on phones)
-- KĀJENE: `footer`
+- KĀJENE: `.site-footer`, `.kajene-ainava` (height `clamp(120px,16.667vw,240px)`, `object-fit: cover`, tower kept at 76%), `.kajene-saturs`,
+  `.kajene-kolonnas` (4 cols → 2 at ≤900px; ≤640px Libertas column full width, 44px link rows), `.kajene-zimols`, `.kajene-logo`, `.kajene-sauklis`,
+  `.kajene-apraksts`, `.kajene-virsraksts`, `.kajene-kolonna`, `.kajene-josla`
 - SNIEGS (end of file): `.snow-canvas` (fixed, `pointer-events: none`, z-index 1000)
 - EMPANADILLO (end of file): `.empanadillo`, `.empa-poga`, `.empa-burbulis`, `.empa-aizvert`, `.empa-roka`, `.empa-acis`, `.empa-cepure`
-- ZIEMASSVĒTKU NOFORMĒJUMS (end of file): all rules under `html.ziemassvetki` (December, home page only). Vars `--xmas-green`, `--xmas-green-dark`, `--xmas-gold`, `--xmas-red`, `--xmas-blue`. Header light string (`.site-header::before/::after`, twinkle), pine branches in hero corners with golden bells (`.zvanu-zars-k`/`-l` containers sized like the branch, bell SVG `<symbol id="zvana-forma">` in `index.html`), `.svetku-sveiciens` greeting pill above the hero `h1` (shown only under `html.svetku-dienas`), CTA box as a gift with an inline-SVG bow `span.cta-bantite` in `index.html` (loops `.cilpa-k`/`.cilpa-l` flap on hover), baubles beside `.section-title`, gold top + holly on `.course-card`, snow-capped `footer`
-- RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks, `.main-nav` hidden (no mobile menu yet)
+- ZIEMASSVĒTKU NOFORMĒJUMS (end of file): all rules under `html.ziemassvetki` (December, home page only). Vars `--xmas-green`, `--xmas-green-dark`, `--xmas-gold`, `--xmas-red`, `--xmas-blue`. Header light string (`.site-header::before/::after`, twinkle), pine branches in hero corners with golden bells (`.zvanu-zars-k`/`-l` containers sized like the branch, bell SVG `<symbol id="zvana-forma">` in `index.html`), `.svetku-sveiciens` greeting pill above the hero `h1` (shown only under `html.svetku-dienas`), CTA box as a gift with an inline-SVG bow `span.cta-bantite` in `index.html` (loops `.cilpa-k`/`.cilpa-l` flap on hover), baubles beside `.section-title`, gold top + holly on `.course-card`, snow cap on `.kajene-saturs::before` (top of the forest band)
+- RESPONSĪVAIS DIZAINS: `@media (max-width: 768px)`: hero stacks (mobile nav lives in NAVIGĀCIJA)
+- LIETOTĀJA IZVĒLNE: `.auth-box`, `.btn-signin` (44px, accent), `.user-chip` (44px, avatar-only ≤768px), `.user-menu`; `.badge-<status>` in semantic colours
 
 ## Conventions
 - UI text and code comments are in Latvian. Section comments in CSS are UPPERCASE Latvian (`/* KĀJENE */`).
-- Reuse the CSS variables. Don't hard-code new colors.
+- Reuse the CSS variables (prefer the new `--c-*` / `--fs-*` / `--sp-*` names). Don't hard-code new colors. Bordo = brand marks/headings, terracotta = actions only.
 - Images go in `assets/`. Prefer compressed `.jpg`/`.webp` (under ~200 KB).
 
 ## Known gaps / TODO
@@ -102,6 +124,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
 - Google OAuth client must be created and `GOOGLE_CLIENT_ID` / secret set before sign-in works live.
 - No email notifications on new enrollments; no online payment (admin marks paid manually).
-- `#par-mums` (About) and `#faq` (BJU) sections missing.
-- No mobile navigation (nav is hidden under 768px).
+- `#par-mums` (About) and `#faq` (BJU) sections missing; "Par mums" link hidden in nav (re-add on all 8 pages + footer Libertas column when content exists).
+- No contact details in the footer yet (only in `noteikumi.html`).
 - No favicon, meta description or Open Graph tags.
+- Redesign in progress on branch `redesign/new-style` (chunk 1 foundation done: tokens, buttons, header/mobile menu, footer). Page bodies (hero, bento, courses, materials, lessons) still use the old look via aliases.
