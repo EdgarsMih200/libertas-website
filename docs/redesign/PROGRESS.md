@@ -5,7 +5,8 @@
 - Step 5.5 backup done early (2026-11-10): original = `a4d5ade`, tags `pre-redesign-backup` + `backup-2026-11-10-pre-redesign` (pushed), work branch `redesign/new-style` (pushed). `main` untouched until Step 7.
 
 ## In progress
-- Step 2: done, waiting for client confirmation (style board reviewed in browser)
+- Step 2 approved by client (2026-11-10), incl. new hero copy + light SVG logo version.
+- Step 3: 3 mascot options ready (A evolution, B traveller, C geometry) — WAITING for client choice. Page: `docs/redesign/mascot-options/index.html` (serve via http, heavy page)
 
 ## Decisions
 - `docs/` in `.assetsignore` (not published).
@@ -14,8 +15,6 @@
 - Workflow: brief overrides CLAUDE.md "push each stage to main" during redesign; main only at Step 7.
 
 ## Open questions
-- Hero copy in style board is NEW (subtitle, 3 feature blocks, CTA labels "Izvēlies kursu" / "Noderīgi materiāli") — needs client approval vs original "REĢISTRĒTIES" / "KURSI".
-- Light logo version (SVG) needed for dark footer/evening.
 - Delete unused `assets/anglu_a1_saturs.png` (2.8 MB)? (propose at Step 6)
 
 ## Rollback
