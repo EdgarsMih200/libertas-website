@@ -2558,6 +2558,9 @@ html .lapas-josla.sc-muertos {
     background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky2) 42%, var(--sc-sky3) 62%, var(--sc-sky3) 100%);
 }
 
+/* ilustrēts vāks (attēls ainavas vietā), apgriež kā ainavu; labā puse = galvenais motīvs */
+.mat-vaks-attels { object-fit: cover; object-position: 70% 30%; }
+
 /* tumša pāreja apakšā, lai sveiciens būtu salasāms */
 .mat-vaks::after {
     content: "";
