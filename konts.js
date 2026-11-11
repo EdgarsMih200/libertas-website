@@ -18,6 +18,13 @@
         profils: { nosaukums: 'Mans profils' }
     };
     var IKONA_KALENDARS = '<svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>';
+    // Grupas periods no D1 (period_start/_end/_days) -> "11.01.2027.–24.02.2027. · Pirmdienās un trešdienās, 18:00–21:00"
+    var DIENAS = { "pr-tr": "Pirmdienās un trešdienās", "ot-ce": "Otrdienās un ceturtdienās" };
+    function lvDatums(s) { var p = String(s).split("-"); return p.length === 3 ? p[2] + "." + p[1] + "." + p[0] + "." : s; }
+    function periodaTeksts(en) {
+        if (!en.period_start) return "";
+        return lvDatums(en.period_start) + "–" + lvDatums(en.period_end) + " · " + (DIENAS[en.period_days] || "") + ", 18:00–21:00";
+    }
     var IKONA_KAMERA = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 
     function fmt(iso) {
@@ -179,10 +186,11 @@
         b.appendChild(birkas);
         b.appendChild(el('h3', '', en.course_name));
         if (en.price_eur != null) b.appendChild(el('p', 'course-price', cena(en.price_eur)));
-        if (en.schedule) {
+        var grupa = periodaTeksts(en) || en.schedule;
+        if (grupa) {
             var inf = el('p', 'course-info');
             inf.innerHTML = IKONA_KALENDARS;
-            inf.appendChild(document.createTextNode(en.schedule));
+            inf.appendChild(document.createTextNode(grupa));
             b.appendChild(inf);
         }
         b.appendChild(gaita(en));

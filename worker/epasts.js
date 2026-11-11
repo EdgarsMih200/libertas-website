@@ -45,7 +45,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
   const rindas = [
     ['Kurss', esc(course.name)],
     ['Cena', esc(cena(course.price_eur))],
-    ['Grafiks', esc(course.schedule || 'Tiks precizēts')],
+    ['Grupa', esc(course.schedule || 'Tiks precizēta')],
     ['Pieteikums iesniegts', esc(datums(enrollment.created_at || enrollment.updated_at))],
   ].filter((r) => r[1]);
   const soli = [
@@ -145,7 +145,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
     '',
     `Kurss: ${course.name}`,
     `Cena: ${cena(course.price_eur)}`,
-    `Grafiks: ${course.schedule || 'Tiks precizēts'}`,
+    `Grupa: ${course.schedule || 'Tiks precizēta'}`,
     '',
     'Statuss: Gaida apmaksu. Vieta grupā kļūst galīga pēc apmaksas.',
     '',
@@ -165,7 +165,7 @@ function adminaVestule({ user, course, origin }) {
   const rinda = (k, v) => `<tr><td style="padding:4px 12px 4px 0;color:#5C554D;">${k}</td><td style="padding:4px 0;"><strong>${esc(v)}</strong></td></tr>`;
   const html = `<div style="font-family:${SANS};font-size:15px;color:#24211E;">
 <p>Jauns pieteikums kursam <strong>${esc(course.name)}</strong>.</p>
-<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}</table>
+<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${rinda('Grupa', course.schedule || 'Tiks precizēta')}</table>
 <p><a href="${origin}/admin.html">Atvērt administrāciju</a></p></div>`;
   const text = `Jauns pieteikums: ${course.name}\n${user.name || ''} <${user.email}>\nTālrunis: ${user.phone || '—'}\n${origin}/admin.html`;
   return { subject: `Jauns pieteikums: ${course.name} — ${user.name || user.email}`, html, text };

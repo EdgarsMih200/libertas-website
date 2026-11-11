@@ -163,9 +163,16 @@
         }
     }
 
-    function enroll(btn, id) {
+    // Grupu periodi (grafiks.js — ES modulis, kopīgs ar Worker)
+    var grafiksP = null;
+    function grafiks() {
+        if (!grafiksP) grafiksP = import('/grafiks.js').catch(function() { return null; });
+        return grafiksP;
+    }
+
+    function enroll(btn, id, period) {
         btn.classList.add('btn-busy');
-        return api('POST', '/api/enroll', { course_id: id }).then(function(d) {
+        return api('POST', '/api/enroll', { course_id: id, period: period || null }).then(function(d) {
             setBtn(btn, d && d.enrollment ? d.enrollment : { status: 'pieteicies' });
             toast(d && d.email_sent ? 'Paldies! Pieteikums saņemts — apstiprinājumu nosūtījām uz tavu e-pastu.' : 'Paldies! Pieteikums saņemts.');
         }).catch(function(err) {
@@ -175,15 +182,23 @@
     }
 
     // Kursa dati apstiprinājuma logam — no kartītes (kursi.html)
+    // (kursa lapā — no pogas data-nosaukums / data-limenis / data-cena)
     function kursaDati(btn) {
         var karte = btn.closest('.course-card') || document;
         function t(sel) { var n = karte.querySelector(sel); return n ? n.textContent.replace(/\s+/g, ' ').trim() : ''; }
-        return { nosaukums: t('h3'), limenis: t('.chip--limenis'), cena: t('.course-price'), grafiks: t('.course-info') };
+        return {
+            nosaukums: btn.getAttribute('data-nosaukums') || t('h3'),
+            limenis: btn.getAttribute('data-limenis') || t('.chip--limenis'),
+            cena: btn.getAttribute('data-cena') || t('.course-price')
+        };
     }
 
-    // Apstiprinājuma logs pirms pieteikšanās (native <dialog>: fokusa slazds + Esc). apstiprinat() izsauc tikai pēc atzīmes.
-    function radiLogu(btn, logged, apstiprinat) {
+    // Apstiprinājuma logs pirms pieteikšanās (native <dialog>: fokusa slazds + Esc). apstiprinat(periods) izsauc tikai pēc atzīmes.
+    function radiLogu(btn, logged, apstiprinat, G) {
         var k = kursaDati(btn);
+        var id = btn.getAttribute('data-course');
+        var periodi = G ? G.periodi(id) : [];
+        var arGrafiku = !!(G && G.AR_GRAFIKU.indexOf(id) >= 0);
         var d = el('dialog', 'pieteikuma-logs');
         d.setAttribute('aria-labelledby', 'pl-virsraksts');
         d.setAttribute('aria-describedby', 'pl-ievads');
@@ -205,7 +220,7 @@
         d.appendChild(galva);
 
         var dl = el('dl', 'pl-dati');
-        [['Līmenis', k.limenis], ['Cena', k.cena], ['Grafiks', k.grafiks]].forEach(function(r) {
+        [['Līmenis', k.limenis], ['Cena', k.cena], ['Apjoms', '14 nodarbības · 7 nedēļas']].forEach(function(r) {
             if (!r[1]) return;
             var w = el('div');
             w.appendChild(el('dt', '', r[0]));
@@ -213,6 +228,32 @@
             dl.appendChild(w);
         });
         d.appendChild(dl);
+
+        // Grupas (perioda) izvēle
+        var izv = null;
+        var gr = el('div', 'pl-grupa');
+        if (periodi.length) {
+            var gl = el('label', 'pl-grupa-virsraksts', 'Izvēlies grupu');
+            gl.htmlFor = 'pl-periods';
+            gr.appendChild(gl);
+            izv = el('select', 'lauks pl-periods'); izv.id = 'pl-periods'; izv.required = true;
+            var velamais = btn.getAttribute('data-periods');
+            btn.removeAttribute('data-periods');
+            periodi.forEach(function(p, i) {
+                var op = el('option', '', G.periodaDatumi(p) + ' · ' + p.dienasTeksts);
+                op.value = p.id;
+                if (velamais ? p.id === velamais : i === 0) op.selected = true;
+                izv.appendChild(op);
+            });
+            gr.appendChild(izv);
+            gr.appendChild(el('p', 'pl-grupa-piezime', 'Nodarbības tiešsaistē ' + G.LAIKS + '. Valsts svētku dienās nodarbību nav — tās pārceļam uz nākamo grupas nodarbības dienu.'));
+        } else {
+            gr.appendChild(el('p', 'pl-grupa-virsraksts', 'Grupa'));
+            gr.appendChild(el('p', 'pl-grupa-piezime', arGrafiku || !G
+                ? 'Grupu datumus neizdevās ielādēt. Pieteikumu vari iesniegt — grupu saskaņosim e-pastā.'
+                : 'Nākamās grupas datumi vēl tiek precizēti. Pieteikums rezervē tev vietu, un datumus paziņosim e-pastā.'));
+        }
+        d.appendChild(gr);
 
         var ievads = el('p', 'pl-ievads', 'Pieteikums rezervē tev vietu grupā. Tas kļūst galīgs pēc apmaksas — līdz tam nekas nav jāmaksā un pieteikumu vari atcelt.');
         ievads.id = 'pl-ievads';
@@ -259,11 +300,57 @@
         // Klikšķis uz fona (ārpus loga) aizver
         d.addEventListener('click', function(e) { if (e.target === d) aizvert(); });
         d.addEventListener('close', function() { d.remove(); if (document.body.contains(btn)) btn.focus(); });
-        ok.addEventListener('click', function() { if (!cb.checked) return; d.close(); apstiprinat(); });
+        ok.addEventListener('click', function() {
+            if (!cb.checked) return;
+            var per = izv ? izv.value : null;
+            d.close();
+            apstiprinat(per);
+        });
 
         document.body.appendChild(d);
         if (d.showModal) d.showModal(); else d.setAttribute('open', '');
-        cb.focus();
+        (izv || cb).focus();
+    }
+
+    // Kartītēs un kursa lapā: tuvākās grupas datumi ([data-nakama-grupa="<kursa id>"])
+    // Kursa lapā: tuvāko grupu saraksts ([data-grupu-saraksts="<kursa id>"]), klikšķis uz grupas = pieteikties tieši tai
+    function raditNakamasGrupas() {
+        var vietas = document.querySelectorAll('[data-nakama-grupa]');
+        var saraksti = document.querySelectorAll('[data-grupu-saraksts]');
+        if (!vietas.length && !saraksti.length) return;
+        grafiks().then(function(G) {
+            if (!G) return;
+            vietas.forEach(function(v) {
+                var p = G.periodi(v.getAttribute('data-nakama-grupa'), { skaits: 1 })[0];
+                if (p) v.textContent = 'Nākamā grupa: ' + G.periodaDatumi(p) + ' · ' + p.dienasTeksts;
+            });
+            saraksti.forEach(function(ul) {
+                var id = ul.getAttribute('data-grupu-saraksts');
+                var periodi = G.periodi(id);
+                if (!periodi.length) return;
+                ul.textContent = '';
+                var poga = document.querySelector('a.btn-cta[data-course="' + id + '"]');
+                periodi.forEach(function(p) {
+                    var li = el('li', 'kurss-grupa');
+                    li.appendChild(el('b', '', G.periodaDatumi(p)));
+                    li.appendChild(el('span', '', p.dienasTeksts + ', ' + p.laiks));
+                    if (p.izlaistas.length) {
+                        li.appendChild(el('small', '', 'Bez nodarbībām svētkos: ' + p.izlaistas.map(function(x) { return G.datums(x.datums).slice(0, 6) + ' (' + x.svetki + ')'; }).join(', ')));
+                    }
+                    if (poga) {
+                        var b = el('button', 'btn-link kurss-grupa-poga', 'Pieteikties šai grupai');
+                        b.type = 'button';
+                        b.addEventListener('click', function() {
+                            if (poga.classList.contains('btn-done')) { poga.focus(); return; }
+                            poga.setAttribute('data-periods', p.id);
+                            poga.click();
+                        });
+                        li.appendChild(b);
+                    }
+                    ul.appendChild(li);
+                });
+            });
+        });
     }
 
     function initPage(me) {
@@ -276,14 +363,22 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (btn.classList.contains('btn-busy') || btn.classList.contains('btn-done')) return;
-                radiLogu(btn, logged, function() {
-                    if (!logged) {
-                        // Apstiprināts pirms ienākšanas — pēc atgriešanās pieteikums tiek iesniegts bez otra loga
-                        try { sessionStorage.setItem('pendingCourse', id); } catch (x) {}
-                        location.href = signInUrl('/kursi.html');
-                        return;
-                    }
-                    enroll(btn, id);
+                btn.classList.add('btn-busy');
+                grafiks().then(function(G) {
+                    btn.classList.remove('btn-busy');
+                    radiLogu(btn, logged, function(period) {
+                        if (!logged) {
+                            // Apstiprināts pirms ienākšanas — pēc atgriešanās pieteikums tiek iesniegts bez otra loga
+                            try {
+                                sessionStorage.setItem('pendingCourse', id);
+                                if (period) sessionStorage.setItem('pendingPeriod', period);
+                                else sessionStorage.removeItem('pendingPeriod');
+                            } catch (x) {}
+                            location.href = signInUrl(location.pathname || '/kursi.html');
+                            return;
+                        }
+                        enroll(btn, id, period);
+                    }, G);
                 });
             });
         });
@@ -303,12 +398,18 @@
         }
 
         // Gaidošais pieteikums pēc ienākšanas
-        var pending = null;
-        try { pending = sessionStorage.getItem('pendingCourse'); sessionStorage.removeItem('pendingCourse'); } catch (x) {}
+        var pending = null, pendingPeriod = null;
+        try {
+            pending = sessionStorage.getItem('pendingCourse');
+            pendingPeriod = sessionStorage.getItem('pendingPeriod');
+            sessionStorage.removeItem('pendingCourse');
+            sessionStorage.removeItem('pendingPeriod');
+        } catch (x) {}
         if (logged && pending) {
             var pb = document.querySelector('a.btn-cta[data-course="' + pending.replace(/[^a-z0-9-]/gi, '') + '"]');
-            if (pb && !(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending);
+            if (pb && !(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, pendingPeriod);
         }
+        raditNakamasGrupas();
     }
 
     document.addEventListener('DOMContentLoaded', function() {

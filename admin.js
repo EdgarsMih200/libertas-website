@@ -3,7 +3,28 @@
     var L = window.LIB, el = L.el, api = L.api;
     var root = document.getElementById('admin');
     var ST = Object.keys(L.STATUSI);
-    var state = { users: [], enr: [], courses: [], tab: 'enr', fc: '', fs: '', q: '' };
+    var state = { users: [], enr: [], courses: [], tab: 'enr', fc: '', fs: '', fp: '', q: '' };
+    var G = null; // grafiks.js (grupu periodi)
+
+    // Kursa grupas administrācijai: no pagājušā gada līdz nākamajam (arī jau sākušās)
+    function kursaPeriodi(courseId) {
+        if (!G || G.AR_GRAFIKU.indexOf(courseId) < 0) return [];
+        var y = new Date().getFullYear(), out = [];
+        for (var g = y - 1; g <= y + 1; g++) out = out.concat(G.gadaPeriodi(courseId, g));
+        return out;
+    }
+    var DIENAS_ISS = { 'pr-tr': 'P/T', 'ot-ce': 'O/C' };
+    function lvD(s) { var p = String(s || '').split('-'); return p.length === 3 ? p[2] + '.' + p[1] + '.' + p[0] + '.' : '—'; }
+    function periodaNos(start, end, days) { return start ? lvD(start) + '–' + lvD(end) + ' · ' + (DIENAS_ISS[days] || '') : 'Nav izvēlēta'; }
+    function periodaSelect(courseId, value, onchange) {
+        var opts = [['', 'Grupa nav izvēlēta']], ir = false;
+        kursaPeriodi(courseId).forEach(function(p) {
+            opts.push([p.id, periodaNos(p.sakums, p.beigas, p.dienas)]);
+            if (p.id === value) ir = true;
+        });
+        if (value && !ir) opts.push([value, lvD(value) + ' (ārpus saraksta)']);
+        return select(opts, value || '', onchange);
+    }
 
     function fmt(iso, time) {
         if (!iso) return '—';
@@ -41,8 +62,10 @@
 
     function load() {
         return Promise.all([
-            api('GET', '/api/admin/users'), api('GET', '/api/admin/enrollments'), api('GET', '/api/courses')
+            api('GET', '/api/admin/users'), api('GET', '/api/admin/enrollments'), api('GET', '/api/courses'),
+            import('/grafiks.js').catch(function() { return null; })
         ]).then(function(r) {
+            G = r[3];
             state.users = r[0].users || r[0] || [];
             state.enr = r[1].enrollments || r[1] || [];
             state.courses = r[2].courses || r[2] || [];
@@ -78,13 +101,17 @@
         var us = select([['', 'Izvēlieties lietotāju']].concat(state.users.map(function(u) {
             return [String(u.id), (u.name || '') + ' <' + u.email + '>'];
         })), '');
-        var cs = select([['', 'Izvēlieties kursu']].concat(state.courses.map(function(c) { return [c.id, c.name]; })), '');
+        var ps = periodaSelect('', '');
+        var cs = select([['', 'Izvēlieties kursu']].concat(state.courses.map(function(c) { return [c.id, c.name]; })), '', function(v) {
+            var jauns = periodaSelect(v, '');
+            f.replaceChild(jauns, ps); ps = jauns;
+        });
         var b = el('button', 'btn-cta btn-small', 'Pievienot'); b.type = 'submit';
-        f.appendChild(us); f.appendChild(cs); f.appendChild(b);
+        f.appendChild(us); f.appendChild(cs); f.appendChild(ps); f.appendChild(b);
         f.addEventListener('submit', function(e) {
             e.preventDefault();
             if (!us.value || !cs.value) return L.toast('Izvēlieties lietotāju un kursu.', true);
-            api('POST', '/api/admin/enrollments', { user_id: Number(us.value), course_id: cs.value })
+            api('POST', '/api/admin/enrollments', { user_id: Number(us.value), course_id: cs.value, period: ps.value || null })
                 .then(function() { L.toast('Pievienots.'); return load(); }).catch(err);
         });
         return f;
@@ -106,7 +133,7 @@
             td(tr, String(u.login_count || 0));
             var cell = el('div', 'summary-chips');
             (u.enrollments || []).forEach(function(e) {
-                cell.appendChild(el('span', 'badge badge-' + e.status, (e.course_name || courseName(e.course_id)) + ' · ' + (L.STATUSI[e.status] || e.status)));
+                cell.appendChild(el('span', 'badge badge-' + e.status, (e.course_name || courseName(e.course_id)) + (e.period_start ? ' (' + lvD(e.period_start) + ')' : '') + ' · ' +(L.STATUSI[e.status] || e.status)));
             });
             td(tr, cell.childNodes.length ? cell : '—');
             t.body.appendChild(tr);
@@ -115,16 +142,24 @@
     }
 
     function enrTab() {
-        var t = tableWrap(['Lietotājs', 'Kurss', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
+        var t = tableWrap(['Lietotājs', 'Kurss', 'Grupa', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
         var q = state.q.toLowerCase();
         state.enr.filter(function(e) {
             return (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&
+                (!state.fp || (state.fp === '-' ? !e.period_start : e.period_start === state.fp)) &&
                 (!q || (eName(e) + ' ' + eEmail(e)).toLowerCase().indexOf(q) >= 0);
         }).forEach(function(e) {
             var tr = el('tr');
             var who = el('div'); who.appendChild(el('strong', '', eName(e))); who.appendChild(el('div', 'muted', eEmail(e)));
             td(tr, who);
             td(tr, e.course_name || courseName(e.course_id));
+            td(tr, periodaSelect(e.course_id, e.period_start, function(v) {
+                api('PATCH', '/api/admin/enrollments/' + e.id, { period: v || null }).then(function(r) {
+                    var n = (r && r.enrollment) || {};
+                    e.period_start = n.period_start || null; e.period_end = n.period_end || null; e.period_days = n.period_days || null;
+                    L.toast('Grupa saglabāta.'); render();
+                }).catch(function(x) { err(x); render(); });
+            }));
             td(tr, select(ST.map(function(s) { return [s, L.STATUSI[s]]; }), e.status, function(v) {
                 api('PATCH', '/api/admin/enrollments/' + e.id, { status: v }).then(function() { e.status = v; render(); }).catch(function(x) { err(x); render(); });
             }));
@@ -184,6 +219,13 @@
         if (state.tab === 'enr') {
             bar.appendChild(select([['', 'Visi kursi']].concat(state.courses.map(function(c) { return [c.id, c.name]; })), state.fc, function(v) { state.fc = v; render(); }));
             bar.appendChild(select([['', 'Visi statusi']].concat(ST.map(function(s) { return [s, L.STATUSI[s]]; })), state.fs, function(v) { state.fs = v; render(); }));
+            // Grupu filtrs: periodi, kuriem ir pieteikumi (izvēlētajam kursam vai visiem)
+            var redzami = {};
+            state.enr.forEach(function(e) {
+                if ((!state.fc || e.course_id === state.fc) && e.period_start) redzami[e.period_start] = periodaNos(e.period_start, e.period_end, e.period_days);
+            });
+            var popts = [['', 'Visas grupas'], ['-', 'Bez grupas']].concat(Object.keys(redzami).sort().map(function(k) { return [k, redzami[k]]; }));
+            bar.appendChild(select(popts, state.fp, function(v) { state.fp = v; render(); }));
         }
         root.appendChild(bar);
         root.appendChild(state.tab === 'enr' ? enrTab() : usersTab());

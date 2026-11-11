@@ -1,5 +1,6 @@
 // Libertas Worker: Google autorizācija, kursu pieteikumi, administrācija.
 import { sutitPieteikumaEpastus } from './epasts.js';
+import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
 const SESSION_DAYS = 30;
@@ -166,7 +167,8 @@ async function logout(request, env) {
 }
 
 // ---------- Lietotāja API ----------
-const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at
+const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at,
+  e.period_start, e.period_end, e.period_days
   FROM enrollments e JOIN courses c ON c.id = e.course_id`;
 
 async function me(request, env, user) {
@@ -244,25 +246,40 @@ async function getEnrollment(env, userId, courseId) {
   return env.DB.prepare('SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?').bind(userId, courseId).first();
 }
 
+// Grupas periods: kursiem ar grafiku obligāts un vēl nesācies; citiem — null ("datumi tiks precizēti")
+function parbauditPeriodu(courseId, period, { prasitNakotni = true } = {}) {
+  if (!AR_GRAFIKU.includes(courseId)) return { p: null };
+  if (period === undefined || period === null || period === '') return { kluda: 'Izvēlies grupas periodu' };
+  const p = atrastPeriodu(courseId, period);
+  if (!p) return { kluda: 'Nederīgs grupas periods' };
+  if (prasitNakotni && p.sakums < new Date().toISOString().slice(0, 10)) return { kluda: 'Šī grupa jau ir sākusies — izvēlies citu periodu' };
+  return { p };
+}
+
 async function enroll(request, env, user, ctx, origin) {
-  const { course_id } = await readBody(request);
+  const { course_id, period } = await readBody(request);
   if (typeof course_id !== 'string') return fail('Nav norādīts kurss');
   const course = await env.DB.prepare('SELECT id, name, price_eur, schedule FROM courses WHERE id = ? AND active = 1').bind(course_id).first();
   if (!course) return fail('Kurss nav atrasts', 404);
+  const pr = parbauditPeriodu(course_id, period);
+  if (pr.kluda) return fail(pr.kluda);
+  const pv = pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null];
   const now = new Date().toISOString();
   const existing = await getEnrollment(env, user.id, course_id);
   if (existing) {
     if (existing.status !== 'atteicies') return fail('Jūs jau esat pieteicies šim kursam', 409);
-    await env.DB.prepare("UPDATE enrollments SET status = 'pieteicies', updated_at = ? WHERE id = ?").bind(now, existing.id).run();
+    await env.DB.prepare("UPDATE enrollments SET status = 'pieteicies', period_start = ?, period_end = ?, period_days = ?, updated_at = ? WHERE id = ?")
+      .bind(...pv, now, existing.id).run();
   } else {
     await env.DB.prepare(
-      "INSERT INTO enrollments (user_id, course_id, status, paid, created_at, updated_at) VALUES (?, ?, 'pieteicies', 0, ?, ?)"
-    ).bind(user.id, course_id, now, now).run();
+      "INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, created_at, updated_at) VALUES (?, ?, 'pieteicies', 0, ?, ?, ?, ?, ?)"
+    ).bind(user.id, course_id, ...pv, now, now).run();
   }
   const enrollment = await getEnrollment(env, user.id, course_id);
   // Apstiprinājuma e-pasts klientam + paziņojums administratoram (fonā, neaizkavē atbildi)
   const admins = (env.ADMIN_EMAILS || '').split(',').map((s) => s.trim()).filter(Boolean);
-  const darbs = sutitPieteikumaEpastus(env, { user, course, enrollment, origin, admins }).catch((e) => console.error(e));
+  const kursam = { ...course, schedule: pr.p ? periodaTeksts(pr.p) : 'Nākamā grupa — datumi tiks precizēti' };
+  const darbs = sutitPieteikumaEpastus(env, { user, course: kursam, enrollment, origin, admins }).catch((e) => console.error(e));
   if (ctx && ctx.waitUntil) ctx.waitUntil(darbs);
   return json({ enrollment, email_sent: !!(env.RESEND_API_KEY && env.EMAIL_FROM) });
 }
@@ -304,7 +321,7 @@ async function adminEnrollments(env) {
 }
 
 async function adminAddEnrollment(request, env) {
-  const { user_id, course_id, status } = await readBody(request);
+  const { user_id, course_id, status, period } = await readBody(request);
   const st = status === undefined ? 'pieteicies' : status;
   if (!Number.isInteger(user_id) || typeof course_id !== 'string') return fail('Nepilnīgi dati');
   if (!STATUSES.includes(st)) return fail('Nederīgs statuss');
@@ -313,10 +330,13 @@ async function adminAddEnrollment(request, env) {
   const c = await env.DB.prepare('SELECT id FROM courses WHERE id = ?').bind(course_id).first();
   if (!c) return fail('Kurss nav atrasts', 404);
   if (await getEnrollment(env, user_id, course_id)) return fail('Pieteikums jau eksistē', 409);
+  const pr = period ? parbauditPeriodu(course_id, period, { prasitNakotni: false }) : { p: null };
+  if (pr.kluda) return fail(pr.kluda);
+  const pv = pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null];
   const now = new Date().toISOString();
   const r = await env.DB.prepare(
-    'INSERT INTO enrollments (user_id, course_id, status, paid, created_at, updated_at) VALUES (?, ?, ?, 0, ?, ?)'
-  ).bind(user_id, course_id, st, now, now).run();
+    'INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, created_at, updated_at) VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?)'
+  ).bind(user_id, course_id, st, ...pv, now, now).run();
   const row = await env.DB.prepare(`${ADMIN_ENROLL_SELECT} WHERE e.id = ?`).bind(r.meta.last_row_id).first();
   return json({ enrollment: row }, 201);
 }
@@ -336,6 +356,13 @@ async function adminPatchEnrollment(request, env, id) {
     const paid = body.paid === true || body.paid === 1;
     sets.push('paid = ?', 'paid_at = ?');
     vals.push(paid ? 1 : 0, paid ? (cur.paid && cur.paid_at ? cur.paid_at : now) : null);
+  }
+  if (body.period !== undefined) {
+    // Administrators var mainīt grupu (arī uz jau sākušos) vai noņemt (null)
+    const pr = body.period ? parbauditPeriodu(cur.course_id, body.period, { prasitNakotni: false }) : { p: null };
+    if (pr.kluda) return fail(pr.kluda);
+    sets.push('period_start = ?', 'period_end = ?', 'period_days = ?');
+    vals.push(...(pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null]));
   }
   if (body.notes !== undefined) {
     if (body.notes !== null && typeof body.notes !== 'string') return fail('Nederīgas piezīmes');
