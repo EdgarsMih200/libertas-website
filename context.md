@@ -135,7 +135,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 ## Known gaps / TODO
 - Schedules for `spain-a2`, `english-a2`, `spain-b1-1`, `spain-b1-2` are "Grafiks tiks precizēts" (update `kursi.html` + D1).
 - `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
-- Google OAuth client must be created and `GOOGLE_CLIENT_ID` / secret set before sign-in works live.
+- Google OAuth client (project "Libertas", edza7112 account) configured for libertas.study, www, workers.dev.
 - No email notifications on new enrollments; no online payment (admin marks paid manually).
 - `#par-mums` (About) and `#faq` (BJU) sections missing; "Par mums" link hidden in nav (re-add on all 8 pages + footer Libertas column when content exists).
 - No contact details in the footer yet (only in `noteikumi.html`).

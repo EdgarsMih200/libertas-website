@@ -21,7 +21,7 @@
   ],
   "vars": {
     "ADMIN_EMAILS": "edza7112@gmail.com",
-    "GOOGLE_CLIENT_ID": "REPLACE_WITH_CLIENT_ID.apps.googleusercontent.com"
+    "GOOGLE_CLIENT_ID": "107664836932-r5b9n8divtdlfbgel2v812q9vgj9ccm5.apps.googleusercontent.com"
   },
   "observability": { "enabled": true }
 }
