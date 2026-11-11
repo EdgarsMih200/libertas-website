@@ -9,7 +9,10 @@ Short reference so work can start without re-reading every file.
 - Plain HTML/CSS/JS. No build step, no framework, no npm dependencies.
 - Repo: `github.com/EdgarsMih200/libertas-website`, branch `main`.
 - Hosting: Cloudflare Workers static assets (`wrangler.jsonc`, `assets.directory: "."`).
-  Pushing to `main` deploys the site automatically.
+  Pushing to `main` deploys the site automatically (Cloudflare Workers Builds, deploy command `npx wrangler deploy`).
+  A build can fail on a transient Cloudflare API error (2026-11-11: code 10021 "binding DB … failed to generate"), which leaves the old
+  version live. After each push check the build: `curl -s https://api.github.com/repos/EdgarsMih200/libertas-website/commits/<sha>/check-runs`
+  (`conclusion` must be `success`); if it failed, use "Retry build" in the Cloudflare dashboard or run `npx wrangler deploy`.
 - Domain: `libertas.study` + `www.libertas.study` (registered at Namecheap; nameservers moved to Cloudflare
   2026-11-11; both attached as Worker Custom Domains). Old Canva site disconnected.
   Google login NOT set up yet: `GOOGLE_CLIENT_ID` in `wrangler.jsonc` is still a placeholder and
