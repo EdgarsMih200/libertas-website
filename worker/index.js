@@ -1,5 +1,6 @@
 // Libertas Worker: Google autorizācija, kursu pieteikumi, administrācija.
 import { sutitPieteikumaEpastus } from './epasts.js';
+import { ekMarsruts, pecApmaksas } from './ekursi.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -168,7 +169,10 @@ async function logout(request, env) {
 
 // ---------- Lietotāja API ----------
 const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at,
-  e.period_start, e.period_end, e.period_days
+  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz,
+  (SELECT kods FROM ek_sertifikati s WHERE s.user_id = e.user_id AND s.kurss = e.course_id) AS ek_sertifikats,
+  (SELECT COUNT(*) FROM ek_progress p WHERE p.user_id = e.user_id AND p.kurss = e.course_id AND p.nokartots_at IS NOT NULL) AS ek_nokartotas,
+  (SELECT COUNT(*) FROM ek_saturs x WHERE x.kurss = e.course_id AND x.fails LIKE 'nodarbiba-%' AND x.gabals = 0) AS ek_nodarbibas
   FROM enrollments e JOIN courses c ON c.id = e.course_id`;
 
 async function me(request, env, user) {
@@ -259,7 +263,7 @@ function parbauditPeriodu(courseId, period, { prasitNakotni = true } = {}) {
 async function enroll(request, env, user, ctx, origin) {
   const { course_id, period } = await readBody(request);
   if (typeof course_id !== 'string') return fail('Nav norādīts kurss');
-  const course = await env.DB.prepare('SELECT id, name, price_eur, schedule FROM courses WHERE id = ? AND active = 1').bind(course_id).first();
+  const course = await env.DB.prepare('SELECT id, name, price_eur, schedule, veids, ek_dienas FROM courses WHERE id = ? AND active = 1').bind(course_id).first();
   if (!course) return fail('Kurss nav atrasts', 404);
   const pr = parbauditPeriodu(course_id, period);
   if (pr.kluda) return fail(pr.kluda);
@@ -278,7 +282,7 @@ async function enroll(request, env, user, ctx, origin) {
   const enrollment = await getEnrollment(env, user.id, course_id);
   // Apstiprinājuma e-pasts klientam + paziņojums administratoram (fonā, neaizkavē atbildi)
   const admins = (env.ADMIN_EMAILS || '').split(',').map((s) => s.trim()).filter(Boolean);
-  const kursam = { ...course, schedule: pr.p ? periodaTeksts(pr.p) : 'Nākamā grupa — datumi tiks precizēti' };
+  const kursam = { ...course, schedule: course.veids === 'ekurss' ? `Pašmācība · ${course.ek_dienas || 90} dienas no apmaksas` : pr.p ? periodaTeksts(pr.p) : 'Nākamā grupa — datumi tiks precizēti' };
   const darbs = sutitPieteikumaEpastus(env, { user, course: kursam, enrollment, origin, admins }).catch((e) => console.error(e));
   if (ctx && ctx.waitUntil) ctx.waitUntil(darbs);
   return json({ enrollment, email_sent: !!(env.RESEND_API_KEY && env.EMAIL_FROM) });
@@ -371,6 +375,7 @@ async function adminPatchEnrollment(request, env, id) {
   if (!sets.length) return fail('Nav ko mainīt');
   sets.push('updated_at = ?'); vals.push(now);
   await env.DB.prepare(`UPDATE enrollments SET ${sets.join(', ')} WHERE id = ?`).bind(...vals, id).run();
+  if (body.paid !== undefined) await pecApmaksas(env, id);
   const row = await env.DB.prepare(`${ADMIN_ENROLL_SELECT} WHERE e.id = ?`).bind(id).first();
   return json({ enrollment: row });
 }
@@ -405,6 +410,11 @@ export default {
 
       const user = await getUser(request, env);
       if (method === 'GET' && path === '/api/me') return await me(request, env, user);
+
+      if (path.startsWith('/api/ek/') || path.startsWith('/api/admin/ek') || path.startsWith('/api/sertifikats/')) {
+        const atb = await ekMarsruts(request, env, { path, method, user, origin: url.origin, url });
+        if (atb) return atb;
+      }
 
       if (path.startsWith('/api/admin/')) {
         if (!user || !user.is_admin) return fail('Nav piekļuves', 403);

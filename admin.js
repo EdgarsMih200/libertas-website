@@ -3,7 +3,7 @@
     var L = window.LIB, el = L.el, api = L.api;
     var root = document.getElementById('admin');
     var ST = Object.keys(L.STATUSI);
-    var state = { users: [], enr: [], courses: [], tab: 'enr', fc: '', fs: '', fp: '', q: '' };
+    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, tab: 'enr', fc: '', fs: '', fp: '', q: '' };
     var G = null; // grafiks.js (grupu periodi)
 
     // Kursa grupas administrācijai: no pagājušā gada līdz nākamajam (arī jau sākušās)
@@ -63,9 +63,11 @@
     function load() {
         return Promise.all([
             api('GET', '/api/admin/users'), api('GET', '/api/admin/enrollments'), api('GET', '/api/courses'),
-            import('/grafiks.js').catch(function() { return null; })
+            import('/grafiks.js').catch(function() { return null; }),
+            api('GET', '/api/admin/ek').catch(function() { return { kursi: [], dalibnieki: [] }; })
         ]).then(function(r) {
             G = r[3];
+            state.ek = r[4];
             state.users = r[0].users || r[0] || [];
             state.enr = r[1].enrollments || r[1] || [];
             state.courses = r[2].courses || r[2] || [];
@@ -195,13 +197,94 @@
         return t.wrap;
     }
 
+    // ---------- E-KURSI: iestatījumi + dalībnieki ----------
+    function ekDienas(iso) { return iso ? Math.ceil((Date.parse(iso) - Date.now()) / 86400000) : null; }
+    function ekTab() {
+        var wrap = el('div', 'ek-admin');
+        if (!state.ek.kursi.length) { wrap.appendChild(el('p', 'register-intro', 'E-kursu vēl nav. Saturu augšupielādē ar node riki/ek-augsupladet.mjs <kurss> --remote.')); return wrap; }
+        state.ek.kursi.forEach(function(c) {
+            var bloks = el('section', 'ek-iest'); bloks.style.marginBottom = 'var(--sp-7)';
+            var f = el('form', 'ek-karte ek-forma');
+            f.appendChild(el('h3', '', c.name)).style.cssText = 'margin:0;font-size:1.1rem';
+            f.appendChild(el('p', 'muted', (c.nodarbibas || 0) + ' nodarbības augšupielādētas' + (c.versija ? ' · ' + fmt(c.versija, true) : ''))).style.margin = '0';
+            var lauki = {};
+            [['price_eur', 'Cena', 'EUR', 0.01], ['ek_dienas', 'Piekļuves ilgums', 'dienas', 1], ['ek_meginajumi', 'Eksāmena mēģinājumi', 'reizes', 1],
+             ['ek_pauze_h', 'Pauze starp mēģinājumiem', 'h', 1], ['ek_papildu_cena', 'Konsultācijas / papildu mēģinājumu cena', 'EUR', 0.01]].forEach(function(x) {
+                var l = el('label', '', x[1]); var s = el('span', 'ar-vien');
+                var i = el('input', 'lauks'); i.type = 'number'; i.step = String(x[3]); i.min = '0'; i.value = c[x[0]] == null ? '' : c[x[0]];
+                lauki[x[0]] = i; s.appendChild(i); s.appendChild(document.createTextNode(' ' + x[2])); l.appendChild(s); f.appendChild(l);
+            });
+            var al = el('label'); al.style.cssText = 'display:flex;gap:10px;align-items:center;font-weight:400';
+            var ac = el('input'); ac.type = 'checkbox'; ac.checked = !!c.active; ac.style.cssText = 'width:20px;height:20px';
+            al.appendChild(ac); al.appendChild(document.createTextNode('Kurss redzams lapā «Kursi» un pērkams')); f.appendChild(al);
+            f.appendChild(el('small', 'muted', 'Piekļuves ilgums attiecas uz jaunām apmaksām; esošajiem dalībniekiem termiņu maini tabulā.'));
+            var sv = el('button', 'btn-cta', 'Saglabāt'); sv.type = 'submit'; f.appendChild(sv);
+            var sa = el('div', 'ek-pogas');
+            var pv = el('a', 'btn-link', 'Priekšskatīt kursu'); pv.href = 'macibas.html?k=' + c.id; pv.target = '_blank'; sa.appendChild(pv);
+            var ap = el('a', 'btn-link', 'Apraksta lapa'); ap.href = 'ek-kurss.html?k=' + c.id; ap.target = '_blank'; sa.appendChild(ap);
+            f.appendChild(sa);
+            f.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var b = { active: ac.checked };
+                Object.keys(lauki).forEach(function(k) { if (lauki[k].value !== '') b[k] = Number(lauki[k].value); });
+                api('PATCH', '/api/admin/ek/kursi/' + c.id, b).then(function() { L.toast('Saglabāts.'); return load(); }).catch(err);
+            });
+            bloks.appendChild(f);
+
+            var k2 = el('div', 'ek-karte');
+            var dal = state.ek.dalibnieki.filter(function(d) { return d.course_id === c.id; });
+            k2.appendChild(el('h3', '', 'Dalībnieki (' + dal.length + ')')).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
+            var t = tableWrap(['Dalībnieks', 'Apmaksāts', 'Piekļuve līdz', 'Progress', 'Eksāmens', 'Sertifikāts']);
+            dal.forEach(function(d) {
+                var tr = el('tr');
+                var who = el('div'); who.appendChild(el('strong', '', d.name || '')); who.appendChild(el('div', 'muted', d.email)); td(tr, who);
+                var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!d.paid;
+                cb.addEventListener('change', function() {
+                    if (!confirm(cb.checked ? 'Atzīmēt apmaksu? Piekļuve sāksies šodien (' + (c.ek_dienas || 90) + ' dienas).' : 'Noņemt apmaksas atzīmi?')) { cb.checked = !cb.checked; return; }
+                    api('PATCH', '/api/admin/enrollments/' + d.id, { paid: cb.checked }).then(function() { L.toast('Saglabāts.'); return load(); }).catch(function(x) { err(x); cb.checked = !cb.checked; });
+                });
+                td(tr, cb, 'center');
+                var lc = el('div');
+                if (d.ek_lidz) {
+                    var di = el('input'); di.type = 'date'; di.value = d.ek_lidz.slice(0, 10); di.setAttribute('aria-label', 'Piekļuve līdz');
+                    di.addEventListener('change', function() { api('PATCH', '/api/admin/ek/dalibnieki/' + d.id, { ek_lidz: di.value }).then(function() { L.toast('Termiņš saglabāts.'); return load(); }).catch(err); });
+                    lc.appendChild(di);
+                    var dn = ekDienas(d.ek_lidz);
+                    if (dn < 0) lc.appendChild(el('span', 'ek-statuss ek-statuss--err', 'Beidzies'));
+                    else if (dn <= 7) lc.appendChild(el('span', 'ek-statuss ek-statuss--warn', 'Beidzas pēc ' + dn + ' d.'));
+                } else lc.appendChild(el('span', 'ek-statuss ek-statuss--warn', 'Gaida apmaksu'));
+                td(tr, lc);
+                var pr = el('div'); var pb = el('span', 'ek-progress'); var ps = el('span'); ps.style.width = (c.nodarbibas ? Math.round(d.nokartotas / c.nodarbibas * 100) : 0) + '%'; pb.appendChild(ps); pr.appendChild(pb); pr.appendChild(document.createTextNode(d.nokartotas + '/' + (c.nodarbibas || 0))); td(tr, pr);
+                var limits = d.ek_eks_limits != null ? d.ek_eks_limits : (c.ek_meginajumi || 3);
+                var ek = el('div');
+                ek.appendChild(el('span', d.eks_izmantoti >= limits && !d.sertifikats && (d.eks_labakais || 0) < 80 ? 'ek-statuss ek-statuss--err' : '', d.eks_izmantoti + '/' + limits + (d.eks_labakais != null ? ' · ' + d.eks_labakais + ' %' : '')));
+                if (d.ek_pieprasijums) ek.appendChild(el('div', 'ek-statuss ek-statuss--warn', 'Pieprasa: ' + (d.ek_pieprasijums === 'konsultacija' ? 'konsultāciju' : 'mēģinājumus') + ' · ' + fmt(d.ek_pieprasijums_at)));
+                if (d.eks_izmantoti >= limits || d.ek_pieprasijums) {
+                    var plus = el('button', 'btn-link', '+' + (c.ek_meginajumi || 3) + ' mēģinājumi (apmaksāts)'); plus.type = 'button';
+                    plus.addEventListener('click', function() {
+                        if (!confirm('Pievienot ' + (c.ek_meginajumi || 3) + ' eksāmena mēģinājumus (' + (d.name || d.email) + ')?')) return;
+                        api('PATCH', '/api/admin/ek/dalibnieki/' + d.id, { papildu_meginajumi: true }).then(function() { L.toast('Pievienots.'); return load(); }).catch(err);
+                    });
+                    ek.appendChild(plus);
+                }
+                td(tr, ek);
+                if (d.sertifikats) { var sa2 = el('a', '', d.sertifikats); sa2.href = 'sertifikats.html?kods=' + d.sertifikats; sa2.target = '_blank'; td(tr, sa2); } else td(tr, '—');
+                t.body.appendChild(tr);
+            });
+            k2.appendChild(t.wrap);
+            bloks.appendChild(k2);
+            wrap.appendChild(bloks);
+        });
+        return wrap;
+    }
+
     function render() {
         root.textContent = '';
         root.appendChild(summary());
         root.appendChild(addForm());
 
         var tabs = el('div', 'admin-tabs');
-        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')']].forEach(function(x) {
+        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')']].forEach(function(x) {
             var b = el('button', 'admin-tab' + (state.tab === x[0] ? ' active' : ''), x[1]); b.type = 'button';
             b.addEventListener('click', function() { state.tab = x[0]; render(); });
             tabs.appendChild(b);
@@ -227,6 +310,7 @@
             var popts = [['', 'Visas grupas'], ['-', 'Bez grupas']].concat(Object.keys(redzami).sort().map(function(k) { return [k, redzami[k]]; }));
             bar.appendChild(select(popts, state.fp, function(v) { state.fp = v; render(); }));
         }
+        if (state.tab === 'ek') { root.appendChild(ekTab()); return; }
         root.appendChild(bar);
         root.appendChild(state.tab === 'enr' ? enrTab() : usersTab());
     }

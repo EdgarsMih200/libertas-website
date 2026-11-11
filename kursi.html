@@ -151,6 +151,26 @@
                 </aside>
             </div>
         </section>
+
+        <!-- Tiešsaistes (pašmācības) kursi: kartītes veido script.js no /api/ek/kursi; paslēpta, ja aktīvu e-kursu nav -->
+        <section class="container kursu-grupa ek-kursi-sadala" id="tiessaistes" aria-labelledby="tiessaistes-virsraksts" data-ek-kursi hidden>
+            <div class="kursu-grupa-galva">
+                <h2 id="tiessaistes-virsraksts">Tiešsaistes kursi — mācies savā tempā</h2>
+                <span class="kursu-grupa-meta">bez grafika · piekļuve 3 mēnešus</span>
+            </div>
+            <div class="ek-piedavajums">
+                <div data-ek-saraksts></div>
+                <aside class="ek-karte ek-ka-notiek">
+                    <h3>Kā notiek pašmācības kurss</h3>
+                    <ol>
+                        <li><span><strong>Mācies, kad tev ērti.</strong> Katrā nodarbībā — daļas pa ~20 minūtēm, vingrinājumi un praktisks uzdevums.</span></li>
+                        <li><span><strong>Pašpārbaudes tests.</strong> Nākamā nodarbība atveras, kad iegūti vismaz 80 %.</span></li>
+                        <li><span><strong>Noslēguma eksāmens.</strong> 3 mēģinājumi ar 24 h pauzi. Ar ≥ 80 % — sertifikāts sadaļā «Mani kursi». Ja 3 reizes neizdodas — konsultācija ar pasniedzēju vai papildu mēģinājumi par maksu.</span></li>
+                    </ol>
+                    <div class="ek-noteikumi"><svg class="ek-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h0"/></svg><span><strong>Digitāls saturs, nevis izglītības programma.</strong> Tu iegādājies piekļuvi tiešsaistes mācību materiāliem. Kurss nav akreditēta neformālās izglītības programma, sertifikāts nav valsts atzīts izglītības dokuments. <a href="noteikumi.html#digitalais-saturs">Noteikumi</a></span></div>
+                </aside>
+            </div>
+        </section>
     </main>
     <!-- Kājene -->
     <footer class="site-footer">

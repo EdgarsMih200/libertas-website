@@ -31,7 +31,7 @@ Kursa id: `<valoda>-<limenis>-<īss>` (piem. `spanu-a1-ps`). Mape: `e-kursi-satu
 | 4a | Saskaņotība | Kad visas gatavas: izvelc tikai `kanons` + visu `kopsavilkums` + `saites` un pārbaudi pretrunas, robus, atkārtojumus. Labo punktveidā. |
 | 5 | Eksāmens + resursi | `eksamens.json` (≥ 1,5 × jautājumi, ≥ 25 % vairāku nodarbību), `resursi.json`. `node riki/ek-parbaudit.mjs <id>` — pārklāšanās ar testiem = kļūda → pārraksti. |
 | 6 | Priekšskatījums | `npx wrangler dev` → `macibas.html?k=<id>&preview`. Īpašnieka piezīmes formā «N. nodarbība, uzd. v-07: …» → punktveida labojumi. **Gaidi apstiprinājumu.** |
-| 7 | Publicēšana | `node riki/ek-augsupladet.mjs <id> --remote` (ja skripta vēl nav — e-kursu platforma nav uzbūvēta: apstājies un pasaki). Kartīte `kursi.html#tiessaistes` + `ek-<id>.html` no `plans.json`; D1 rinda `courses` (veids `ekurss`, cena, piekļuves dienas) ar migrāciju; `context.md`; commit + push. |
+| 7 | Publicēšana | Vispirms lokāli: `node riki/ek-augsupladet.mjs <id> --local` + `npx wrangler dev` → `macibas.html?k=<id>` (admins redz visu). Tad `node riki/ek-augsupladet.mjs <id> --remote` (pievieno arī neaktīvu `courses` rindu). Kartīte `kursi.html#tiessaistes` un apraksts `ek-kurss.html?k=<id>` veidojas automātiski no API — HTML nav jāraksta. Kursu ieslēdz, cenu/termiņu maina īpašnieks: admin → E-kursi. `context.md` (pilotkursa statuss) + commit. |
 | 8 | Rezerve | Īpašnieks pats palaiž (parole nav jāredz Claude): `node riki/ek-rezerve.mjs <id>` → commit `e-kursi-rezerve/<id>.enc`. Atjaunot: `--atjaunot`. |
 
 Bez īpašnieka materiāliem (0. solis tukšs): plānu balsti uz atvērtiem uzticamiem avotiem un ieraksti tos `plans.avoti`

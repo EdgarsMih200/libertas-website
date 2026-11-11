@@ -166,7 +166,53 @@
         return '';
     }
 
+    // E-kurss (pašmācība): progress pa nodarbībām, piekļuves termiņš, "Turpināt" un sertifikāts
+    function ekKartite(en) {
+        var m = String(en.course_id).match(/^(spanu|anglu)-(a1|a2|b1-1|b1-2)/);
+        var art = el('article', 'course-card mans-kurss mans-kurss--' + en.status);
+        var img = el('img'); img.src = 'assets/kursi/' + (m ? m[0] : 'spanu-a1') + '.svg'; img.alt = ''; img.width = 600; img.height = 320; img.decoding = 'async';
+        art.appendChild(img);
+        var b = el('div', 'course-body');
+        var aktivs = en.paid && en.ek_lidz && en.ek_lidz > new Date().toISOString();
+        var beidzies = en.paid && en.ek_lidz && !aktivs;
+        var birkas = el('div', 'mans-kurss-birkas');
+        birkas.appendChild(el('span', 'ek-birka', 'Pašmācība'));
+        if (en.ek_sertifikats) birkas.appendChild(el('span', 'badge badge-pabeidzis', 'Pabeigts'));
+        else if (beidzies) birkas.appendChild(el('span', 'badge badge-atteicies', 'Piekļuve beigusies'));
+        else if (aktivs) birkas.appendChild(el('span', 'badge badge-uznemts', 'Aktīvs'));
+        else birkas.appendChild(el('span', 'badge badge-pieteicies', 'Gaida apmaksu'));
+        b.appendChild(birkas);
+        b.appendChild(el('h3', '', en.course_name));
+        if (en.paid) {
+            var kopa = en.ek_nodarbibas || 0, pab = en.ek_nokartotas || 0;
+            var pr = el('div', 'ek-progress'); var ps = el('span'); ps.style.width = (kopa ? Math.round(pab / kopa * 100) : 0) + '%'; pr.appendChild(ps);
+            pr.setAttribute('role', 'img'); pr.setAttribute('aria-label', pab + ' no ' + kopa + ' nodarbībām pabeigtas');
+            b.appendChild(pr);
+            b.appendChild(el('p', 'mans-kurss-piezime', pab + '/' + kopa + ' nodarbības pabeigtas' + (en.ek_lidz ? ' · piekļuve līdz ' + lvDatums(en.ek_lidz.slice(0, 10)) : '')));
+        } else {
+            if (en.price_eur != null) b.appendChild(el('p', 'course-price', cena(en.price_eur)));
+            b.appendChild(el('p', 'mans-kurss-piezime', 'Atsūtīsim apmaksas informāciju. Kurss atvērsies uzreiz pēc apmaksas; līdz tam pasūtījumu vari atcelt.'));
+        }
+        var apaksa = el('div', 'mans-kurss-apaksa');
+        if (aktivs) { var t = el('a', 'btn-cta btn-card', pab ? 'Turpināt mācības' : 'Sākt mācības'); t.href = 'macibas.html?k=' + en.course_id; apaksa.appendChild(t); }
+        if (en.ek_sertifikats) { var s = el('a', 'btn-secondary btn-card', 'Sertifikāts'); s.href = 'sertifikats.html?kods=' + en.ek_sertifikats; apaksa.appendChild(s); }
+        if (!en.paid && en.status === 'pieteicies') {
+            var x = el('button', 'btn-link btn-danger', 'Atcelt pasūtījumu'); x.type = 'button';
+            x.addEventListener('click', function() {
+                if (!confirm('Atcelt pasūtījumu "' + en.course_name + '"?')) return;
+                x.disabled = true;
+                api('POST', '/api/enroll/cancel', { course_id: en.course_id }).then(function() { en.status = 'atteicies'; L.toast('Pasūtījums atcelts.'); render(); })
+                    .catch(function(err) { x.disabled = false; L.toast(err.message, true); });
+            });
+            apaksa.appendChild(x);
+        }
+        b.appendChild(apaksa);
+        art.appendChild(b);
+        return art;
+    }
+
     function kartite(en) {
+        if (en.veids === 'ekurss') return ekKartite(en);
         var k = KURSI[en.course_id] || {};
         var art = el('article', 'course-card mans-kurss mans-kurss--' + en.status);
 

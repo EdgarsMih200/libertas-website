@@ -147,7 +147,14 @@
 
     // Poga pēc pieteikšanās: "Gaida apmaksu" (silts, nevis zaļš ✓ — vieta vēl nav galīga), pēc uzņemšanas — statuss ar ✓
     function setBtn(btn, enr) {
-        btn.classList.remove('btn-done', 'btn-gaida');
+        btn.classList.remove('btn-done', 'btn-gaida', 'btn-ek-atverts');
+        if (enr && enr.veids === 'ekurss' && enr.paid && enr.status !== 'atteicies') {
+            btn.textContent = 'Atvērt kursu';
+            btn.href = 'macibas.html?k=' + enr.course_id;
+            btn.classList.add('btn-ek-atverts');
+            btn.removeAttribute('title');
+            return;
+        }
         if (enr && enr.status !== 'atteicies') {
             if (enr.status === 'pieteicies') {
                 btn.textContent = 'Gaida apmaksu';
@@ -158,7 +165,7 @@
                 btn.classList.add('btn-done');
             }
         } else {
-            btn.textContent = 'Pieteikties kursam';
+            btn.textContent = btn.getAttribute('data-veids') === 'ekurss' ? 'Iegādāties piekļuvi' : 'Pieteikties kursam';
             btn.removeAttribute('title');
         }
     }
@@ -197,7 +204,8 @@
     function radiLogu(btn, logged, apstiprinat, G) {
         var k = kursaDati(btn);
         var id = btn.getAttribute('data-course');
-        var periodi = G ? G.periodi(id) : [];
+        var ek = btn.getAttribute('data-veids') === 'ekurss';
+        var periodi = G && !ek ? G.periodi(id) : [];
         var arGrafiku = !!(G && G.AR_GRAFIKU.indexOf(id) >= 0);
         var d = el('dialog', 'pieteikuma-logs');
         d.setAttribute('aria-labelledby', 'pl-virsraksts');
@@ -210,7 +218,7 @@
             galva.appendChild(empa);
         }
         var gt = el('div', 'pl-galva-teksts');
-        gt.appendChild(el('p', 'pl-zime', 'Pieteikums kursam'));
+        gt.appendChild(el('p', 'pl-zime', ek ? 'Tiešsaistes kurss · piekļuves iegāde' : 'Pieteikums kursam'));
         var h = el('h2', 'pl-virsraksts', k.nosaukums || 'Kurss'); h.id = 'pl-virsraksts';
         gt.appendChild(h);
         galva.appendChild(gt);
@@ -220,7 +228,7 @@
         d.appendChild(galva);
 
         var dl = el('dl', 'pl-dati');
-        [['Līmenis', k.limenis], ['Cena', k.cena], ['Apjoms', '14 nodarbības · 7 nedēļas']].forEach(function(r) {
+        [['Līmenis', k.limenis], ['Cena', k.cena], ['Apjoms', ek ? btn.getAttribute('data-apjoms') : '14 nodarbības · 7 nedēļas'], ['Piekļuve', ek ? (btn.getAttribute('data-dienas') || 90) + ' dienas no apmaksas' : '']].forEach(function(r) {
             if (!r[1]) return;
             var w = el('div');
             w.appendChild(el('dt', '', r[0]));
@@ -232,7 +240,10 @@
         // Grupas (perioda) izvēle
         var izv = null;
         var gr = el('div', 'pl-grupa');
-        if (periodi.length) {
+        if (ek) {
+            gr.appendChild(el('p', 'pl-grupa-virsraksts', 'Kā notiek'));
+            gr.appendChild(el('p', 'pl-grupa-piezime', 'Pašmācība bez grafika: nodarbības, vingrinājumi, pašpārbaudes testi (≥ 80 % atver nākamo nodarbību) un noslēguma eksāmens ar sertifikātu. Eksāmenam ' + (btn.getAttribute('data-meginajumi') || 3) + ' mēģinājumi; pēc tam — konsultācija vai papildu mēģinājumi par maksu.'));
+        } else if (periodi.length) {
             var gl = el('label', 'pl-grupa-virsraksts', 'Izvēlies grupu');
             gl.htmlFor = 'pl-periods';
             gr.appendChild(gl);
@@ -255,17 +266,23 @@
         }
         d.appendChild(gr);
 
-        var ievads = el('p', 'pl-ievads', 'Pieteikums rezervē tev vietu grupā. Tas kļūst galīgs pēc apmaksas — līdz tam nekas nav jāmaksā un pieteikumu vari atcelt.');
+        var ievads = el('p', 'pl-ievads', ek
+            ? 'Tu iegādājies piekļuvi digitālam mācību saturam, nevis uzņemšanu izglītības programmā. Kurss nav akreditēta neformālās izglītības programma, un sertifikāts nav valsts atzīts izglītības dokuments.'
+            : 'Pieteikums rezervē tev vietu grupā. Tas kļūst galīgs pēc apmaksas — līdz tam nekas nav jāmaksā un pieteikumu vari atcelt.');
         ievads.id = 'pl-ievads';
         d.appendChild(ievads);
 
         d.appendChild(el('h3', 'pl-apaksvirsraksts', 'Kas notiks tālāk'));
         var ol = el('ol', 'pl-soli');
-        [
+        (ek ? [
+            ['Apstiprinājums e-pastā', 'Uzreiz nosūtīsim vēstuli ar pasūtījuma kopsavilkumu.'],
+            ['Apmaksas informācija', 'Nosūtīsim rēķinu vai apmaksas rekvizītus. Līdz apmaksai pieteikumu vari atcelt.'],
+            ['Kurss atveras', 'Pēc apmaksas kurss parādās sadaļā “Mani kursi”, un piekļuves termiņš sākas.']
+        ] : [
             ['Apstiprinājums e-pastā', 'Uzreiz nosūtīsim vēstuli ar pieteikuma kopsavilkumu.'],
             ['Apmaksas informācija', 'Sazināsimies ar tevi un nosūtīsim rēķinu vai apmaksas rekvizītus.'],
             ['Vieta grupā ir tava', 'Pēc apmaksas statuss “Mani kursi” sadaļā mainās uz “Uzņemts”.']
-        ].forEach(function(s) {
+        ]).forEach(function(s) {
             var li = el('li');
             li.appendChild(el('b', '', s[0]));
             li.appendChild(el('span', '', s[1]));
@@ -280,12 +297,20 @@
         lt.appendChild(document.createTextNode('Esmu iepazinies ar '));
         var na = el('a', '', 'noteikumiem un privātuma politiku'); na.href = 'noteikumi.html'; na.target = '_blank'; na.rel = 'noopener';
         lt.appendChild(na);
-        lt.appendChild(document.createTextNode(' un vēlos pieteikties šim kursam.'));
+        lt.appendChild(document.createTextNode(ek ? ' un saprotu, ka iegādājos piekļuvi digitālam saturam, nevis uzņemšanu izglītības programmā.' : ' un vēlos pieteikties šim kursam.'));
         lbl.appendChild(lt);
         d.appendChild(lbl);
+        var cb2 = null;
+        if (ek) {
+            var lbl2 = el('label', 'pl-piekrisana');
+            cb2 = el('input'); cb2.type = 'checkbox'; cb2.required = true;
+            lbl2.appendChild(cb2);
+            lbl2.appendChild(el('span', '', 'Lūdzu nodrošināt piekļuvi digitālajam saturam uzreiz pēc apmaksas un apzinos, ka līdz ar to zaudēju 14 dienu atteikuma tiesības.'));
+            d.appendChild(lbl2);
+        }
 
         var pogas = el('div', 'pl-pogas');
-        var ok = el('button', 'btn-cta', logged ? 'Apstiprināt pieteikumu' : 'Ienākt ar Google un pieteikties');
+        var ok = el('button', 'btn-cta', logged ? (ek ? 'Apstiprināt pasūtījumu' : 'Apstiprināt pieteikumu') : 'Ienākt ar Google un pieteikties');
         ok.type = 'button'; ok.disabled = true;
         var atcelt = el('button', 'btn-secondary', 'Atcelt'); atcelt.type = 'button';
         pogas.appendChild(ok);
@@ -293,7 +318,9 @@
         d.appendChild(pogas);
         if (!logged) d.appendChild(el('p', 'pl-piezime', 'Pieteikšanās notiek ar Google kontu — pēc ienākšanas pieteikums tiks iesniegts automātiski.'));
 
-        cb.addEventListener('change', function() { ok.disabled = !cb.checked; });
+        function parbaudit() { ok.disabled = !cb.checked || (cb2 && !cb2.checked); }
+        cb.addEventListener('change', parbaudit);
+        if (cb2) cb2.addEventListener('change', parbaudit);
         function aizvert() { d.close(); }
         x.addEventListener('click', aizvert);
         atcelt.addEventListener('click', aizvert);
@@ -301,7 +328,7 @@
         d.addEventListener('click', function(e) { if (e.target === d) aizvert(); });
         d.addEventListener('close', function() { d.remove(); if (document.body.contains(btn)) btn.focus(); });
         ok.addEventListener('click', function() {
-            if (!cb.checked) return;
+            if (!cb.checked || (cb2 && !cb2.checked)) return;
             var per = izv ? izv.value : null;
             d.close();
             apstiprinat(per);
@@ -353,14 +380,12 @@
         });
     }
 
-    function initPage(me) {
-        var logged = !!(me && me.user);
-        var map = enrolledMap(me);
-
-        document.querySelectorAll('a.btn-cta[data-course]').forEach(function(btn) {
+    // Kursa pogas piesaiste (arī JS veidotām e-kursu kartītēm: LIB.piesaistitPogu)
+    function piesaistit(btn, logged, map) {
             var id = btn.getAttribute('data-course');
             if (logged) setBtn(btn, map[id]);
             btn.addEventListener('click', function(e) {
+                if (btn.classList.contains('btn-ek-atverts')) return;
                 e.preventDefault();
                 if (btn.classList.contains('btn-busy') || btn.classList.contains('btn-done')) return;
                 btn.classList.add('btn-busy');
@@ -381,7 +406,84 @@
                     }, G);
                 });
             });
-        });
+    }
+
+    // E-kursu kartītes kursi.html ([data-ek-kursi] sadaļa; paslēpta, ja aktīvu e-kursu nav)
+    var EK_VAKI = ['spanu-a1', 'spanu-a2', 'spanu-b1-1', 'spanu-b1-2', 'anglu-a1', 'anglu-a2'];
+    function ekVaks(k) {
+        var v = (k.valoda === 'en' ? 'anglu-' : 'spanu-') + String(k.limenis || 'a1').toLowerCase().replace('.', '-');
+        return 'assets/kursi/' + (EK_VAKI.indexOf(v) >= 0 ? v : 'spanu-a1') + '.svg';
+    }
+    window.LIB.ekVaks = ekVaks;
+    function cenaTeksts(e) { return Number(e || 0).toFixed(2).replace('.', ',') + ' EUR'; }
+    window.LIB.cenaTeksts = cenaTeksts;
+    function ekPoga(k) {
+        var b = el('a', 'btn-cta btn-card', 'Iegādāties piekļuvi');
+        b.href = 'ek-kurss.html?k=' + k.id;
+        b.setAttribute('data-course', k.id); b.setAttribute('data-veids', 'ekurss');
+        b.setAttribute('data-nosaukums', k.nosaukums); b.setAttribute('data-limenis', k.limenis || '');
+        b.setAttribute('data-cena', cenaTeksts(k.cena)); b.setAttribute('data-dienas', k.dienas || 90);
+        b.setAttribute('data-meginajumi', k.meginajumi || 3);
+        b.setAttribute('data-apjoms', k.nodarbibas.length + ' nodarbības' + (k.stundas ? ' · ~' + k.stundas + ' stundas' : ''));
+        return b;
+    }
+    window.LIB.ekPoga = ekPoga;
+    function ekKursi(logged, map) {
+        var vieta = document.querySelector('[data-ek-kursi]');
+        if (!vieta) return Promise.resolve();
+        var rezgis = vieta.querySelector('[data-ek-saraksts]');
+        return fetch('/api/ek/kursi', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : { kursi: [] }; }).then(function(d) {
+            var kursi = (d && d.kursi) || [];
+            if (!kursi.length) return;
+            kursi.forEach(function(k) {
+                var a = el('article', 'ek-karte ek-kursa-karte');
+                var img = el('img'); img.src = ekVaks(k); img.alt = ''; img.width = 600; img.height = 320; img.decoding = 'async'; a.appendChild(img);
+                var s = el('div', 'ek-k-saturs');
+                var bi = el('div'); bi.appendChild(el('span', 'ek-birka', 'Pašmācība')); bi.appendChild(document.createTextNode(' ')); bi.appendChild(el('span', 'chip chip--limenis', k.limenis || '')); s.appendChild(bi);
+                var h = el('h3'); var hs = el('a', 'course-saite', k.nosaukums); hs.href = 'ek-kurss.html?k=' + k.id; h.appendChild(hs); s.appendChild(h);
+                if (k.apraksts) { var p = el('p', '', k.apraksts); p.style.cssText = 'margin:0;color:var(--c-muted);font-size:var(--fs-sm)'; s.appendChild(p); }
+                var ul = el('ul', 'ek-fakti');
+                [k.nodarbibas.length + ' nodarbības', k.stundas ? '~' + k.stundas + ' stundas' : null, Math.round((k.dienas || 90) / 30) + ' mēn. piekļuve', 'Sertifikāts'].forEach(function(t) { if (t) ul.appendChild(el('li', '', t)); });
+                s.appendChild(ul);
+                s.appendChild(el('p', 'ek-cena', cenaTeksts(k.cena)));
+                var pg = el('div', 'ek-pogas');
+                var par = el('a', 'btn-secondary btn-card', 'Par kursu'); par.href = 'ek-kurss.html?k=' + k.id; pg.appendChild(par);
+                var b = ekPoga(k); pg.appendChild(b); s.appendChild(pg);
+                a.appendChild(s);
+                rezgis.appendChild(a);
+                piesaistit(b, logged, map);
+            });
+            vieta.hidden = false;
+            if (location.hash === '#tiessaistes') vieta.scrollIntoView();
+        }).catch(function() {});
+    }
+
+    // Gaidošais pieteikums pēc ienākšanas (izpilda, kad pogas ir lapā)
+    var gaidosais = null;
+    try {
+        gaidosais = { kurss: sessionStorage.getItem('pendingCourse'), periods: sessionStorage.getItem('pendingPeriod') };
+        sessionStorage.removeItem('pendingCourse');
+        sessionStorage.removeItem('pendingPeriod');
+    } catch (x) {}
+    function izpilditGaidoso() {
+        var me = window.LIB.me;
+        if (!gaidosais || !gaidosais.kurss || !(me && me.user)) return;
+        var map = enrolledMap(me), pending = gaidosais.kurss;
+        var pb = document.querySelector('a.btn-cta[data-course="' + pending.replace(/[^a-z0-9-]/gi, '') + '"]');
+        if (!pb) return;
+        gaidosais = null;
+        if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, null);
+    }
+    window.LIB.piesaistitPogu = function(btn) {
+        var me = window.LIB.me;
+        piesaistit(btn, !!(me && me.user), enrolledMap(me));
+        izpilditGaidoso();
+    };
+
+    function initPage(me) {
+        var logged = !!(me && me.user);
+        var map = enrolledMap(me);
+        document.querySelectorAll('a.btn-cta[data-course]').forEach(function(btn) { piesaistit(btn, logged, map); });
 
         // Piekrišanas piezīme viesiem — kursu lapā pie pieteikšanās (hero poga "Izvēlies kursu" vairs neved uz Google)
         // vieta: [data-consent-vieta] (kursi.html "Kā pieteikties"), citādi aiz ievada teksta
@@ -397,18 +499,16 @@
             else ievads.parentNode.insertBefore(note, ievads.nextSibling);
         }
 
-        // Gaidošais pieteikums pēc ienākšanas
-        var pending = null, pendingPeriod = null;
-        try {
-            pending = sessionStorage.getItem('pendingCourse');
-            pendingPeriod = sessionStorage.getItem('pendingPeriod');
-            sessionStorage.removeItem('pendingCourse');
-            sessionStorage.removeItem('pendingPeriod');
-        } catch (x) {}
-        if (logged && pending) {
-            var pb = document.querySelector('a.btn-cta[data-course="' + pending.replace(/[^a-z0-9-]/gi, '') + '"]');
-            if (pb && !(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, pendingPeriod);
+        // Gaidošais pieteikums pēc ienākšanas (grupu kursiem ar periodu; e-kursiem — pēc kartīšu ielādes)
+        if (logged && gaidosais && gaidosais.kurss) {
+            var pb = document.querySelector('a.btn-cta[data-course="' + gaidosais.kurss.replace(/[^a-z0-9-]/gi, '') + '"]');
+            if (pb) {
+                var pending = gaidosais.kurss, pendingPeriod = gaidosais.periods;
+                gaidosais = null;
+                if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, pendingPeriod);
+            }
         }
+        ekKursi(logged, map).then(izpilditGaidoso);
         raditNakamasGrupas();
     }
 

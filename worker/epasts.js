@@ -45,10 +45,14 @@ function klientaVestule({ user, course, enrollment, origin }) {
   const rindas = [
     ['Kurss', esc(course.name)],
     ['Cena', esc(cena(course.price_eur))],
-    ['Grupa', esc(course.schedule || 'Tiks precizēta')],
+    [course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', esc(course.schedule || 'Tiks precizēta')],
     ['Pieteikums iesniegts', esc(datums(enrollment.created_at || enrollment.updated_at))],
   ].filter((r) => r[1]);
-  const soli = [
+  const soli = course.veids === 'ekurss' ? [
+    ['Pieteikums saņemts', 'Tu iegādājies piekļuvi digitālam mācību saturam (tiešsaistes pašmācības kurss).'],
+    ['Apmaksas informācija', 'Tuvākajā laikā nosūtīsim rēķinu vai apmaksas rekvizītus.'],
+    ['Piekļuve uzreiz pēc apmaksas', `Kurss atvērsies sadaļā “Mani kursi” uz ${course.ek_dienas || 90} dienām. Tu piekriti, ka piekļuve sākas uzreiz, tāpēc 14 dienu atteikuma tiesības pēc tam vairs nav spēkā.`],
+  ] : [
     ['Rezervējām tev vietu', 'Pieteikums ir saņemts un vieta grupā tev ir paturēta.'],
     ['Apmaksas informācija', 'Tuvākajā laikā sazināsimies un nosūtīsim rēķinu vai apmaksas rekvizītus.'],
     ['Vieta grupā ir tava', 'Pēc apmaksas statuss sadaļā “Mani kursi” mainīsies uz “Uzņemts”, un nosūtīsim visu nepieciešamo pirmajai nodarbībai.'],
@@ -165,7 +169,7 @@ function adminaVestule({ user, course, origin }) {
   const rinda = (k, v) => `<tr><td style="padding:4px 12px 4px 0;color:#5C554D;">${k}</td><td style="padding:4px 0;"><strong>${esc(v)}</strong></td></tr>`;
   const html = `<div style="font-family:${SANS};font-size:15px;color:#24211E;">
 <p>Jauns pieteikums kursam <strong>${esc(course.name)}</strong>.</p>
-<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${rinda('Grupa', course.schedule || 'Tiks precizēta')}</table>
+<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${rinda(course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', course.schedule || 'Tiks precizēta')}</table>
 <p><a href="${origin}/admin.html">Atvērt administrāciju</a></p></div>`;
   const text = `Jauns pieteikums: ${course.name}\n${user.name || ''} <${user.email}>\nTālrunis: ${user.phone || '—'}\n${origin}/admin.html`;
   return { subject: `Jauns pieteikums: ${course.name} — ${user.name || user.email}`, html, text };
@@ -194,4 +198,4 @@ export async function sutitPieteikumaEpastus(env, { user, course, enrollment, or
 }
 
 // Priekšskatījumam / testiem
-export { klientaVestule };
+export { klientaVestule, sutit };
