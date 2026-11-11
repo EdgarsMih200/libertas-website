@@ -777,6 +777,15 @@ html.ziemassvetki .lapas-josla {
     --sc-path: #C9C1C0; --sc-front: #22332D; --sc-deep: #17231F; --sc-snow-o: 1; --sc-bird: #E8A598;
 }
 
+/* Día de Muertos: samteņu oranžs pēcpusdienas debess, iedegtas sveces logos, papel picado virtenes.
+   html … selektors, lai decembrī ziemas tonis nepārrakstītu šo materiālu */
+.sc-muertos,
+html .lapas-josla.sc-muertos {
+    --sc-sky1: #F6EBDD; --sc-sky2: #F6D3A8; --sc-sky3: #EFAE72; --sc-sun: #E98A4C; --sc-sun-o: 1; --sc-cloud: #FFF4E6;
+    --sc-lake: #E7CDB2; --sc-glint: #FFF3E2; --sc-window: #F2C46A; --sc-lights-o: 1;
+    --sc-snow-o: 0; --sc-bunting-o: 1; --sc-bird: #6B1D1D;
+}
+
 /* PRIEKŠROCĪBAS (josla zem hero) */
 .hero-prieksrocibas {
     background: var(--c-bg);

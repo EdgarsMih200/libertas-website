@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Día de Muertos spāņu valodā (A1) — Noderīgi materiāli — Libertas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body class="mat-lapa mat-nodarbiba">
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html" aria-current="page">Noderīgi materiāli</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Materiāla virsraksts (.sc-muertos = oranžs krēslas vakars ar papel picado virtenēm) -->
+    <section class="mat-hero lapas-josla lapas-josla--augsta sc-muertos">
+        <div class="lapas-josla-ainava" aria-hidden="true">
+            <svg viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-clouds"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+        </div>
+        <div class="container mat-hero-iekssa lapas-josla-saturs">
+            <a href="materiali.html" class="mat-atpakal"><svg class="mat-atpakal-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Visi materiāli</a>
+            <div class="mat-birkas">
+                <span class="mat-limenis">A1</span>
+                <span class="mat-valoda">Spāņu valoda</span>
+            </div>
+            <h1><span lang="es" class="mat-hero-es">Día de Muertos</span> Mirušo diena spāņu valodā</h1>
+            <p class="mat-hero-teksts">
+                Krāsainākie piemiņas svētki pasaulē: vārdi, frāzes un tradīcijas, lai saprastu, kā Meksikā
+                ar ziediem, svecēm un mūziku piemin savus tuviniekus. Spied <svg class="ikona-skana" viewBox="0 0 24 24" role="img" aria-label="skaļruņa pogu" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none"/></svg>, lai dzirdētu izrunu.
+            </p>
+            <ul class="mat-statistika">
+                <li><strong>20</strong> vārdi</li>
+                <li><strong>10</strong> frāzes</li>
+                <li><strong>4</strong> uzdevumi</li>
+                <li><strong>~30</strong> min</li>
+            </ul>
+            <div class="mat-hero-pogas">
+                <a href="#vardi" class="btn-cta">Sākt nodarbību</a>
+                <button type="button" class="btn-secondary mat-poga-druka" onclick="window.print()"><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><path d="M7 14h10v6H7z"/></svg>Drukāt</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mat-izkartojums">
+        <!-- Satura rādītājs (sānos) -->
+        <nav class="mat-saturs" aria-label="Saturs">
+            <span class="mat-saturs-virsraksts">Saturs</span>
+            <a href="#vardi"><span>1</span> Vārdi</a>
+            <a href="#frazes"><span>2</span> Frāzes</a>
+            <a href="#gramatika"><span>3</span> Gramatika</a>
+            <a href="#dialogs"><span>4</span> Dialogs</a>
+            <a href="#tradicijas"><span>5</span> Tradīcijas</a>
+            <a href="#uzdevumi"><span>6</span> Uzdevumi</a>
+        </nav>
+
+        <main class="mat-galvenais">
+
+            <!-- 1. VĀRDI -->
+            <section class="mat-sadala" id="vardi">
+                <h2><span class="mat-nr">1</span> Mirušo dienas vārdi</h2>
+                <p class="mat-ievads">Uzklikšķini uz kartītes, lai redzētu tulkojumu. Mācies vārdu kopā ar artikulu:
+                    <span class="art-el">el / los</span> — vīriešu dzimte, <span class="art-la">la / las</span> — sieviešu dzimte.</p>
+                <ul class="vardu-rezgis">
+                    <li class="vards" data-es="el Día de Muertos">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">📅</span><span class="vards-es" lang="es"><span class="art-el">el</span> Día de Muertos</span></span>
+                            <span class="vards-puse vards-aizmugure">Mirušo diena (1.–2.11.)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la ofrenda">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🏮</span><span class="vards-es" lang="es"><span class="art-la">la</span> ofrenda</span></span>
+                            <span class="vards-puse vards-aizmugure">piemiņas altāris mājās</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la calavera">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">💀</span><span class="vards-es" lang="es"><span class="art-la">la</span> calavera</span></span>
+                            <span class="vards-puse vards-aizmugure">galvaskauss</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la calaverita de azúcar">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🍭</span><span class="vards-es" lang="es"><span class="art-la">la</span> calaverita de azúcar</span></span>
+                            <span class="vards-puse vards-aizmugure">cukura galvaskausiņš</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la Catrina">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">💃</span><span class="vards-es" lang="es"><span class="art-la">la</span> Catrina</span></span>
+                            <span class="vards-puse vards-aizmugure">Katrina — elegantā skeleta dāma</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el esqueleto">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🦴</span><span class="vards-es" lang="es"><span class="art-el">el</span> esqueleto</span></span>
+                            <span class="vards-puse vards-aizmugure">skelets</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el cempasúchil">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🌼</span><span class="vards-es" lang="es"><span class="art-el">el</span> cempasúchil</span></span>
+                            <span class="vards-puse vards-aizmugure">samtene (Mirušo dienas zieds)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la flor">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🌸</span><span class="vards-es" lang="es"><span class="art-la">la</span> flor</span></span>
+                            <span class="vards-puse vards-aizmugure">zieds</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la vela">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🕯️</span><span class="vards-es" lang="es"><span class="art-la">la</span> vela</span></span>
+                            <span class="vards-puse vards-aizmugure">svece</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el pan de muerto">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🍞</span><span class="vards-es" lang="es"><span class="art-el">el</span> pan de muerto</span></span>
+                            <span class="vards-puse vards-aizmugure">“mirušo maize” — salda svētku maize</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el papel picado">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎊</span><span class="vards-es" lang="es"><span class="art-el">el</span> papel picado</span></span>
+                            <span class="vards-puse vards-aizmugure">izgriezta papīra virtenes</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la foto">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🖼️</span><span class="vards-es" lang="es"><span class="art-la">la</span> foto</span></span>
+                            <span class="vards-puse vards-aizmugure">fotogrāfija</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el recuerdo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">💭</span><span class="vards-es" lang="es"><span class="art-el">el</span> recuerdo</span></span>
+                            <span class="vards-puse vards-aizmugure">atmiņa</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el cementerio">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🪦</span><span class="vards-es" lang="es"><span class="art-el">el</span> cementerio</span></span>
+                            <span class="vards-puse vards-aizmugure">kapsēta</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el alma">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">✨</span><span class="vards-es" lang="es"><span class="art-el">el</span> alma</span></span>
+                            <span class="vards-puse vards-aizmugure">dvēsele (siev. dz.! dsk. las almas)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="los abuelos">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">👵</span><span class="vards-es" lang="es"><span class="art-el">los</span> abuelos</span></span>
+                            <span class="vards-puse vards-aizmugure">vecvecāki</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la familia">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">👨‍👩‍👧</span><span class="vards-es" lang="es"><span class="art-la">la</span> familia</span></span>
+                            <span class="vards-puse vards-aizmugure">ģimene</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el chocolate caliente">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">☕</span><span class="vards-es" lang="es"><span class="art-el">el</span> chocolate caliente</span></span>
+                            <span class="vards-puse vards-aizmugure">karstā šokolāde</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la música">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🎺</span><span class="vards-es" lang="es"><span class="art-la">la</span> música</span></span>
+                            <span class="vards-puse vards-aizmugure">mūzika</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la noche">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-emoji" aria-hidden="true">🌙</span><span class="vards-es" lang="es"><span class="art-la">la</span> noche</span></span>
+                            <span class="vards-puse vards-aizmugure">nakts</span>
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- 2. FRĀZES -->
+            <section class="mat-sadala" id="frazes">
+                <h2><span class="mat-nr">2</span> Frāzes</h2>
+                <ul class="frazu-saraksts">
+                    <li data-es="¡Feliz Día de Muertos!"><span class="fraze-teksts"><span class="es" lang="es">¡Feliz Día de Muertos!</span><span class="lv">Priecīgu Mirušo dienu!</span></span></li>
+                    <li data-es="Recordamos a nuestros abuelos."><span class="fraze-teksts"><span class="es" lang="es">Recordamos a nuestros abuelos.</span><span class="lv">Mēs pieminam savus vecvecākus.</span></span></li>
+                    <li data-es="Esta es la ofrenda de mi familia."><span class="fraze-teksts"><span class="es" lang="es">Esta es la ofrenda de mi familia.</span><span class="lv">Šis ir manas ģimenes piemiņas altāris.</span></span></li>
+                    <li data-es="Ponemos flores y velas."><span class="fraze-teksts"><span class="es" lang="es">Ponemos flores y velas.</span><span class="lv">Mēs liekam ziedus un sveces.</span></span></li>
+                    <li data-es="Es la foto de mi abuela."><span class="fraze-teksts"><span class="es" lang="es">Es la foto de mi abuela.</span><span class="lv">Tā ir manas vecmāmiņas fotogrāfija.</span></span></li>
+                    <li data-es="¿Qué hay en la ofrenda?"><span class="fraze-teksts"><span class="es" lang="es">¿Qué hay en la ofrenda?</span><span class="lv">Kas ir uz altāra?</span></span></li>
+                    <li data-es="Hay pan de muerto y fruta."><span class="fraze-teksts"><span class="es" lang="es">Hay pan de muerto y fruta.</span><span class="lv">Tur ir “mirušo maize” un augļi.</span></span></li>
+                    <li data-es="No es un día triste."><span class="fraze-teksts"><span class="es" lang="es">No es un día triste.</span><span class="lv">Tā nav skumja diena.</span></span></li>
+                    <li data-es="Es una fiesta llena de color."><span class="fraze-teksts"><span class="es" lang="es">Es una fiesta llena de color.</span><span class="lv">Tie ir krāsu pilni svētki.</span></span></li>
+                    <li data-es="¡Qué bonita es la Catrina!"><span class="fraze-teksts"><span class="es" lang="es">¡Qué bonita es la Catrina!</span><span class="lv">Cik skaista ir Katrina!</span></span></li>
+                </ul>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> <em lang="es">Día de Muertos</em> nav Helovīns! Tie nav šausmu svētki, bet prieka un piemiņas diena. Kopš 2008. gada tā ir UNESCO nemateriālā kultūras mantojuma sarakstā.</p>
+            </section>
+
+            <!-- 3. GRAMATIKA -->
+            <section class="mat-sadala" id="gramatika">
+                <h2><span class="mat-nr">3</span> Gramatika</h2>
+
+                <h3>Noteiktie artikuli</h3>
+                <div class="artikulu-rezgis" lang="es">
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">el</span><span>altar</span><small lang="lv">vīr. dz. · vsk.</small></div>
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">los</span><span>altares</span><small lang="lv">vīr. dz. · dsk.</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">la</span><span>vela</span><small lang="lv">siev. dz. · vsk.</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">las</span><span>velas</span><small lang="lv">siev. dz. · dsk.</small></div>
+                </div>
+
+                <h3>Piederības vietniekvārdi — mans, tavs, viņa</h3>
+                <div class="likumu-rezgis">
+                    <div class="likums"><span class="likums-galotne">mi / mis</span><p>mans, mana / mani, manas</p><span lang="es"><b>mi</b> abuela · <b>mis</b> abuelos</span></div>
+                    <div class="likums"><span class="likums-galotne">tu / tus</span><p>tavs, tava / tavi, tavas</p><span lang="es"><b>tu</b> foto · <b>tus</b> fotos</span></div>
+                    <div class="likums"><span class="likums-galotne">su / sus</span><p>viņa, viņas, viņu</p><span lang="es"><b>su</b> vela · <b>sus</b> velas</span></div>
+                </div>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> <strong lang="es">tu</strong> (tavs) raksta bez uzsvara, <strong lang="es">tú</strong> (tu) — ar uzsvaru: <span lang="es"><em>Tú pones tu foto.</em></span> — Tu noliec savu fotogrāfiju.</p>
+
+                <h3>Darbības vārds <em lang="es">recordar</em> — atcerēties, pieminēt</h3>
+                <div class="locijumi">
+                    <div data-es="yo recuerdo"><span lang="es">yo <b>recuerdo</b></span><small>es atceros</small></div>
+                    <div data-es="nosotros recordamos"><span lang="es">nosotros <b>recordamos</b></span><small>mēs atceramies</small></div>
+                    <div data-es="tú recuerdas"><span lang="es">tú <b>recuerdas</b></span><small>tu atceries</small></div>
+                    <div data-es="vosotros recordáis"><span lang="es">vosotros <b>recordáis</b></span><small>jūs atceraties</small></div>
+                    <div data-es="él recuerda"><span lang="es">él / ella <b>recuerda</b></span><small>viņš / viņa atceras</small></div>
+                    <div data-es="ellos recuerdan"><span lang="es">ellos / ellas <b>recuerdan</b></span><small>viņi / viņas atceras</small></div>
+                </div>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> Uzsvērtajā zilbē <strong>o → ue</strong> (<span lang="es">rec<b>ue</b>rdo</span>), bet <span lang="es">nosotros</span> un <span lang="es">vosotros</span> formā paliek <strong>o</strong>.</p>
+            </section>
+
+            <!-- 4. DIALOGS -->
+            <section class="mat-sadala" id="dialogs">
+                <h2><span class="mat-nr">4</span> Dialogs: pie ofrendas</h2>
+                <div class="dialoga-riki">
+                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg>Klausīties visu dialogu</button>
+                    <label class="mat-sledzis"><input type="checkbox" id="radit-tulkojumu"> Rādīt tulkojumu</label>
+                </div>
+                <div class="cats">
+                    <div class="replika replika--p" data-es="¡Hola, Lucía! ¿Qué es esto?">
+                        <span class="replika-avatars" aria-hidden="true">D</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Diego</strong>
+                            <span class="es" lang="es">¡Hola, Lucía! ¿Qué es esto?</span>
+                            <span class="lv">Sveika, Lūsija! Kas tas ir?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Es nuestra ofrenda para el Día de Muertos.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Lucía</strong>
+                            <span class="es" lang="es">Es nuestra ofrenda para el Día de Muertos.</span>
+                            <span class="lv">Tas ir mūsu piemiņas altāris Mirušo dienai.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¿Quién es el señor de la foto?">
+                        <span class="replika-avatars" aria-hidden="true">D</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Diego</strong>
+                            <span class="es" lang="es">¿Quién es el señor de la foto?</span>
+                            <span class="lv">Kas ir kungs fotogrāfijā?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Es mi abuelo Juan. Aquí está su chocolate favorito.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Lucía</strong>
+                            <span class="es" lang="es">Es mi abuelo Juan. Aquí está su chocolate favorito.</span>
+                            <span class="lv">Tas ir mans vectēvs Huans. Šeit ir viņa mīļākā šokolāde.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¿Y las flores naranjas?">
+                        <span class="replika-avatars" aria-hidden="true">D</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Diego</strong>
+                            <span class="es" lang="es">¿Y las flores naranjas?</span>
+                            <span class="lv">Un oranžie ziedi?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Son cempasúchiles. Su color guía a las almas a casa.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Lucía</strong>
+                            <span class="es" lang="es">Son cempasúchiles. Su color guía a las almas a casa.</span>
+                            <span class="lv">Tās ir samtenes. To krāsa rāda dvēselēm ceļu uz mājām.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¡Qué bonito! ¿Es un día triste?">
+                        <span class="replika-avatars" aria-hidden="true">D</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Diego</strong>
+                            <span class="es" lang="es">¡Qué bonito! ¿Es un día triste?</span>
+                            <span class="lv">Cik skaisti! Vai tā ir skumja diena?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="No, es una fiesta. Recordamos a la familia con alegría.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Lucía</strong>
+                            <span class="es" lang="es">No, es una fiesta. Recordamos a la familia con alegría.</span>
+                            <span class="lv">Nē, tie ir svētki. Mēs ar prieku pieminam ģimeni.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¿Puedo probar el pan de muerto?">
+                        <span class="replika-avatars" aria-hidden="true">D</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Diego</strong>
+                            <span class="es" lang="es">¿Puedo probar el pan de muerto?</span>
+                            <span class="lv">Vai drīkstu pagaršot “mirušo maizi”?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="¡Claro! ¡Buen provecho!">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Lucía</strong>
+                            <span class="es" lang="es">¡Claro! ¡Buen provecho!</span>
+                            <span class="lv">Protams! Labu apetīti!</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. TRADĪCIJAS -->
+            <section class="mat-sadala" id="tradicijas">
+                <h2><span class="mat-nr">5</span> Kā Mirušo dienu svin Meksikā</h2>
+                <ol class="laika-josla">
+                    <li><span class="laika-emoji" aria-hidden="true">🏮</span><div><span class="laika-datums">Oktobra beigas</span><strong lang="es">La ofrenda</strong><p>Mājās ceļ piemiņas altāri: tuvinieku fotogrāfijas, sveces, <span lang="es">cempasúchil</span> ziedi, <span lang="es">papel picado</span> un mīļākie ēdieni un dzērieni.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">🌼</span><div><span class="laika-datums">31. oktobris</span><strong lang="es">El camino de flores</strong><p>No durvīm līdz altārim izber oranžu ziedlapiņu taku, lai dvēseles atrastu ceļu mājās.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">👼</span><div><span class="laika-datums">1. novembris</span><strong lang="es">Día de los Angelitos</strong><p>Piemiņas diena bērniem. Uz altāra liek rotaļlietas, saldumus un <span lang="es">calaveritas de azúcar</span>.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">🪦</span><div><span class="laika-datums">2. novembris</span><strong lang="es">Día de los Fieles Difuntos</strong><p>Pieaugušo piemiņas diena. Ģimenes dodas uz kapsētu, rotā kapus, ēd, spēlē mūziku un stāsta atmiņas — dažreiz visu nakti.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">✍️</span><div><span class="laika-datums">Visu nedēļu</span><strong lang="es">Las calaveritas literarias</strong><p>Īsi, jautri dzejolīši, kuros “nāve” nāk pēc draugiem, kolēģiem vai politiķiem. Tos raksta skolās un avīzēs.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true">💃</span><div><span class="laika-datums">Mehiko</span><strong lang="es">El desfile de Día de Muertos</strong><p>Lielā parāde ar milzu skeletiem un <span lang="es">Catrinas</span>. Tā notiek kopš 2016. gada — iedvesmota no Džeimsa Bonda filmas “Spectre”.</p></div></li>
+                </ol>
+            </section>
+
+            <!-- 6. UZDEVUMI -->
+            <section class="mat-sadala" id="uzdevumi">
+                <h2><span class="mat-nr">6</span> Uzdevumi</h2>
+                <p class="mat-ievads">Ieraksti atbildes un spied “Pārbaudīt”. Garumzīmes un pieturzīmes var nerakstīt.</p>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">1</span> Ieraksti artikulu: <em>el, la, los</em> vai <em>las</em></h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="la" aria-label="Atbilde" autocomplete="off" spellcheck="false"> ofrenda</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="las" aria-label="Atbilde" autocomplete="off" spellcheck="false"> calaveras</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="el" aria-label="Atbilde" autocomplete="off" spellcheck="false"> pan de muerto</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="las" aria-label="Atbilde" autocomplete="off" spellcheck="false"> velas</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="el" aria-label="Atbilde" autocomplete="off" spellcheck="false"> cementerio</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="los" aria-label="Atbilde" autocomplete="off" spellcheck="false"> esqueletos</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. la ofrenda · 2. las calaveras · 3. el pan de muerto · 4. las velas · 5. el cementerio · 6. los esqueletos</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">2</span> Ieraksti <em>mi, mis, tu, tus, su</em> vai <em>sus</em></h3>
+                    <ol class="uzdevums" lang="es">
+                        <li>Es <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="mi" aria-label="Atbilde" autocomplete="off" spellcheck="false"> abuela. <span lang="lv">(mana)</span></li>
+                        <li>Son <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="mis" aria-label="Atbilde" autocomplete="off" spellcheck="false"> fotos. <span lang="lv">(manas)</span></li>
+                        <li>¿Es <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="tu" aria-label="Atbilde" autocomplete="off" spellcheck="false"> ofrenda? <span lang="lv">(tavs)</span></li>
+                        <li>Juan y <input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="sus" aria-label="Atbilde" autocomplete="off" spellcheck="false"> flores. <span lang="lv">(viņa)</span></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. mi abuela · 2. mis fotos · 3. tu ofrenda · 4. sus flores</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">3</span> Ieraksti pareizo formu: <em>recuerdo, recuerdas, recuerda</em> vai <em>recordamos</em></h3>
+                    <ol class="uzdevums" lang="es">
+                        <li>Yo <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="recuerdo" aria-label="Atbilde" autocomplete="off" spellcheck="false"> a mi abuelo.</li>
+                        <li>Nosotros <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="recordamos" aria-label="Atbilde" autocomplete="off" spellcheck="false"> a la familia.</li>
+                        <li>¿Tú <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="recuerdas" aria-label="Atbilde" autocomplete="off" spellcheck="false"> a tu abuela?</li>
+                        <li>Lucía <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="recuerda" aria-label="Atbilde" autocomplete="off" spellcheck="false"> a Juan.</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. recuerdo · 2. recordamos · 3. recuerdas · 4. recuerda</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">4</span> Pārtulko spāniski</h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><span lang="lv">Priecīgu Mirušo dienu!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="feliz dia de muertos|feliz dia de los muertos" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Tā ir manas vecmāmiņas fotogrāfija.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="es la foto de mi abuela|es la fotografia de mi abuela" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Mēs liekam ziedus un sveces.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="ponemos flores y velas|nosotros ponemos flores y velas" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Tā nav skumja diena.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="no es un dia triste" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. ¡Feliz Día de Muertos! · 2. Es la foto de mi abuela. · 3. Ponemos flores y velas. · 4. No es un día triste.</p>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Aicinājums -->
+            <aside class="mat-cta">
+                <div>
+                    <h2>Gribi runāt spāniski droši?</h2>
+                    <p>7 nedēļu kurss “Spāņu valodas pamati (A1)” — ar dzīvu sarunu praksi.</p>
+                </div>
+                <a href="kursi.html#spanu" class="btn-cta">Apskatīt kursu</a>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="materiali.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>
