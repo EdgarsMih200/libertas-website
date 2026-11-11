@@ -10,6 +10,11 @@ Short reference so work can start without re-reading every file.
 - Repo: `github.com/EdgarsMih200/libertas-website`, branch `main`.
 - Hosting: Cloudflare Workers static assets (`wrangler.jsonc`, `assets.directory: "."`).
   Pushing to `main` deploys the site automatically.
+- Domain: `libertas.study` + `www.libertas.study` (registered at Namecheap; nameservers moved to Cloudflare
+  2026-11-11; both attached as Worker Custom Domains). Old Canva site disconnected.
+  Google login NOT set up yet: `GOOGLE_CLIENT_ID` in `wrangler.jsonc` is still a placeholder and
+  `GOOGLE_CLIENT_SECRET` is unset, so `/auth/google` returns 503. Redirect URIs to register:
+  `https://libertas.study/auth/google/callback`, `https://www.libertas.study/auth/google/callback`.
 
 ## Files
 | File | Purpose |
