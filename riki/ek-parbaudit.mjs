@@ -80,10 +80,11 @@ const LV = /[āčēģīķļņšūž]/i;
 
 // ---------- kanons: secība ----------
 const atstarpe = (w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-const kanonaVardi = Object.entries(kanons.vardi || {}).map(([v, nr]) => ({ v, nr, re: new RegExp(`(?<!\\p{L})${atstarpe(v)}(?!\\p{L})`, 'iu') }));
+const kanonaVardi = Object.entries(kanons.vardi || {}).map(([v, nr]) => ({ v, nr, re: new RegExp(`(?<![\\p{L}|-])${atstarpe(v)}(?![\\p{L}|-])`, 'iu') })); // zilbes (pa-LA-bra) neskaitās
 const kanonaTermini = Object.entries(kanons.termini || {}).map(([t, d]) => ({ v: t, nr: d.nr, re: new RegExp(`(?<!\\p{L})${atstarpe(t)}`, 'iu') }));
 const pirmsLaika = (f, nr, saturs) => {
-  const teksts = virknes(saturs).join('\n');
+  // burtu nosaukumi un zilbju bloki nav vārdi (ese = burts S)
+  const teksts = virknes(JSON.parse(JSON.stringify(saturs, (k, v) => (v && (v.t === 'burti' || v.t === 'zilbes') ? undefined : v)))).join('\n');
   for (const k of [...kanonaVardi, ...kanonaTermini])
     if (k.nr > nr && k.re.test(teksts)) kl(f, 'kanons', `"${k.v}" lietots pirms tā ieviešanas (${k.nr}. nodarbībā)`);
 };

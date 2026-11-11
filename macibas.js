@@ -467,6 +467,9 @@
             sat.appendChild(ap);
             lay.appendChild(sat);
             sakne.appendChild(lay);
+            // Telefonā daļu josla ritinās horizontāli — parādām pašreizējo daļu
+            const tag = ol.querySelector('[aria-current]');
+            if (tag && ol.scrollWidth > ol.clientWidth) ol.scrollLeft = tag.getBoundingClientRect().left - ol.getBoundingClientRect().left - 16;
         });
     }
 
