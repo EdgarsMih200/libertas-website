@@ -42,6 +42,29 @@
     }
     window.LIB.signInUrl = signInUrl;
 
+    // Profila foto (paša augšupielādēts vai Google) vai iniciālis; izmanto galvene un konts.js
+    function avatars(u, cls) {
+        var n;
+        if (u.picture) {
+            n = el('img', 'user-avatar' + (cls ? ' ' + cls : ''));
+            n.src = u.picture; n.alt = ''; n.referrerPolicy = 'no-referrer';
+            n.addEventListener('error', function() { n.replaceWith(avatars({ name: u.name, email: u.email }, cls)); });
+        } else {
+            n = el('span', 'user-avatar user-avatar-ph' + (cls ? ' ' + cls : ''), (u.name || u.email || '?').charAt(0).toUpperCase());
+            n.setAttribute('aria-hidden', 'true');
+        }
+        return n;
+    }
+    window.LIB.avatars = avatars;
+
+    // Pēc profila maiņas (konts.js) atjauno galvenes foto un vārdu
+    window.LIB.atjaunotGalveni = function(u) {
+        var vecs = document.querySelector('.auth-box');
+        if (vecs) vecs.remove();
+        window.LIB.me.user = u;
+        renderAuth(window.LIB.me);
+    };
+
     function renderAuth(me) {
         var wrap = document.querySelector('.nav-wrapper');
         if (!wrap) return;
@@ -52,33 +75,64 @@
             box.appendChild(a);
         } else {
             var u = me.user;
+            // Galvenē tikai foto; vārds un e-pasts — izvēlnes augšā
             var chip = el('button', 'user-chip');
             chip.type = 'button';
             chip.setAttribute('aria-haspopup', 'true');
             chip.setAttribute('aria-expanded', 'false');
-            if (u.picture) {
-                var img = el('img', 'user-avatar');
-                img.src = u.picture; img.alt = ''; img.referrerPolicy = 'no-referrer';
-                chip.appendChild(img);
-            } else {
-                chip.appendChild(el('span', 'user-avatar user-avatar-ph', (u.name || u.email || '?').charAt(0).toUpperCase()));
-            }
-            chip.appendChild(el('span', 'user-name', u.name || u.email));
+            chip.setAttribute('aria-controls', 'lietotaja-izvelne');
+            chip.setAttribute('aria-label', 'Konta izvēlne' + (u.name ? ': ' + u.name : ''));
+            chip.appendChild(avatars(u));
             var menu = el('div', 'user-menu');
+            menu.id = 'lietotaja-izvelne';
             menu.hidden = true;
-            var l1 = el('a', '', 'Mani kursi'); l1.href = 'konts.html'; menu.appendChild(l1);
-            if (u.is_admin) { var l2 = el('a', '', 'Administrācija'); l2.href = 'admin.html'; menu.appendChild(l2); }
-            var out = el('button', '', 'Iziet'); out.type = 'button';
+            var kas = el('div', 'user-menu-kas');
+            kas.appendChild(el('strong', '', u.name || u.email));
+            if (u.name) kas.appendChild(el('span', '', u.email));
+            menu.appendChild(kas);
+            function saite(teksts, href) {
+                var a = el('a', '', teksts); a.href = href; menu.appendChild(a);
+                // tajā pašā lapā (konts.html) maina tikai #hash — aizver izvēlni
+                a.addEventListener('click', aizvert);
+                return a;
+            }
+            saite('Mans profils', 'konts.html#profils');
+            saite('Mani kursi', 'konts.html#kursi');
+            if (u.is_admin) saite('Administrācija', 'admin.html');
+            var out = el('button', 'user-menu-iziet', 'Iziet'); out.type = 'button';
             out.addEventListener('click', function() {
                 api('POST', '/auth/logout').catch(function() {}).then(function() { location.href = 'index.html'; });
             });
             menu.appendChild(out);
+            function vienumi() { return [].slice.call(menu.querySelectorAll('a, button')); }
+            function aizvert(fokuss) {
+                if (menu.hidden) return;
+                menu.hidden = true;
+                chip.setAttribute('aria-expanded', 'false');
+                if (fokuss === true) chip.focus();
+            }
+            function atvert(pirmais) {
+                menu.hidden = false;
+                chip.setAttribute('aria-expanded', 'true');
+                if (pirmais) vienumi()[0].focus();
+            }
             chip.addEventListener('click', function(e) {
                 e.stopPropagation();
-                menu.hidden = !menu.hidden;
-                chip.setAttribute('aria-expanded', String(!menu.hidden));
+                if (menu.hidden) atvert(e.detail === 0); else aizvert();
             });
-            document.addEventListener('click', function() { menu.hidden = true; chip.setAttribute('aria-expanded', 'false'); });
+            chip.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown') { e.preventDefault(); atvert(true); }
+            });
+            // Bultas pārvietojas pa izvēlni, Esc aizver un atdod fokusu foto pogai, Tab ārā — aizver
+            menu.addEventListener('keydown', function(e) {
+                var v = vienumi(), i = v.indexOf(document.activeElement);
+                if (e.key === 'Escape') { e.preventDefault(); aizvert(true); }
+                else if (e.key === 'ArrowDown') { e.preventDefault(); v[(i + 1) % v.length].focus(); }
+                else if (e.key === 'ArrowUp') { e.preventDefault(); v[(i - 1 + v.length) % v.length].focus(); }
+                else if (e.key === 'Tab') aizvert();
+            });
+            menu.addEventListener('click', function(e) { e.stopPropagation(); });
+            document.addEventListener('click', aizvert);
             box.appendChild(chip);
             box.appendChild(menu);
         }

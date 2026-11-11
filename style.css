@@ -2094,7 +2094,7 @@ html .lapas-josla.sc-muertos {
 
 .ielades-stavoklis .register-intro { margin: 0; }
 /* Rezervē vietu, kamēr konts ielādējas, lai kājene nelēktu */
-.account-card[aria-busy="true"] { min-height: 22rem; }
+.konta-saturs[aria-busy="true"] .account-card { min-height: 22rem; align-content: center; }
 
 #admin > .register-intro { text-align: center; }
 
@@ -3882,30 +3882,42 @@ html .lapas-josla.sc-muertos {
     white-space: nowrap;
 }
 
+/* galvenē tikai profila foto (apaļa poga); vārds — izvēlnes augšā */
 .user-chip {
     display: flex;
     align-items: center;
-    gap: 8px;
-    min-height: 44px;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    padding: 2px;
     background: var(--c-surface);
-    border: 1.5px solid var(--c-line-strong);
-    border-radius: var(--r-pill);
-    padding: 4px 14px 4px 4px;
+    border: 2px solid var(--c-line-strong);
+    border-radius: 50%;
     cursor: pointer;
     font: inherit;
     color: var(--c-ink);
+    transition: border-color var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
 }
 
-.user-chip:hover {
-    border-color: var(--c-ink);
+.user-chip .user-avatar { width: 38px; height: 38px; }
+
+.user-chip:hover,
+.user-chip[aria-expanded="true"] {
+    border-color: var(--c-accent);
+    box-shadow: 0 0 0 3px var(--c-accent-soft);
 }
 
-.user-name {
-    max-width: 160px;
+/* ekrāna lasītājiem paredzēts teksts */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
+    clip: rect(0 0 0 0);
     white-space: nowrap;
-    font-size: 14px;
+    border: 0;
 }
 
 .user-avatar {
@@ -3935,7 +3947,8 @@ html .lapas-josla.sc-muertos {
     position: absolute;
     right: 0;
     top: calc(100% + 8px);
-    min-width: 190px;
+    min-width: 220px;
+    max-width: min(300px, calc(100vw - 24px));
     background: var(--c-surface);
     border: 1px solid var(--c-line);
     border-radius: var(--r-sm);
@@ -3965,9 +3978,39 @@ html .lapas-josla.sc-muertos {
 }
 
 .user-menu a:hover,
-.user-menu button:hover {
+.user-menu button:hover,
+.user-menu a:focus-visible,
+.user-menu button:focus-visible {
     background: var(--c-sunk);
     color: var(--c-accent-strong);
+}
+
+/* izvēlnes augša: kas ienācis (vārds + e-pasts) */
+.user-menu-kas {
+    display: grid;
+    gap: 2px;
+    padding: 8px 12px 10px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--c-line);
+}
+
+.user-menu-kas strong {
+    font-family: var(--ff-display);
+    font-size: 1rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.user-menu-kas span {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+    overflow-wrap: anywhere;
+}
+
+.user-menu .user-menu-iziet {
+    margin-top: 4px;
+    border-top: 1px solid var(--c-line);
+    border-radius: 0 0 8px 8px;
 }
 
 .consent-note {
@@ -4386,6 +4429,312 @@ html:has(.pieteikuma-logs[open]) { overflow: hidden; }
     outline-offset: 2px;
 }
 
+/* KONTA CILNES UN SADAĻAS (konts.js: .konta-cilnes > a.konta-cilne[aria-current] (+ .konta-cilne-skaits);
+   #kursi: .mani-kursi > .courses-grid.mani-kursi-rezgis > article.course-card.mans-kurss (.mans-kurss-birkas, .kursa-gaita li.izdarits,
+   .mans-kurss-piezime, .mans-kurss-apaksa), .mani-kursi-tukss (skumjais Empanadillo), details.atceltie;
+   #profils: .profila-karte > .profila-galva (.profila-foto + .profila-foto-poga, .profila-kas, .profila-foto-saites), .profila-forma) */
+.konta-cilnes {
+    display: flex;
+    width: fit-content;
+    max-width: 100%;
+    gap: 2px;
+    margin: 0 auto var(--sp-6);
+    padding: 4px;
+    border-radius: var(--r-pill);
+    background: var(--c-sunk);
+}
+
+.konta-cilne {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-height: 44px;
+    padding: 0 22px;
+    border-radius: var(--r-pill);
+    color: var(--c-ink);
+    font-weight: 600;
+    font-size: var(--fs-sm);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+
+.konta-cilne:hover { color: var(--c-accent-strong); }
+
+.konta-cilne[aria-current="page"] {
+    background: var(--c-surface);
+    color: var(--c-accent-strong);
+    box-shadow: var(--shadow-1);
+}
+
+.konta-cilne-skaits {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: var(--r-pill);
+    background: var(--c-accent-soft);
+    color: var(--c-accent-strong);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Mani kursi: tās pašas kartītes kā kursi.html, bet līdz 3 kolonnām */
+.mani-kursi-rezgis {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+}
+
+.mans-kurss-birkas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+}
+
+.mans-kurss--pabeidzis img { filter: saturate(.7); }
+
+/* gaita: 4 punkti ar līniju starp tiem */
+.kursa-gaita {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    margin: var(--sp-2) 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.kursa-gaita li {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 6px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    text-align: center;
+    color: var(--c-muted);
+}
+
+.kursa-gaita li::before {
+    content: "";
+    position: relative;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 2px solid var(--c-line-strong);
+    background: var(--c-surface);
+}
+
+/* savienojošā līnija uz nākamo soli */
+.kursa-gaita li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: calc(50% + 7px);
+    width: calc(100% - 14px);
+    height: 2px;
+    background: var(--c-line);
+}
+
+.kursa-gaita li.izdarits { color: var(--c-ink); font-weight: 600; }
+.kursa-gaita li.izdarits::before { border-color: var(--c-success); background: var(--c-success); box-shadow: inset 0 0 0 2px var(--c-surface); }
+.kursa-gaita li.izdarits:has(+ li.izdarits)::after { background: var(--c-success); }
+
+.mans-kurss-piezime {
+    margin: var(--sp-2) 0 0;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    background: var(--c-sunk);
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+}
+
+.mans-kurss--pieteicies .mans-kurss-piezime { background: var(--c-warn-bg); }
+
+.mans-kurss-apaksa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--sp-2);
+    width: 100%;
+    margin-top: auto;
+    padding-top: var(--sp-2);
+}
+
+.mani-kursi-vairak {
+    margin-top: var(--sp-5);
+    text-align: center;
+}
+
+.mani-kursi-vairak a,
+.profila-privatums a {
+    color: var(--c-accent-strong);
+    font-weight: 600;
+}
+
+.mani-kursi-tukss {
+    display: grid;
+    justify-items: center;
+    gap: var(--sp-3);
+    text-align: center;
+}
+
+.mani-kursi-tukss h2 {
+    font-size: var(--fs-h3);
+    color: var(--c-brand);
+}
+
+.mani-kursi-tukss .muted {
+    max-width: 44ch;
+    margin: 0 0 var(--sp-2);
+    font-size: 1rem;
+}
+
+.konta-empa svg { display: block; overflow: visible; image-rendering: pixelated; }
+
+/* kamēr redzams skumjais Empanadillo, stūra palīgs paslēpts (viens talismans ekrānā) */
+body:has(.mani-kursi-tukss) .empanadillo { display: none; }
+
+.atceltie {
+    max-width: 760px;
+    margin: var(--sp-6) auto 0;
+    padding: var(--sp-3) var(--sp-4);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-sm);
+    background: var(--c-surface);
+}
+
+.atceltie summary {
+    min-height: 32px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--c-muted);
+}
+
+.atceltie .enroll-row:last-child { border-bottom: 0; }
+
+/* Mans profils */
+.profila-galva {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+}
+
+.profila-foto {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.user-avatar.user-avatar-xl {
+    width: 112px;
+    height: 112px;
+    font-size: 2.75rem;
+    font-family: var(--ff-display);
+    border: 3px solid var(--c-surface);
+    box-shadow: var(--shadow-2);
+}
+
+.profila-foto.ladejas .user-avatar { opacity: .4; }
+
+.profila-foto-poga {
+    position: absolute;
+    right: -4px;
+    bottom: -4px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 3px solid var(--c-surface);
+    background: var(--c-accent);
+    color: var(--c-on-accent);
+    cursor: pointer;
+    transition: background var(--dur-1) var(--ease);
+}
+
+.profila-foto-poga:hover { background: var(--c-accent-strong); }
+
+.profila-foto-poga svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+}
+
+/* faila lauks paslēpts — fokusu rāda uz kameras pogas */
+.profila-foto input:focus-visible + .profila-foto-poga {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 2px;
+}
+
+.profila-kas {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.profila-kas strong {
+    font-family: var(--ff-display);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+}
+
+.profila-foto-saites {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--sp-3);
+    margin-left: -6px;
+}
+
+.profila-forma {
+    display: grid;
+    gap: var(--sp-4);
+}
+
+.profila-lauks {
+    display: grid;
+    gap: 6px;
+}
+
+.profila-lauks label {
+    font-weight: 600;
+    font-size: var(--fs-sm);
+}
+
+.profila-lauks input[readonly] {
+    background: var(--c-sunk);
+    color: var(--c-muted);
+    cursor: default;
+}
+
+.profila-palidziba {
+    margin: 0;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+}
+
+.profila-pogas { padding-top: var(--sp-2); }
+
+.profila-privatums {
+    margin-top: var(--sp-5);
+    padding-top: var(--sp-4);
+    border-top: 1px solid var(--c-line);
+}
+
+@media (max-width: 560px) {
+    .profila-galva { flex-direction: column; text-align: center; }
+    .profila-foto-saites { justify-content: center; margin-left: 0; }
+    .konta-cilne { padding: 0 16px; }
+}
+
 /* ADMINISTRĀCIJA (admin.js zīmē: .admin-summary, .summary-card, .summary-chips, .admin-add, .admin-tabs, .admin-tab(.active),
    .admin-filters, .table-wrap, .admin-table) */
 .admin-section {
@@ -4518,8 +4867,6 @@ body {
 }
 
 @media (max-width: 768px) {
-    .user-name { display: none; }
-    .user-chip { padding: 4px; min-height: 44px; min-width: 44px; justify-content: center; }
     .btn-signin { min-height: 44px; padding: 8px 14px; font-size: .9375rem; box-shadow: none; }
     .admin-section { padding: 24px 12px; }
 }

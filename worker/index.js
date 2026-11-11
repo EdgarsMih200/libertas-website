@@ -49,6 +49,8 @@ async function getUser(request, env) {
     'SELECT u.* FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?'
   ).bind(hash, now).first();
   if (!row) return null;
+  row.google_name = row.name;
+  if (row.display_name) row.name = row.display_name; // paša izvēlētais vārds (e-pastiem, adminam, galvenei)
   row.is_admin = isAdminEmail(env, row.email);
   return row;
 }
@@ -62,7 +64,12 @@ async function readBody(request) {
   }
 }
 
-const publicUser = (u) => ({ id: u.id, email: u.email, name: u.name, picture: u.picture, phone: u.phone, is_admin: !!u.is_admin });
+// picture: paša augšupielādētais foto (ja ir), citādi Google foto. ?v= maina adresi pēc katras nomaiņas (kešs).
+const publicUser = (u) => ({
+  id: u.id, email: u.email, name: u.name, phone: u.phone, is_admin: !!u.is_admin, created_at: u.created_at,
+  picture: u.avatar_at ? `/api/me/avatar?v=${encodeURIComponent(u.avatar_at)}` : u.picture,
+  google_picture: u.picture, custom_picture: !!u.avatar_at,
+});
 
 // ---------- Google OAuth ----------
 async function authStart(request, env, url) {
@@ -159,7 +166,7 @@ async function logout(request, env) {
 }
 
 // ---------- Lietotāja API ----------
-const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, e.status, e.paid, e.created_at
+const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at
   FROM enrollments e JOIN courses c ON c.id = e.course_id`;
 
 async function me(request, env, user) {
@@ -172,12 +179,65 @@ async function me(request, env, user) {
   return json({ user: publicUser(user), enrollments: results.map(({ user_id, ...rest }) => rest) });
 }
 
+// Profila labošana: tālrunis un/vai vārds (tukšs vārds = atpakaļ uz Google vārdu)
 async function patchMe(request, env, user) {
   const body = await readBody(request);
-  if (typeof body.phone !== 'string') return fail('Nederīgs tālrunis');
-  const phone = body.phone.trim().slice(0, 40);
-  await env.DB.prepare('UPDATE users SET phone = ? WHERE id = ?').bind(phone || null, user.id).run();
-  return json({ ok: true, phone: phone || null });
+  const sets = [];
+  const vals = [];
+  const out = { ok: true };
+  if (body.phone !== undefined) {
+    if (typeof body.phone !== 'string') return fail('Nederīgs tālrunis');
+    const phone = body.phone.trim().slice(0, 40);
+    if (phone && !/^[0-9+()\-\s.]{5,40}$/.test(phone)) return fail('Tālrunī drīkst būt tikai cipari, atstarpes un + ( ) -');
+    sets.push('phone = ?'); vals.push(phone || null);
+    out.phone = phone || null;
+  }
+  if (body.name !== undefined) {
+    if (typeof body.name !== 'string') return fail('Nederīgs vārds');
+    const name = body.name.replace(/\s+/g, ' ').trim().slice(0, 80);
+    const dn = name && name !== user.google_name ? name : null;
+    sets.push('display_name = ?'); vals.push(dn);
+    out.name = dn || user.google_name || null;
+  }
+  if (!sets.length) return fail('Nav ko mainīt');
+  await env.DB.prepare(`UPDATE users SET ${sets.join(', ')} WHERE id = ?`).bind(...vals, user.id).run();
+  return json(out);
+}
+
+// ---------- Profila foto (D1 tabula avatars; klients to jau samazina līdz ~256×256 JPEG) ----------
+const AVATAR_MAX_B64 = 200 * 1024;
+
+async function putAvatar(request, env, user) {
+  const { image } = await readBody(request);
+  const m = typeof image === 'string' && image.match(/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/);
+  if (!m) return fail('Nederīgs attēls');
+  if (m[2].length > AVATAR_MAX_B64) return fail('Attēls ir par lielu', 413);
+  const now = new Date().toISOString();
+  await env.DB.batch([
+    env.DB.prepare(`INSERT INTO avatars (user_id, mime, data, updated_at) VALUES (?, ?, ?, ?)
+      ON CONFLICT(user_id) DO UPDATE SET mime = excluded.mime, data = excluded.data, updated_at = excluded.updated_at`)
+      .bind(user.id, m[1], m[2], now),
+    env.DB.prepare('UPDATE users SET avatar_at = ? WHERE id = ?').bind(now, user.id),
+  ]);
+  return json({ user: publicUser({ ...user, avatar_at: now }) });
+}
+
+async function deleteAvatar(env, user) {
+  await env.DB.batch([
+    env.DB.prepare('DELETE FROM avatars WHERE user_id = ?').bind(user.id),
+    env.DB.prepare('UPDATE users SET avatar_at = NULL WHERE id = ?').bind(user.id),
+  ]);
+  return json({ user: publicUser({ ...user, avatar_at: null }) });
+}
+
+// Tikai savs foto (privāts kešs; adrese mainās ar ?v=)
+async function getAvatar(env, user) {
+  const row = await env.DB.prepare('SELECT mime, data FROM avatars WHERE user_id = ?').bind(user.id).first();
+  if (!row) return new Response('Nav atrasts', { status: 404 });
+  const bin = Uint8Array.from(atob(row.data), (c) => c.charCodeAt(0));
+  return new Response(bin, {
+    headers: { 'Content-Type': row.mime, 'Cache-Control': 'private, max-age=31536000, immutable', 'X-Content-Type-Options': 'nosniff' },
+  });
 }
 
 async function getEnrollment(env, userId, courseId) {
@@ -224,7 +284,7 @@ async function courses(env) {
 }
 
 // ---------- Administrācija ----------
-const ADMIN_ENROLL_SELECT = `SELECT e.*, u.email AS user_email, u.name AS user_name, c.name AS course_name
+const ADMIN_ENROLL_SELECT = `SELECT e.*, u.email AS user_email, COALESCE(u.display_name, u.name) AS user_name, c.name AS course_name
   FROM enrollments e JOIN users u ON u.id = e.user_id JOIN courses c ON c.id = e.course_id`;
 
 async function adminUsers(env) {
@@ -235,7 +295,7 @@ async function adminUsers(env) {
     if (!byUser.has(e.user_id)) byUser.set(e.user_id, []);
     byUser.get(e.user_id).push(e);
   }
-  return json({ users: users.map((u) => ({ ...u, enrollments: byUser.get(u.id) || [] })) });
+  return json({ users: users.map((u) => ({ ...u, name: u.display_name || u.name, enrollments: byUser.get(u.id) || [] })) });
 }
 
 async function adminEnrollments(env) {
@@ -335,9 +395,14 @@ export default {
         return fail('Nav atrasts', 404);
       }
 
-      if (['/api/me', '/api/enroll', '/api/enroll/cancel'].includes(path)) {
+      if (['/api/me', '/api/me/avatar', '/api/enroll', '/api/enroll/cancel'].includes(path)) {
         if (!user) return fail('Nepieciešama pieteikšanās', 401);
         if (method === 'PATCH' && path === '/api/me') return await patchMe(request, env, user);
+        if (path === '/api/me/avatar') {
+          if (method === 'GET') return await getAvatar(env, user);
+          if (method === 'PUT') return await putAvatar(request, env, user);
+          if (method === 'DELETE') return await deleteAvatar(env, user);
+        }
         if (method === 'POST' && path === '/api/enroll') return await enroll(request, env, user, ctx, url.origin);
         if (method === 'POST' && path === '/api/enroll/cancel') return await cancel(request, env, user);
       }

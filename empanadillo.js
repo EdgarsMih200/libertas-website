@@ -52,6 +52,10 @@
     var ACIS_PA_LABI = ['.WW........WW.', 'WWKK......WWKK', 'WWHK......WWHK', 'WWKK......WWKK', '.WW........WW.'];
     var UZACIS_APJUKUSI = ['.F........F.', 'FL........LF'];
     var MUTE_O = ['LMMMMM', 'MMRRMM', 'MRPPRM', 'MMRRMM'];
+    // skumjš: uzacis ar paceltiem iekšējiem galiem, nolaists smaids, asara
+    var UZACIS_SKUMJAS = ['...O......O...', '.OO........OO.'];
+    var MUTE_SKUMJA = ['MMMMMM', 'MMRRMM', 'MRMMRM', 'MMMMMM'];
+    var ASARA = ['.O.', 'OZO', 'OWO', '.O.'];
 
     var ROKA_A = ['...OO.', '..OLLO', '..OLMO', '...OMO', '..OMMO', '.OMMO.', 'OMMO..'];
     var ROKA_B = ['......OO', '.....OLLO', '.....OLMO', '....OMMO.', '...OMMO..', '..OMMO...', 'OMMMO....'];
@@ -130,6 +134,8 @@
         rada: [[SOMA, NUJA_S, ROKA_K_S, [ROKA_RADA, 30, 12, 'empa-roka'], KERM, SIKSNA_S, [ACIS_PA_LABI, 10, 11, 'empa-acis']]],
         apjucis: [[SOMA, NUJA_S, ROKA_K_S, MIERS, KERM, SIKSNA_S, ACIS_S,
             [UZACIS_APJUKUSI, 11, 8], [MUTE_O, 14, 15], [SVIEDRI, 29, 4], [JAUTAJUMS, 34, -4, 'empa-jautajums']]],
+        skumst: [[SOMA, NUJA_S, ROKA_K_S, MIERS, KERM, SIKSNA_S, [ACIS_LEJA, 10, 11, 'empa-acis'],
+            [UZACIS_SKUMJAS, 10, 8], [MUTE_SKUMJA, 14, 15], [ASARA, 9, 16, 'empa-asara']]],
         ielade: [
             [SOMA, [NUJA, -9, 2, 'empa-nuja'], [ROKA_K, -10, 7, 'empa-roka-k'], MIERS, [KERMENIS_AUGSA, 0, 0], [KAJAS_SOLIS_A, 0, 23], SIKSNA_S, ACIS_S],
             [SOMA, NUJA_S, ROKA_K_S, MIERS, [KERMENIS_AUGSA, 0, 0], [KAJAS_SOLIS_B, 0, 23], SIKSNA_S, ACIS_S]
