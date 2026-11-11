@@ -40,7 +40,7 @@ Short reference so work can start without re-reading every file.
 | `worker/index.js` | Cloudflare Worker: Google OAuth, sessions, JSON API (runs first for `/api/*`, `/auth/*`) |
 | `worker/epasts.js` | Enrollment emails via Resend API (`fetch`): dark forest-themed HTML + text confirmation to the client (summary, "Gaida apmaksu" status, next steps, CTA → konts.html, sign-off in course language) + short notice to `ADMIN_EMAILS` (reply-to = client). Sent in `ctx.waitUntil` after `POST /api/enroll`; skipped (logged) unless secret `RESEND_API_KEY` + var `EMAIL_FROM` are set; optional var `EMAIL_REPLY_TO` |
 | `migrations/` | D1 schema (`0001_init.sql`: users, sessions, courses, enrollments; `0002_more_courses.sql`: A2/B1 courses) |
-| `wrangler.jsonc` | Cloudflare config: worker `main`, assets (`run_worker_first` for `/api/*`, `/auth/*`; `"not_found_handling": "404-page"` → `404.html`), D1 `DB` (`libertas-db`), vars `ADMIN_EMAILS`, `GOOGLE_CLIENT_ID` |
+| `wrangler.jsonc` | Cloudflare config: worker `main`, assets (`run_worker_first` for `/api/*`, `/auth/*`; `"not_found_handling": "404-page"` → `404.html`), D1 `DB` (`libertas-db`), vars `ADMIN_EMAILS`, `GOOGLE_CLIENT_ID`, `EMAIL_FROM`; secrets `GOOGLE_CLIENT_SECRET`, `RESEND_API_KEY` |
 | `.assetsignore` | Files NOT published to the live site (add any new non-site files here) |
 | `context.md`, `CLAUDE.md` | Dev notes for Claude; listed in `.assetsignore` |
 
@@ -137,7 +137,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - Schedules for `spain-a2`, `english-a2`, `spain-b1-1`, `spain-b1-2` are "Grafiks tiks precizēts" (update `kursi.html` + D1).
 - `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
 - Google OAuth client (project "Libertas", edza7112 account) configured for libertas.study, www, workers.dev.
-- Enrollment emails coded (`worker/epasts.js`) but need setup: Resend account, verify `libertas.study` domain (DNS in Cloudflare), `npx wrangler secret put RESEND_API_KEY`, add var `EMAIL_FROM`. No online payment (admin marks paid manually); payment details not in the email yet.
+- Enrollment emails: Resend account set up 2026-11-11 (region eu-west-1, DNS records in Cloudflare), secret `RESEND_API_KEY` uploaded, var `EMAIL_FROM` = `Libertas <pieteikumi@libertas.study>`. `pieteikumi@` has no inbox (no `EMAIL_REPLY_TO` / Email Routing yet). No online payment (admin marks paid manually); payment details not in the email yet.
 - `#par-mums` (About) and `#faq` (BJU) sections missing; "Par mums" link hidden in nav (re-add on all 8 pages + footer Libertas column when content exists).
 - No contact details in the footer yet (only in `noteikumi.html`).
 - No favicon, meta description or Open Graph tags.

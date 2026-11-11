@@ -21,7 +21,9 @@
   ],
   "vars": {
     "ADMIN_EMAILS": "edza7112@gmail.com",
-    "GOOGLE_CLIENT_ID": "107664836932-r5b9n8divtdlfbgel2v812q9vgj9ccm5.apps.googleusercontent.com"
+    "GOOGLE_CLIENT_ID": "107664836932-r5b9n8divtdlfbgel2v812q9vgj9ccm5.apps.googleusercontent.com",
+    // Pieteikumu e-pastu sūtītājs (Resend, domēns libertas.study). Atslēga: secret RESEND_API_KEY
+    "EMAIL_FROM": "Libertas <pieteikumi@libertas.study>"
   },
   "observability": { "enabled": true }
 }
