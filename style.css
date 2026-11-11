@@ -3992,6 +3992,209 @@ html .lapas-josla.sc-muertos {
     cursor: default;
 }
 
+/* Pieteikts, bet vēl nav apmaksāts: silts "gaida" tonis (ne zaļš ✓) */
+.btn-cta.btn-gaida,
+.btn-card.btn-gaida {
+    background-color: var(--c-warn-bg);
+    color: var(--c-warn);
+    box-shadow: inset 0 0 0 1px rgb(127 83 0 / .25);
+}
+
+/* PIETEIKUMA APSTIPRINĀJUMA LOGS (script.js zīmē dialog.pieteikuma-logs) */
+html:has(.pieteikuma-logs[open]) { overflow: hidden; }
+
+.pieteikuma-logs {
+    width: min(560px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    overflow: auto;
+    margin: auto; /* globālais reset nonem dialog centrēšanu */
+    padding: var(--sp-6);
+    border: 0;
+    border-radius: var(--r-lg);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-3);
+}
+
+.pieteikuma-logs::backdrop {
+    background: rgb(30 46 41 / .62);
+    backdrop-filter: blur(3px);
+}
+
+.pieteikuma-logs[open] { animation: pl-ieeja var(--dur-3, .28s) var(--ease, ease-out); }
+
+@keyframes pl-ieeja {
+    from { opacity: 0; transform: translateY(12px) scale(.98); }
+    to { opacity: 1; transform: none; }
+}
+
+.pl-galva {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--sp-3);
+    padding-right: 44px;
+    position: relative;
+}
+
+.pl-empa { line-height: 0; flex: none; }
+.pl-empa svg { display: block; overflow: visible; image-rendering: pixelated; }
+
+.pl-zime {
+    margin: 0 0 4px;
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--c-accent-strong);
+}
+
+.pl-virsraksts {
+    margin: 0;
+    font-size: var(--fs-h3);
+    color: var(--c-brand);
+    line-height: 1.2;
+}
+
+.pl-aizvert {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--c-muted);
+    cursor: pointer;
+}
+
+.pl-aizvert:hover { background: var(--c-sunk); color: var(--c-ink); }
+.pl-aizvert svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+.pl-dati {
+    display: grid;
+    grid-template-columns: minmax(80px, auto) minmax(110px, auto) 1fr;
+    gap: var(--sp-2);
+    margin: var(--sp-5) 0 var(--sp-4);
+}
+
+@media (max-width: 480px) {
+    .pl-dati { grid-template-columns: 1fr 1fr; }
+    .pl-dati div:nth-child(3) { grid-column: 1 / -1; }
+}
+
+.pl-dati div {
+    padding: var(--sp-2) var(--sp-3);
+    border-radius: var(--r-sm);
+    background: var(--c-sunk);
+}
+
+.pl-dati dt {
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+}
+
+.pl-dati dd {
+    margin: 0;
+    font-weight: 600;
+}
+
+.pl-ievads {
+    margin: 0 0 var(--sp-4);
+    padding: var(--sp-3) var(--sp-4);
+    border-left: 3px solid var(--c-warn);
+    border-radius: 0 var(--r-xs) var(--r-xs) 0;
+    background: var(--c-warn-bg);
+    color: var(--c-ink);
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+}
+
+.pl-apaksvirsraksts {
+    margin: 0 0 var(--sp-2);
+    font-size: var(--fs-body);
+}
+
+.pl-soli {
+    list-style: none;
+    counter-reset: pl;
+    margin: 0 0 var(--sp-5);
+    padding: 0;
+    display: grid;
+    gap: var(--sp-2);
+}
+
+.pl-soli li {
+    counter-increment: pl;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    column-gap: var(--sp-3);
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+}
+
+.pl-soli li::before {
+    content: counter(pl);
+    grid-row: span 2;
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--c-accent-soft);
+    color: var(--c-accent-strong);
+    font-weight: 700;
+}
+
+.pl-soli span { color: var(--c-muted); }
+
+.pl-piekrisana {
+    display: flex;
+    gap: var(--sp-3);
+    align-items: flex-start;
+    padding: var(--sp-3);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-sm);
+    font-size: var(--fs-sm);
+    line-height: 1.45;
+    cursor: pointer;
+}
+
+.pl-piekrisana input {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+    accent-color: var(--c-accent);
+    cursor: pointer;
+}
+
+.pl-piekrisana a { color: var(--c-accent-strong); text-decoration: underline; text-underline-offset: 2px; }
+
+.pl-pogas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+}
+
+.pl-pogas .btn-cta { flex: 1 1 240px; }
+.pl-pogas .btn-cta:disabled { cursor: not-allowed; }
+
+.pl-piezime {
+    margin: var(--sp-3) 0 0;
+    font-size: var(--fs-xs);
+    color: var(--c-muted);
+}
+
+@media (max-width: 640px) {
+    .pieteikuma-logs { padding: var(--sp-5) var(--sp-4); }
+    .pl-empa { display: none; }
+    .pl-pogas .btn-secondary { flex: 1 1 100%; }
+}
+
 .btn-busy {
     opacity: .7;
     pointer-events: none;
@@ -4148,7 +4351,7 @@ html .lapas-josla.sc-muertos {
     white-space: nowrap;
 }
 
-.badge-pieteicies { background: var(--c-info-bg); color: var(--c-info); }
+.badge-pieteicies { background: var(--c-warn-bg); color: var(--c-warn); }
 .badge-uznemts { background: var(--c-success-bg); color: var(--c-success); }
 .badge-sacis { background: var(--c-sage); color: var(--c-sage-ink); }
 .badge-pabeidzis { background: var(--c-sunk); color: var(--c-ink); }

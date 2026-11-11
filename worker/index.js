@@ -1,4 +1,5 @@
 // Libertas Worker: Google autorizācija, kursu pieteikumi, administrācija.
+import { sutitPieteikumaEpastus } from './epasts.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
 const SESSION_DAYS = 30;
@@ -183,10 +184,10 @@ async function getEnrollment(env, userId, courseId) {
   return env.DB.prepare('SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?').bind(userId, courseId).first();
 }
 
-async function enroll(request, env, user) {
+async function enroll(request, env, user, ctx, origin) {
   const { course_id } = await readBody(request);
   if (typeof course_id !== 'string') return fail('Nav norādīts kurss');
-  const course = await env.DB.prepare('SELECT id FROM courses WHERE id = ? AND active = 1').bind(course_id).first();
+  const course = await env.DB.prepare('SELECT id, name, price_eur, schedule FROM courses WHERE id = ? AND active = 1').bind(course_id).first();
   if (!course) return fail('Kurss nav atrasts', 404);
   const now = new Date().toISOString();
   const existing = await getEnrollment(env, user.id, course_id);
@@ -198,7 +199,12 @@ async function enroll(request, env, user) {
       "INSERT INTO enrollments (user_id, course_id, status, paid, created_at, updated_at) VALUES (?, ?, 'pieteicies', 0, ?, ?)"
     ).bind(user.id, course_id, now, now).run();
   }
-  return json({ enrollment: await getEnrollment(env, user.id, course_id) });
+  const enrollment = await getEnrollment(env, user.id, course_id);
+  // Apstiprinājuma e-pasts klientam + paziņojums administratoram (fonā, neaizkavē atbildi)
+  const admins = (env.ADMIN_EMAILS || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const darbs = sutitPieteikumaEpastus(env, { user, course, enrollment, origin, admins }).catch((e) => console.error(e));
+  if (ctx && ctx.waitUntil) ctx.waitUntil(darbs);
+  return json({ enrollment, email_sent: !!(env.RESEND_API_KEY && env.EMAIL_FROM) });
 }
 
 async function cancel(request, env, user) {
@@ -290,7 +296,7 @@ async function adminDeleteEnrollment(env, id) {
 
 // ---------- Maršrutēšana ----------
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, '') || '/';
     const method = request.method;
@@ -332,7 +338,7 @@ export default {
       if (['/api/me', '/api/enroll', '/api/enroll/cancel'].includes(path)) {
         if (!user) return fail('Nepieciešama pieteikšanās', 401);
         if (method === 'PATCH' && path === '/api/me') return await patchMe(request, env, user);
-        if (method === 'POST' && path === '/api/enroll') return await enroll(request, env, user);
+        if (method === 'POST' && path === '/api/enroll') return await enroll(request, env, user, ctx, url.origin);
         if (method === 'POST' && path === '/api/enroll/cancel') return await cancel(request, env, user);
       }
       return fail('Nav atrasts', 404);

@@ -65,7 +65,7 @@
             var row = el('div', 'enroll-row');
             var left = el('div');
             left.appendChild(el('strong', '', en.course_name));
-            left.appendChild(el('div', 'muted', 'Pieteicies: ' + fmt(en.created_at)));
+            left.appendChild(el('div', 'muted', 'Pieteikums iesniegts: ' + fmt(en.created_at)));
             row.appendChild(left);
             var right = el('div', 'enroll-right');
             right.appendChild(el('span', 'badge badge-' + en.status, L.STATUSI[en.status] || en.status));

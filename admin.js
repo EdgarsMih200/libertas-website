@@ -115,7 +115,7 @@
     }
 
     function enrTab() {
-        var t = tableWrap(['Lietotājs', 'Kurss', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Pieteicies', '']);
+        var t = tableWrap(['Lietotājs', 'Kurss', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
         var q = state.q.toLowerCase();
         state.enr.filter(function(e) {
             return (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&

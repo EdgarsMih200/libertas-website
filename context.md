@@ -38,6 +38,7 @@ Short reference so work can start without re-reading every file.
 | `admin.html` + `admin.js` | Admin panel (users: data, last login/visit; enrollments: status, paid, notes, add/delete). noindex, no mascot. `main.admin-lapa` → `.lapas-josla--maza` (h1) → `section.admin-section` > `#admin` (loading "*Un momento…* Ielādē.") |
 | `404.html` | Not-found page (redesign chunk 3): same header/footer as other pages but **root-absolute paths** (`/style.css`, `/kursi.html`, …) because Cloudflare serves it at any URL; noindex. `main.kluda-lapa > section.container.kluda`: `span.kluda-empa[data-empa-poza="apjucis"]` ×4 (×3 phones, `role="img"` label), `p.kluda-kods` "Kļūda 404", h1 "¡Ay, caramba! Šī taka ved *nekurienē*.", `p.kluda-teksts`, `.kluda-pogas` (Uz sākumlapu primary · Kursi · Noderīgi materiāli). Header/footer edits must be copied here too (with `/` paths) |
 | `worker/index.js` | Cloudflare Worker: Google OAuth, sessions, JSON API (runs first for `/api/*`, `/auth/*`) |
+| `worker/epasts.js` | Enrollment emails via Resend API (`fetch`): dark forest-themed HTML + text confirmation to the client (summary, "Gaida apmaksu" status, next steps, CTA → konts.html, sign-off in course language) + short notice to `ADMIN_EMAILS` (reply-to = client). Sent in `ctx.waitUntil` after `POST /api/enroll`; skipped (logged) unless secret `RESEND_API_KEY` + var `EMAIL_FROM` are set; optional var `EMAIL_REPLY_TO` |
 | `migrations/` | D1 schema (`0001_init.sql`: users, sessions, courses, enrollments; `0002_more_courses.sql`: A2/B1 courses) |
 | `wrangler.jsonc` | Cloudflare config: worker `main`, assets (`run_worker_first` for `/api/*`, `/auth/*`; `"not_found_handling": "404-page"` → `404.html`), D1 `DB` (`libertas-db`), vars `ADMIN_EMAILS`, `GOOGLE_CLIENT_ID` |
 | `.assetsignore` | Files NOT published to the live site (add any new non-site files here) |
@@ -74,7 +75,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
   `oauth_state` cookie during sign-in. Secret `GOOGLE_CLIENT_SECRET` set with `wrangler secret put` (not in repo).
   If the client id/secret isn't configured, `/auth/google` shows a "being set up" page.
 - Admin = email in `ADMIN_EMAILS` var (`edza7112@gmail.com`).
-- Enrollment status values: `pieteicies` → `uznemts` → `sacis` → `pabeidzis`, or `atteicies`; plus `paid`/`paid_at`/`notes`.
+- Enrollment status values (D1): `pieteicies` (shown to users as **"Gaida apmaksu"**, warn colours) → `uznemts` → `sacis` → `pabeidzis`, or `atteicies`; plus `paid`/`paid_at`/`notes`.
 - `last_seen_at` ("last visit") is updated by `GET /api/me` (every page load, throttled to 5 min).
 - API: `/api/me` (GET/PATCH), `/api/enroll`, `/api/enroll/cancel`, `/api/courses`, `/api/admin/users`,
   `/api/admin/enrollments` (GET/POST), `/api/admin/enrollments/:id` (PATCH/DELETE). Mutations reject foreign `Origin`.
@@ -86,7 +87,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
   returns focus, link click closes, closes when the viewport grows past 768px.
 - Calls `/api/me`, injects sign-in button or user chip/menu (Mani kursi, Administrācija, Iziet) into `.nav-wrapper`.
 - Exposes `window.LIB` (`api`, `el`, `toast`, `signInUrl`, `STATUSI`, `me`) and fires `lib:me`; used by `konts.js`/`admin.js`.
-- Course buttons (`data-course`): enroll, or sign in first (pending course kept in sessionStorage). `#exploreBtn` is a plain link to `kursi.html` (no guest sign-in redirect); for guests a `.consent-note` is put into `[data-consent-vieta]` (kursi.html "Kā pieteikties"), else after `.courses-section .sakums-ievads`.
+- Course buttons (`data-course`): first open the confirmation popup `dialog.pieteikuma-logs` (built in JS from the card: `.pl-galva` + Empanadillo `rada`, `.pl-dati` level/price/schedule, `.pl-ievads` "not final until paid", `.pl-soli` next steps, required checkbox `.pl-piekrisana`, `.pl-pogas`); on confirm enroll, or for guests sign in first (pending course kept in sessionStorage, enrolled after return without a second popup). After enrolling the button reads "Gaida apmaksu" (`.btn-done.btn-gaida`); toast mentions the email only if the API returns `email_sent`. `#exploreBtn` is a plain link to `kursi.html` (no guest sign-in redirect); for guests a `.consent-note` is put into `[data-consent-vieta]` (kursi.html "Kā pieteikties"), else after `.courses-section .sakums-ievads`.
 - Header sign-in button = `a.btn-secondary.btn-signin` (outline; the hero CTA is the one primary per screen).
 - Home hero parallax: sets `--px/--py` on `.hero-ainava` on pointer move (only `(pointer: fine)`, no reduced motion, ≥1024px).
 - Home bento: sets `--mx/--my` on `.bento-flize` for the cursor spotlight; reveal-on-scroll (`.bento.gaida` → `.redzams`) via IntersectionObserver.
@@ -106,7 +107,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
   underline grows on hover (accent-strong), `aria-current`/`.active` = bordo underline; `.izvelnes-poga` (hidden >768px).
   ≤768px: order logo · `.auth-box` · menu button; `.main-nav` = absolute sheet under the header (60px Lora rows, bordo left marker on the current page,
   footer silhouette strip via `.main-nav::after`), shown with `.site-header.izvelne-atverta`
-- POGAS: `.btn-cta` (terracotta pill, 48px, hover/active/focus/disabled), `.btn-secondary` (outlined pill);
+- POGAS: `.btn-cta` (terracotta pill, 48px, hover/active/focus/disabled), `.btn-secondary` (outlined pill); `.btn-gaida` + PIETEIKUMA APSTIPRINĀJUMA LOGS (`.pieteikuma-logs`, `.pl-*`) live next to `.btn-done`/`.btn-busy` near LIETOTĀJA IZVĒLNE;
   `.chip` (sage; `[aria-pressed=true]` accent-soft + ✓; `.chip--limenis`) and `.lauks` (48px input, `aria-invalid`) helpers for new markup;
   shared input styles also cover `.account-form input`, `.admin-filters`, `.admin-add select`
 - HERO SADAĻA: `.hero-section` (`--hero-h: clamp(600px,56vw,860px)`), `.hero-ainava`, `.hero-ainava-kadrs` (xMidYMax-slice emulation), `.hero-ainava-svg`, `.ainavas-defs`, `.ainava-slanis*` (`--d` depth), `.hero-orientieris*`, `.hero-empa`, `.hero-container`, `.hero-text`, `.hero-zime(-punkts)`, `.hero-subtitle`, `.hero-cta-box`, `.btn-hero`, `.btn-ikona`; breakpoints 1023px / 767px (+ chips 1200–1599px)
@@ -136,7 +137,7 @@ Adding/changing a course means editing `kursi.html` (`article.course-card` with 
 - Schedules for `spain-a2`, `english-a2`, `spain-b1-1`, `spain-b1-2` are "Grafiks tiks precizēts" (update `kursi.html` + D1).
 - `noteikumi.html` has yellow `[placeholders]` (company name, reg. no., address, email, payment days, refund %, effective date).
 - Google OAuth client (project "Libertas", edza7112 account) configured for libertas.study, www, workers.dev.
-- No email notifications on new enrollments; no online payment (admin marks paid manually).
+- Enrollment emails coded (`worker/epasts.js`) but need setup: Resend account, verify `libertas.study` domain (DNS in Cloudflare), `npx wrangler secret put RESEND_API_KEY`, add var `EMAIL_FROM`. No online payment (admin marks paid manually); payment details not in the email yet.
 - `#par-mums` (About) and `#faq` (BJU) sections missing; "Par mums" link hidden in nav (re-add on all 8 pages + footer Libertas column when content exists).
 - No contact details in the footer yet (only in `noteikumi.html`).
 - No favicon, meta description or Open Graph tags.

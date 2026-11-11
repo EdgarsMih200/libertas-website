@@ -1,6 +1,7 @@
 // Kopīgais JS: pieteikšanās logrīks galvenē, kursu pieteikšanās
 (function() {
-    var STATUSI = { pieteicies: 'Pieteicies', uznemts: 'Uzņemts', sacis: 'Sācis', pabeidzis: 'Pabeidzis', atteicies: 'Atteicies' };
+    // 'pieteicies' (D1 vērtība) klientam rāda kā "Gaida apmaksu": pieteikums vēl nav galīgs, kamēr nav samaksāts
+    var STATUSI = { pieteicies: 'Gaida apmaksu', uznemts: 'Uzņemts', sacis: 'Sācis', pabeidzis: 'Pabeidzis', atteicies: 'Atteicies' };
     window.LIB = window.LIB || {};
     window.LIB.STATUSI = STATUSI;
 
@@ -90,25 +91,125 @@
         return m;
     }
 
+    // Poga pēc pieteikšanās: "Gaida apmaksu" (silts, nevis zaļš ✓ — vieta vēl nav galīga), pēc uzņemšanas — statuss ar ✓
     function setBtn(btn, enr) {
+        btn.classList.remove('btn-done', 'btn-gaida');
         if (enr && enr.status !== 'atteicies') {
-            btn.textContent = enr.status === 'pieteicies' ? 'Pieteikts ✓' : (STATUSI[enr.status] || enr.status) + ' ✓';
-            btn.classList.add('btn-done');
+            if (enr.status === 'pieteicies') {
+                btn.textContent = 'Gaida apmaksu';
+                btn.classList.add('btn-done', 'btn-gaida');
+                btn.title = 'Pieteikums saņemts. Statusu redzi sadaļā “Mani kursi”.';
+            } else {
+                btn.textContent = (STATUSI[enr.status] || enr.status) + ' ✓';
+                btn.classList.add('btn-done');
+            }
         } else {
             btn.textContent = 'Pieteikties kursam';
-            btn.classList.remove('btn-done');
+            btn.removeAttribute('title');
         }
     }
 
     function enroll(btn, id) {
         btn.classList.add('btn-busy');
-        return api('POST', '/api/enroll', { course_id: id }).then(function(enr) {
-            setBtn(btn, enr && enr.status ? enr : { status: 'pieteicies' });
-            toast('Paldies! Jūsu pieteikums ir saņemts.');
+        return api('POST', '/api/enroll', { course_id: id }).then(function(d) {
+            setBtn(btn, d && d.enrollment ? d.enrollment : { status: 'pieteicies' });
+            toast(d && d.email_sent ? 'Paldies! Pieteikums saņemts — apstiprinājumu nosūtījām uz tavu e-pastu.' : 'Paldies! Pieteikums saņemts.');
         }).catch(function(err) {
-            if (err.status === 409) { setBtn(btn, { status: 'pieteicies' }); toast('Jūs jau esat pieteicies šim kursam.'); }
-            else toast(err.message || 'Neizdevās pieteikties', true);
+            if (err.status === 409) { setBtn(btn, { status: 'pieteicies' }); toast('Tu jau esi pieteicies šim kursam.'); }
+            else toast(err.message || 'Neizdevās iesniegt pieteikumu', true);
         }).then(function() { btn.classList.remove('btn-busy'); });
+    }
+
+    // Kursa dati apstiprinājuma logam — no kartītes (kursi.html)
+    function kursaDati(btn) {
+        var karte = btn.closest('.course-card') || document;
+        function t(sel) { var n = karte.querySelector(sel); return n ? n.textContent.replace(/\s+/g, ' ').trim() : ''; }
+        return { nosaukums: t('h3'), limenis: t('.chip--limenis'), cena: t('.course-price'), grafiks: t('.course-info') };
+    }
+
+    // Apstiprinājuma logs pirms pieteikšanās (native <dialog>: fokusa slazds + Esc). apstiprinat() izsauc tikai pēc atzīmes.
+    function radiLogu(btn, logged, apstiprinat) {
+        var k = kursaDati(btn);
+        var d = el('dialog', 'pieteikuma-logs');
+        d.setAttribute('aria-labelledby', 'pl-virsraksts');
+        d.setAttribute('aria-describedby', 'pl-ievads');
+
+        var galva = el('div', 'pl-galva');
+        if (window.EMPANADILLO && EMPANADILLO.svg) {
+            var empa = el('span', 'pl-empa');
+            empa.innerHTML = EMPANADILLO.svg('rada', { scale: 2, shadow: false });
+            galva.appendChild(empa);
+        }
+        var gt = el('div', 'pl-galva-teksts');
+        gt.appendChild(el('p', 'pl-zime', 'Pieteikums kursam'));
+        var h = el('h2', 'pl-virsraksts', k.nosaukums || 'Kurss'); h.id = 'pl-virsraksts';
+        gt.appendChild(h);
+        galva.appendChild(gt);
+        var x = el('button', 'pl-aizvert'); x.type = 'button'; x.setAttribute('aria-label', 'Aizvērt');
+        x.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+        galva.appendChild(x);
+        d.appendChild(galva);
+
+        var dl = el('dl', 'pl-dati');
+        [['Līmenis', k.limenis], ['Cena', k.cena], ['Grafiks', k.grafiks]].forEach(function(r) {
+            if (!r[1]) return;
+            var w = el('div');
+            w.appendChild(el('dt', '', r[0]));
+            w.appendChild(el('dd', '', r[1]));
+            dl.appendChild(w);
+        });
+        d.appendChild(dl);
+
+        var ievads = el('p', 'pl-ievads', 'Pieteikums rezervē tev vietu grupā. Tas kļūst galīgs pēc apmaksas — līdz tam nekas nav jāmaksā un pieteikumu vari atcelt.');
+        ievads.id = 'pl-ievads';
+        d.appendChild(ievads);
+
+        d.appendChild(el('h3', 'pl-apaksvirsraksts', 'Kas notiks tālāk'));
+        var ol = el('ol', 'pl-soli');
+        [
+            ['Apstiprinājums e-pastā', 'Uzreiz nosūtīsim vēstuli ar pieteikuma kopsavilkumu.'],
+            ['Apmaksas informācija', 'Sazināsimies ar tevi un nosūtīsim rēķinu vai apmaksas rekvizītus.'],
+            ['Vieta grupā ir tava', 'Pēc apmaksas statuss “Mani kursi” sadaļā mainās uz “Uzņemts”.']
+        ].forEach(function(s) {
+            var li = el('li');
+            li.appendChild(el('b', '', s[0]));
+            li.appendChild(el('span', '', s[1]));
+            ol.appendChild(li);
+        });
+        d.appendChild(ol);
+
+        var lbl = el('label', 'pl-piekrisana');
+        var cb = el('input'); cb.type = 'checkbox'; cb.required = true;
+        lbl.appendChild(cb);
+        var lt = el('span');
+        lt.appendChild(document.createTextNode('Esmu iepazinies ar '));
+        var na = el('a', '', 'noteikumiem un privātuma politiku'); na.href = 'noteikumi.html'; na.target = '_blank'; na.rel = 'noopener';
+        lt.appendChild(na);
+        lt.appendChild(document.createTextNode(' un vēlos pieteikties šim kursam.'));
+        lbl.appendChild(lt);
+        d.appendChild(lbl);
+
+        var pogas = el('div', 'pl-pogas');
+        var ok = el('button', 'btn-cta', logged ? 'Apstiprināt pieteikumu' : 'Ienākt ar Google un pieteikties');
+        ok.type = 'button'; ok.disabled = true;
+        var atcelt = el('button', 'btn-secondary', 'Atcelt'); atcelt.type = 'button';
+        pogas.appendChild(ok);
+        pogas.appendChild(atcelt);
+        d.appendChild(pogas);
+        if (!logged) d.appendChild(el('p', 'pl-piezime', 'Pieteikšanās notiek ar Google kontu — pēc ienākšanas pieteikums tiks iesniegts automātiski.'));
+
+        cb.addEventListener('change', function() { ok.disabled = !cb.checked; });
+        function aizvert() { d.close(); }
+        x.addEventListener('click', aizvert);
+        atcelt.addEventListener('click', aizvert);
+        // Klikšķis uz fona (ārpus loga) aizver
+        d.addEventListener('click', function(e) { if (e.target === d) aizvert(); });
+        d.addEventListener('close', function() { d.remove(); if (document.body.contains(btn)) btn.focus(); });
+        ok.addEventListener('click', function() { if (!cb.checked) return; d.close(); apstiprinat(); });
+
+        document.body.appendChild(d);
+        if (d.showModal) d.showModal(); else d.setAttribute('open', '');
+        cb.focus();
     }
 
     function initPage(me) {
@@ -121,12 +222,15 @@
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 if (btn.classList.contains('btn-busy') || btn.classList.contains('btn-done')) return;
-                if (!logged) {
-                    try { sessionStorage.setItem('pendingCourse', id); } catch (x) {}
-                    location.href = signInUrl('/kursi.html');
-                    return;
-                }
-                enroll(btn, id);
+                radiLogu(btn, logged, function() {
+                    if (!logged) {
+                        // Apstiprināts pirms ienākšanas — pēc atgriešanās pieteikums tiek iesniegts bez otra loga
+                        try { sessionStorage.setItem('pendingCourse', id); } catch (x) {}
+                        location.href = signInUrl('/kursi.html');
+                        return;
+                    }
+                    enroll(btn, id);
+                });
             });
         });
 
