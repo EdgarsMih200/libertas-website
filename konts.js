@@ -137,7 +137,12 @@
     // Gaita: pieteikums → apmaksa → uzņemts → kurss sācies
     function gaita(en) {
         var s = en.status;
-        var soli = [
+        var soli = en.veids === 'ekurss' ? [
+            ['Pieteikums', true],
+            ['Apmaksa', !!en.paid],
+            ['Kurss atvērts', !!en.paid && !!en.ek_lidz],
+            [en.ek_sertifikats ? 'Pabeigts' : 'Sertifikāts', !!en.ek_sertifikats]
+        ] : [
             ['Pieteikums', true],
             ['Apmaksa', !!en.paid || s === 'uznemts' || s === 'sacis' || s === 'pabeidzis'],
             ['Uzņemts', s === 'uznemts' || s === 'sacis' || s === 'pabeidzis'],
@@ -183,6 +188,7 @@
         else birkas.appendChild(el('span', 'badge badge-pieteicies', 'Gaida apmaksu'));
         b.appendChild(birkas);
         b.appendChild(el('h3', '', en.course_name));
+        b.appendChild(gaita(en));
         if (en.paid) {
             var kopa = en.ek_nodarbibas || 0, pab = en.ek_nokartotas || 0;
             var pr = el('div', 'ek-progress'); var ps = el('span'); ps.style.width = (kopa ? Math.round(pab / kopa * 100) : 0) + '%'; pr.appendChild(ps);

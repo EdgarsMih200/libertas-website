@@ -58,6 +58,11 @@ function klientaVestule({ user, course, enrollment, origin }) {
     ['Vieta grupā ir tava', 'Pēc apmaksas statuss sadaļā “Mani kursi” mainīsies uz “Uzņemts”, un nosūtīsim visu nepieciešamo pirmajai nodarbībai.'],
   ];
 
+  const ek = course.veids === 'ekurss';
+  const statusaTeksts = ek
+    ? 'Kurss tavā kontā atvērsies uzreiz pēc apmaksas. Līdz tam pasūtījumu vari atcelt sadaļā „Mani kursi”.'
+    : 'Vieta grupā kļūst galīga pēc apmaksas. Līdz tam pieteikumu vari atcelt sadaļā „Mani kursi”.';
+
   const html = `<!doctype html>
 <html lang="lv">
 <head>
@@ -99,7 +104,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
       <!-- Statuss -->
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
         <tr><td style="background:${K.warnBg};border-radius:12px;padding:14px 16px;font-family:${SANS};font-size:15px;line-height:1.5;color:${K.warn};">
-          <strong>Statuss: Gaida apmaksu.</strong> Vieta grupā kļūst galīga pēc apmaksas. Līdz tam pieteikumu vari atcelt sadaļā „Mani kursi”.
+          <strong>Statuss: Gaida apmaksu.</strong> ${statusaTeksts}
         </td></tr>
       </table>
 
@@ -149,9 +154,9 @@ function klientaVestule({ user, course, enrollment, origin }) {
     '',
     `Kurss: ${course.name}`,
     `Cena: ${cena(course.price_eur)}`,
-    `Grupa: ${course.schedule || 'Tiks precizēta'}`,
+    `${ek ? 'Piekļuve' : 'Grupa'}: ${course.schedule || 'Tiks precizēta'}`,
     '',
-    'Statuss: Gaida apmaksu. Vieta grupā kļūst galīga pēc apmaksas.',
+    `Statuss: Gaida apmaksu. ${statusaTeksts}`,
     '',
     'Kas notiks tālāk:',
     ...soli.map(([v, t], i) => `${i + 1}. ${v} — ${t}`),
