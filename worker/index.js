@@ -2,6 +2,7 @@
 import { sutitPieteikumaEpastus } from './epasts.js';
 import { ekMarsruts, pecApmaksas } from './ekursi.js';
 import { adventeMarsruts, parbauditKodu } from './advente.js';
+import { rekiniMarsruts } from './rekini.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -441,6 +442,11 @@ export default {
 
       if (path === '/api/advente' || path.startsWith('/api/advente/') || path.startsWith('/api/admin/advente')) {
         const atb = await adventeMarsruts(request, env, { path, method, user, url });
+        if (atb) return atb;
+      }
+
+      if (path.startsWith('/api/rekins/') || path.startsWith('/api/admin/rekini') || path === '/api/admin/rekviziti') {
+        const atb = await rekiniMarsruts(request, env, { path, method, user, url, pecApmaksas });
         if (atb) return atb;
       }
 

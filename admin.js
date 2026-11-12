@@ -3,7 +3,7 @@
     var L = window.LIB, el = L.el, api = L.api;
     var root = document.getElementById('admin');
     var ST = Object.keys(L.STATUSI);
-    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, tab: 'enr', fc: '', fs: '', fp: '', q: '' };
+    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, tab: location.hash === '#rekini' ? 'rek' : 'enr', fc: '', fs: '', fp: '', q: '' };
     var G = null; // grafiks.js (grupu periodi)
 
     // Kursa grupas administrācijai: no pagājušā gada līdz nākamajam (arī jau sākušās)
@@ -65,8 +65,10 @@
             api('GET', '/api/admin/users'), api('GET', '/api/admin/enrollments'), api('GET', '/api/courses'),
             import('/grafiks.js').catch(function() { return null; }),
             api('GET', '/api/admin/ek').catch(function() { return { kursi: [], dalibnieki: [] }; }),
-            api('GET', '/api/admin/advente').catch(function() { return { dalibnieki: [], kodi: [], izloze: null }; })
+            api('GET', '/api/admin/advente').catch(function() { return { dalibnieki: [], kodi: [], izloze: null }; }),
+            api('GET', '/api/admin/rekini').catch(function() { return { rekini: [], rekviziti: {} }; })
         ]).then(function(r) {
+            state.rek = r[6];
             G = r[3];
             state.ek = r[4];
             state.adv = r[5];
@@ -146,7 +148,7 @@
     }
 
     function enrTab() {
-        var t = tableWrap(['Lietotājs', 'Kurss', 'Atlaide', 'Grupa', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
+        var t = tableWrap(['Lietotājs', 'Kurss', 'Atlaide', 'Grupa', 'Statuss', 'Rēķins', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
         var q = state.q.toLowerCase();
         state.enr.filter(function(e) {
             return (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&
@@ -168,7 +170,7 @@
             td(tr, select(ST.map(function(s) { return [s, L.STATUSI[s]]; }), e.status, function(v) {
                 api('PATCH', '/api/admin/enrollments/' + e.id, { status: v }).then(function() { e.status = v; render(); }).catch(function(x) { err(x); render(); });
             }));
-            var paidDate;
+            td(tr, rekinaSuna(e));
             var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!e.paid;
             cb.addEventListener('change', function() {
                 api('PATCH', '/api/admin/enrollments/' + e.id, { paid: cb.checked }).then(function(r) {
@@ -198,6 +200,82 @@
             t.body.appendChild(tr);
         });
         return t.wrap;
+    }
+
+    // ---------- RĒĶINI (redaktors: rekins.html) ----------
+    var REK_ST = { melnraksts: ['Melnraksts', ''], nosutits: ['Nosūtīts', 'badge-uznemts'], daleji: ['Daļēji apmaksāts', 'badge-pieteicies'], apmaksats: ['Apmaksāts', 'badge-paid'] };
+    function eurS(n) { return (Number(n) || 0).toFixed(2).replace('.', ',') + ' EUR'; }
+    function rekBadge(r) {
+        var s = REK_ST[r.statuss] || REK_ST.melnraksts;
+        var w = el('span', 'summary-chips');
+        w.appendChild(el('span', 'badge ' + s[1], s[0] + (r.statuss === 'daleji' ? ' ' + r.apmaksatas + '/' + r.rindu : '')));
+        if (r.kavets) w.appendChild(el('span', 'badge badge-atteicies', 'Kavēts'));
+        return w;
+    }
+    // Pieteikumu tabulas šūna: esošie rēķini (saite + statuss) un saite jaunam rēķinam
+    function rekinaSuna(e) {
+        var box = el('div', 'rek-suna');
+        state.rek.rekini.filter(function(r) { return r.enrollment_id === e.id; }).forEach(function(r) {
+            var rinda = el('div');
+            var a = el('a', '', 'Nr. ' + r.nr); a.href = 'rekins.html?id=' + r.id; rinda.appendChild(a);
+            rinda.appendChild(document.createTextNode(' '));
+            rinda.appendChild(rekBadge(r));
+            box.appendChild(rinda);
+        });
+        var jauns = el('a', 'btn-link', box.childNodes.length ? '+ Vēl rēķins' : 'Izrakstīt rēķinu');
+        jauns.href = 'rekins.html?pieteikums=' + e.id;
+        box.appendChild(jauns);
+        return box;
+    }
+    function rekTab() {
+        var R = state.rek, wrap = el('div', 'ek-admin');
+        var aug = el('div', 'ek-pogas');
+        var jn = el('a', 'btn-cta btn-small', 'Jauns rēķins'); jn.href = 'rekins.html?jauns'; aug.appendChild(jn);
+        aug.appendChild(el('span', 'muted', 'Nākamais Nr. ' + (R.nakamais_nr || '—') + '. Rēķinu pieteikumam izraksti cilnē «Pieteikumi».' + (R.epasts ? '' : ' E-pasta sūtīšana nav iestatīta.')));
+        wrap.appendChild(aug);
+
+        // Rekvizīti glabājas datubāzē (repozitorijs ir publisks)
+        var rk = R.rekviziti || {};
+        var det = el('details', 'ek-karte');
+        if (!rk.konts) det.open = true;
+        det.appendChild(el('summary', '', 'Rekvizīti rēķinam' + (rk.konts ? '' : ' — jāaizpilda!'))).style.cssText = 'font-weight:700;cursor:pointer';
+        var f = el('form', 'ek-forma'), lauki = {};
+        [['vards', 'Vārds, uzvārds (saņēmējs)'], ['talrunis', 'Tālrunis'], ['epasts', 'E-pasts (klientu atbildes nonāk šeit)'], ['adrese', 'Adrese'],
+         ['banka', 'Banka'], ['konts', 'Konta Nr. (IBAN)'], ['piezime', 'Piezīme rēķina apakšā'], ['pirmais_nr', 'Mazākais nākamā rēķina Nr.']].forEach(function(x) {
+            var l = el('label', '', x[1]); var i = el('input', 'lauks'); i.type = x[0] === 'pirmais_nr' ? 'number' : 'text';
+            i.value = rk[x[0]] == null ? '' : rk[x[0]]; lauki[x[0]] = i; l.appendChild(i); f.appendChild(l);
+        });
+        var sv = el('button', 'btn-cta', 'Saglabāt rekvizītus'); sv.type = 'submit'; f.appendChild(sv);
+        f.addEventListener('submit', function(ev) {
+            ev.preventDefault();
+            var b = {}; Object.keys(lauki).forEach(function(k) { b[k] = lauki[k].value; });
+            api('PUT', '/api/admin/rekviziti', b).then(function() { L.toast('Rekvizīti saglabāti.'); return load(); }).catch(err);
+        });
+        det.appendChild(f);
+        wrap.appendChild(det);
+
+        if (!R.rekini.length) { wrap.appendChild(el('p', 'register-intro', 'Rēķinu vēl nav.')); return wrap; }
+        var t = tableWrap(['Nr.', 'Datums', 'Maksātājs', 'Kurss', 'Summa', 'Apmaksāts', 'Statuss', 'Nākamais termiņš', 'Nosūtīts', '']);
+        var q = state.q.toLowerCase();
+        R.rekini.filter(function(r) {
+            return !q || ((r.m_vards || '') + ' ' + (r.m_epasts || '') + ' ' + r.nr).toLowerCase().indexOf(q) >= 0;
+        }).forEach(function(r) {
+            var tr = el('tr');
+            var a = el('a', '', r.nr); a.href = 'rekins.html?id=' + r.id; var s = el('strong'); s.appendChild(a); td(tr, s);
+            td(tr, lvD(r.datums));
+            var who = el('div'); who.appendChild(el('strong', '', r.m_vards || '—')); who.appendChild(el('div', 'muted', r.m_epasts || '')); td(tr, who);
+            td(tr, r.kurss);
+            td(tr, eurS(r.summa));
+            td(tr, eurS(r.apmaksats));
+            td(tr, rekBadge(r));
+            var nak = (r.rindas || []).filter(function(x) { return !x.p && x.d; }).map(function(x) { return x.d; }).sort()[0];
+            td(tr, nak ? lvD(nak) : '—');
+            td(tr, r.nosutits_at ? fmt(r.nosutits_at, true) : 'Nav');
+            var o = el('a', 'btn-link', 'Atvērt'); o.href = 'rekins.html?id=' + r.id; td(tr, o);
+            t.body.appendChild(tr);
+        });
+        wrap.appendChild(t.wrap);
+        return wrap;
     }
 
     // ---------- E-KURSI: iestatījumi + dalībnieki ----------
@@ -329,9 +407,9 @@
         root.appendChild(addForm());
 
         var tabs = el('div', 'admin-tabs');
-        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')']].forEach(function(x) {
+        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')']].forEach(function(x) {
             var b = el('button', 'admin-tab' + (state.tab === x[0] ? ' active' : ''), x[1]); b.type = 'button';
-            b.addEventListener('click', function() { state.tab = x[0]; render(); });
+            b.addEventListener('click', function() { state.tab = x[0]; history.replaceState(null, '', x[0] === 'rek' ? '#rekini' : location.pathname + location.search); render(); });
             tabs.appendChild(b);
         });
         root.appendChild(tabs);
@@ -357,7 +435,7 @@
         }
         if (state.tab === 'ek') { root.appendChild(ekTab()); return; }
         root.appendChild(bar);
-        root.appendChild(state.tab === 'enr' ? enrTab() : state.tab === 'adv' ? advTab() : usersTab());
+        root.appendChild(state.tab === 'enr' ? enrTab() : state.tab === 'adv' ? advTab() : state.tab === 'rek' ? rekTab() : usersTab());
     }
 
     function start(me) {

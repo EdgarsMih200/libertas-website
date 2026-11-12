@@ -191,6 +191,7 @@ async function sutit(env, to, { subject, html, text }, replyTo) {
     body: JSON.stringify(body),
   });
   if (!r.ok) console.error('E-pasts netika nosūtīts', r.status, await r.text().catch(() => ''));
+  return r.ok;
 }
 
 export async function sutitPieteikumaEpastus(env, { user, course, enrollment, origin, admins }) {

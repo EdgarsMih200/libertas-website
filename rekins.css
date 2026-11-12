@@ -1,0 +1,152 @@
+/* RĒĶINS (rekins.html): A4 lapa + administratora panelis. Krāsas = style.css žetoni (šī lapa style.css neielādē). */
+:root {
+    --c-forest: #1E2E29; --c-forest-2: #2B4038; --c-on-forest: #E9E4D8; --c-on-forest-muted: #AFB9B0;
+    --c-paper: #FBF8F2; --c-sunk: #F1EBE0; --c-line: #DDD3C3; --c-ink: #24211E; --c-muted: #6A6259;
+    --c-sage: #DDE5DA; --c-accent: #B4502A; --c-error: #A4282A; --c-error-bg: #F8E3E1;
+    --c-success: #2E6A47; --c-success-bg: #E3EFE5; --c-warn: #7F5300; --c-warn-bg: #FAEED3;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body.rekins-lapa {
+    background: #D9D4CA; color: var(--c-ink);
+    font: 15px/1.45 "Source Sans 3", system-ui, sans-serif;
+    display: flex; gap: 24px; justify-content: center; align-items: flex-start;
+    padding: 24px 16px; min-height: 100vh;
+}
+.rk-zinojums { max-width: 480px; background: #fff; border-radius: 12px; padding: 24px; text-align: center; }
+.rk-zinojums a { color: var(--c-forest-2); }
+
+/* ---------- Panelis (tikai ekrānā) ---------- */
+.rk-panelis {
+    position: sticky; top: 24px; width: 300px; flex-shrink: 0; max-height: calc(100vh - 48px); overflow: auto;
+    background: #fff; border-radius: 12px; padding: 18px; box-shadow: 0 2px 12px rgba(0,0,0,.08); font-size: 14px;
+}
+.rk-panelis h2 { font: 600 18px "Lora", serif; margin: 0; color: var(--c-forest); }
+.rk-atpakal { display: inline-block; margin-bottom: 10px; color: var(--c-muted); text-decoration: none; font-size: 13px; }
+.rk-atpakal:hover { color: var(--c-forest); text-decoration: underline; }
+.rk-piez { margin: 4px 0 12px; color: var(--c-muted); font-size: 13px; }
+.rk-statuss { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin: 6px 0 2px; }
+.rk-statuss--melnraksts { background: var(--c-sunk); color: var(--c-muted); }
+.rk-statuss--nosutits { background: #E2EBF2; color: #2F5878; }
+.rk-statuss--daleji, .rk-statuss--kavets { background: var(--c-warn-bg); color: var(--c-warn); }
+.rk-statuss--apmaksats { background: var(--c-success-bg); color: var(--c-success); }
+.rk-panelis fieldset { border: 1px solid var(--c-line); border-radius: 8px; padding: 10px 12px 12px; margin: 0 0 12px; }
+.rk-panelis legend { font-weight: 700; padding: 0 4px; color: var(--c-forest); }
+.rk-panelis label { display: block; margin: 6px 0 2px; font-weight: 600; font-size: 13px; }
+.rk-panelis input[type=date], .rk-panelis input[type=number], .rk-panelis input[type=text], .rk-panelis input[type=email] {
+    width: 100%; padding: 6px 8px; border: 1px solid var(--c-line); border-radius: 6px; font: inherit;
+}
+.rk-dienas { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+.rk-dienas label { margin: 0; font-weight: 400; display: flex; align-items: center; gap: 2px;
+    border: 1px solid var(--c-line); border-radius: 6px; padding: 2px 6px; cursor: pointer; }
+.rk-radio label { font-weight: 400; display: flex; gap: 6px; align-items: center; }
+.rk-poga {
+    display: block; width: 100%; margin-top: 8px; padding: 9px 12px; border-radius: 8px; cursor: pointer; text-align: center;
+    font: 600 14px "Source Sans 3", sans-serif; border: 1px solid var(--c-forest); background: #fff; color: var(--c-forest); text-decoration: none;
+}
+.rk-poga:hover { background: var(--c-sage); }
+.rk-poga:disabled { opacity: .5; cursor: default; }
+.rk-poga--galvena { background: var(--c-forest); color: var(--c-on-forest); }
+.rk-poga--galvena:hover { background: var(--c-forest-2); }
+.rk-poga--akcents { background: var(--c-accent); border-color: var(--c-accent); color: #fff; }
+.rk-poga--akcents:hover { background: #963F20; }
+.rk-poga--bistama { border-color: var(--c-error); color: var(--c-error); }
+.rk-poga--bistama:hover { background: var(--c-error-bg); }
+.rk-poga:focus-visible, .rk-panelis input:focus-visible { outline: 2px solid var(--c-ink); outline-offset: 2px; }
+.rk-toast {
+    position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--c-forest); color: var(--c-on-forest);
+    padding: 10px 18px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.2); z-index: 10; font-weight: 600;
+}
+.rk-toast--kluda { background: var(--c-error); color: #fff; }
+
+/* Klienta skata pogas */
+.rk-klienta-josla { position: fixed; right: 20px; bottom: 20px; z-index: 5; }
+.rk-klienta-josla .rk-poga { width: auto; padding: 12px 20px; box-shadow: 0 4px 16px rgba(0,0,0,.2); }
+
+/* ---------- A4 lapa ---------- */
+.rk-lapa {
+    width: 210mm; min-height: 297mm; background: var(--c-paper); flex-shrink: 0;
+    box-shadow: 0 4px 24px rgba(0,0,0,.15);
+    display: flex; flex-direction: column; overflow: hidden; zoom: var(--rk-merogs, 1);
+}
+.rk-lapa [contenteditable] { outline: none; border-radius: 3px; min-width: 1em; }
+.rk-lapa [contenteditable]:hover { background: rgba(43,64,56,.07); }
+.rk-lapa [contenteditable]:focus { background: rgba(43,64,56,.12); box-shadow: 0 0 0 2px rgba(43,64,56,.25); }
+.rk-lapa [contenteditable]:empty::before { content: attr(data-vieta); color: #A89F92; }
+.rk-lapa [aria-invalid=true] { box-shadow: 0 0 0 2px var(--c-error) !important; }
+
+.rk-galva { background: var(--c-forest); color: var(--c-on-forest); padding: 8mm 16mm 7mm; display: flex; justify-content: space-between; align-items: flex-end; }
+.rk-galva img { width: 46mm; height: auto; display: block; }
+.rk-virsraksts { text-align: right; }
+.rk-virsraksts .rk-vards { font: 600 30px/1 "Lora", serif; letter-spacing: .14em; text-transform: uppercase; }
+.rk-virsraksts .rk-nr { font-size: 16px; margin-top: 8px; }
+.rk-virsraksts .rk-datums { color: var(--c-on-forest-muted); font-size: 14px; }
+.rk-josla { height: 2mm; background: var(--c-forest-2); }
+.rk-saturs { padding: 7mm 16mm 0; flex: 1; display: flex; flex-direction: column; }
+
+.rk-puses { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin-bottom: 6mm; }
+.rk-birka { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c-forest-2);
+    margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1.5px solid var(--c-forest); }
+.rk-puses .rk-maks-vards { font-weight: 700; font-size: 16px; }
+.rk-dati { display: grid; grid-template-columns: auto 1fr; column-gap: 12px; row-gap: 1px; margin: 0; }
+.rk-dati dt { color: var(--c-muted); }
+.rk-dati dd { margin: 0; text-align: right; font-weight: 600; }
+
+.rk-tabula { width: 100%; border-collapse: collapse; }
+.rk-tabula thead th { background: var(--c-forest); color: var(--c-on-forest); font-size: 12px; font-weight: 700; letter-spacing: .06em;
+    text-transform: uppercase; text-align: left; padding: 7px 10px; border: 0; white-space: nowrap; }
+.rk-tabula thead th:first-child { border-radius: 6px 0 0 6px; width: 11mm; text-align: center; }
+.rk-tabula thead th.rk-summa { border-radius: 0 6px 6px 0; text-align: right; }
+.rk-kurss td { padding: 7px 10px 3px; }
+.rk-kurss-nos { font: 600 15.5px "Lora", serif; color: var(--c-forest); }
+.rk-kurss-info { font-size: 13px; color: var(--c-muted); }
+.rk-poz td { padding: 4px 10px; line-height: 1.3; border-bottom: 1px solid var(--c-line); }
+.rk-poz:nth-child(even) td:not(.rk-ekrans) { background: rgba(241,235,224,.55); }
+.rk-poz td:first-child { text-align: center; color: var(--c-muted); }
+.rk-poz td.rk-termins, .rk-poz td.rk-summa { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rk-poz td.rk-summa { text-align: right; }
+.rk-poz.rk-poz--kavets td.rk-termins { color: var(--c-error); font-weight: 700; }
+.rk-blivs .rk-poz td { padding-top: 2px; padding-bottom: 2px; font-size: 13.5px; }
+
+/* Ekrāna kolonna: apmaksas atzīme + dzēšana (drukā paslēpta) */
+.rk-tabula th.rk-ekrans { background: none; color: var(--c-muted); width: 1%; white-space: nowrap; text-align: left; }
+td.rk-ekrans { border-bottom: 1px solid var(--c-line); padding: 2px 0 2px 8px !important; white-space: nowrap; font-size: 12.5px; }
+.rk-apm { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; color: var(--c-muted); }
+.rk-apm input { width: 16px; height: 16px; accent-color: var(--c-success); cursor: pointer; }
+.rk-apm--ja, .rk-apm-zime { color: var(--c-success); font-weight: 700; }
+.rk-dzest { border: 0; background: none; color: var(--c-error); font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 4px; margin-left: 4px; opacity: .45; }
+.rk-poz:hover .rk-dzest, .rk-dzest:focus-visible { opacity: 1; }
+
+.rk-kopa { display: flex; justify-content: flex-end; margin-top: 4mm; }
+.rk-kopa-kaste { min-width: 78mm; border: 1.5px solid var(--c-forest); border-radius: 8px; overflow: hidden; }
+.rk-kopa-kaste .r { display: flex; justify-content: space-between; gap: 16px; padding: 3px 12px; font-size: 14px; }
+.rk-kopa-kaste .r span:last-child { font-variant-numeric: tabular-nums; }
+.rk-kopa-kaste .r.liela { background: var(--c-forest); color: var(--c-on-forest); font-weight: 700; font-size: 17px; padding: 8px 12px; }
+.rk-kopa-kaste .r.rk-ekrans-r { color: var(--c-success); font-weight: 600; }
+
+.rk-apaksa { margin-top: auto; padding-top: 6mm; display: grid; grid-template-columns: 1.05fr 1fr; gap: 10mm; align-items: end; }
+.rk-maksajums { background: var(--c-sunk); border-left: 4px solid var(--c-forest); border-radius: 0 8px 8px 0; padding: 10px 14px; }
+.rk-maksajums .rk-dati dd { text-align: left; }
+.rk-merkis { margin-top: 8px; padding: 6px 10px; border: 1.5px dashed var(--c-forest-2); border-radius: 6px; background: var(--c-paper); font-size: 13.5px; }
+.rk-merkis b { font-size: 15px; }
+.rk-paldies { text-align: right; }
+.rk-paldies .rk-script { font: 52px/1 "Great Vibes", cursive; color: var(--c-forest); margin-bottom: 2px; }
+.rk-paldies .rk-izd-vards { font: 600 19px "Lora", serif; color: var(--c-forest); }
+.rk-paldies .rk-kontakti { color: var(--c-muted); font-size: 13.5px; }
+.rk-kaje { margin-top: 6mm; background: var(--c-forest); color: var(--c-on-forest-muted); font-size: 11.5px; padding: 3.2mm 16mm;
+    display: flex; justify-content: space-between; gap: 10mm; }
+
+@media (max-width: 1150px) {
+    body.rekins-lapa { flex-direction: column; align-items: center; }
+    .rk-panelis { position: static; width: 100%; max-width: 794px; max-height: none; }
+}
+
+@page { size: A4; margin: 0; }
+@media print {
+    body.rekins-lapa { background: none; padding: 0; display: block; min-height: 0; }
+    .rk-panelis, .rk-klienta-josla, .rk-ekrans, .rk-ekrans-r, .rk-toast { display: none !important; }
+    .rk-lapa { box-shadow: none; width: 210mm; height: 297mm; min-height: 0; zoom: 1; }
+    .rk-lapa [contenteditable]:hover, .rk-lapa [contenteditable]:focus { background: none; box-shadow: none; }
+    .rk-lapa [contenteditable]:empty::before { content: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
