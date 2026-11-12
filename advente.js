@@ -103,7 +103,7 @@
         var s = Math.max(0, Math.floor((SAKUMS - Date.now()) / 1000));
         if (sim !== undefined) s = Math.max(s, 9 * 86400 + 3723); // simulācija: parādīt skaitītāju arī pēc 1.12.
         var d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), sek = s % 60;
-        statuss.textContent = 'Kalendārs atvērsies pēc ' + d + ' ' + lvDienas(d) + ', ' + h + ' st. ' + m + ' min. ' + sek + ' sek.';
+        statuss.textContent = 'Kalendārs atvērsies pēc ' + d + ' ' + (d % 10 === 1 && d % 100 !== 11 ? 'dienas' : 'dienām') + ', ' + h + ' st. ' + m + ' min. ' + sek + ' sek.';
         if (s === 0 && sim === undefined) { clearInterval(taimeris); ielade(); }
     }
 
