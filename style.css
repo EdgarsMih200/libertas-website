@@ -3962,6 +3962,516 @@ html .lapas-josla.sc-muertos {
     }
 }
 
+/* NORVĒĢU MATERIĀLS (materiali-norvegu-ziemassvetki.html, materiali-norvegu.js; nor-* prefikss)
+   Vietnes nodarbības karkass + materiāla plakanās ilustrācijas (JS SVG). Krāsas tikai no žetoniem. */
+.nor-izvele {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    min-height: 48px;
+    margin-bottom: var(--sp-5);
+}
+
+.nor-vards {
+    min-height: 44px;
+    padding: 6px 16px;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font-family: var(--ff-display);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease), border-color var(--dur-1) var(--ease);
+}
+
+.nor-vards:hover { border-color: var(--c-ink); }
+
+.nor-vards[aria-pressed="true"] {
+    border-color: var(--c-accent);
+    background: var(--c-accent-soft);
+    color: var(--c-accent-strong);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-1);
+}
+
+.nor-attelu-rezgis {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--sp-3);
+}
+
+.nor-attels {
+    display: flex;
+    flex-direction: column;
+    border: 1.5px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    overflow: hidden;
+    transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+
+.nor-attels-poga {
+    display: block;
+    width: 100%;
+    padding: var(--sp-2) var(--sp-3) 0;
+    border: 0;
+    background: var(--c-info-bg);
+    cursor: pointer;
+}
+
+.nor-attels-poga svg { display: block; width: 100%; height: auto; }
+.nor-attels-poga:disabled { cursor: default; }
+
+.nor-attels-nosaukums {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2px 8px;
+    min-height: 64px;
+    padding: var(--sp-2);
+    text-align: center;
+    line-height: 1.25;
+}
+
+.nor-jautajums { font-family: var(--ff-display); font-size: 1.5rem; color: var(--c-muted); }
+.nor-maza { font-size: var(--fs-xs); color: var(--c-muted); }
+.nor-attels-no { font-family: var(--ff-display); font-weight: 600; font-size: 1.0625rem; }
+.nor-attels-lv { flex-basis: 100%; order: 3; font-size: var(--fs-sm); color: var(--c-muted); }
+.nor-art { font-weight: 400; color: var(--c-info); }
+
+.nor-attels.nor-atrasts { border-color: var(--c-success); background: var(--c-success-bg); }
+.nor-attels.nor-atrasts .nor-attels-poga { background: var(--c-success-bg); }
+
+.nor-kluda { animation: nor-kratit .4s; border-color: var(--c-error) !important; background: var(--c-error-bg) !important; }
+
+@keyframes nor-kratit {
+    0%, 100% { transform: none; }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+
+/* Skaņas poga, kamēr skan */
+.nor .runat-poga.nor-atskan,
+.nor .mat-poga-maza.nor-atskan {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: var(--c-on-accent);
+}
+
+/* 2. Teksts */
+.nor-stasta-galva {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-5);
+    margin-bottom: var(--sp-5);
+}
+
+.nor-stasta-galva > svg { flex: none; width: 96px; height: 96px; }
+.nor-stasta-galva .mat-ievads { margin-bottom: var(--sp-2); }
+
+.nor-rinda {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-3);
+}
+
+.nor-rinda--centra { justify-content: center; margin-top: var(--sp-4); }
+
+.nor-stasts {
+    display: grid;
+    gap: var(--sp-4);
+    max-width: 70ch;
+}
+
+.nor-rindkopa {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--sp-2) var(--sp-3);
+    align-items: start;
+}
+
+.nor-rindkopa > p:first-child {
+    font-family: var(--ff-display);
+    font-size: 1.1875rem;
+    line-height: 1.6;
+}
+
+.nor-tulk {
+    display: none;
+    grid-column: 1 / -1;
+    padding-left: var(--sp-3);
+    border-left: 3px solid var(--c-sage-ink);
+    color: var(--c-muted);
+    font-style: italic;
+}
+
+.nor-rada-tulk .nor-tulk { display: block; }
+
+.nor-vardini {
+    margin-top: var(--sp-5);
+    padding: var(--sp-4) var(--sp-5);
+    border-radius: var(--r-md);
+    background: var(--c-sunk);
+}
+
+.nor .nor-vardini h3 { margin: 0 0 var(--sp-2); font-size: 1.0625rem; }
+
+.nor-vardini ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--fs-sm);
+}
+
+.nor-padoms {
+    max-width: 70ch;
+    margin-top: var(--sp-5);
+    padding: var(--sp-4) var(--sp-5);
+    border-left: 4px solid var(--c-season-glow);
+    border-radius: var(--r-sm);
+    background: var(--c-warn-bg);
+}
+
+.nor-padoms--gramatika { margin: 0 0 var(--sp-5); border-left-color: var(--c-sage-ink); background: var(--c-sage); }
+
+/* 3. Tradīcijas */
+.nor-tradicijas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: var(--sp-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nor-trad {
+    padding: var(--sp-4) var(--sp-5) var(--sp-5);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+}
+
+.nor-trad svg { display: block; width: 112px; height: 112px; margin: 0 auto var(--sp-2); }
+
+.nor-kad {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--r-pill);
+    background: var(--c-accent-soft);
+    color: var(--c-accent-strong);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+}
+
+.nor .nor-trad h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    margin: var(--sp-2) 0;
+    font-size: 1.1875rem;
+}
+
+.nor-trad p { font-size: var(--fs-sm); line-height: 1.5; }
+
+/* Atbilžu pogas (tests, riktig/galt) */
+.nor-jautajums-bloks,
+.nor-pp {
+    padding: var(--sp-3) 0;
+    border-bottom: 1px dashed var(--c-line);
+}
+
+.nor-jautajums-teksts { font-weight: 600; margin-bottom: var(--sp-2); }
+
+.nor-opcijas { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+.nor-opcija {
+    min-height: 44px;
+    padding: 6px 18px;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.nor-opcija:hover { border-color: var(--c-ink); }
+.nor-atbildets .nor-opcija { cursor: default; }
+.nor-atbildets .nor-opcija:not(.nor-pareizi):not(.nor-nepareizi) { opacity: .45; }
+
+.nor-opcija.nor-pareizi { border-color: var(--c-success); background: var(--c-success-bg); color: var(--c-success); }
+.nor-opcija.nor-nepareizi { border-color: var(--c-error); background: var(--c-error-bg); color: var(--c-error); }
+.nor-opcija.nor-pareizi::before { content: "✓ "; }
+.nor-opcija.nor-nepareizi::before { content: "✕ "; }
+
+.nor-pp-saraksts,
+.nor-trukst,
+.nor-teikumi { margin: 0; padding-left: 22px; }
+
+.nor-pp {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2) var(--sp-3);
+}
+
+.nor-pp-teikums {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sp-2);
+    flex: 1 1 260px;
+    font-family: var(--ff-display);
+    font-size: 1.0625rem;
+}
+
+.nor-atsauksme { flex-basis: 100%; font-size: var(--fs-sm); font-weight: 600; }
+.nor-atsauksme:empty { display: none; }
+.nor-ok { color: var(--c-success); }
+.nor-slikti, .nor-slikti-teksts { color: var(--c-error); }
+
+/* 5. Trūkstošie vārdi */
+.nor-banka {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-2);
+    margin: 0 0 var(--sp-3);
+    padding: var(--sp-3) var(--sp-4);
+    border: 1.5px dashed var(--c-line-strong);
+    border-radius: var(--r-md);
+    background: var(--c-sunk);
+    list-style: none;
+}
+
+.nor-banka li {
+    padding: 2px 12px;
+    border-radius: var(--r-sm);
+    background: var(--c-surface);
+    font-family: var(--ff-display);
+    font-weight: 600;
+}
+
+.nor-burti {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
+    margin-bottom: var(--sp-4);
+    color: var(--c-muted);
+    font-size: var(--fs-sm);
+}
+
+.nor-burti button {
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: var(--r-sm);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font-family: var(--ff-display);
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.nor-burti button:hover { border-color: var(--c-ink); }
+
+.nor-trukst { display: grid; gap: 10px; margin-bottom: var(--sp-4); }
+.nor-trukst li { line-height: 2.6; }
+
+/* 6. Saliec teikumu */
+.nor-teikums { padding: var(--sp-4) 0; border-bottom: 1px dashed var(--c-line); }
+
+.nor-atbilde {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    min-height: 58px;
+    margin-bottom: var(--sp-2);
+    padding: 6px 8px;
+    border: 1.5px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-sunk);
+}
+
+.nor-atbilde:empty::before { content: "Spied uz vārdiem zemāk"; padding-left: 6px; color: var(--c-muted); font-size: var(--fs-sm); }
+.nor-atbilde.nor-ok { border-color: var(--c-success); background: var(--c-success-bg); }
+.nor-atbilde.nor-slikti { border-color: var(--c-error); background: var(--c-error-bg); }
+
+.nor-krajums { display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; margin-bottom: var(--sp-3); }
+
+/* 7. Spēle */
+.nor-skatuve {
+    overflow: hidden;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-lg);
+    background: var(--c-info-bg);
+    box-shadow: var(--shadow-1);
+}
+
+.nor-skatuve svg { display: block; width: 100%; height: auto; }
+
+.nor-paradas {
+    animation: nor-paradas .5s cubic-bezier(.3, 1.6, .5, 1) both;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+@keyframes nor-paradas { from { transform: scale(0); } to { transform: scale(1); } }
+
+.nor-punkti {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: var(--sp-3) 0;
+    padding: 0;
+    list-style: none;
+}
+
+.nor-punkti li { width: 10px; height: 10px; border-radius: 50%; background: var(--c-line); }
+.nor-punkti li.nor-gatavs { background: var(--c-sage-ink); }
+.nor-punkti li.nor-tagad { background: var(--c-accent); }
+
+.nor-spele-rinda {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-3);
+}
+
+.nor-spele-klausities { width: 56px; min-width: 56px; padding: 0; justify-content: center; }
+.nor-spele-klausities .btn-ikona { width: 22px; height: 22px; fill: currentColor; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.nor-spele-klausities .btn-ikona path + path { fill: none; }
+
+.nor-spele-teksts {
+    font-family: var(--ff-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    filter: blur(6px);
+    user-select: none;
+    transition: filter var(--dur-2) var(--ease);
+}
+
+.nor-spele-teksts.nor-redzams { filter: none; user-select: auto; }
+
+.nor-spele-lv {
+    flex-basis: 100%;
+    min-height: 1.5em;
+    color: var(--c-muted);
+    font-style: italic;
+    text-align: center;
+}
+
+.nor-izveles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--sp-3);
+    max-width: 420px;
+    margin: var(--sp-3) auto 0;
+}
+
+.nor-izvele-attels {
+    padding: 6px;
+    border: 2px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    cursor: pointer;
+}
+
+.nor-izvele-attels:hover { border-color: var(--c-ink); }
+.nor-izvele-attels svg { display: block; width: 100%; }
+.nor-izvele-attels.nor-pareizi { border-color: var(--c-success); background: var(--c-success-bg); }
+
+#gnext[hidden] { display: none; }
+
+/* Beigas */
+.nor-beigas { text-align: center; }
+.nor-beigas[hidden] { display: none; }
+.nor-beigas svg { width: 160px; height: 160px; margin: 0 auto var(--sp-3); }
+.nor .nor-beigas h2 { justify-content: center; color: var(--c-brand); }
+
+/* Punktu josla: lipīga apakšā, kamēr redzama nodarbība */
+.nor-rezultats {
+    position: sticky;
+    bottom: var(--sp-3);
+    z-index: 5;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2) var(--sp-4);
+    margin: var(--sp-6) 0;
+    padding: 10px var(--sp-5);
+    border-radius: var(--r-pill);
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+    box-shadow: var(--shadow-2);
+    font-weight: 600;
+}
+
+.nor-rezultats b { color: var(--c-season-glow); }
+
+.nor-josla {
+    flex: 0 1 220px;
+    height: 10px;
+    border-radius: var(--r-pill);
+    background: var(--c-forest-2);
+    overflow: hidden;
+}
+
+.nor-josla i { display: block; width: 0; height: 100%; background: var(--c-season-glow); transition: width var(--dur-3) var(--ease); }
+
+.nor-apturet,
+.nor-no-jauna {
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid var(--c-on-forest-muted);
+    border-radius: var(--r-pill);
+    background: transparent;
+    color: var(--c-on-forest);
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.nor-apturet { display: none; border-color: var(--c-season-glow); color: var(--c-season-glow); }
+.nor-skan .nor-apturet { display: inline-block; }
+.nor-apturet:focus-visible,
+.nor-no-jauna:focus-visible { outline-color: var(--c-focus-dark); }
+
+.nor-autors { margin-top: var(--sp-4); color: var(--c-muted); font-size: var(--fs-xs); text-align: center; }
+
+/* Stūra Empanadillo virs punktu joslas */
+body.mat-norvegu .empanadillo { bottom: 84px; }
+
+@media (max-width: 640px) {
+    .nor-attelu-rezgis { grid-template-columns: repeat(2, 1fr); }
+    .nor-stasta-galva > svg { width: 72px; height: 72px; }
+    .nor-stasta-galva { gap: var(--sp-3); align-items: flex-start; }
+    .nor-rezultats { border-radius: var(--r-md); padding: 8px var(--sp-3); }
+    .nor-no-jauna { display: none; }
+    body.mat-norvegu .empanadillo { bottom: 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nor-kluda, .nor-paradas { animation: none; }
+}
+
+@media print {
+    .nor-rezultats, .nor-izvele, .nor-burti, .nor-spele-rinda, .nor-izveles, #gnext { display: none !important; }
+    .nor-tulk { display: block; }
+}
+
 /* 404 LAPA (404.html, layout.md §7): apjucis Empanadillo ×4 (×3 telefonā), divvalodīgs teksts, trīs izejas */
 .kluda {
     display: grid;
