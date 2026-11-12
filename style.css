@@ -7227,3 +7227,257 @@ html.blogs-gaiss .blogs-tema-poga[aria-pressed="true"] { background: var(--c-sur
     .blogs-kom-forma > .blogs-kom-foto { display: none; }
     .blogs-kom-ienakt { width: 100%; }
 }
+
+/* PAR MUMS (par-mums.html): stāsts ar foto, vērtības, skaitļi, mācību gaita, Empanadillo, aicinājums */
+.pm-sadala { padding-top: var(--sp-section); }
+.pm-sadala:last-child { padding-bottom: var(--sp-section); }
+
+.pm-stasts-rezgis {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--sp-8, 56px);
+    align-items: center;
+}
+
+.pm-foto { margin: 0; position: relative; justify-self: center; width: min(100%, 440px); }
+
+.pm-foto-ramis {
+    padding: 12px 12px 0;
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-2);
+    transform: rotate(-1.5deg);
+}
+
+/* Līmlente augšā */
+.pm-foto-ramis::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 108px;
+    height: 28px;
+    transform: translateX(-50%) rotate(3deg);
+    background: color-mix(in srgb, var(--c-sage) 85%, transparent);
+    border-radius: 3px;
+}
+
+.pm-foto img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 30% 40%;
+    border-radius: var(--r-sm);
+}
+
+.pm-foto-paraksts {
+    padding: 12px 4px 14px;
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: var(--fs-sm);
+    text-align: center;
+    color: var(--c-muted);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-top: 0;
+    border-radius: 0 0 var(--r-md) var(--r-md);
+    transform: rotate(-1.5deg) translateY(-1px);
+    box-shadow: var(--shadow-2);
+}
+
+.pm-foto-paraksts b { font-style: normal; font-weight: 600; color: var(--c-brand); }
+
+.pm-stasts-teksts { display: grid; justify-items: start; gap: var(--sp-4); }
+.pm-stasts-teksts p { max-width: 62ch; margin: 0; line-height: 1.65; }
+
+.pm-citats {
+    position: relative;
+    margin: var(--sp-3) 0 0;
+    padding: var(--sp-5) var(--sp-6) var(--sp-5) calc(var(--sp-6) + 40px);
+    background: var(--c-accent-soft);
+    border-radius: var(--r-md);
+    max-width: 62ch;
+}
+
+.pm-citats-zime {
+    position: absolute;
+    left: var(--sp-5);
+    top: var(--sp-5);
+    width: 34px;
+    fill: var(--c-brand);
+}
+
+.pm-citats p {
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: var(--fs-lead);
+    line-height: 1.45;
+    color: var(--c-brand);
+}
+
+.pm-citats footer { margin-top: var(--sp-2); font-weight: 600; color: var(--c-ink); }
+
+/* Vērtības */
+.pm-vertibas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+}
+
+.pm-vertiba {
+    display: grid;
+    align-content: start;
+    gap: var(--sp-3);
+    padding: var(--sp-6);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+}
+
+.pm-vertiba-ikona {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--c-sage);
+    color: var(--c-sage-ink);
+}
+
+.pm-vertiba-ikona svg {
+    width: 38px;
+    height: 38px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.pm-vertiba h3 { font-size: var(--fs-h3); line-height: 1.2; margin: var(--sp-2) 0 0; color: var(--c-ink); }
+.pm-vertiba p { margin: 0; color: var(--c-muted); line-height: 1.6; }
+
+/* Skaitļi */
+.pm-skaitli-josla {
+    margin-top: var(--sp-section);
+    padding: var(--sp-8, 56px) 0;
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+}
+
+.pm-skaitli {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-6);
+}
+
+.pm-skaitli li { display: grid; gap: var(--sp-2); padding-left: var(--sp-5); border-left: 2px solid var(--c-forest-2); }
+.pm-skaitli b { font-family: var(--ff-display); font-size: var(--fs-h1); font-weight: 500; line-height: 1; color: var(--c-on-forest); }
+.pm-skaitli span { color: var(--c-on-forest-muted); line-height: 1.45; }
+
+/* Mācību gaita */
+.pm-soli {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: pm-solis;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-5);
+}
+
+.pm-solis { counter-increment: pm-solis; position: relative; display: grid; align-content: start; gap: var(--sp-2); }
+
+.pm-solis::before {
+    content: counter(pm-solis);
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: var(--sp-3);
+    border-radius: 50%;
+    background: var(--c-brand);
+    color: var(--c-bg);
+    font-family: var(--ff-display);
+    font-size: 1.375rem;
+    font-weight: 600;
+}
+
+/* Taka starp soļiem */
+.pm-solis:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 60px;
+    right: calc(-1 * var(--sp-5) + 12px);
+    border-top: 2px dashed var(--c-line-strong);
+}
+
+.pm-solis h3 { font-size: var(--fs-h3); line-height: 1.2; margin: 0; color: var(--c-ink); }
+.pm-solis p { margin: 0; color: var(--c-muted); line-height: 1.6; }
+
+.pm-piezime { margin: var(--sp-6) 0 0; font-size: var(--fs-sm); color: var(--c-muted); }
+.pm-piezime a { color: var(--c-accent-strong); }
+
+/* Empanadillo */
+.pm-empa-karte {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: var(--sp-7, 40px);
+    padding: var(--sp-7, 40px) var(--sp-8, 56px);
+    background: var(--c-sage);
+    border-radius: var(--r-lg);
+}
+
+.pm-empa-karte > div { display: grid; justify-items: start; gap: var(--sp-3); }
+.pm-empa-karte p { margin: 0; max-width: 60ch; line-height: 1.65; }
+.pm-empa-figura { line-height: 0; }
+.pm-empa-figura svg { display: block; overflow: visible; image-rendering: pixelated; }
+
+/* Aicinājums */
+.pm-cta {
+    display: grid;
+    justify-items: center;
+    gap: var(--sp-4);
+    padding: var(--sp-8, 56px) var(--gutter);
+    text-align: center;
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+    border-radius: var(--r-lg);
+}
+
+.pm-cta h2 { margin: 0; font-size: var(--fs-h2); line-height: 1.15; color: var(--c-on-forest); }
+.pm-cta h2 em { font-weight: 400; color: var(--c-accent-soft); }
+.pm-cta p { margin: 0; max-width: 52ch; color: var(--c-on-forest-muted); }
+.pm-cta-pogas { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--sp-3); margin-top: var(--sp-3); }
+.pm-cta .pm-cta-otra { color: var(--c-on-forest); border-color: var(--c-on-forest-muted); background: transparent; }
+.pm-cta .pm-cta-otra:hover { color: var(--c-forest); background: var(--c-on-forest); border-color: var(--c-on-forest); }
+
+@media (max-width: 1023px) {
+    .pm-stasts-rezgis { grid-template-columns: 1fr; gap: var(--sp-7, 40px); }
+    .pm-foto { width: min(100%, 380px); }
+    .pm-vertibas, .pm-skaitli, .pm-soli { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pm-solis::after { display: none; }
+    .pm-soli { row-gap: var(--sp-7, 40px); }
+}
+
+@media (max-width: 639px) {
+    .pm-foto { width: min(100%, 320px); }
+    .pm-vertibas, .pm-soli { grid-template-columns: 1fr; }
+    .pm-skaitli { gap: var(--sp-5); }
+    .pm-skaitli li { padding-left: var(--sp-3); }
+    .pm-citats { padding: var(--sp-4) var(--sp-4) var(--sp-4) calc(var(--sp-4) + 36px); }
+    .pm-citats-zime { left: var(--sp-3); top: var(--sp-4); width: 28px; }
+    .pm-empa-karte { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: var(--sp-6) var(--sp-5); }
+    .pm-empa-karte > div { justify-items: center; }
+}

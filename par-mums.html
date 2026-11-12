@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Par mums — Libertas</title>
+    <meta name="description" content="Libertas — spāņu un angļu valodas mācību centrs, kur mācīšanās nozīmē brīvību: brīvību izteikties, saprast citus un atklāt pasauli no jauna.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body>
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html">Noderīgi materiāli</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="par-mums.html" aria-current="page">Par mums</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="pm-lapa">
+        <!-- Lapas josla -->
+        <div class="lapas-josla">
+            <div class="lapas-josla-ainava" aria-hidden="true">
+                <svg viewBox="0 220 1440 390" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+            </div>
+            <div class="container lapas-josla-saturs">
+                <nav class="lapas-cels" aria-label="Atrašanās vieta"><a href="index.html">Sākums</a><span aria-hidden="true">/</span><span aria-current="page">Par mums</span></nav>
+                <h1>Par <em>mums</em></h1>
+                <p class="lapas-josla-ievads">Libertas ir vieta, kur mācīšanās nozīmē brīvību — brīvību izteikties, saprast citus un atklāt pasauli no jauna.</p>
+            </div>
+        </div>
+
+        <!-- Stāsts: foto + teksts + citāts -->
+        <section class="pm-sadala pm-stasts" aria-labelledby="pm-stasts-virsraksts">
+            <div class="container pm-stasts-rezgis">
+                <figure class="pm-foto">
+                    <div class="pm-foto-ramis">
+                        <img src="assets/par-mums/edgars.jpg" alt="Edgars Mihovs saulrietā kalnos virs mākoņu jūras" width="900" height="1200" loading="eager" decoding="async">
+                    </div>
+                    <figcaption class="pm-foto-paraksts"><b>Edgars Mihovs</b> · Libertas dibinātājs</figcaption>
+                </figure>
+
+                <div class="pm-stasts-teksts">
+                    <span class="sadalas-zime">Mūsu stāsts</span>
+                    <h2 class="sadalas-virsraksts" id="pm-stasts-virsraksts">Vārds, kas nozīmē <em>brīvību</em></h2>
+                    <p>Nosaukums «Libertas» nāk no latīņu vārda <i lang="la">libertas</i> — brīvība. Tas lieliski raksturo mūsu pieeju: valoda nav eksāmens, ko vienkārši nokārtot, bet atslēga, kas atver durvis — uz jaunām sarunām, ceļojumiem, darbu un draugiem citās zemēs.</p>
+                    <p>Libertas sākās ar vienkāršu domu: valodu var iemācīties tikai tad, ja to lieto. Tāpēc nodarbībās mēs vairāk runājam nekā pierakstām — spēlējam, diskutējam, klausāmies un smejamies. Gramatika nāk līdzi dabiski, kā ceļa karte, nevis kā šķērslis.</p>
+
+                    <blockquote class="pm-citats">
+                        <svg class="pm-citats-zime" viewBox="0 0 48 36" aria-hidden="true" focusable="false"><path d="M0 36V22C0 10 6 2 18 0l2 5c-6 2-9 6-9 12h9v19H0Zm28 0V22c0-12 6-20 18-22l2 5c-6 2-9 6-9 12h9v19H28Z"/></svg>
+                        <p>Apgūt valodu ir ceļojums uz sevi un pasauli. Libertas palīdz atrast īsto ceļojuma maršrutu.</p>
+                        <footer>— Edgars Mihovs</footer>
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pieeja: 4 vērtības -->
+        <section class="pm-sadala pm-pieeja" aria-labelledby="pm-pieeja-virsraksts">
+            <div class="container">
+                <div class="sadalas-galva">
+                    <div>
+                        <span class="sadalas-zime">Mūsu pieeja</span>
+                        <h2 class="sadalas-virsraksts" id="pm-pieeja-virsraksts">Kam mēs <em>ticam</em></h2>
+                    </div>
+                    <p class="sadalas-ievads">Četras lietas, kas veido katru Libertas nodarbību.</p>
+                </div>
+
+                <ul class="pm-vertibas">
+                    <li class="pm-vertiba">
+                        <span class="pm-vertiba-ikona" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" focusable="false"><path d="M6 10h22a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H15l-6 5v-5H6a3 3 0 0 1-3-3V13a3 3 0 0 1 3-3Z"/><path d="M35 19h7a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3h-3v5l-6-5h-9a3 3 0 0 1-3-3v-3"/><path d="M10 18.5h14M10 22h9"/></svg>
+                        </span>
+                        <h3>Spāņu un angļu valoda</h3>
+                        <p>Piedāvājam spāņu un angļu valodas kursus no A1 līdz B1 līmenim un papildinām kursu klāstu pēc studentu pieprasījuma.</p>
+                    </li>
+                    <li class="pm-vertiba">
+                        <span class="pm-vertiba-ikona" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" focusable="false"><circle cx="15" cy="24" r="9"/><circle cx="15" cy="24" r="3"/><path d="M24 24h20M38 24v6M32 24v5"/></svg>
+                        </span>
+                        <h3>Zināšanas atbrīvo</h3>
+                        <p>Zināšanas atbrīvo prātu un atver durvis uz jaunām iespējām. Katra jauna frāze ir solis tuvāk brīvai sarunai.</p>
+                    </li>
+                    <li class="pm-vertiba">
+                        <span class="pm-vertiba-ikona" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" focusable="false"><rect x="4" y="16" width="20" height="20" rx="4" transform="rotate(-12 14 26)"/><rect x="24" y="8" width="20" height="20" rx="4" transform="rotate(14 34 18)"/><circle cx="10" cy="22" r="1.6"/><circle cx="18" cy="30" r="1.6"/><circle cx="14" cy="26" r="1.6"/><circle cx="30" cy="13" r="1.6"/><circle cx="38" cy="23" r="1.6"/></svg>
+                        </span>
+                        <h3>Spēles un dzīvas diskusijas</h3>
+                        <p>Nodarbībās izmantojam mūsdienīgus materiālus, spēles un dzīvas diskusijas — mācīties var arī ar prieku.</p>
+                    </li>
+                    <li class="pm-vertiba">
+                        <span class="pm-vertiba-ikona" aria-hidden="true">
+                            <svg viewBox="0 0 48 48" focusable="false"><circle cx="24" cy="15" r="6"/><path d="M13 40v-3a11 11 0 0 1 22 0v3"/><circle cx="9" cy="20" r="4"/><path d="M2 38v-2a7 7 0 0 1 8-7"/><circle cx="39" cy="20" r="4"/><path d="M46 38v-2a7 7 0 0 0-8-7"/></svg>
+                        </span>
+                        <h3>Mazas grupas</h3>
+                        <p>Mazā grupā katram ir laiks runāt, kļūdīties un saņemt atgriezenisko saiti. Kļūdas šeit ir daļa no ceļa, nevis iemesls kaunēties.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Skaitļi (meža josla) -->
+        <section class="pm-skaitli-josla" aria-label="Libertas skaitļos">
+            <div class="container">
+                <ul class="pm-skaitli">
+                    <li><b>6</b><span>kursu līmeņi — no A1 līdz B1.2</span></li>
+                    <li><b>14</b><span>nodarbības vienā spāņu valodas līmenī</span></li>
+                    <li><b>4</b><span>valodas bezmaksas materiālos</span></li>
+                    <li><b>24/7</b><span>e-kurss pašmācībai jebkurā laikā</span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Kā notiek mācības -->
+        <section class="pm-sadala pm-gaita" aria-labelledby="pm-gaita-virsraksts">
+            <div class="container">
+                <div class="sadalas-galva">
+                    <div>
+                        <span class="sadalas-zime">Kā tas notiek</span>
+                        <h2 class="sadalas-virsraksts" id="pm-gaita-virsraksts">Tavs ceļš <em>Libertas</em></h2>
+                    </div>
+                    <p class="sadalas-ievads">No pirmā «¡Hola!» līdz brīvai sarunai — soli pa solim.</p>
+                </div>
+
+                <ol class="pm-soli">
+                    <li class="pm-solis">
+                        <h3>Izvēlies līmeni</h3>
+                        <p>Sāc no nulles ar A1 vai turpini tur, kur apstājies. Ja šaubies — uzraksti mums, palīdzēsim izvēlēties.</p>
+                    </li>
+                    <li class="pm-solis">
+                        <h3>Piesakies grupai</h3>
+                        <p>Izvēlies grupu ar sev ērtām dienām — pirmdiena un trešdiena vai otrdiena un ceturtdiena — un piesakies tiešsaistē.</p>
+                    </li>
+                    <li class="pm-solis">
+                        <h3>Mācies 7 nedēļas</h3>
+                        <p>14 nodarbības divreiz nedēļā vakaros. Runājam, spēlējam, klausāmies un lietojam valodu dzīvās situācijās.</p>
+                    </li>
+                    <li class="pm-solis">
+                        <h3>Turpini ceļu</h3>
+                        <p>Pēc kursa grupa var turpināt nākamajā līmenī tajās pašās nedēļas dienās — kopā ar tiem pašiem ceļabiedriem.</p>
+                    </li>
+                </ol>
+                <p class="pm-piezime">Grafiks attiecas uz spāņu valodas grupām; angļu valodas grupu datumi vēl tiek precizēti. Ja gribi mācīties savā tempā, izmēģini <a href="kursi.html#tiessaistes">e-kursu</a>.</p>
+            </div>
+        </section>
+
+        <!-- Empanadillo -->
+        <section class="pm-sadala pm-empa-sadala" aria-labelledby="pm-empa-virsraksts">
+            <div class="container">
+                <div class="pm-empa-karte">
+                    <span class="pm-empa-figura" data-empa-poza="vicina" data-empa-merogs="3"></span>
+                    <div>
+                        <span class="sadalas-zime">Iepazīsties</span>
+                        <h2 class="sadalas-virsraksts" id="pm-empa-virsraksts">Mūsu ceļabiedrs <em>Empanadillo</em></h2>
+                        <p>Mazais ceļotājs pavada tevi pa visu vietni — uzklikšķini uz viņa ekrāna stūrī, un viņš pastāstīs kaut ko noderīgu. Kāpēc tāds vārds? <i lang="es">Empanadilla</i> ir mazs spāņu pīrādziņš ar pildījumu — tāpat kā katra laba nodarbība.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Aicinājums -->
+        <section class="pm-sadala pm-cta-sadala" aria-labelledby="pm-cta-virsraksts">
+            <div class="container">
+                <div class="pm-cta">
+                    <h2 id="pm-cta-virsraksts">Gatavs sākt savu <em>ceļojumu</em>?</h2>
+                    <p>Apskati kursus vai uzraksti mums — atbildēsim uz jautājumiem un palīdzēsim izvēlēties īsto līmeni.</p>
+                    <div class="pm-cta-pogas">
+                        <a href="kursi.html" class="btn-cta">Izvēlies kursu</a>
+                        <a href="mailto:edgars.libertas@gmail.com" class="btn-secondary pm-cta-otra">Raksti mums</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Kontakti" parādīsies, kad būs kontaktinformācija -->
+                        <li><a href="par-mums.html">Par mums</a></li>
+                        <li><a href="blogs.html">Blogs</a></li>
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>
