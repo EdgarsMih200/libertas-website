@@ -4,6 +4,7 @@ import { ekMarsruts, pecApmaksas } from './ekursi.js';
 import { adventeMarsruts, parbauditKodu } from './advente.js';
 import { rekiniMarsruts } from './rekini.js';
 import { blogsMarsruts } from './blogs.js';
+import { bjuMarsruts } from './bju.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -455,6 +456,8 @@ export default {
         const atb = await blogsMarsruts(request, env, { path, method, user, url });
         if (atb) return atb;
       }
+
+      if (path === '/api/bju') return await bjuMarsruts(request, env, { path, method, user });
 
       if (path.startsWith('/api/admin/')) {
         if (!user || !user.is_admin) return fail('Nav piekļuves', 403);

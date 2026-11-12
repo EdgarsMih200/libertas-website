@@ -7481,3 +7481,463 @@ html.blogs-gaiss .blogs-tema-poga[aria-pressed="true"] { background: var(--c-sur
     .pm-empa-karte { grid-template-columns: 1fr; justify-items: center; text-align: center; padding: var(--sp-6) var(--sp-5); }
     .pm-empa-karte > div { justify-items: center; }
 }
+
+/* BJU — BIEŽĀK UZDOTIE JAUTĀJUMI (bju.js): "?" poga galvenē, logs ar Empanadillo, virvju kāpnes.
+   Kāpņu krāsas = Empanadillo paletes brūnie toņi (KRASAS F/D), lai kāpnes iederas pie pikseļu figūras. */
+:root {
+    --bju-virve: #8A5020;
+    --bju-koks: #A8652A;
+}
+
+.bju-poga {
+    order: 1;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    margin-left: calc(var(--sp-3) - var(--sp-6));
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: var(--c-forest);
+    color: var(--c-surface);
+    font-family: var(--ff-display);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: var(--shadow-1);
+    transition: background-color var(--dur-1) var(--ease), transform var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.bju-poga:hover { background: var(--c-forest-2); transform: translateY(-1px); }
+.bju-poga:active { transform: translateY(0); }
+.bju-poga[aria-expanded="true"] { box-shadow: 0 0 0 3px var(--c-bg), 0 0 0 5px var(--c-forest); }
+.bju-poga-zime { transform: translateY(1px); }
+
+/* Atverot izvēlne (saites + profils) nedaudz pabīdās pa kreisi; "?" poga paliek vietā */
+.main-nav,
+.nav-wrapper .auth-box { transition: transform .35s var(--ease); }
+html.bju-atverts .main-nav,
+html.bju-atverts .nav-wrapper .auth-box { transform: translateX(-18px); }
+
+/* Kamēr logs atvērts, stūra palīgs ir logā (vai kāpj) */
+html.bju-atverts .empanadillo { visibility: hidden !important; transition: none !important; }
+
+/* Logs */
+.bju-logs {
+    position: fixed;
+    z-index: 1003;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    box-shadow: var(--shadow-3);
+    opacity: 0;
+    transform: scale(.2);
+    transition: opacity .22s var(--ease), transform .32s cubic-bezier(.2, .9, .3, 1.15);
+}
+
+.bju-logs[hidden] { display: none; }
+.bju-logs.redzams { opacity: 1; transform: none; }
+
+.bju-aste {
+    position: absolute;
+    top: -7px;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    background: var(--c-forest);
+    transform: rotate(45deg);
+    border-radius: 2px 0 0 0;
+}
+
+.bju-galva {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-3) var(--sp-3) var(--sp-3) var(--sp-4);
+    border-radius: calc(var(--r-md) - 1px) calc(var(--r-md) - 1px) 0 0;
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+}
+
+.bju-avatars {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border-radius: var(--r-pill);
+    background: var(--c-forest-2);
+    overflow: hidden;
+}
+
+.bju-avatars svg {
+    width: 48px;
+    height: 40px;
+    margin-top: 6px;
+    overflow: visible;
+    image-rendering: pixelated;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .2s var(--ease), transform .35s cubic-bezier(.2, .9, .3, 1.4);
+}
+
+.bju-logs--klat .bju-avatars svg { opacity: 1; transform: none; }
+
+.bju-galva-teksts { min-width: 0; flex: 1; }
+
+.bju-virsraksts {
+    margin: 0;
+    color: var(--c-on-forest);
+    font-size: 1.15rem;
+    line-height: 1.2;
+}
+
+.bju-apakssvirsraksts {
+    margin: 2px 0 0;
+    color: var(--c-on-forest-muted);
+    font-size: var(--fs-xs);
+}
+
+.bju-aizvert {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: none;
+    color: var(--c-on-forest);
+    cursor: pointer;
+}
+
+.bju-aizvert:hover { background: var(--c-forest-2); }
+.bju-aizvert:focus-visible { outline: 2px solid var(--c-focus-dark); outline-offset: -2px; }
+
+.bju-aizvert svg,
+.bju-sutit svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.bju-saruna {
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+    margin: 0;
+    padding: var(--sp-4);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    list-style: none;
+}
+
+.bju-zina { display: flex; flex-shrink: 0; max-width: 88%; }
+.bju-zina--empa { align-self: flex-start; }
+.bju-zina--es { align-self: flex-end; }
+
+.bju-zina-teksts {
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: var(--fs-sm);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    animation: empa-burbulis-paradas .25s var(--ease);
+}
+
+.bju-zina--empa .bju-zina-teksts {
+    border: 1px solid var(--c-line);
+    border-bottom-left-radius: 4px;
+    background: var(--c-bg);
+    color: var(--c-ink);
+}
+
+.bju-zina--es .bju-zina-teksts {
+    border-bottom-right-radius: 4px;
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+}
+
+.bju-zina-teksts b { color: var(--c-brand); }
+.bju-zina-teksts a { color: var(--c-accent-strong); font-weight: 600; text-underline-offset: 2px; }
+.bju-zina-teksts ol,
+.bju-zina-teksts ul { margin: 6px 0; padding-left: 1.3em; }
+.bju-zina-teksts li + li { margin-top: 2px; }
+
+/* kamēr viņš kāpj */
+.bju-gaida {
+    margin: auto;
+    color: var(--c-muted);
+    font-family: var(--ff-display);
+    font-style: italic;
+    font-size: var(--fs-sm);
+    text-align: center;
+}
+
+/* "raksta…" punktiņi */
+.bju-zina--raksta .bju-zina-teksts { display: flex; gap: 4px; padding: 14px 16px; }
+.bju-zina--raksta span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c-muted);
+    animation: bju-punkts 1s ease-in-out infinite;
+}
+.bju-zina--raksta span:nth-child(2) { animation-delay: .15s; }
+.bju-zina--raksta span:nth-child(3) { animation-delay: .3s; }
+
+@keyframes bju-punkts {
+    0%, 60%, 100% { opacity: .3; transform: none; }
+    30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* Jautājumu saraksts un atbilžu pogas */
+.bju-zina--saraksts { max-width: 100%; align-self: stretch; }
+.bju-jautajumi {
+    display: grid;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.bju-jautajums {
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-sm);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font: inherit;
+    font-size: var(--fs-sm);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color var(--dur-1) var(--ease), background-color var(--dur-1) var(--ease);
+}
+
+.bju-jautajums:hover { border-color: var(--c-sage-ink); background: var(--c-sage); }
+
+.bju-zina--pogas {
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 100%;
+    align-self: flex-start;
+}
+
+.bju-izvele {
+    min-height: 40px;
+    padding: 6px 16px;
+    border: 1.5px solid var(--c-forest);
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    color: var(--c-forest);
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.bju-izvele:hover { background: var(--c-sage); }
+.bju-izvele--galvena { background: var(--c-forest); color: var(--c-on-forest); }
+.bju-izvele--galvena:hover { background: var(--c-forest-2); }
+.bju-izvele:disabled { opacity: .45; cursor: default; }
+.bju-izvele--izveleta:disabled { opacity: 1; }
+
+/* Forma Edgaram */
+.bju-zina--forma { max-width: 100%; align-self: stretch; }
+.bju-zina--forma .bju-zina-teksts { width: 100%; }
+.bju-forma { margin-top: var(--sp-3); }
+.bju-forma-rinda { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.bju-forma-lauks { display: grid; gap: 4px; margin: 0 0 var(--sp-2); }
+.bju-forma-lauks label { font-size: var(--fs-xs); font-weight: 600; color: var(--c-muted); }
+.bju-forma .lauks { width: 100%; min-height: 44px; padding: 8px 12px; }
+.bju-forma textarea.lauks { min-height: 76px; resize: vertical; }
+.bju-forma-piezime { margin: 0 0 var(--sp-2); color: var(--c-muted); font-size: var(--fs-xs); }
+.bju-forma-kluda { margin: 0 0 var(--sp-2); padding: 8px 10px; border-radius: var(--r-xs); background: var(--c-error-bg); color: var(--c-error); font-size: var(--fs-xs); }
+.bju-forma-kluda[hidden] { display: none; }
+.bju-forma-pogas { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.bju-forma-sutit { min-height: 44px; padding: 0 20px; font-size: var(--fs-sm); }
+.bju-slazds { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Ievade apakšā */
+.bju-ievade {
+    display: flex;
+    gap: var(--sp-2);
+    padding: var(--sp-3);
+    border-top: 1px solid var(--c-line);
+}
+
+.bju-lauks {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1.5px solid var(--c-line-strong);
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font: inherit;
+    font-size: 1rem;
+}
+
+.bju-lauks:hover { border-color: var(--c-ink); }
+
+.bju-sutit {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--r-pill);
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+    cursor: pointer;
+}
+
+.bju-sutit:hover { background: var(--c-forest-2); }
+
+/* Virvju kāpnes: divas virves + koka pakāpieni; nolaižas (clip-path) un izšūpojas (rotate ap augšu) */
+.bju-kapnes {
+    position: fixed;
+    z-index: 1001;
+    width: 22px;
+    pointer-events: none;
+    visibility: hidden;
+    transform-origin: 50% 0;
+    transform: rotate(var(--bju-lenkis, 0deg));
+    background:
+        linear-gradient(var(--bju-virve), var(--bju-virve)) left top / 3px 100% no-repeat,
+        linear-gradient(var(--bju-virve), var(--bju-virve)) right top / 3px 100% no-repeat,
+        repeating-linear-gradient(to bottom, transparent 0 10px, var(--bju-koks) 10px 14px, transparent 14px 16px);
+    clip-path: inset(0 0 100% 0);
+}
+
+.bju-kapnes.nolaistas {
+    visibility: visible;
+    clip-path: inset(0 0 0 0);
+    animation: bju-nolaizas 1s cubic-bezier(.3, .7, .4, 1) both, bju-supojas 1.5s ease-out both;
+}
+
+.bju-kapnes.sarullejas {
+    visibility: visible;
+    animation: bju-sarullejas .45s ease-in forwards;
+}
+
+@keyframes bju-nolaizas {
+    from { clip-path: inset(0 0 100% 0); }
+    to { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes bju-sarullejas {
+    from { clip-path: inset(0 0 0 0); }
+    to { clip-path: inset(0 0 100% 0); }
+}
+
+@keyframes bju-supojas {
+    0% { transform: rotate(calc(var(--bju-lenkis, 0deg) + 26deg)); }
+    30% { transform: rotate(calc(var(--bju-lenkis, 0deg) - 14deg)); }
+    55% { transform: rotate(calc(var(--bju-lenkis, 0deg) + 7deg)); }
+    75% { transform: rotate(calc(var(--bju-lenkis, 0deg) - 3deg)); }
+    100% { transform: rotate(var(--bju-lenkis, 0deg)); }
+}
+
+/* Kāpējs = Empanadillo tieši stūra palīga vietā */
+.bju-kapejs.empa {
+    position: fixed;
+    right: 20px;
+    bottom: 16px;
+    z-index: 1002;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.bju-kapejs.redzams { visibility: visible; }
+.bju-kapeja-figura { position: relative; }
+.bju-k { display: none; }
+.bju-k svg { display: block; width: 96px; height: 81px; overflow: visible; image-rendering: pixelated; }
+
+.bju-kapejs[data-poza="prieksa"] .bju-k--prieksa,
+.bju-kapejs[data-poza="mugura"] .bju-k--mugura,
+.bju-kapejs[data-poza="kapj"] .bju-k--kapj,
+.bju-kapejs[data-poza="lec"] .bju-k--lec { display: block; }
+
+/* pagrieziens: saplok un atveras (kadru maiņa pa vidu, bju.js) */
+.bju-kapejs.griezas .bju-k { animation: bju-griezas .28s steps(4) both; }
+@keyframes bju-griezas {
+    0%, 100% { transform: scaleX(1); }
+    50% { transform: scaleX(.1); }
+}
+
+/* pikseļu dibentiņš pakustina */
+.bju-kapejs.luncina .bju-k--mugura svg { animation: bju-luncina .3s steps(1) 3; }
+@keyframes bju-luncina {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(3px); }
+}
+
+/* kāpšanas kadri A ↔ B */
+.bju-k--kapj .empa-kadrs-1 { visibility: hidden; }
+.bju-kapejs[data-poza="kapj"] .bju-k--kapj .empa-kadrs-0 { animation: empa-maj-a .36s steps(1) infinite; }
+.bju-kapejs[data-poza="kapj"] .bju-k--kapj .empa-kadrs-1 { animation: empa-maj-b .36s steps(1) infinite; }
+
+.bju-kapejs.piezemejas .bju-k { animation: bju-piezemejas .26s ease-out; transform-origin: 50% 100%; }
+@keyframes bju-piezemejas {
+    0% { transform: scale(1.12, .8); }
+    60% { transform: scale(.96, 1.05); }
+    100% { transform: none; }
+}
+
+/* "Un momento…" — blakus viņam pa kreisi (virs viņa to aizsegtu logs); aste uz labo pusi */
+.bju-kapeja-burbulis.empa-burbulis {
+    right: calc(100% + 4px);
+    bottom: 6px;
+    width: 250px;
+    padding-right: 14px;
+}
+
+.bju-kapeja-burbulis.empa-burbulis::after {
+    right: -7px;
+    bottom: 22px;
+    transform: rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+    .bju-poga { order: 3; margin-left: 0; }
+    .izvelnes-poga { order: 4; }
+    .nav-wrapper:not(:has(.auth-box)) .bju-poga { margin-left: auto; }
+    html.bju-atverts .main-nav { transform: none; }
+    html.bju-atverts .nav-wrapper .auth-box { transform: translateX(-8px); }
+    .bju-kapejs.empa { right: 10px; bottom: 10px; }
+    .bju-k svg { width: 64px; height: 54px; }
+    .bju-kapeja-burbulis.empa-burbulis { width: 210px; }
+    .bju-forma-rinda { grid-template-columns: 1fr; gap: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bju-logs,
+    .bju-avatars svg,
+    .main-nav,
+    .nav-wrapper .auth-box { transition: none; }
+    .bju-zina--raksta span { animation: none; }
+}
+
+@media print {
+    .bju-poga, .bju-logs, .bju-kapnes, .bju-kapejs { display: none !important; }
+}

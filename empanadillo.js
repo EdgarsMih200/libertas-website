@@ -10,6 +10,10 @@
 (function (root) {
     'use strict';
 
+    // bju.js atrodas blakus šim failam (404 lapā ceļi ir no saknes)
+    var bjuSrc = document.currentScript && document.currentScript.src
+        ? document.currentScript.src.replace(/empanadillo\.js(\?.*)?$/, 'bju.js') : '';
+
     var KRASAS = {
         O: '#4A2810', F: '#8A5020', D: '#A8652A', S: '#B8742E', M: '#D9963F', L: '#F0BE62', H: '#FBE3A0',
         W: '#FFFDF8', K: '#2A1A10', P: '#E8796B', R: '#6B1D1D', A: '#6E3F27', V: '#A9BFA8',
@@ -155,8 +159,38 @@
         sveicina: [[M_SOMA, M_A, M_B, M_KERM, M_SIKSNA, M_ACIS]]
     };
 
-    // Adventes kalendāra balvas: ziemeļbrieža ragi (12. durvis) un zelta Santa cepure (visas 24 durvis)
+    // ---- Mazais no mugurpuses (BJU: kāpj pa virvju kāpnēm) — bez sejas, soma uz muguras, pikseļu dibentiņš ----
     function spogulis(rindas) { return rindas.map(function (r) { return r.split('').reverse().join(''); }); }
+    var MUGURA_KERMENIS = spogulis(MAZAIS_KERMENIS.slice(0, 16)).map(function (r) {
+        return r.replace(/[PR]/g, 'M').replace(/S/g, 'L');
+    });
+    var MUGURAS_SOMA = ['.OOOOOOO.', 'OVVVVVVVO', 'OVAAAAAVO', 'OAAAAAAAO', 'OAALLLAAO', 'OAAAAAAAO', '.OOOOOOO.'];
+    var DIBENS = [
+        '...OOO.OOO...',
+        '..OLHLOLHLO..',
+        '.OLLLLOLLLLO.',
+        '.OMLLLOLLLMO.',
+        '.OMMLMOMLMMO.',
+        '..OMMO.OMMO..',
+        '...OO...OO...'
+    ];
+    var KAJA_LEJA = ['OFO', 'OFO', 'OOO'];
+    var KAJA_AUGSA = ['OFO', 'OOO'];
+    var ROKA_AUGSA = ['OOO', 'OLO', 'OMO', 'OMO', 'OMO', 'OMO', 'OMO'];
+    var ROKA_LEJA = ['.O.', 'OMO', 'OMO', 'OLO', '.O.'];
+    var MG_KERM = [MUGURA_KERMENIS, 0, 0];
+    var MG_SOMA = [MUGURAS_SOMA, 10, 2, 'empa-soma'];
+    var MG_DIBENS = [DIBENS, 8, 10, 'empa-dibens'];
+    MAZAIS.mugura = [[[KAJA_LEJA, 7, 16], [KAJA_LEJA, 20, 16], [ROKA_LEJA, 1, 9], [ROKA_LEJA, 26, 9], MG_KERM, MG_SOMA, MG_DIBENS]];
+    MAZAIS.kapj = [
+        [[KAJA_AUGSA, 7, 15], [KAJA_LEJA, 20, 16], [ROKA_AUGSA, 4, -5], [ROKA_AUGSA, 23, -2], MG_KERM, MG_SOMA, MG_DIBENS],
+        [[KAJA_LEJA, 7, 16], [KAJA_AUGSA, 20, 15], [ROKA_AUGSA, 4, -2], [ROKA_AUGSA, 23, -5], MG_KERM, MG_SOMA, MG_DIBENS]
+    ];
+    // lec: abas rokas augšā (no priekšpuses)
+    MAZAIS.lec = [[M_SOMA, [spogulis(MAZA_ROKA_A), 1, 0, 'empa-roka'], [MAZA_ROKA_A, 24, 0, 'empa-roka'], M_KERM, M_SIKSNA, M_ACIS]];
+    var MUGURAS_POZAS = { mugura: 1, kapj: 1 };
+
+    // Adventes kalendāra balvas: ziemeļbrieža ragi (12. durvis) un zelta Santa cepure (visas 24 durvis)
     function blakus(a, atstarpe, b) { return a.map(function (r, i) { return r + atstarpe + b[i]; }); }
     var RAGS = ['O...O..', 'FO.OF..', '.FOF..O', '.OFO.OF', '..OFOF.', '..OFFO.', '...OFO.', '...OFO.'];
     var RAGI = blakus(RAGS, '......', spogulis(RAGS));
@@ -198,6 +232,10 @@
         o = o || {};
         var kadri = (o.mazais ? MAZAIS : POZAS)[poza] || POZAS.miera;
         var cepure = o.hat && (o.mazais ? MAZAS_CEPURES : CEPURES)[o.hat];
+        // no mugurpuses cepure ir spoguļattēlā
+        if (cepure && o.mazais && MUGURAS_POZAS[poza]) {
+            cepure = [spogulis(cepure[0]), 30 - cepure[1] - cepure[0][0].length, cepure[2], cepure[3]];
+        }
         function kadrs(slani) {
             slani = slani.slice();
             if (cepure) slani.push(cepure);
@@ -436,4 +474,17 @@
         if (hero) maj(hero); // ceļotājs pamāj, ierodoties (vicina -> miera)
         atjaunot();
     }, mazaKustiba ? 0 : 800);
+
+    // BJU logs (bju.js) izmanto to pašu cepuri un aizver burbuļus; stūra palīgs pēc atgriešanās pamāj
+    root.EMPANADILLO.cepure = cepure;
+    root.EMPANADILLO.kluset = function () { kluset(sturis); kluset(hero); };
+    root.EMPANADILLO.pamaj = function () { maj(sturis); };
+
+    // Biežāk uzdotie jautājumi: poga galvenē + logs ar Empanadillo (ielādē tikai lapās ar galveni)
+    if (document.querySelector('.nav-wrapper') && bjuSrc) {
+        var s = document.createElement('script');
+        s.src = bjuSrc;
+        s.defer = true;
+        document.body.appendChild(s);
+    }
 })(window);
