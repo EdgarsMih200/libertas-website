@@ -17,7 +17,8 @@
     var KRASAS = {
         O: '#4A2810', F: '#8A5020', D: '#A8652A', S: '#B8742E', M: '#D9963F', L: '#F0BE62', H: '#FBE3A0',
         W: '#FFFDF8', K: '#2A1A10', P: '#E8796B', R: '#6B1D1D', A: '#6E3F27', V: '#A9BFA8',
-        Z: '#A9C9DA', X: '#B23A2A', B: '#7E2620', G: '#D9CFC0', Y: '#F2C46A', N: '#C98F3A'
+        Z: '#A9C9DA', X: '#B23A2A', B: '#7E2620', G: '#D9CFC0', Y: '#F2C46A', N: '#C98F3A',
+        Q: '#F3B49C', U: '#E39480', I: '#FCE1D4' // Q/U/I = sārtais dibentiņš (BJU)
     };
 
     // ---- Lielais ķermenis (34×25) ----
@@ -165,14 +166,15 @@
         return r.replace(/[PR]/g, 'M').replace(/S/g, 'L');
     });
     var MUGURAS_SOMA = ['.OOOOOOO.', 'OVVVVVVVO', 'OVAAAAAVO', 'OAAAAAAAO', 'OAALLLAAO', 'OAAAAAAAO', '.OOOOOOO.'];
+    // apaļš, sārts: divi pusloki ar spīduma punktu (I) un ēnu apakšā (U)
     var DIBENS = [
-        '...OOO.OOO...',
-        '..OLHLOLHLO..',
-        '.OLLLLOLLLLO.',
-        '.OMLLLOLLLMO.',
-        '.OMMLMOMLMMO.',
-        '..OMMO.OMMO..',
-        '...OO...OO...'
+        '...OOOO.OOOO...',
+        '..OQIQQOQQIQO..',
+        '.OQIQQQOQQQIQO.',
+        '.OQQQQQOQQQQQO.',
+        '.OUQQQQOQQQQUO.',
+        '..OUUQQOQQUUO..',
+        '...OOOO.OOOO...'
     ];
     var KAJA_LEJA = ['OFO', 'OFO', 'OOO'];
     var KAJA_AUGSA = ['OFO', 'OOO'];
@@ -180,7 +182,7 @@
     var ROKA_LEJA = ['.O.', 'OMO', 'OMO', 'OLO', '.O.'];
     var MG_KERM = [MUGURA_KERMENIS, 0, 0];
     var MG_SOMA = [MUGURAS_SOMA, 10, 2, 'empa-soma'];
-    var MG_DIBENS = [DIBENS, 8, 10, 'empa-dibens'];
+    var MG_DIBENS = [DIBENS, 7, 10, 'empa-dibens'];
     MAZAIS.mugura = [[[KAJA_LEJA, 7, 16], [KAJA_LEJA, 20, 16], [ROKA_LEJA, 1, 9], [ROKA_LEJA, 26, 9], MG_KERM, MG_SOMA, MG_DIBENS]];
     MAZAIS.kapj = [
         [[KAJA_AUGSA, 7, 15], [KAJA_LEJA, 20, 16], [ROKA_AUGSA, 4, -5], [ROKA_AUGSA, 23, -2], MG_KERM, MG_SOMA, MG_DIBENS],
