@@ -30,17 +30,58 @@
         return u;
     }
 
+    // IERAKSTĪTĀ BALSS: body[data-balss="assets/…/"] + balss.json { "teksts": "NN.mp3" }. Ja teksts ir kartē, atskaņo ierakstu,
+    // citādi pārlūka sintēzi. (Daudzos datoros nav, piem., zviedru balss — tad pārlūks lasītu angliski)
+    var balssMape = document.body.getAttribute('data-balss');
+    var IERAKSTI = {};
+    if (balssMape) {
+        fetch(balssMape + 'balss.json').then(function (r) { return r.ok ? r.json() : {}; })
+            .then(function (j) { IERAKSTI = j || {}; }).catch(function () {});
+    }
+    var atskanotajs = null;
+
+    function apturet() {
+        if (atskanotajs) { atskanotajs.onended = null; atskanotajs.onerror = null; atskanotajs.pause(); atskanotajs = null; }
+        if (runaIr) speechSynthesis.cancel();
+        if (dialogaPoga) dialogaPoga.dataset.karta = ''; // aptur arī dialoga virkni
+    }
+
+    // Izrunā d = { teksts, valoda }; o.sakums / o.beigas — notikumi (dialogam), o.pitch — sintēzei
+    function izrunat(d, o) {
+        o = o || {};
+        var fails = IERAKSTI[d.teksts];
+        function sintezet() {
+            if (!runaIr) { if (o.beigas) o.beigas(); return; }
+            var u = izteikums(d);
+            if (o.pitch) u.pitch = o.pitch;
+            u.onstart = o.sakums || null;
+            u.onend = o.beigas || null;
+            speechSynthesis.speak(u);
+        }
+        if (fails) {
+            var a = new Audio(balssMape + fails);
+            atskanotajs = a;
+            a.onplay = o.sakums || null;
+            a.onended = function () { if (atskanotajs === a) atskanotajs = null; if (o.beigas) o.beigas(); };
+            a.onerror = function () { if (atskanotajs === a) { atskanotajs = null; sintezet(); } };
+            a.play().catch(function () { if (atskanotajs === a) { atskanotajs = null; sintezet(); } });
+        } else {
+            sintezet();
+        }
+    }
+
     // Citi skripti (materiali-zviedru.js) var likt izrunāt: window.MAT_RUNA('God jul!', 'sv')
     window.MAT_RUNA = function (teksts, valoda) {
-        if (!runaIr) return;
-        speechSynthesis.cancel();
-        speechSynthesis.speak(izteikums({ teksts: teksts, valoda: valoda }));
+        apturet();
+        izrunat({ teksts: teksts, valoda: valoda });
     };
 
     if (runaIr) {
         izveletiesBalsis();
         speechSynthesis.addEventListener('voiceschanged', izveletiesBalsis);
+    }
 
+    if (runaIr || balssMape) {
         document.querySelectorAll('[data-es], [data-en], [data-sv]').forEach(function (el) {
             var d = runasDati(el);
             var poga = document.createElement('button');
@@ -51,8 +92,8 @@
             poga.title = 'Klausīties izrunu';
             poga.addEventListener('click', function (e) {
                 e.stopPropagation();
-                speechSynthesis.cancel();
-                speechSynthesis.speak(izteikums(d));
+                apturet();
+                izrunat(d);
             });
             var vieta = el.querySelector('[data-runa-vieta]');
             if (vieta) vieta.appendChild(poga);
@@ -68,7 +109,7 @@
         });
     });
 
-    // DIALOGS: tulkojums un visa dialoga atskaņošana
+    // DIALOGS: tulkojums un visa dialoga atskaņošana (replikas pēc kārtas; ieraksti vai sintēze)
     var cats = document.querySelector('.cats');
     var tulk = document.getElementById('radit-tulkojumu');
     if (cats && tulk) {
@@ -77,22 +118,25 @@
         });
     }
     var dialogaPoga = document.getElementById('klausities-dialogu');
-    if (cats && dialogaPoga && runaIr) {
+    if (cats && dialogaPoga && (runaIr || balssMape)) {
         dialogaPoga.hidden = false;
         dialogaPoga.addEventListener('click', function () {
-            speechSynthesis.cancel();
-            var replikas = cats.querySelectorAll('.replika');
-            replikas.forEach(function (r, i) {
-                var u = izteikums(runasDati(r));
-                // Pārmaiņus divas balss augstuma variācijas, lai atšķirtu runātājus
-                u.pitch = r.classList.contains('replika--p') ? 0.8 : 1.15;
-                u.onstart = function () {
-                    replikas.forEach(function (x) { x.classList.remove('runa'); });
-                    r.classList.add('runa');
-                };
-                if (i === replikas.length - 1) u.onend = function () { r.classList.remove('runa'); };
-                speechSynthesis.speak(u);
-            });
+            apturet();
+            var replikas = [].slice.call(cats.querySelectorAll('.replika'));
+            var karta = Date.now();
+            dialogaPoga.dataset.karta = karta;
+            function nakama(i) {
+                replikas.forEach(function (x) { x.classList.remove('runa'); });
+                if (i >= replikas.length || dialogaPoga.dataset.karta !== String(karta)) return;
+                var r = replikas[i];
+                izrunat(runasDati(r), {
+                    // sintēzē divi balss augstumi, lai atšķirtu runātājus (ierakstos jau divas balsis)
+                    pitch: r.classList.contains('replika--p') ? 0.8 : 1.15,
+                    sakums: function () { r.classList.add('runa'); },
+                    beigas: function () { setTimeout(function () { nakama(i + 1); }, 250); }
+                });
+            }
+            nakama(0);
         });
     }
 

@@ -4539,6 +4539,9 @@ body.mat-norvegu .empanadillo { bottom: 84px; }
 /* ZVIEDRU MATERIĀLS (materiali-zviedru-ziemassvetki.html + materiali-zviedru.js; uzdevumi 4–6 izmanto nor-* klases) */
 .mat-zviedru .likumu-rezgis { grid-template-columns: repeat(2, 1fr); }
 
+/* vārdu kartīšu ilustrācijas (assets/materiali/zviedru-ziemassvetki/vardi.svg) emoji vietā */
+.vards-attels { display: block; width: 56px; height: 56px; flex-shrink: 0; }
+
 .laika-josla--ikonas .laika-emoji svg {
     width: 24px;
     height: 24px;
