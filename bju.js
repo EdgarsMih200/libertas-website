@@ -107,6 +107,8 @@
           a: '¡De nada! Ja vēl kas interesē — jautā droši.' }
     ];
 
+    var POPULARI = ['kursi', 'cena', 'sakums', 'pieteikties'];
+
     var T = {
         sveiciens: '¡Ya estoy! Uzkāpu. Izvēlies jautājumu no saraksta vai uzraksti savu.',
         momento: 'Un momento, por favor, es tūliņ atbildēšu uz visiem taviem jautājumiem',
@@ -291,15 +293,30 @@
             var li = el('li', 'bju-zina bju-zina--saraksts');
             var ul = el('ul', 'bju-jautajumi');
             ul.setAttribute('aria-label', 'Biežāk uzdotie jautājumi');
-            JAUTAJUMI.forEach(function (q) {
+            function pievienot(q) {
                 var i = el('li');
                 var b = el('button', 'bju-jautajums', q.j);
                 b.type = 'button';
                 b.addEventListener('click', function () { jautat(q.j, q); });
                 i.appendChild(b);
                 ul.appendChild(i);
-            });
+                return b;
+            }
+            // sākumā tikai populārākie (mazāks logs, garākas kāpnes); pārējie — ar pogu
+            var galvenie = JAUTAJUMI.filter(function (q) { return POPULARI.indexOf(q.id) >= 0; });
+            var citi = JAUTAJUMI.filter(function (q) { return POPULARI.indexOf(q.id) < 0; });
+            galvenie.forEach(pievienot);
             li.appendChild(ul);
+            var vel = el('button', 'bju-izvele bju-vel', 'Rādīt vēl ' + citi.length + ' jautājumus');
+            vel.type = 'button';
+            vel.addEventListener('click', function () {
+                vel.remove();
+                var pirmais = null;
+                citi.forEach(function (q) { var b = pievienot(q); if (!pirmais) pirmais = b; });
+                if (pirmais) pirmais.focus({ preventScroll: true });
+                ritinat(li);
+            });
+            li.appendChild(vel);
             saruna.appendChild(li);
             ritinat();
         });
@@ -436,7 +453,7 @@
         var kreisa = labaMala - platums;
         var brivs = vh - augsa - (kr.height + 90);
         var kompakts = brivs < KOMPAKTS_MIN;
-        var augstums = kompakts ? vh - augsa - 10 : Math.min(620, brivs);
+        var augstums = kompakts ? vh - augsa - 10 : Math.min(468, brivs);
 
         logs.style.left = kreisa + 'px';
         logs.style.top = augsa + 'px';
