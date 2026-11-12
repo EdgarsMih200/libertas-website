@@ -112,8 +112,9 @@
     var T = {
         sveiciens: '¡Ya estoy! Uzkāpu. Izvēlies jautājumu no saraksta vai uzraksti savu.',
         momento: 'Un momento, por favor, es tūliņ atbildēšu uz visiem taviem jautājumiem',
-        espera: 'Espera, es tūliņ pierakstīšu un nodošu info savam priekšniekam Edgaram. ' +
-                'Vai Tev nav nekas pret, ka es nosūtīšu viņam e-pastu ar tavu kontaktinformāciju?',
+        espera: 'Hmm… uz šo jautājumu es diemžēl nezinu atbildi. Espera — es to pierakstīšu un pajautāšu ' +
+                'savam priekšniekam Edgaram. Vai Tev nav nekas pret, ka es nosūtīšu viņam e-pastu ar tavu ' +
+                'kontaktinformāciju, lai viņš var Tev atbildēt?',
         velviens: 'Vai ir vēl kāds jautājums uz kuru varu atbildēt?'
     };
 
