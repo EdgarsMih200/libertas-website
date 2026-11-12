@@ -136,7 +136,49 @@ async function vertetMeginajumu(env, userId, body, veids, banka) {
   const rezultats = Math.round((summa / (jaut.length || 1)) * 100);
   await env.DB.prepare('UPDATE ek_meginajumi SET atbildes = ?, rezultats = ?, iesniegts_at = ? WHERE id = ?')
     .bind(JSON.stringify(atb).slice(0, 100000), rezultats, nowIso(), m.id).run();
-  return { m, rezultats, vertejums, pareizi: vertejums.filter((v) => v.punkti === 1).length, kopa: jaut.length };
+  return { m, atb, rezultats, vertejums, pareizi: vertejums.filter((v) => v.punkti === 1).length, kopa: jaut.length };
+}
+
+// ---------- eksāmena pārskats (atbildes tikai pēc nokārtošanas) ----------
+// Studenta atbilde teksta veidā
+function manaAtbilde(u, a) {
+  if (a == null || a === '' || (Array.isArray(a) && !a.length)) return '—';
+  switch (u.tips) {
+    case 'izvele': return u.varianti[a] ?? '—';
+    case 'klausies': return u.varianti ? (u.varianti[a] ?? '—') : String(a);
+    case 'vairakas': return Array.isArray(a) ? a.map((i) => u.varianti[i]).join(', ') : '—';
+    case 'ievadi': return String(a);
+    case 'tuksumi': return Array.isArray(a) ? u.atbildes.map((_, i) => a[i] || '—').join(' · ') : '—';
+    case 'pari': return Array.isArray(a) ? u.pari.map((p, i) => `${p[0]} — ${a[i] || '—'}`).join('; ') : '—';
+    case 'seciba': return Array.isArray(a) ? a.join(' ') : '—';
+    case 'kategorijas': {
+      if (typeof a !== 'object') return '—';
+      const g = {};
+      for (const [x, k] of Object.entries(a)) (g[k] ||= []).push(x);
+      return Object.entries(g).map(([k, v]) => `${k}: ${v.join(', ')}`).join('; ') || '—';
+    }
+    default: return '—';
+  }
+}
+const eksamenaParskats = (vertejums, atb) => vertejums.filter((x) => x.u).map(({ id, u, punkti }) => ({
+  id, tips: u.tips, prasme: u.prasme, nodarbibas: u.nodarbibas || [], teksts: u.teksts, jautajums: u.jautajums || null,
+  fragments: u.fragments || null, runa: u.runa || null, mana: manaAtbilde(u, atb[id]), pareiza: pareizaAtbilde(u),
+  skaidrojums: u.skaidrojums || '', ok: punkti === 1,
+}));
+// Kļūdas pa nodarbībām un rezultāts pa prasmēm (bez atbildēm — der arī nenokārtotam)
+function eksamenaAnalize(vertejums, plans) {
+  const nod = {}, pr = {};
+  for (const x of vertejums) {
+    if (!x.u) continue;
+    for (const nr of x.u.nodarbibas || []) { nod[nr] ||= { nr, kopa: 0, kludas: 0 }; nod[nr].kopa++; if (x.punkti < 1) nod[nr].kludas++; }
+    pr[x.u.prasme] ||= { id: x.u.prasme, kopa: 0, pareizi: 0 }; pr[x.u.prasme].kopa++; pr[x.u.prasme].pareizi += x.punkti;
+  }
+  return {
+    nodarbibas: Object.values(nod).filter((n) => n.kludas).map((n) => ({ ...n, nosaukums: plans.nodarbibas.find((m) => m.nr === n.nr)?.nosaukums || '' }))
+      .sort((a, b) => b.kludas - a.kludas || a.nr - b.nr),
+    prasmes: Object.values(pr).map((p) => ({ id: p.id, nosaukums: plans.prasmes?.find((q) => q.id === p.id)?.nosaukums || p.id, kopa: p.kopa, procenti: Math.round((p.pareizi / p.kopa) * 100) }))
+      .sort((a, b) => a.procenti - b.procenti),
+  };
 }
 
 // ---------- eksāmena statuss ----------
@@ -317,7 +359,27 @@ async function eksamensIesniegt(request, env, user, kurss) {
   const course = await getKurss(env, kurss);
   const prog = await progresaKarte(env, user.id, kurss);
   return json({ rezultats: v.rezultats, pareizi: v.pareizi, kopa: v.kopa, nokartots, slieksnis, vajas_vietas: vajas,
+    analize: eksamenaAnalize(v.vertejums, plans),
+    parskats: nokartots ? eksamenaParskats(v.vertejums, v.atb) : null,
     statuss: await eksamenaStatuss(env, user, kurss, course, pk.enr, plans, prog, pk.admin) });
+}
+
+// Nokārtota eksāmena atbilžu pārskats vēlāk (labākais nokārtotais mēģinājums)
+async function eksamenaParskatsSkats(env, user, kurss) {
+  const pk = await piekluve(env, user, kurss);
+  if (!pk.ok) return fail('Nav piekļuves', 403);
+  const plans = await saturs(env, kurss, 'plans');
+  const eks = await saturs(env, kurss, 'eksamens');
+  if (!plans || !eks) return fail('Kurss nav atrasts', 404);
+  const slieksnis = plans.eksamens?.slieksnis || SLIEKSNIS;
+  const m = await env.DB.prepare(
+    "SELECT * FROM ek_meginajumi WHERE user_id = ? AND kurss = ? AND veids = 'eksamens' AND rezultats >= ? ORDER BY rezultats DESC, id DESC LIMIT 1"
+  ).bind(user.id, kurss, slieksnis).first();
+  if (!m) return fail('Atbildes var skatīt pēc noslēguma eksāmena nokārtošanas', 403);
+  const atb = JSON.parse(m.atbildes || '{}');
+  const pecId = new Map(eks.banka.map((u) => [u.id, u]));
+  const vert = JSON.parse(m.jautajumi).map((j) => { const u = pecId.get(j.id); return { id: j.id, u, punkti: u ? vertet(u, atb[j.id]) : 0 }; });
+  return json({ rezultats: m.rezultats, datums: m.iesniegts_at, slieksnis, parskats: eksamenaParskats(vert, atb) });
 }
 
 const KODA_BURTI = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -463,6 +525,7 @@ export async function ekMarsruts(request, env, { path, method, user, origin, url
   if ((r = rest.match(/^tests\/(\d+)\/iesniegt$/)) && method === 'POST') return testsIesniegt(request, env, user, kurss, Number(r[1]));
   if (rest === 'eksamens' && method === 'POST') return eksamensSakt(env, user, kurss);
   if (rest === 'eksamens/iesniegt' && method === 'POST') return eksamensIesniegt(request, env, user, kurss);
+  if (rest === 'eksamens/parskats' && method === 'GET') return eksamenaParskatsSkats(env, user, kurss);
   if (rest === 'sertifikats' && method === 'POST') return izsniegtSertifikatu(request, env, user, kurss);
   if (rest === 'pieprasijums' && method === 'POST') return pieprasijums(request, env, user, kurss, origin);
   return fail('Nav atrasts', 404);

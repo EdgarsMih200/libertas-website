@@ -593,7 +593,7 @@
         const h = el('h2', '', P.kurss.nosaukums); h.style.margin = '10px 0 6px'; k.appendChild(h);
         if (E.nokartots) {
             k.appendChild(el('p', '', 'Eksāmens nokārtots ar ' + E.labakais + ' %. Apsveicam!'));
-            const pg = el('div', 'ek-pogas'); pg.appendChild(saite(P.sertifikats ? 'Mans sertifikāts' : 'Saņemt sertifikātu', '#sertifikats', 'btn-cta')); pg.appendChild(saite('Ko darīt tālāk', '#talak', 'btn-secondary')); k.appendChild(pg);
+            const pg = el('div', 'ek-pogas'); pg.appendChild(saite(P.sertifikats ? 'Mans sertifikāts' : 'Saņemt sertifikātu', '#sertifikats', 'btn-cta')); pg.appendChild(saite('Skatīt manas atbildes', '#eksamens/parskats', 'btn-secondary')); pg.appendChild(saite('Ko darīt tālāk', '#talak', 'btn-secondary')); k.appendChild(pg);
             w.appendChild(k); return;
         }
         if (!E.atverts) { k.appendChild(el('p', '', 'Eksāmens atveras, kad nokārtoti visu nodarbību pašpārbaudes testi.')); k.appendChild(saite('Uz kursa sākumu', '#', 'btn-cta')); w.appendChild(k); return; }
@@ -631,6 +631,46 @@
         else k.appendChild(poga(E.iesakts ? 'Turpināt iesākto mēģinājumu' : 'Sākt ' + (E.izmantoti + 1) + '. mēģinājumu', 'btn-cta', () => testaSkats('eksamens')));
         w.appendChild(k);
     }
+    // Eksāmena atbilžu saraksts (tikai pēc nokārtošanas): tava atbilde, pareizā, skaidrojums; filtrs «tikai kļūdas»
+    function eksamenaAtbildes(saraksts) {
+        const k = karte(); k.style.marginTop = 'var(--sp-5)';
+        const kl = saraksts.filter((a) => !a.ok).length;
+        k.appendChild(el('h2', '', 'Tavas atbildes'));
+        k.appendChild(el('p', '', kl ? kl + (kl === 1 ? ' kļūda' : ' kļūdas') + ' no ' + saraksts.length + ' uzdevumiem. Zem katras kļūdas — pareizā atbilde un skaidrojums.' : 'Visas atbildes pareizas!'));
+        const ul = el('ul', 'ek-tests-saraksts');
+        const zim = el('label'); zim.style.cssText = 'display:flex;gap:8px;align-items:center;font-size:var(--fs-sm)';
+        const cb = el('input'); cb.type = 'checkbox'; zim.appendChild(cb); zim.appendChild(document.createTextNode('Rādīt tikai kļūdas'));
+        if (kl) k.appendChild(zim);
+        saraksts.forEach((a, i) => {
+            const li = el('li', a.ok ? 'ok' : 'nav'); li.dataset.ok = a.ok ? '1' : '';
+            li.appendChild(el('b', '', (i + 1) + '. ' + (a.teksts || '') + (a.jautajums ? ' ' + a.jautajums : '')));
+            if (a.fragments) { const f = el('div', '', a.fragments); f.style.cssText = 'white-space:pre-line;color:var(--c-muted);margin:4px 0'; li.appendChild(f); }
+            if (a.runa) { const b = poga('', 'btn-secondary ek-poga-maza'); b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Atskaņot')); b.style.margin = '6px 0'; b.addEventListener('click', () => runat(a.runa)); li.appendChild(b); }
+            li.appendChild(el('div', '', 'Tava atbilde: ' + a.mana));
+            if (!a.ok) li.appendChild(el('div', '', 'Pareizi: ' + a.pareiza));
+            if (a.skaidrojums) li.appendChild(el('small', '', a.skaidrojums));
+            ul.appendChild(li);
+        });
+        cb.addEventListener('change', () => ul.querySelectorAll('li').forEach((li) => { li.hidden = cb.checked && li.dataset.ok === '1'; }));
+        k.appendChild(ul);
+        return k;
+    }
+    // Nenokārtotam: kļūdas pa visām nodarbībām un rezultāts pa prasmēm (bez atbildēm)
+    function eksamenaAnalize(t, a) {
+        if (a.nodarbibas.length) {
+            t.appendChild(el('p', '', 'Kļūdas pa nodarbībām — atkārto tās, kur kļūdu vairāk:'));
+            const ul = el('ul', 'ek-vajagatkartot');
+            a.nodarbibas.forEach((n) => { const li = el('li'); li.appendChild(document.createTextNode('→ ')); li.appendChild(saite(n.nr + '. ' + (n.nosaukums || 'nodarbība') + ' — ' + n.kludas + ' no ' + n.kopa, '#n/' + n.nr, '')); ul.appendChild(li); });
+            t.appendChild(ul);
+        }
+        if (a.prasmes.length) {
+            t.appendChild(el('p', '', 'Rezultāts pa prasmēm:'));
+            const ul = el('ul', 'ek-vajagatkartot');
+            a.prasmes.forEach((p) => ul.appendChild(el('li', '', p.nosaukums + ': ' + p.procenti + ' %')));
+            t.appendChild(ul);
+        }
+        const p = el('p', '', 'Pareizās atbildes un skaidrojumus redzēsi pēc eksāmena nokārtošanas.'); p.style.cssText = 'color:var(--c-muted);font-size:var(--fs-sm)'; t.appendChild(p);
+    }
     function eksamenaRezultats(r) {
         notirit();
         const w = el('div', 'ek-tests'); sakne.appendChild(w);
@@ -639,11 +679,27 @@
         const pog = el('div', 'ek-pogas');
         if (r.nokartots) pog.appendChild(saite('Saņemt sertifikātu', '#sertifikats', 'btn-cta'));
         else {
-            if (r.vajas_vietas.length) { const ul = el('ul', 'ek-vajagatkartot'); r.vajas_vietas.forEach((v) => { const li = el('li'); li.appendChild(document.createTextNode('→ ')); li.appendChild(saite(v.nr + '. ' + (v.nosaukums || 'nodarbība') + ' (' + v.kludas + ')', '#n/' + v.nr, '')); ul.appendChild(li); }); t.appendChild(el('p', '', 'Vājākās vietas:')); t.appendChild(ul); }
+            if (r.analize) eksamenaAnalize(t, r.analize);
+            else if (r.vajas_vietas.length) { const ul = el('ul', 'ek-vajagatkartot'); r.vajas_vietas.forEach((v) => { const li = el('li'); li.appendChild(document.createTextNode('→ ')); li.appendChild(saite(v.nr + '. ' + (v.nosaukums || 'nodarbība') + ' (' + v.kludas + ')', '#n/' + v.nr, '')); ul.appendChild(li); }); t.appendChild(el('p', '', 'Vājākās vietas:')); t.appendChild(ul); }
             t.appendChild(meginajumuRinda(r.statuss));
             pog.appendChild(saite('Uz eksāmena lapu', '#eksamens', 'btn-cta'));
         }
         t.appendChild(pog); w.appendChild(k);
+        if (r.nokartots && r.parskats) w.appendChild(eksamenaAtbildes(r.parskats));
+    }
+    // #eksamens/parskats — nokārtotā eksāmena atbildes arī vēlāk
+    function eksamenaParskatsLapa() {
+        return api('GET', '/api/ek/' + kurss + '/eksamens/parskats').then((r) => {
+            notirit();
+            const w = el('div', 'ek-tests'); sakne.appendChild(w);
+            const k = karte();
+            k.appendChild(el('span', 'ek-birka ek-birka--silts', 'Noslēguma eksāmens'));
+            const h = el('h2', '', 'Eksāmens nokārtots ar ' + r.rezultats + ' %'); h.style.margin = '10px 0 6px'; k.appendChild(h);
+            k.appendChild(el('p', '', 'Iesniegts ' + lvDatLaiks(r.datums) + '.'));
+            const pg = el('div', 'ek-pogas'); pg.appendChild(saite('Uz eksāmena lapu', '#eksamens', 'btn-secondary')); k.appendChild(pg);
+            w.appendChild(k);
+            w.appendChild(eksamenaAtbildes(r.parskats));
+        });
     }
 
     // ---------- sertifikāts ----------
@@ -704,6 +760,7 @@
         if ((m = h.match(/^n\/(\d+)(?:\/([a-z0-9-]+))?$/))) darbs = nodarbiba(Number(m[1]), m[2]);
         else if ((m = h.match(/^t\/(\d+)$/))) darbs = testaSkats('tests', Number(m[1]));
         else if (h === 'eksamens') darbs = ieladetParskatu().then(eksamens);
+        else if (h === 'eksamens/parskats') darbs = eksamenaParskatsLapa();
         else if (h === 'sertifikats') darbs = Promise.resolve(sertifikats());
         else if (h === 'talak') darbs = Promise.resolve(talak());
         else darbs = ieladetParskatu().then(sakums);
