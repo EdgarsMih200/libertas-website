@@ -768,8 +768,8 @@ button.chip:hover { border-color: var(--c-line-strong); }
 /* Ainavas toņu varianti (vākiem): rīts un ziemas vakars */
 .sc-rits { --sc-sky1: #EFEDE6; --sc-sky2: #F3E7D8; --sc-sky3: #F2DBC3; --sc-sun: #F9D9B5; }
 .sc-ziema,
-html.ziemassvetki .hero-section,
-html.ziemassvetki .lapas-josla {
+html.ziema .hero-section,
+html.ziema .lapas-josla {
     --sc-sky1: #2A3550; --sc-sky2: #6E5A73; --sc-sky3: #D88A6A; --sc-sun: #F0A27E; --sc-sun-o: .55; --sc-cloud: #9A8AA6;
     --sc-far: #6E6C8A; --sc-far2: #615F7D; --sc-chalk: #8F8BA8; --sc-landmark: #4F4D69; --sc-lamp: #F2C46A;
     --sc-lake: #7E8399; --sc-glint: #F2C46A; --sc-mid: #4F6070; --sc-mid2: #46566A;
@@ -5793,24 +5793,24 @@ body {
 
 /* Ziemas vakars (design-system.md §4.2): tikai aina pāriet krēslā (.sc-ziema tokeni uz .hero-section un .lapas-josla),
    akcents un pogas nemainās. Virsraksts un apakšvirsraksts — papīra krāsā uz tumšajām debesīm (≥ 4.5:1) */
-html.ziemassvetki .hero-text h1,
-html.ziemassvetki .hero-subtitle {
+html.ziema .hero-text h1,
+html.ziema .hero-subtitle {
     color: var(--c-bg);
 }
 
-html.ziemassvetki .hero-section :focus-visible { outline-color: var(--c-focus-dark); }
-html.ziemassvetki .hero-zime { background: rgb(255 253 248 / .92); }
+html.ziema .hero-section :focus-visible { outline-color: var(--c-focus-dark); }
+html.ziema .hero-zime { background: rgb(255 253 248 / .92); }
 
 /* Debesu gradients: krēsla zemāk, oranžā blāzma tikai pie horizonta (teksts paliek uz tumšā) */
-html.ziemassvetki .hero-ainava-svg {
+html.ziema .hero-ainava-svg {
     background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky1) 14%, var(--sc-sky2) 54%, var(--sc-sky3) 66%, var(--sc-sky3) 100%);
 }
 
 /* Drošības zona aiz teksta platos ekrānos (tur teksts var nonākt līdz horizontam) */
 @media (min-width: 1024px) {
-    html.ziemassvetki .hero-text { position: relative; }
+    html.ziema .hero-text { position: relative; }
 
-    html.ziemassvetki .hero-text::before {
+    html.ziema .hero-text::before {
         content: "";
         position: absolute;
         inset: -12% -14% -18%;
@@ -5820,14 +5820,14 @@ html.ziemassvetki .hero-ainava-svg {
     }
 }
 
-/* Laternas gar taku (hero SVG .ainava-ziema) — tikai decembrī */
+/* Ziemas vakars (html.ziema, 15. nov.–febr.): laternas gar taku; Ziemassvētku egle krastā tikai ar html.ziemassvetki (1. dec.–3. janv.) */
 .ainava-ziema { display: none; }
-html.ziemassvetki .ainava-ziema { display: inline; }
+html.ziema .ainava-laternas, html.ziemassvetki .ainava-egle { display: inline; }
 
 /* Iekšlapu josla: papīra migla plašāka, lai virsraksts paliktu uz gaiša fona arī pie krēslas */
-html.ziemassvetki .lapas-josla { --josla-migla: 72%; }
+html.ziema .lapas-josla { --josla-migla: 72%; }
 @media (max-width: 1023px) {
-    html.ziemassvetki .lapas-josla { --josla-migla: 84%; }
+    html.ziema .lapas-josla { --josla-migla: 84%; }
 }
 
 /* Lampiņu virtene zem galvenes: plakans vads ar siltām spuldzītēm (assets/ziemassvetki/virtene.svg) + lēna mirdzēšana */
@@ -5935,9 +5935,9 @@ html.ballite .ainava-ballite { display: inline; }
 
 /* Kājene: ziemas kārta virs silueta (assets/ziemassvetki/kajene-sniegs.svg, tās pašas koordinātas kā kajene-mezs.svg;
    background cover + 76% 100% = tas pats apgriezums kā img object-fit/object-position) */
-html.ziemassvetki .site-footer { position: relative; }
+html.ziema .site-footer { position: relative; }
 
-html.ziemassvetki .site-footer::before {
+html.ziema .site-footer::before {
     content: "";
     position: absolute;
     top: 0;
