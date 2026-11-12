@@ -320,7 +320,28 @@
         if (!e) return;
         e.burbulis.hidden = true;
         clearTimeout(e.taimeris);
+        e.el.classList.remove('liedz');
+        if (e === sturis && piespiests) {
+            piespiests = false;
+            setTimeout(atjaunot, 0);
+        }
     }
+
+    // Lapas skripti var likt Empanadillo pateikt ko (piem. slēgts materiāls): stūra palīgs parādās arī tad,
+    // ja ekrānā ir cita figūra, pamāj ar roku, pakrata galvu (.liedz) un runā. Kamēr burbulis atvērts, viņš paliek redzams
+    var piespiests = false;
+    root.EMPANADILLO.runat = function (teksts, o) {
+        o = o || {};
+        jaSveicina = false; // sveiciens nepārraksta šo ziņu
+        var e = hero && heroRedzams ? hero : sturis;
+        if (e === sturis) { piespiests = true; ieradies = true; atjaunot(); }
+        runat(e, teksts);
+        if (o.liedz && !mazaKustiba) {
+            e.el.classList.remove('liedz');
+            void e.el.offsetWidth;
+            e.el.classList.add('liedz');
+        }
+    };
 
     document.addEventListener('keydown', function (ev) {
         if (ev.key === 'Escape') { kluset(sturis); kluset(hero); }
@@ -361,7 +382,7 @@
 
     // Stūra palīgs redzams tikai tad, kad hero ceļotājs nav ekrānā
     function atjaunot() {
-        var radit = ieradies && !heroRedzams && !redzamasStatiskas.length;
+        var radit = ieradies && (piespiests || (!heroRedzams && !redzamasStatiskas.length));
         sturis.el.classList.toggle('ieradies', radit);
         if (!radit) kluset(sturis);
         if (!ieradies) return;

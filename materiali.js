@@ -3,8 +3,8 @@
     var runaIr = 'speechSynthesis' in window;
     var balss = null;
 
-    // IZRUNA (pārlūka runas sintēze): data-es → es-ES, data-en → en-GB
-    var VALODAS = { es: 'es-ES', en: 'en-GB' };
+    // IZRUNA (pārlūka runas sintēze): data-es → es-ES, data-en → en-GB, data-sv → sv-SE
+    var VALODAS = { es: 'es-ES', en: 'en-GB', sv: 'sv-SE' };
     var balsis = {};
 
     function izveletiesBalsis() {
@@ -15,9 +15,10 @@
         });
     }
 
-    // Atgriež { teksts, valoda } no elementa ar data-es vai data-en
+    // Atgriež { teksts, valoda } no elementa ar data-es, data-en vai data-sv
     function runasDati(el) {
         if (el.hasAttribute('data-en')) return { teksts: el.getAttribute('data-en'), valoda: 'en' };
+        if (el.hasAttribute('data-sv')) return { teksts: el.getAttribute('data-sv'), valoda: 'sv' };
         return { teksts: el.getAttribute('data-es'), valoda: 'es' };
     }
 
@@ -29,11 +30,18 @@
         return u;
     }
 
+    // Citi skripti (materiali-zviedru.js) var likt izrunāt: window.MAT_RUNA('God jul!', 'sv')
+    window.MAT_RUNA = function (teksts, valoda) {
+        if (!runaIr) return;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(izteikums({ teksts: teksts, valoda: valoda }));
+    };
+
     if (runaIr) {
         izveletiesBalsis();
         speechSynthesis.addEventListener('voiceschanged', izveletiesBalsis);
 
-        document.querySelectorAll('[data-es], [data-en]').forEach(function (el) {
+        document.querySelectorAll('[data-es], [data-en], [data-sv]').forEach(function (el) {
             var d = runasDati(el);
             var poga = document.createElement('button');
             poga.type = 'button';
@@ -102,7 +110,7 @@
         var poga = bloks.querySelector('.uzd-parbaudit');
         var rez = bloks.querySelector('.uzd-rezultats');
         var lauki = bloks.querySelectorAll('.uzd-lauks');
-        if (!poga) return;
+        if (!poga || bloks.hasAttribute('data-pats')) return; // data-pats = bloks ar savu loģiku (materiali-zviedru.js)
 
         function parbaudit() {
             var pareizi = 0;
@@ -203,6 +211,47 @@
             requestAnimationFrame(function () { requestAnimationFrame(function () { filtri.classList.remove('bez-anim'); }); });
             window.addEventListener('resize', atjaunot);
             if (document.fonts && document.fonts.ready) document.fonts.ready.then(atjaunot);
+        }
+    }
+    // SLĒGTI MATERIĀLI (tikai reģistrētiem): kartīte slēgta, līdz /api/me apstiprina lietotāju.
+    // Viesis spiež → Empanadillo pamāj un saka "¡No, no, no!"; Worker sūta viesus atpakaļ ar ?slegts=<valoda>
+    var slegtas = document.querySelectorAll('.mat-karte[data-slegts]');
+    function lietotajs() { return window.LIB && window.LIB.me && window.LIB.me.user; }
+    function noNoNo(karte) {
+        var saite = karte && karte.querySelector('.mat-karte-saite');
+        var atpakal = saite ? saite.getAttribute('href') : location.pathname;
+        var pieslegties = window.LIB && window.LIB.signInUrl ? window.LIB.signInUrl('/' + atpakal) : '/auth/google';
+        var teksts = '<b>¡No, no, no!</b> Šis materiāls ir tikai reģistrētiem lietotājiem. ' +
+            '<a href="' + pieslegties + '">Pieslēdzies vai reģistrējies</a> — un tas atvērsies!';
+        if (karte) {
+            karte.classList.remove('mat-karte--klauve');
+            void karte.offsetWidth;
+            karte.classList.add('mat-karte--klauve');
+        }
+        if (window.EMPANADILLO && window.EMPANADILLO.runat) window.EMPANADILLO.runat(teksts, { liedz: true });
+        else if (window.LIB && window.LIB.toast) window.LIB.toast('Šis materiāls ir tikai reģistrētiem lietotājiem.');
+    }
+    if (slegtas.length) {
+        slegtas.forEach(function (k) {
+            k.addEventListener('click', function (e) {
+                // kamēr /api/me vēl nav atbildējis, ļauj iet: Worker pats pārbaudīs sesiju
+                if (!window.LIB || !window.LIB.me || lietotajs()) return;
+                e.preventDefault();
+                noNoNo(k);
+            });
+        });
+        document.addEventListener('lib:me', function () {
+            if (!lietotajs()) return;
+            slegtas.forEach(function (k) { k.classList.remove('mat-karte--slegta'); });
+        });
+        var atgriezts = /[?&]slegts=([a-z]+)/.exec(location.search);
+        if (atgriezts) {
+            var karte = document.querySelector('.mat-karte[data-slegts][data-valoda="' + atgriezts[1] + '"]');
+            try { history.replaceState(null, '', location.pathname + location.hash); } catch (x) {}
+            window.addEventListener('load', function () {
+                if (karte) karte.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                setTimeout(function () { noNoNo(karte); }, 900);
+            });
         }
     }
 })();

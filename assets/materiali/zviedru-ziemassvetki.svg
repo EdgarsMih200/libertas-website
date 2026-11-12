@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <!-- Zviedru Ziemassvētki: sarkana koka māja (falu rött) ar adventa zvaigzni logā, salmu āzis (julbock), egles, sniegs.
+       Galvenais motīvs labajā pusē, lai apakšā pa kreisi sveiciens būtu salasāms. -->
+  <defs>
+    <linearGradient id="debesis" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1F2A44"/>
+      <stop offset=".55" stop-color="#3A4766"/>
+      <stop offset="1" stop-color="#6E6F86"/>
+    </linearGradient>
+    <radialGradient id="mirdzums" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#F6C46A" stop-opacity=".75"/>
+      <stop offset="1" stop-color="#F6C46A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="320" fill="url(#debesis)"/>
+  <!-- zvaigznes -->
+  <g fill="#F6F1E8">
+    <circle cx="60" cy="40" r="1.6"/><circle cx="140" cy="22" r="1.2"/><circle cx="215" cy="58" r="1.4"/>
+    <circle cx="300" cy="30" r="1.8"/><circle cx="372" cy="18" r="1.2"/><circle cx="455" cy="44" r="1.5"/>
+    <circle cx="560" cy="26" r="1.3"/><circle cx="250" cy="96" r="1"/><circle cx="96" cy="104" r="1.1"/>
+  </g>
+  <!-- mēness -->
+  <circle cx="110" cy="70" r="20" fill="#F2E6C8"/>
+  <circle cx="119" cy="64" r="18" fill="#2A3655"/>
+  <!-- tālie pakalni -->
+  <path d="M0 214 Q90 178 190 200 T380 188 T600 196 V320 H0Z" fill="#8C93AA"/>
+  <!-- tālās egles -->
+  <g fill="#2F4A40">
+    <path d="M40 210 l14 -40 l14 40z"/><path d="M62 212 l11 -30 l11 30z"/>
+    <path d="M178 204 l12 -34 l12 34z"/><path d="M200 206 l9 -24 l9 24z"/>
+  </g>
+  <!-- tuvais sniegs -->
+  <path d="M0 252 Q150 226 300 244 T600 236 V320 H0Z" fill="#E9E4D8"/>
+  <path d="M0 278 Q180 262 340 276 T600 270 V320 H0Z" fill="#F6F1E8"/>
+
+  <!-- māja -->
+  <g>
+    <!-- siena -->
+    <rect x="330" y="150" width="190" height="100" fill="#9B2E22"/>
+    <!-- dēļi -->
+    <g stroke="#7E2219" stroke-width="2">
+      <path d="M352 152v96M374 152v96M396 152v96M418 152v96M440 152v96M462 152v96M484 152v96M506 152v96"/>
+    </g>
+    <!-- baltie stūri -->
+    <rect x="326" y="150" width="9" height="100" fill="#F6F1E8"/>
+    <rect x="515" y="150" width="9" height="100" fill="#F6F1E8"/>
+    <!-- jumts ar sniegu -->
+    <path d="M312 156 L425 92 L538 156Z" fill="#2B2A30"/>
+    <path d="M312 156 L425 92 L538 156 L528 160 Q470 140 425 108 Q380 140 322 160Z" fill="#F6F1E8"/>
+    <!-- skurstenis -->
+    <rect x="470" y="98" width="18" height="34" fill="#7E2219"/>
+    <rect x="466" y="94" width="26" height="8" rx="3" fill="#F6F1E8"/>
+    <!-- durvis -->
+    <rect x="352" y="196" width="30" height="54" fill="#2F4A40"/>
+    <rect x="348" y="192" width="38" height="5" fill="#F6F1E8"/>
+    <circle cx="376" cy="224" r="2" fill="#F2C14E"/>
+    <!-- logi ar gaismu -->
+    <circle cx="430" cy="200" r="46" fill="url(#mirdzums)"/>
+    <rect x="404" y="176" width="52" height="46" fill="#F6C46A"/>
+    <path d="M430 176v46M404 199h52" stroke="#F6F1E8" stroke-width="4"/>
+    <rect x="400" y="172" width="60" height="54" fill="none" stroke="#F6F1E8" stroke-width="5"/>
+    <rect x="474" y="180" width="32" height="38" fill="#F6C46A"/>
+    <path d="M490 180v38M474 199h32" stroke="#F6F1E8" stroke-width="3"/>
+    <rect x="471" y="177" width="38" height="44" fill="none" stroke="#F6F1E8" stroke-width="4"/>
+    <!-- adventa zvaigzne logā -->
+    <path d="M430 156 v20" stroke="#2B2A30" stroke-width="1.5"/>
+    <path d="M430 178 l5 10 l11 1.5 l-8 7.5 l2 11 l-10 -5.5 l-10 5.5 l2 -11 l-8 -7.5 l11 -1.5z" fill="#FFF3D6" stroke="#B4502A" stroke-width="1.5" stroke-linejoin="round"/>
+    <!-- sniegs pie mājas -->
+    <path d="M318 252 Q420 240 532 252 L532 258 L318 258Z" fill="#F6F1E8"/>
+  </g>
+
+  <!-- egle ar sniegu pa labi -->
+  <g>
+    <rect x="556" y="232" width="8" height="18" fill="#5A3B2A"/>
+    <path d="M560 134 L590 186 H574 L598 234 H522 L546 186 H530Z" fill="#2F4A40"/>
+    <path d="M560 134 L574 158 Q560 152 546 158Z M546 186 Q560 178 574 186 L578 192 Q560 184 542 192Z" fill="#F6F1E8"/>
+  </g>
+
+  <!-- salmu āzis (julbock) priekšplānā -->
+  <g transform="translate(250 196)">
+    <!-- ragi -->
+    <path d="M44 14 Q40 -6 54 -10 Q48 2 52 14" fill="#D9A752" stroke="#9C6B2A" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M50 14 Q50 -4 64 -6 Q56 4 58 16" fill="#D9A752" stroke="#9C6B2A" stroke-width="2" stroke-linejoin="round"/>
+    <!-- galva un kakls -->
+    <path d="M40 16 Q50 8 62 16 L66 30 Q58 34 50 30 L44 46 L34 46 Z" fill="#E1B460" stroke="#9C6B2A" stroke-width="2" stroke-linejoin="round"/>
+    <!-- ķermenis -->
+    <rect x="-6" y="40" width="54" height="20" rx="9" fill="#E1B460" stroke="#9C6B2A" stroke-width="2"/>
+    <!-- kājas -->
+    <g fill="#E1B460" stroke="#9C6B2A" stroke-width="2">
+      <rect x="-2" y="56" width="8" height="26" rx="3"/><rect x="10" y="56" width="8" height="26" rx="3"/>
+      <rect x="28" y="56" width="8" height="26" rx="3"/><rect x="40" y="56" width="8" height="26" rx="3"/>
+    </g>
+    <!-- aste -->
+    <path d="M-6 46 Q-16 40 -14 30" fill="none" stroke="#9C6B2A" stroke-width="4" stroke-linecap="round"/>
+    <!-- sarkanās lentes -->
+    <g fill="#C0392B">
+      <rect x="4" y="40" width="5" height="20"/><rect x="22" y="40" width="5" height="20"/><rect x="38" y="40" width="5" height="20"/>
+      <rect x="38" y="24" width="12" height="5" transform="rotate(-62 44 26)"/>
+      <rect x="-3" y="70" width="10" height="4"/><rect x="9" y="70" width="10" height="4"/>
+      <rect x="27" y="70" width="10" height="4"/><rect x="39" y="70" width="10" height="4"/>
+    </g>
+    <circle cx="57" cy="20" r="2" fill="#2B2A30"/>
+  </g>
+
+  <!-- krītošs sniegs -->
+  <g fill="#F6F1E8" opacity=".85">
+    <circle cx="210" cy="140" r="2"/><circle cx="280" cy="120" r="1.6"/><circle cx="350" cy="70" r="2"/>
+    <circle cx="420" cy="54" r="1.6"/><circle cx="520" cy="90" r="2"/><circle cx="580" cy="60" r="1.6"/>
+    <circle cx="160" cy="170" r="1.6"/><circle cx="560" cy="300" r="1.4"/>
+  </g>
+</svg>

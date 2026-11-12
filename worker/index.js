@@ -386,6 +386,21 @@ async function adminDeleteEnrollment(env, id) {
   return json({ ok: true });
 }
 
+// ---------- Materiāli tikai reģistrētiem (wrangler.jsonc run_worker_first: /materiali-zviedru*) ----------
+// Bez sesijas: lapa → materiali.html?slegts=zviedru (tur Empanadillo paskaidro), skripts → 403. Ar sesiju: parastais fails, bez koplietota keša
+async function tikaiRegistretiem(request, env, url) {
+  let user = null;
+  try { user = await getUser(request, env); } catch { user = null; }
+  if (!user) {
+    if (/\.(js|json|mp3|svg)$/.test(url.pathname)) return new Response('Tikai reģistrētiem lietotājiem', { status: 403, headers: { 'Cache-Control': 'no-store' } });
+    return new Response(null, { status: 302, headers: { Location: '/materiali.html?slegts=zviedru', 'Cache-Control': 'no-store' } });
+  }
+  const r = await env.ASSETS.fetch(request);
+  const h = new Headers(r.headers);
+  h.set('Cache-Control', 'private, no-store');
+  return new Response(r.body, { status: r.status, statusText: r.statusText, headers: h });
+}
+
 // ---------- Maršrutēšana ----------
 export default {
   async fetch(request, env, ctx) {
@@ -393,6 +408,7 @@ export default {
     const path = url.pathname.replace(/\/+$/, '') || '/';
     const method = request.method;
 
+    if (path.startsWith('/materiali-zviedru')) return await tikaiRegistretiem(request, env, url);
     if (!path.startsWith('/api/') && !path.startsWith('/auth/')) return env.ASSETS.fetch(request);
 
     try {

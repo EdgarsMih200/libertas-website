@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ziemassvētki zviedru valodā (A1) — Noderīgi materiāli — Libertas</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body class="mat-lapa mat-nodarbiba mat-zviedru" data-uzslava="Bra jobbat!">
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html" aria-current="page">Noderīgi materiāli</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
+            </nav>
+        </div>
+    </header>
+
+
+    <!-- Materiāla virsraksts -->
+    <section class="mat-hero lapas-josla lapas-josla--augsta sc-ziema">
+        <div class="lapas-josla-ainava" aria-hidden="true">
+            <svg viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-clouds"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+        </div>
+        <div class="container mat-hero-iekssa lapas-josla-saturs">
+            <a href="materiali.html" class="mat-atpakal"><svg class="mat-atpakal-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Visi materiāli</a>
+            <div class="mat-birkas">
+                <span class="mat-limenis">A1</span>
+                <span class="mat-valoda">Zviedru valoda</span>
+            </div>
+            <h1><span lang="sv" class="mat-hero-es">God jul!</span> Ziemassvētki zviedru valodā</h1>
+            <p class="mat-hero-teksts">
+                Pamatvārdi, apsveikumi un tradīcijas — no Lūcijas dienas līdz <span lang="sv">tjugondag Knut</span>, lai tu varētu
+                apsveikt draugus zviedriski un saprast, kā svētkus svin Zviedrijā. Spied <svg class="ikona-skana" viewBox="0 0 24 24" role="img" aria-label="skaļruņa pogu" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none"/></svg>, lai dzirdētu izrunu.
+            </p>
+            <ul class="mat-statistika">
+                <li><strong>20</strong> vārdi</li>
+                <li><strong>10</strong> frāzes</li>
+                <li><strong>6</strong> uzdevumi</li>
+                <li><strong>~35</strong> min</li>
+            </ul>
+            <div class="mat-hero-pogas">
+                <a href="#vardi" class="btn-cta">Sākt nodarbību</a>
+                <button type="button" class="btn-secondary mat-poga-druka" onclick="window.print()"><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><path d="M7 14h10v6H7z"/></svg>Drukāt</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mat-izkartojums">
+        <!-- Satura rādītājs (sānos) -->
+        <nav class="mat-saturs" aria-label="Saturs">
+            <span class="mat-saturs-virsraksts">Saturs</span>
+            <a href="#vardi"><span>1</span> Vārdi</a>
+            <a href="#frazes"><span>2</span> Frāzes</a>
+            <a href="#gramatika"><span>3</span> Gramatika</a>
+            <a href="#dialogs"><span>4</span> Dialogs</a>
+            <a href="#tradicijas"><span>5</span> Tradīcijas</a>
+            <a href="#uzdevumi"><span>6</span> Uzdevumi</a>
+        </nav>
+
+        <main class="mat-galvenais">
+
+            <!-- 1. VĀRDI -->
+            <section class="mat-sadala" id="vardi">
+                <h2><span class="mat-nr">1</span> Ziemassvētku vārdi</h2>
+                <p class="mat-ievads">Uzklikšķini uz kartītes, lai redzētu tulkojumu. Mācies vārdu kopā ar artikulu:
+                    <span class="art-el" lang="sv">en</span> — <i>en</i>-vārdi (lielākā daļa), <span class="art-la" lang="sv">ett</span> — <i>ett</i>-vārdi. Likuma nav — vienkārši jāiegaumē!</p>
+                <ul class="vardu-rezgis">
+                    <li class="vards" data-sv="en jul">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> jul</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētki</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="julafton">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv">julafton</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku vakars (24.12.)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en julgran">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> julgran</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku eglīte</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en tomte">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> tomte</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku vecītis, rūķis</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en julklapp">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> julklapp</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku dāvana</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="ett ljus">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-la">ett</span> ljus</span></span>
+                            <span class="vards-puse vards-aizmugure">svece; gaisma</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en stjärna">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> stjärna</span></span>
+                            <span class="vards-puse vards-aizmugure">zvaigzne</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="ett julkort">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-la">ett</span> julkort</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku kartīte</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en pepparkaka">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> pepparkaka</span></span>
+                            <span class="vards-puse vards-aizmugure">piparkūka</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en lussekatt">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> lussekatt</span></span>
+                            <span class="vards-puse vards-aizmugure">safrāna bulciņa (Lūcijas dienā)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en glögg">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> glögg</span></span>
+                            <span class="vards-puse vards-aizmugure">karstvīns, glegs</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="ett julbord">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-la">ett</span> julbord</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku mielasts (galds)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en skinka">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> skinka</span></span>
+                            <span class="vards-puse vards-aizmugure">šķiņķis</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en julbock">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> julbock</span></span>
+                            <span class="vards-puse vards-aizmugure">Ziemassvētku salmu āzis</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="ett luciatåg">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-la">ett</span> luciatåg</span></span>
+                            <span class="vards-puse vards-aizmugure">Lūcijas gājiens</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="snö">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv">snö</span></span>
+                            <span class="vards-puse vards-aizmugure">sniegs</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en snögubbe">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> snögubbe</span></span>
+                            <span class="vards-puse vards-aizmugure">sniegavīrs</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="en familj">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv"><span class="art-el">en</span> familj</span></span>
+                            <span class="vards-puse vards-aizmugure">ģimene</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="nyårsafton">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv">nyårsafton</span></span>
+                            <span class="vards-puse vards-aizmugure">Vecgada vakars (31.12.)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-sv="kallt">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><span class="vards-es" lang="sv">kallt</span></span>
+                            <span class="vards-puse vards-aizmugure">auksti</span>
+                        </button>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- 2. FRĀZES -->
+            <section class="mat-sadala" id="frazes">
+                <h2><span class="mat-nr">2</span> Apsveikumi un frāzes</h2>
+                <ul class="frazu-saraksts">
+                    <li data-sv="God jul!"><span class="fraze-teksts"><span class="es" lang="sv">God jul!</span><span class="lv">Priecīgus Ziemassvētkus!</span></span></li>
+                    <li data-sv="God jul och gott nytt år!"><span class="fraze-teksts"><span class="es" lang="sv">God jul och gott nytt år!</span><span class="lv">Priecīgus Ziemassvētkus un laimīgu Jauno gadu!</span></span></li>
+                    <li data-sv="Gott nytt år!"><span class="fraze-teksts"><span class="es" lang="sv">Gott nytt år!</span><span class="lv">Laimīgu Jauno gadu!</span></span></li>
+                    <li data-sv="Tack, detsamma!"><span class="fraze-teksts"><span class="es" lang="sv">Tack, detsamma!</span><span class="lv">Paldies, tev arī!</span></span></li>
+                    <li data-sv="Vad vill du ha i julklapp?"><span class="fraze-teksts"><span class="es" lang="sv">Vad vill du ha i julklapp?</span><span class="lv">Ko tu gribi Ziemassvētku dāvanā?</span></span></li>
+                    <li data-sv="Jag vill ha en bok."><span class="fraze-teksts"><span class="es" lang="sv">Jag vill ha en bok.</span><span class="lv">Es gribu grāmatu.</span></span></li>
+                    <li data-sv="Den här julklappen är till dig."><span class="fraze-teksts"><span class="es" lang="sv">Den här julklappen är till dig.</span><span class="lv">Šī dāvana ir tev.</span></span></li>
+                    <li data-sv="Tack så mycket! Den är jättefin!"><span class="fraze-teksts"><span class="es" lang="sv">Tack så mycket! Den är jättefin!</span><span class="lv">Liels paldies! Tā ir ļoti jauka!</span></span></li>
+                    <li data-sv="Det är kallt och det snöar."><span class="fraze-teksts"><span class="es" lang="sv">Det är kallt och det snöar.</span><span class="lv">Ir auksti, un snieg.</span></span></li>
+                    <li data-sv="Skål!"><span class="fraze-teksts"><span class="es" lang="sv">Skål!</span><span class="lv">Priekā! (paceļot glāzi)</span></span></li>
+                </ul>
+                <p class="mat-padoms">Zviedru alfabētā ir trīs papildu burti: <strong lang="sv">å, ä, ö</strong>. Tie ir atsevišķi burti alfabēta beigās, nevis „a” vai „o” ar zīmīti — <span lang="sv">år</span> (gads) un <span lang="sv">ar</span> ir pavisam dažādi vārdi!</p>
+            </section>
+
+            <!-- 3. GRAMATIKA -->
+            <section class="mat-sadala" id="gramatika">
+                <h2><span class="mat-nr">3</span> Gramatika</h2>
+
+                <h3>Artikuls: <em lang="sv">en</em> un <em lang="sv">ett</em></h3>
+                <p class="mat-ievads">Zviedru valodā noteikto formu (<i>tā</i> eglīte) veido ar galotni: <span lang="sv">en</span>-vārdiem pievieno <b lang="sv">-en</b> (vai <b lang="sv">-n</b>), <span lang="sv">ett</span>-vārdiem — <b lang="sv">-et</b> (vai <b lang="sv">-t</b>).</p>
+                <div class="artikulu-rezgis" lang="sv">
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">en</span><span>julgran</span><small lang="lv">kāda eglīte</small></div>
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">-en</span><span>julgran<b>en</b></span><small lang="lv">tā eglīte</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">ett</span><span>ljus</span><small lang="lv">kāda svece</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">-et</span><span>ljus<b>et</b></span><small lang="lv">tā svece</small></div>
+                </div>
+
+                <h3>Kā veido daudzskaitli</h3>
+                <div class="likumu-rezgis">
+                    <div class="likums"><span class="likums-galotne" lang="sv">-a → -or</span><p>en-vārdi ar -a beigās</p><span lang="sv">stjärna → stjärn<b>or</b></span></div>
+                    <div class="likums"><span class="likums-galotne" lang="sv">+ ar</span><p>daudzi en-vārdi</p><span lang="sv">julgran → julgran<b>ar</b></span></div>
+                    <div class="likums"><span class="likums-galotne" lang="sv">+ er</span><p>citi en-vārdi</p><span lang="sv">familj → familj<b>er</b></span></div>
+                    <div class="likums"><span class="likums-galotne" lang="sv">± 0</span><p>ett-vārdi ar līdzskani beigās</p><span lang="sv">ett ljus → två ljus</span></div>
+                </div>
+
+                <h3>Darbības vārds <em lang="sv">vilja</em> — gribēt</h3>
+                <p class="mat-ievads">Labā ziņa: zviedru darbības vārdi <b>nemainās pēc personas</b>. Visiem — <b lang="sv">vill</b>. „Gribēt kaut ko” = <span lang="sv">vill <b>ha</b></span>.</p>
+                <div class="locijumi">
+                    <div data-sv="jag vill"><span lang="sv">jag <b>vill</b></span><small>es gribu</small></div>
+                    <div data-sv="vi vill"><span lang="sv">vi <b>vill</b></span><small>mēs gribam</small></div>
+                    <div data-sv="du vill"><span lang="sv">du <b>vill</b></span><small>tu gribi</small></div>
+                    <div data-sv="ni vill"><span lang="sv">ni <b>vill</b></span><small>jūs gribat</small></div>
+                    <div data-sv="han vill, hon vill"><span lang="sv">han / hon <b>vill</b></span><small>viņš / viņa grib</small></div>
+                    <div data-sv="de vill"><span lang="sv">de <b>vill</b></span><small>viņi / viņas grib</small></div>
+                </div>
+
+                <h3>Vārdu secība: darbības vārds otrajā vietā</h3>
+                <div class="likumu-rezgis likumu-rezgis--v2">
+                    <div class="likums"><span class="likums-galotne">1 · <b>2</b> · 3</span><p>Parasti</p><span lang="sv">Vi <b>äter</b> skinka på julafton.</span></div>
+                    <div class="likums"><span class="likums-galotne">1 · <b>2</b> · 3</span><p>Ja sākumā ir laiks vai vieta</p><span lang="sv">På julafton <b>äter</b> vi skinka.</span></div>
+                </div>
+                <p class="mat-padoms">Ja teikums sākas ar laiku (<span lang="sv">på julafton, i dag, klockan tre</span>), darbības vārds paliek otrajā vietā, un <b>persona pārvietojas aiz tā</b>: <span lang="sv">I dag <b>är</b> det kallt.</span></p>
+            </section>
+
+            <!-- 4. DIALOGS -->
+            <section class="mat-sadala" id="dialogs">
+                <h2><span class="mat-nr">4</span> Dialogs: dāvanu apmaiņa</h2>
+                <div class="dialoga-riki">
+                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg>Klausīties visu dialogu</button>
+                    <label class="mat-sledzis"><input type="checkbox" id="radit-tulkojumu"> Rādīt tulkojumu</label>
+                </div>
+                <div class="cats">
+                    <div class="replika replika--a" data-sv="Hej Oskar! God jul!">
+                        <span class="replika-avatars" aria-hidden="true">E</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Elsa</strong>
+                            <span class="es" lang="sv">Hej Oskar! God jul!</span>
+                            <span class="lv">Sveiks, Oskar! Priecīgus Ziemassvētkus!</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-sv="Hej Elsa! God jul! Den här julklappen är till dig.">
+                        <span class="replika-avatars" aria-hidden="true">O</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Oskar</strong>
+                            <span class="es" lang="sv">Hej Elsa! God jul! Den här julklappen är till dig.</span>
+                            <span class="lv">Sveika, Elsa! Priecīgus Ziemassvētkus! Šī dāvana ir tev.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-sv="Åh, tack så mycket! Vad är det?">
+                        <span class="replika-avatars" aria-hidden="true">E</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Elsa</strong>
+                            <span class="es" lang="sv">Åh, tack så mycket! Vad är det?</span>
+                            <span class="lv">Ak, liels paldies! Kas tas ir?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-sv="Det är en bok på svenska.">
+                        <span class="replika-avatars" aria-hidden="true">O</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Oskar</strong>
+                            <span class="es" lang="sv">Det är en bok på svenska.</span>
+                            <span class="lv">Tā ir grāmata zviedru valodā.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-sv="Den är jättefin! Och det här är till dig: pepparkakor.">
+                        <span class="replika-avatars" aria-hidden="true">E</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Elsa</strong>
+                            <span class="es" lang="sv">Den är jättefin! Och det här är till dig: pepparkakor.</span>
+                            <span class="lv">Tā ir ļoti jauka! Un šis ir tev — piparkūkas.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-sv="Mums, tack! Vad gör du på julafton?">
+                        <span class="replika-avatars" aria-hidden="true">O</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Oskar</strong>
+                            <span class="es" lang="sv">Mums, tack! Vad gör du på julafton?</span>
+                            <span class="lv">Mmm, paldies! Ko tu dari Ziemassvētku vakarā?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-sv="Jag äter julbord med min familj. Och du?">
+                        <span class="replika-avatars" aria-hidden="true">E</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Elsa</strong>
+                            <span class="es" lang="sv">Jag äter julbord med min familj. Och du?</span>
+                            <span class="lv">Es ēdu Ziemassvētku mielastu ar savu ģimeni. Un tu?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-sv="Jag också. Klockan tre tittar vi på Kalle Anka!">
+                        <span class="replika-avatars" aria-hidden="true">O</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Oskar</strong>
+                            <span class="es" lang="sv">Jag också. Klockan tre tittar vi på Kalle Anka!</span>
+                            <span class="lv">Es arī. Pulksten trijos mēs skatāmies „Kalle Anka”!</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-sv="God jul och gott nytt år!">
+                        <span class="replika-avatars" aria-hidden="true">E</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Elsa</strong>
+                            <span class="es" lang="sv">God jul och gott nytt år!</span>
+                            <span class="lv">Priecīgus Ziemassvētkus un laimīgu Jauno gadu!</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-sv="Tack, detsamma!">
+                        <span class="replika-avatars" aria-hidden="true">O</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Oskar</strong>
+                            <span class="es" lang="sv">Tack, detsamma!</span>
+                            <span class="lv">Paldies, tev arī!</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. TRADĪCIJAS (ikonas zīmētas SVG, bez emoji) -->
+            <section class="mat-sadala" id="tradicijas">
+                <h2><span class="mat-nr">5</span> Kā Ziemassvētkus svin Zviedrijā</h2>
+                <ol class="laika-josla laika-josla--ikonas">
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 20h18M6 20v-7M10 20v-7M14 20v-7M18 20v-7"/><path d="M6 10.5v-1M10 10.5v-1M14 10.5v-1M18 10.5v-1"/></svg></span><div><span class="laika-datums">4 svētdienas pirms Ziemassvētkiem</span><strong lang="sv">Första advent</strong><p>Pirmajā Adventē logos iededzas papīra zvaigznes (<span lang="sv">adventsstjärna</span>) un elektriskie svečturi. Katru svētdienu aizdedz vēl vienu sveci.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="15.5" r="4.5"/><path d="M6 10h12M8 10V5.5M12 10V4.5M16 10V5.5"/></svg></span><div><span class="laika-datums">13. decembris</span><strong lang="sv">Lucia</strong><p>Tumšā rītā nāk Lūcijas gājiens (<span lang="sv">luciatåg</span>): baltos tērpos, Lūcijai galvā sveču vainags. Dzied „<span lang="sv">Sankta Lucia</span>” un ēd <span lang="sv">lussekatter</span> ar <span lang="sv">glögg</span>.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3.5"/><path d="M1.5 4v6.5M1.5 13v7M22.5 4v16"/></svg></span><div><span class="laika-datums">24. decembris</span><strong lang="sv">Julafton och julbord</strong><p>Galvenā svētku diena ir 24. decembris. Ģimene ēd <span lang="sv">julbord</span> — bufeti ar <span lang="sv">julskinka</span>, <span lang="sv">köttbullar</span> (kotletītēm), siļķi un <span lang="sv">Janssons frestelse</span> (kartupeļu sacepumu).</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M8.5 22h7M9 3l3 4 3-4"/></svg></span><div><span class="laika-datums">24.12., pulksten 15.00</span><strong lang="sv">Kalle Anka</strong><p>Katru gadu kopš 1960. gada puse Zviedrijas pulksten trijos skatās vienu un to pašu Disneja multfilmu programmu (<span lang="sv">Kalle Anka</span> = Donalds Daks).</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="1"/><path d="M3 8h18v3H3zM12 8v13M12 8c-2.5-4.5-7-3-4.5 0M12 8c2.5-4.5 7-3 4.5 0"/></svg></span><div><span class="laika-datums">24. decembra vakarā</span><strong lang="sv">Tomten</strong><p>Pie durvīm klauvē <span lang="sv">jultomten</span> ar dāvanu maisu un jautā: „<span lang="sv">Finns det några snälla barn här?</span>” — „Vai te ir kāds labs bērns?”</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v4M10 4h4M5 21V11l7-5 7 5v10M10 21v-5h4v5"/></svg></span><div><span class="laika-datums">25. decembris</span><strong lang="sv">Juldagen</strong><p>Mierīga diena. Daudzi agri no rīta iet uz <span lang="sv">julotta</span> — svētku dievkalpojumu baznīcā ar svecēm.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg></span><div><span class="laika-datums">31. decembris</span><strong lang="sv">Nyårsafton</strong><p>Svinīgas vakariņas ar draugiem un salūts pusnaktī. Daudzi televīzijā klausās, kā Stokholmas brīvdabas muzejā <span lang="sv">Skansen</span> nolasa dzejoli „<span lang="sv">Ring, klocka, ring</span>”.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l5 7h-3l4 6H6l4-6H7z"/><path d="M12 16v5"/></svg></span><div><span class="laika-datums">13. janvāris</span><strong lang="sv">Tjugondag Knut</strong><p>20. diena pēc Ziemassvētkiem — svētku beigas. Eglīti „izdejo” no mājas (<span lang="sv">julen dansas ut</span>), un bērni apēd pēdējās konfektes no zariem.</p></div></li>
+                </ol>
+            </section>
+
+            <!-- 6. UZDEVUMI. 1–3 pārbauda materiali.js; 4–6 (data-pats) — materiali-zviedru.js -->
+            <section class="mat-sadala" id="uzdevumi">
+                <h2><span class="mat-nr">6</span> Uzdevumi</h2>
+                <p class="mat-ievads">Ieraksti atbildes un spied “Pārbaudīt”. Burtus <span lang="sv">å, ä, ö</span> vari ierakstīt ar pogām vai arī rakstīt <i>a</i> un <i>o</i>.</p>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">1</span> Ieraksti artikulu: <em lang="sv">en</em> vai <em lang="sv">ett</em></h3>
+                    <ol class="uzdevums" lang="sv">
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="en" aria-label="Atbilde" autocomplete="off" spellcheck="false"> julgran</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="ett" aria-label="Atbilde" autocomplete="off" spellcheck="false"> ljus</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="ett" aria-label="Atbilde" autocomplete="off" spellcheck="false"> julkort</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="en" aria-label="Atbilde" autocomplete="off" spellcheck="false"> stjärna</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="ett" aria-label="Atbilde" autocomplete="off" spellcheck="false"> julbord</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="en" aria-label="Atbilde" autocomplete="off" spellcheck="false"> tomte</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="sv">1. en julgran · 2. ett ljus · 3. ett julkort · 4. en stjärna · 5. ett julbord · 6. en tomte</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">2</span> Uzraksti noteikto formu (<i>tā</i> …)</h3>
+                    <ol class="uzdevums" lang="sv">
+                        <li>en julgran → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="julgranen" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li>ett ljus → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="ljuset" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li>en julklapp → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="julklappen" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li>ett julbord → <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="julbordet" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="sv">1. julgranen · 2. ljuset · 3. julklappen · 4. julbordet</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">3</span> Pārtulko zviedriski</h3>
+                    <div class="nor-burti" data-burti>Zviedru burti: <button type="button" data-l="å">å</button><button type="button" data-l="ä">ä</button><button type="button" data-l="ö">ö</button></div>
+                    <ol class="uzdevums" lang="sv">
+                        <li><span lang="lv">Priecīgus Ziemassvētkus!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="god jul" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Paldies, tev arī!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="tack detsamma" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Laimīgu Jauno gadu!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="gott nytt år" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Es gribu grāmatu.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="jag vill ha en bok" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="sv">1. God jul! · 2. Tack, detsamma! · 3. Gott nytt år! · 4. Jag vill ha en bok.</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks" data-pats>
+                    <h3><span class="uzd-nr">4</span> <span lang="sv">Rätt eller fel?</span></h3>
+                    <p class="mat-ievads">Teikumi par dialogu un tradīcijām: <b lang="sv">rätt</b> = pareizi, <b lang="sv">fel</b> = nepareizi.</p>
+                    <ol class="nor-pp-saraksts" id="sv-rf"></ol>
+                </div>
+
+                <div class="uzdevums-bloks" data-pats>
+                    <h3><span class="uzd-nr">5</span> Saliec teikumu</h3>
+                    <p class="mat-ievads">Spied uz vārdiem pareizā secībā; uzspied vārdam augšā, lai to noņemtu. Atceries — darbības vārds otrajā vietā!</p>
+                    <ol class="nor-teikumi" id="sv-seciba"></ol>
+                </div>
+
+                <div class="uzdevums-bloks" data-pats>
+                    <h3><span class="uzd-nr">6</span> Ieraksti trūkstošo vārdu</h3>
+                    <p class="mat-ievads">Izmanto vārdus no lodziņa. Šeit burtiem <span lang="sv">å, ä, ö</span> jābūt pareiziem.</p>
+                    <ul class="nor-banka" id="sv-banka" aria-label="Vārdi"></ul>
+                    <div class="nor-burti" data-burti>Zviedru burti: <button type="button" data-l="å">å</button><button type="button" data-l="ä">ä</button><button type="button" data-l="ö">ö</button></div>
+                    <ol class="nor-trukst" id="sv-trukst"></ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit" id="sv-trukst-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" id="sv-trukst-rez" aria-live="polite"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aicinājums -->
+            <aside class="mat-cta">
+                <div>
+                    <h2>Gribi apgūt vēl kādu valodu?</h2>
+                    <p>Libertas kursos — spāņu un angļu valoda ar dzīvu sarunu praksi.</p>
+                </div>
+                <a href="kursi.html" class="btn-cta">Apskatīt kursus</a>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="materiali-zviedru.js"></script>
+    <script src="materiali.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>

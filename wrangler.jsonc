@@ -7,7 +7,8 @@
   "assets": {
     "directory": ".",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*", "/auth/*"],
+    // /materiali-zviedru* = materiāls tikai reģistrētiem (Worker pārbauda sesiju)
+    "run_worker_first": ["/api/*", "/auth/*", "/materiali-zviedru*"],
     // nezināmām adresēm rāda 404.html (statuss 404)
     "not_found_handling": "404-page"
   },

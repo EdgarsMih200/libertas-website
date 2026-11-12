@@ -3040,6 +3040,70 @@ html .lapas-josla.sc-muertos {
     transform: rotate(45deg);
 }
 
+/* Slēgta kartīte (tikai reģistrētiem): tumša meža virsma, vāks aptumšots, slēdzene vāka vidū; nosaukums paliek salasāms.
+   Atslēdz materiali.js (noņem .mat-karte--slegta), ja lietotājs pieslēdzies */
+.mat-slegts-zime,
+.mat-apaksa-slegts { display: none; }
+
+.mat-karte--slegta {
+    background: var(--c-forest);
+    border-color: var(--c-forest-2);
+}
+
+.mat-karte--slegta .mat-vaks-attels { filter: brightness(.45) saturate(.55); }
+
+.mat-karte--slegta .mat-slegts-zime {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 76px;
+    height: 76px;
+    margin: -50px 0 0 -38px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--c-forest) 82%, transparent);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--c-on-forest) 35%, transparent), var(--shadow-2);
+}
+
+.mat-slegts-ikona { width: 40px; height: 40px; }
+.mat-slegts-loks { fill: none; stroke: var(--c-on-forest); stroke-width: 4.2; stroke-linecap: round; }
+.mat-slegts-korpuss { fill: var(--c-on-forest); }
+.mat-slegts-caurums { fill: var(--c-forest); }
+.mat-slegts-caurums-k { stroke: var(--c-forest); stroke-width: 3; stroke-linecap: round; }
+
+.mat-karte--slegta h2,
+.mat-karte--slegta .mat-karte-ieklauts b,
+.mat-karte--slegta .mat-karte-dati dd { color: var(--c-on-forest); }
+
+.mat-karte--slegta p,
+.mat-karte--slegta .mat-karte-tema,
+.mat-karte--slegta .mat-karte-dati dt { color: var(--c-on-forest-muted); }
+
+.mat-karte--slegta .mat-karte-limenis { background: var(--c-forest-2); color: var(--c-on-forest); }
+.mat-karte--slegta .mat-karte-dati { border-color: var(--c-forest-2); }
+
+.mat-karte--slegta .mat-karte-apaksa { color: var(--c-on-forest); }
+.mat-karte--slegta .mat-apaksa-atverts { display: none; }
+.mat-karte--slegta .mat-apaksa-slegts { display: inline; }
+.mat-karte--slegta .mat-karte-bulta,
+.mat-karte--slegta:hover .mat-karte-bulta { background: var(--c-forest-2); color: var(--c-on-forest); transform: none; }
+
+.mat-karte--slegta:has(.mat-karte-saite:focus-visible) { outline-color: var(--c-focus-dark); }
+.mat-karte:not(.mat-karte--slegta) .mat-slegts-sr { display: none; }
+
+/* slēdzene nedaudz sakustas, kad kartīti mēģina atvērt */
+.mat-karte--slegta.mat-karte--klauve .mat-slegts-zime { animation: mat-slegts-krata .5s var(--ease); }
+
+@keyframes mat-slegts-krata {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(-12deg); }
+    40% { transform: rotate(10deg); }
+    60% { transform: rotate(-7deg); }
+    80% { transform: rotate(4deg); }
+}
+
 /* Drīzumā: pārtraukta mala, bez virsmas */
 .mat-karte--drizuma {
     justify-content: center;
@@ -4470,6 +4534,28 @@ body.mat-norvegu .empanadillo { bottom: 84px; }
 @media print {
     .nor-rezultats, .nor-izvele, .nor-burti, .nor-spele-rinda, .nor-izveles, #gnext { display: none !important; }
     .nor-tulk { display: block; }
+}
+
+/* ZVIEDRU MATERIĀLS (materiali-zviedru-ziemassvetki.html + materiali-zviedru.js; uzdevumi 4–6 izmanto nor-* klases) */
+.mat-zviedru .likumu-rezgis { grid-template-columns: repeat(2, 1fr); }
+
+.laika-josla--ikonas .laika-emoji svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: var(--c-brand);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mat-zviedru .uzdevums-bloks .mat-ievads { margin-bottom: var(--sp-3); }
+.mat-zviedru .uzdevums-bloks .nor-pp:last-child,
+.mat-zviedru .uzdevums-bloks .nor-teikums:last-child { border-bottom: 0; }
+.mat-zviedru .nor-burti { margin-bottom: var(--sp-3); }
+
+@media (max-width: 640px) {
+    .mat-zviedru .likumu-rezgis { grid-template-columns: 1fr; }
 }
 
 /* 404 LAPA (404.html, layout.md §7): apjucis Empanadillo ×4 (×3 telefonā), divvalodīgs teksts, trīs izejas */
@@ -5988,6 +6074,14 @@ html.ziemassvetki .hero-zvani {
 .empa.maj .empa-roka-a { animation: empa-maj-a .36s steps(1) 4; }
 .empa.maj .empa-roka-b { animation: empa-maj-b .36s steps(1) 4; }
 .empa.maj .empa-roka-miers { animation: empa-paslept 1.44s steps(1); }
+/* "nē, nē, nē": figūra šūpojas no vienas puses uz otru (EMPANADILLO.runat(..., { liedz: true })) */
+.empa.liedz .empa-poga > svg { animation: empa-liedz .48s ease-in-out 3; transform-origin: 50% 100%; }
+
+@keyframes empa-liedz {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-6deg); }
+    75% { transform: rotate(6deg); }
+}
 
 /* Cepures: Ziemassvētku — tikai decembrī (html.ziemassvetki); ballītes — vienmēr, kad tā uzzīmēta (5. dec.) */
 .empa-cepure { display: none; }
@@ -6013,6 +6107,7 @@ html.ziemassvetki .empa-cepure { display: inline; }
 
 .empa-burbulis[hidden] { display: none; }
 .empa-burbulis b { color: var(--c-brand); }
+.empa-burbulis a { color: var(--c-accent-strong); font-weight: 600; text-underline-offset: 2px; }
 
 .empa-burbulis::after {
     content: "";
