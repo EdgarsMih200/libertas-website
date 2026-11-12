@@ -45,6 +45,18 @@
             </div>
         </div>
 
+        <!-- Filtri (script.js): pogas veido no kartīšu data-valoda / data-veids; paslēpti, ja ir tikai viena vērtība -->
+        <div class="container">
+            <div class="mat-rikjosla kursu-rikjosla">
+                <div class="kursu-filtru-grupas">
+                    <div class="mat-filtri" data-filtrs="valoda" role="group" aria-label="Filtrēt pēc valodas" hidden></div>
+                    <div class="mat-filtri" data-filtrs="veids" role="group" aria-label="Filtrēt pēc kursa veida" hidden></div>
+                </div>
+                <p class="mat-skaits" aria-live="polite"></p>
+            </div>
+            <p class="kursu-tukss" hidden>Šādu kursu pagaidām nav. <button type="button" class="kursu-tukss-poga">Rādīt visus kursus</button></p>
+        </div>
+
         <!-- Kursi pa valodām, pēc līmeņa. Jauns kurss = article.course-card ar data-course="<D1 id>" uz pogas -->
         <section class="container kursu-grupa" id="spanu" aria-labelledby="spanu-virsraksts">
             <div class="kursu-grupa-galva">
@@ -53,7 +65,7 @@
             </div>
             <div class="courses-grid">
                 <!-- Spāņu A1 -->
-                <article class="course-card">
+                <article class="course-card" data-valoda="spanu" data-veids="grupa">
                     <img src="assets/kursi/spanu-a1.svg" alt="Spāņu valoda A1" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A1</span>
@@ -66,7 +78,7 @@
                 </article>
 
                 <!-- Spāņu A2 -->
-                <article class="course-card">
+                <article class="course-card" data-valoda="spanu" data-veids="grupa">
                     <img src="assets/kursi/spanu-a2.svg" alt="Spāņu valoda A2" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A2</span>
@@ -79,7 +91,7 @@
                 </article>
 
                 <!-- Spāņu B1.1 -->
-                <article class="course-card">
+                <article class="course-card" data-valoda="spanu" data-veids="grupa">
                     <img src="assets/kursi/spanu-b1-1.svg" alt="Spāņu valoda B1.1" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">B1.1</span>
@@ -92,7 +104,7 @@
                 </article>
 
                 <!-- Spāņu B1.2 -->
-                <article class="course-card">
+                <article class="course-card" data-valoda="spanu" data-veids="grupa">
                     <img src="assets/kursi/spanu-b1-2.svg" alt="Spāņu valoda B1.2" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">B1.2</span>
@@ -113,7 +125,7 @@
             </div>
             <div class="courses-grid">
                 <!-- Angļu A1 -->
-                <article class="course-card">
+                <article class="course-card" data-valoda="anglu" data-veids="grupa">
                     <img src="assets/kursi/anglu-a1.svg" alt="Angļu valoda A1" width="600" height="320" loading="lazy" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A1</span>
@@ -126,7 +138,7 @@
                 </article>
 
                 <!-- Angļu A2 -->
-                <article class="course-card">
+                <article class="course-card" data-valoda="anglu" data-veids="grupa">
                     <img src="assets/kursi/anglu-a2.svg" alt="Angļu valoda A2" width="600" height="320" loading="lazy" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A2</span>
@@ -139,7 +151,7 @@
                 </article>
 
                 <!-- Kā pieteikties: tikai esošā plūsma (script.js pieteikšanās + Google ienākšana, konts.html) -->
-                <aside class="pieteiksanas-soli" aria-labelledby="soli-virsraksts">
+                <aside class="pieteiksanas-soli" data-veids="grupa" aria-labelledby="soli-virsraksts">
                     <h3 id="soli-virsraksts">Kā pieteikties</h3>
                     <ol>
                         <li><b>Izvēlies kursu un grupu</b><span>Spied “Pieteikties kursam”, izvēlies sev ērtāko grupu (datumus) un apstiprini pieteikumu.</span></li>

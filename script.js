@@ -419,6 +419,108 @@
             });
     }
 
+    // KURSU FILTRI kursi.html: valoda × veids (tās pašas .mat-filtri klases kā materiali.html).
+    // Kartītes: [data-valoda][data-veids]; elements bez data-valoda (piem. "Kā pieteikties") atbilst jebkurai valodai.
+    // Sadaļa paslēpjas, ja tajā nav redzamu elementu; galva — ja nav redzamu kursu. Izsauc atkārtoti pēc e-kursu ielādes.
+    var KF_NOSAUKUMI = {
+        valoda: { '': 'Visas valodas', spanu: 'Spāņu', anglu: 'Angļu' },
+        veids: { '': 'Visi kursi', grupa: 'Grupu kursi', tiessaiste: 'Tiešsaistē' }
+    };
+    var kfIzvele = { valoda: '', veids: '' };
+    function kursuFiltri() {
+        var josla = document.querySelector('.kursu-rikjosla');
+        if (!josla) return;
+        var kartes = Array.prototype.slice.call(document.querySelectorAll('.courses-section .kursu-grupa [data-veids]:not(a)'));
+        var kursi = kartes.filter(function(k) { return k.hasAttribute('data-valoda'); });
+        var skaits = josla.querySelector('.mat-skaits');
+        function skaitsTeksts(n) {
+            return '<strong>' + n + '</strong> ' + (n % 10 === 1 && n % 100 !== 11 ? 'kurss' : 'kursi');
+        }
+        function atbilst(k, izv) {
+            return (!izv.veids || k.dataset.veids === izv.veids) && (!izv.valoda || !k.dataset.valoda || k.dataset.valoda === izv.valoda);
+        }
+        function piemerot(anim) {
+            kartes.forEach(function(k) {
+                var r = atbilst(k, kfIzvele);
+                k.hidden = !r;
+                k.classList.remove('paradas');
+                if (r && anim) { void k.offsetWidth; k.classList.add('paradas'); }
+            });
+            document.querySelectorAll('.courses-section .kursu-grupa').forEach(function(s) {
+                if (s.matches('[data-ek-kursi]') && !s.querySelector('.ek-kursa-karte')) return; // e-kursu nav — sadaļa paliek paslēpta
+                var redzKursi = s.querySelectorAll('[data-valoda]:not([hidden])').length;
+                var redz = s.querySelectorAll('[data-veids]:not(a):not([hidden])').length;
+                s.hidden = !redz;
+                var galva = s.querySelector('.kursu-grupa-galva');
+                if (galva) galva.hidden = !redzKursi;
+            });
+            var n = kursi.filter(function(k) { return atbilst(k, kfIzvele); }).length;
+            if (skaits) skaits.innerHTML = skaitsTeksts(n);
+            var tukss = document.querySelector('.kursu-tukss');
+            if (tukss) tukss.hidden = n > 0;
+        }
+        var tPoga = document.querySelector('.kursu-tukss-poga');
+        if (tPoga && !tPoga.dataset.klausas) {
+            tPoga.dataset.klausas = '1';
+            tPoga.addEventListener('click', function() {
+                document.querySelectorAll('.kursu-rikjosla .mat-filtri:not([hidden])').forEach(function(f) {
+                    var b = f.querySelector('.mat-filtrs');
+                    if (b) b.click();
+                });
+            });
+        }
+        josla.querySelectorAll('.mat-filtri[data-filtrs]').forEach(function(f) {
+            var dim = f.dataset.filtrs, vertibas = [], skaiti = {};
+            kursi.forEach(function(k) {
+                var v = k.dataset[dim];
+                if (vertibas.indexOf(v) < 0) vertibas.push(v);
+                skaiti[v] = (skaiti[v] || 0) + 1;
+            });
+            f.innerHTML = '';
+            if (vertibas.length < 2) { f.hidden = true; kfIzvele[dim] = ''; return; }
+            if (vertibas.indexOf(kfIzvele[dim]) < 0) kfIzvele[dim] = '';
+            var slids = el('span', 'mat-filtri-slids'); slids.setAttribute('aria-hidden', 'true'); f.appendChild(slids);
+            function novietot() {
+                var b = f.querySelector('.mat-filtrs[aria-pressed="true"]');
+                if (!b) return;
+                f.style.setProperty('--x', b.offsetLeft + 'px');
+                f.style.setProperty('--w', b.offsetWidth + 'px');
+            }
+            [''].concat(vertibas).forEach(function(v) {
+                var b = el('button', 'mat-filtrs');
+                b.type = 'button';
+                b.appendChild(el('span', '', KF_NOSAUKUMI[dim][v] || v));
+                b.appendChild(el('span', 'mat-filtrs-sk', String(v ? skaiti[v] : kursi.length)));
+                b.setAttribute('aria-pressed', v === kfIzvele[dim] ? 'true' : 'false');
+                b.addEventListener('click', function() {
+                    f.querySelectorAll('.mat-filtrs').forEach(function(x) { x.setAttribute('aria-pressed', 'false'); });
+                    b.setAttribute('aria-pressed', 'true');
+                    kfIzvele[dim] = v;
+                    novietot();
+                    piemerot(true);
+                });
+                f.appendChild(b);
+            });
+            f.hidden = false;
+            f.classList.add('bez-anim');
+            novietot();
+            requestAnimationFrame(function() { requestAnimationFrame(function() { f.classList.remove('bez-anim'); }); });
+            if (!f.dataset.klausas) {
+                f.dataset.klausas = '1';
+                window.addEventListener('resize', novietotVisus);
+                if (document.fonts && document.fonts.ready) document.fonts.ready.then(novietotVisus);
+            }
+        });
+        piemerot(false);
+    }
+    window.LIB.kursuFiltri = kursuFiltri;
+    function novietotVisus() {
+        document.querySelectorAll('.kursu-rikjosla .mat-filtri:not([hidden])').forEach(function(f) {
+            var b = f.querySelector('.mat-filtrs[aria-pressed="true"]');
+            if (b) { f.style.setProperty('--x', b.offsetLeft + 'px'); f.style.setProperty('--w', b.offsetWidth + 'px'); }
+        });
+    }
+
     // E-kursu kartītes kursi.html ([data-ek-kursi] sadaļa; paslēpta, ja aktīvu e-kursu nav)
     var EK_VAKI = ['spanu-a1', 'spanu-a2', 'spanu-b1-1', 'spanu-b1-2', 'anglu-a1', 'anglu-a2'];
     function ekVaks(k) {
@@ -448,6 +550,7 @@
             if (!kursi.length) return;
             kursi.forEach(function(k) {
                 var a = el('article', 'ek-karte ek-kursa-karte');
+                a.setAttribute('data-valoda', k.valoda === 'en' ? 'anglu' : 'spanu'); a.setAttribute('data-veids', 'tiessaiste');
                 var img = el('img'); img.src = ekVaks(k); img.alt = ''; img.width = 600; img.height = 320; img.decoding = 'async'; a.appendChild(img);
                 var s = el('div', 'ek-k-saturs');
                 var bi = el('div'); bi.appendChild(el('span', 'ek-birka', 'Pašmācība')); bi.appendChild(document.createTextNode(' ')); bi.appendChild(el('span', 'chip chip--limenis', k.limenis || '')); s.appendChild(bi);
@@ -520,11 +623,12 @@
                 if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, pendingPeriod, gaidosais.kods);
             }
         }
-        ekKursi(logged, map).then(izpilditGaidoso);
+        ekKursi(logged, map).then(function() { kursuFiltri(); izpilditGaidoso(); });
         raditNakamasGrupas();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        kursuFiltri();
         fetch('/api/me', { credentials: 'same-origin' })
             .then(function(r) { return r.ok ? r.json() : { user: null }; })
             .catch(function() { return { user: null }; })

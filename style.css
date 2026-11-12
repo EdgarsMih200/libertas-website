@@ -1080,6 +1080,32 @@ html .lapas-josla.sc-muertos {
     font-size: var(--fs-sm);
 }
 
+/* Kursu filtri (script.js kursuFiltri): .mat-rikjosla + divas .mat-filtri rindas (valoda, veids) */
+.kursu-rikjosla { padding-bottom: 0; }
+.kursu-filtru-grupas { display: flex; flex-wrap: wrap; gap: var(--sp-3); min-width: 0; max-width: 100%; }
+.kursu-grupa[hidden],
+.kursu-grupa-galva[hidden],
+.courses-section [data-veids][hidden] { display: none; }
+.courses-section [data-veids].paradas { animation: mat-paradas var(--dur-3) var(--ease) both; }
+.kursu-tukss { padding-top: var(--sp-6); color: var(--c-muted); }
+.kursu-tukss[hidden] { display: none; }
+.kursu-tukss-poga {
+    font: inherit;
+    color: var(--c-accent-strong);
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+    .courses-section [data-veids].paradas { animation: none; }
+}
+@media (max-width: 639px) {
+    .kursu-filtru-grupas { flex-direction: column; align-items: flex-start; }
+}
+
 .courses-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
