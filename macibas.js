@@ -17,8 +17,13 @@
 
     // ---------- palīgi ----------
     function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    // Administratora «studenta skats» (tikai šajā pārlūkā): serveris tad piemēro visus slēgumus
+    function studentaSkats() { try { return localStorage.getItem('ek-skats') === 'students'; } catch (e) { return false; } }
+    function iestatitSkatu(students) { try { if (students) localStorage.setItem('ek-skats', 'students'); else localStorage.removeItem('ek-skats'); } catch (e) {} location.hash = ''; location.reload(); }
     function api(method, url, body) {
-        return fetch(url, { method, credentials: 'same-origin', headers: body ? { 'Content-Type': 'application/json' } : {}, body: body ? JSON.stringify(body) : undefined })
+        const headers = body ? { 'Content-Type': 'application/json' } : {};
+        if (studentaSkats()) headers['X-Ek-Skats'] = 'students';
+        return fetch(url, { method, credentials: 'same-origin', headers, body: body ? JSON.stringify(body) : undefined })
             .then((r) => r.json().catch(() => ({})).then((d) => { if (!r.ok) { const e = new Error(d.error || 'Kļūda'); e.status = r.status; e.dati = d; throw e; } return d; }));
     }
     function toast(m, kl) { if (window.LIB && LIB.toast) LIB.toast(m, kl); else alert(m); }
@@ -360,8 +365,20 @@
         if (tagad) k1.appendChild(saite(tagad.teksts, tagad.href, 'btn-cta'));
         const pk = el('p', 'ek-piekluve'); pk.style.justifyContent = 'center'; pk.appendChild(ikona('kal'));
         if (P.piekluve.lidz) { pk.appendChild(document.createTextNode('Piekļuve līdz ')); pk.appendChild(el('strong', '', lvDatD(P.piekluve.lidz))); pk.appendChild(document.createTextNode(' (vēl ' + dienasLidz(P.piekluve.lidz) + ' d.)')); }
-        else pk.appendChild(document.createTextNode(P.piekluve.admin ? 'Priekšskatījums (administrators)' : ''));
+        else pk.appendChild(document.createTextNode(P.piekluve.admin ? 'Priekšskatījums (administrators)' : P.piekluve.students ? 'Studenta skats (administrators)' : ''));
         k1.appendChild(pk);
+        if (P.piekluve.admin || P.piekluve.students) {
+            const sk = el('div'); sk.style.cssText = 'display:flex;flex-direction:column;gap:8px;margin-top:12px';
+            if (P.piekluve.admin) sk.appendChild(poga('Skatīt kā students', 'btn-secondary ek-poga-maza', () => iestatitSkatu(true)));
+            else {
+                sk.appendChild(poga('Atpakaļ uz administratora skatu', 'btn-secondary ek-poga-maza', () => iestatitSkatu(false)));
+                sk.appendChild(poga('Notīrīt manu progresu', 'btn-secondary ek-poga-maza', () => {
+                    if (!confirm('Dzēst tavus testu un eksāmena rezultātus šajā kursā? Kurss sāksies no 1. nodarbības.')) return;
+                    api('DELETE', '/api/ek/' + encodeURIComponent(kurss) + '/progress').then(() => { location.hash = ''; location.reload(); }).catch((e) => toast(e.message, true));
+                }));
+            }
+            k1.appendChild(sk);
+        }
         pan.appendChild(k1);
         if (K.prasmes && K.prasmes.length) {
             const k2 = karte(); k2.appendChild(el('h3', '', 'Ko tu trenē')).style.cssText = 'margin:0 0 12px;font-size:1.1rem';

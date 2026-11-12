@@ -24,6 +24,8 @@ async function piekluve(env, user, kurss) {
   if (!user) return { ok: false, iemesls: 'ienakt' };
   const enr = await env.DB.prepare('SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?').bind(user.id, kurss).first();
   if (user.is_admin) return { ok: true, admin: true, enr };
+  // Administrators «studenta skatā»: piekļuve bez pieteikuma, bet slēgumi kā studentam
+  if (user.ek_students) return { ok: true, students: true, enr };
   if (!enr || enr.status === 'atteicies') return { ok: false, iemesls: 'nav', enr };
   if (!enr.paid) return { ok: false, iemesls: 'apmaksa', enr };
   if (!enr.ek_lidz || enr.ek_lidz < nowIso()) return { ok: false, iemesls: 'beigusies', enr };
@@ -202,7 +204,7 @@ async function parskats(env, user, kurss) {
     kurss: { ...pamata, apraksts: plans.apraksts, stundas: plans.stundas, prasmes: plans.prasmes,
       nodarbibas: plans.nodarbibas.map((n) => ({ nr: n.nr, nosaukums: n.nosaukums, merki: n.merki, temas: n.temas,
         dalas: (n.dalas || []).map((d) => ({ nosaukums: d.nosaukums, ilgums_min: d.ilgums_min })), atverta: atverta(plans, prog, n.nr, pk.admin) })) },
-    piekluve: { ok: true, admin: !!pk.admin, lidz: pk.enr?.ek_lidz || null },
+    piekluve: { ok: true, admin: !!pk.admin, students: !!pk.students, lidz: pk.enr?.ek_lidz || null },
     progress: prog, eksamens: eks, sertifikats: s,
     resursi: eks.nokartots || pk.admin ? await saturs(env, kurss, 'resursi') : null,
     lietotajs: { vards: user.name || '' },
@@ -441,9 +443,20 @@ export async function ekMarsruts(request, env, { path, method, user, origin, url
   m = path.match(/^\/api\/ek\/([a-z0-9-]+)(?:\/(.*))?$/);
   if (!m) return null;
   const [, kurss, rest = ''] = m;
+  // Studenta skats: administrators redz kursu ar visiem slēgumiem (galvene no macibas.js pārslēga)
+  if (user?.is_admin && request.headers.get('X-Ek-Skats') === 'students') user = { ...user, is_admin: false, ek_students: true };
   if (method === 'GET' && rest === '') return parskats(env, user, kurss);
   if (!user) return fail('Nepieciešama pieteikšanās', 401);
   let r;
+  if (rest === 'progress' && method === 'DELETE') {
+    // Tikai administratoram: notīra paša progresu un mēģinājumus šajā kursā, lai pārbaudītu slēgumus no sākuma
+    if (!user.is_admin && !user.ek_students) return fail('Nav piekļuves', 403);
+    await env.DB.batch([
+      env.DB.prepare('DELETE FROM ek_progress WHERE user_id = ? AND kurss = ?').bind(user.id, kurss),
+      env.DB.prepare('DELETE FROM ek_meginajumi WHERE user_id = ? AND kurss = ?').bind(user.id, kurss),
+    ]);
+    return json({ ok: true });
+  }
   if ((r = rest.match(/^nodarbiba\/(\d+)$/)) && method === 'GET') return nodarbiba(env, user, kurss, Number(r[1]));
   if ((r = rest.match(/^nodarbiba\/(\d+)\/progress$/)) && method === 'POST') return saglabatProgresu(request, env, user, kurss, Number(r[1]));
   if ((r = rest.match(/^tests\/(\d+)$/)) && method === 'POST') return testsSakt(env, user, kurss, Number(r[1]));
