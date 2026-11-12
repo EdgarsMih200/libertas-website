@@ -6474,3 +6474,262 @@ html.ziemassvetki .empa-cepure { display: inline; }
 .ek-jautajums:focus { outline: none; }
 .ek-admin .ek-progress { width: 90px; display: inline-block; vertical-align: middle; margin-right: 6px; }
 .ek-meginajumi { flex-wrap: wrap; }
+
+/* ADVENTES KALENDĀRS (advente.html + advente.js; sākumlapā .adv-sakums zīme un saite uz egli; sezona.js: html.advente-gaida 15.–30. nov., html.advente 1.–24. dec.) */
+.adv-lapa { --adv-zelts: #F2C46A; --adv-slegts: #3C4B57; }
+.adv-skatuve {
+    padding-block: clamp(24px, 3vw, 48px) clamp(40px, 6vw, 80px);
+    background: linear-gradient(180deg, #1E2A38 0%, #2F3A50 38%, #5B4F68 72%, #8E6F7A 100%);
+    color: var(--c-on-forest);
+}
+.adv-galva { grid-area: galva; display: grid; gap: var(--sp-3); align-content: start; }
+.adv-cels, .adv-cels a { color: var(--c-on-forest-muted); }
+.adv-cels a:hover { color: var(--adv-zelts); }
+.adv-zime-augsa { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--adv-zelts); }
+.adv-galva h1 { font-size: var(--fs-h1); font-weight: 600; line-height: 1.04; color: var(--c-bg); }
+.adv-galva h1 em { font-weight: 400; color: #F7C9A3; }
+.adv-ievads { line-height: 1.5; color: var(--c-on-forest); max-width: 62ch; }
+.adv-statuss {
+    padding: 12px 16px; border-radius: var(--r-sm); background: rgb(20 30 27 / .55);
+    border: 1px solid rgb(242 196 106 / .35); color: var(--c-on-forest); font-variant-numeric: tabular-nums;
+}
+.adv-statuss-saite { color: var(--adv-zelts); font-weight: 700; }
+.adv-skatuve :focus-visible { outline-color: var(--c-focus-dark); }
+
+.adv-izkartojums {
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); grid-template-areas: "egle galva" "egle karte";
+    grid-template-rows: auto 1fr; gap: var(--sp-5) clamp(20px, 3vw, 48px); align-items: start;
+}
+.adv-egle { grid-area: egle; display: grid; gap: var(--sp-3); min-width: 0; }
+.adv-egle-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.adv-zvaigzne { fill: #5A6470; stroke: #8A949C; stroke-width: 1.5; transition: fill .4s; }
+.adv-zvaigznes-mirdzums { opacity: 0; transition: opacity .6s; }
+.adv-egle--pilna .adv-zvaigzne { fill: var(--adv-zelts); stroke: #FFE9B8; }
+.adv-egle--pilna .adv-zvaigznes-mirdzums { opacity: 1; }
+
+.adv-rotajums { cursor: pointer; outline: none; }
+.adv-aukla { stroke: #C9B48A; stroke-width: 1.2; }
+.adv-cilpa { fill: #C9B48A; }
+.adv-lode-g { transition: transform .2s ease; }
+.adv-rotajums:hover .adv-lode-g, .adv-rotajums:focus-visible .adv-lode-g { transform: scale(1.12); }
+.adv-lode { stroke-width: 2; }
+.adv-rotajums text { font: 600 16px var(--ff-display); text-anchor: middle; dominant-baseline: central; pointer-events: none; }
+.adv-gredzens { fill: none; stroke: var(--adv-zelts); stroke-width: 2; opacity: 0; }
+.adv-rotajums--slegts .adv-lode, .adv-rotajums--beidzies .adv-lode { fill: var(--adv-slegts); stroke: #6F7F88; stroke-width: 1.5; }
+.adv-rotajums--slegts text, .adv-rotajums--beidzies text { fill: #A9B4B8; }
+.adv-rotajums--beidzies { opacity: .55; }
+.adv-rotajums--sodien .adv-lode { fill: #E07A4A; stroke: #FFE2C9; stroke-width: 2.5; }
+.adv-rotajums--sodien text { fill: #fff; }
+.adv-rotajums--sodien .adv-gredzens { animation: adv-gredzens 1.8s ease-out infinite; }
+.adv-rotajums--nokavets .adv-lode { fill: #2A3640; stroke: var(--adv-zelts); stroke-dasharray: 4 3; }
+.adv-rotajums--nokavets text { fill: var(--adv-zelts); }
+.adv-rotajums--atverts .adv-lode { fill: var(--adv-tips, #34503F); stroke: rgb(255 255 255 / .6); stroke-width: 1.5; }
+.adv-rotajums--atverts text { fill: #fff; }
+.adv-rotajums--izvelets .adv-lode { stroke: #fff; stroke-width: 3.5; stroke-dasharray: none; }
+.adv-rotajums:focus-visible .adv-lode { stroke: var(--c-focus-dark); stroke-width: 4; stroke-dasharray: none; }
+.adv-rotajums.adv-gaida { opacity: .6; }
+.adv-krata { animation: adv-krata .4s; }
+@keyframes adv-gredzens { 0% { r: 18; opacity: .85; } 100% { r: 34; opacity: 0; } }
+@keyframes adv-krata { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+
+/* Durvju tipu krāsas: rotājums + pastkartītes etiķete */
+.adv-tips--vards { --adv-tips: #34503F; --adv-tips-teksts: var(--c-sage-ink); }
+.adv-tips--atlaide { --adv-tips: #B4502A; --adv-tips-teksts: var(--c-accent-strong); }
+.adv-tips--quiz { --adv-tips: #2F5878; --adv-tips-teksts: var(--c-info); }
+.adv-tips--trad { --adv-tips: #6B1D1D; --adv-tips-teksts: var(--c-brand); }
+.adv-tips--davana { --adv-tips: #A86F0E; --adv-tips-teksts: var(--c-warn); }
+.adv-tips--finals { --adv-tips: #F2C46A; --adv-tips-teksts: var(--c-warn); }
+.adv-rotajums.adv-tips--finals text { fill: #1E2E29; }
+
+.adv-lezenda { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0; padding: 0; list-style: none; font-size: var(--fs-sm); color: var(--c-on-forest-muted); }
+.adv-lezenda li { display: inline-flex; align-items: center; gap: 8px; }
+.adv-punkts { width: 14px; height: 14px; border-radius: 50%; flex: none; }
+.adv-punkts--sodien { background: #E07A4A; box-shadow: inset 0 0 0 2px #FFE2C9; }
+.adv-punkts--nokavets { background: #2A3640; border: 2px dashed var(--adv-zelts); }
+.adv-punkts--slegts { background: var(--adv-slegts); }
+.adv-punkts--atverts { background: conic-gradient(#34503F 0 25%, #B4502A 0 50%, #2F5878 0 75%, #A86F0E 0); }
+
+/* Pastkartīte */
+.adv-pastkarte-vieta { grid-area: karte; min-width: 0; position: sticky; top: calc(var(--header-h, 76px) + 16px); }
+.adv-pastkarte {
+    position: relative; display: grid; gap: var(--sp-3); padding: 28px 26px 22px;
+    background: var(--c-surface); color: var(--c-ink); border-radius: var(--r-md); box-shadow: var(--shadow-3);
+    background-image: repeating-linear-gradient(-45deg, #B4502A 0 10px, transparent 10px 20px, #2F5878 20px 30px, transparent 30px 40px);
+    background-size: 100% 6px; background-repeat: no-repeat;
+}
+.adv-pastkarte--tuksa { background-image: none; text-align: center; justify-items: center; padding: 32px 26px; }
+.adv-pastkarte--tuksa .btn-cta { margin-top: var(--sp-2); }
+.adv-zimogs {
+    position: absolute; top: 24px; right: 22px; width: 66px; height: 78px; display: grid; place-content: center; text-align: center;
+    border: 2px dashed var(--c-line-strong); border-radius: 6px; background: var(--c-sunk); transform: rotate(3deg);
+}
+.adv-zimogs b { font: 700 22px/1 var(--ff-display); color: var(--c-brand); }
+.adv-zimogs small { display: block; margin-top: 4px; font-size: 10px; letter-spacing: .08em; color: var(--c-muted); }
+.adv-zimogs-datums {
+    justify-self: start; padding: 3px 10px; border: 1.5px solid var(--c-line); border-radius: var(--r-pill);
+    font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--c-muted);
+}
+.adv-pk-tips { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--adv-tips-teksts, var(--c-muted)); }
+.adv-pk-virsraksts { margin: 0; padding-right: 78px; font-family: var(--ff-display); font-size: clamp(26px, 3vw, 34px); line-height: 1.12; color: var(--c-ink); text-wrap: balance; }
+.adv-pastkarte--tuksa .adv-pk-virsraksts { padding-right: 0; font-size: 24px; }
+.adv-pk-tulkojums { font: italic 19px/1.3 var(--ff-display); color: var(--c-muted); }
+.adv-pk-piemers { display: grid; gap: 2px; padding-left: 12px; border-left: 3px solid var(--c-line); }
+.adv-pk-piemers i { font-family: var(--ff-display); }
+.adv-pk-piemers span, .adv-pk-sikums, .adv-pk-skaidrojums { font-size: var(--fs-sm); color: var(--c-muted); }
+.adv-pk-runat {
+    justify-self: start; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px;
+    border: 1.5px solid var(--c-accent); border-radius: var(--r-pill); background: none; color: var(--c-accent-strong);
+    font: 600 var(--fs-sm) var(--ff-body); cursor: pointer;
+}
+.adv-pk-runat svg { width: 18px; height: 18px; }
+.adv-pk-runat:hover { background: var(--c-accent-soft); }
+.adv-pk-kods { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.adv-kods {
+    padding: 8px 14px; border: 1.5px dashed var(--c-accent); border-radius: 10px; background: var(--c-accent-soft); color: var(--c-accent-strong);
+    font: 700 18px ui-monospace, Consolas, monospace; letter-spacing: .08em;
+}
+.adv-kods--maz { padding: 2px 8px; font-size: 14px; }
+.adv-kopet { width: auto; min-height: 40px; padding: 6px 16px; }
+.adv-pk-jautajums { font-weight: 600; }
+.adv-pk-atbildes { display: grid; gap: 8px; }
+.adv-pk-atbilde {
+    min-height: 44px; padding: 10px 14px; text-align: left; border: 1.5px solid var(--c-line); border-radius: var(--r-sm);
+    background: var(--c-bg); color: var(--c-ink); font: 600 1rem var(--ff-body); cursor: pointer;
+}
+.adv-pk-atbilde:hover:not(:disabled) { border-color: var(--c-accent); }
+.adv-pk-atbilde--pareizi { border-color: var(--c-success); background: var(--c-success-bg); color: var(--c-success); }
+.adv-pk-atbilde--pareizi::after { content: " ✓"; }
+.adv-pk-atbilde--nepareizi { border-color: var(--c-error); background: var(--c-error-bg); color: var(--c-error); text-decoration: line-through; }
+.adv-pk-atbilde:disabled { cursor: default; }
+.adv-pk-poga { justify-self: start; }
+.adv-pk-paraksts { justify-self: end; font: italic var(--fs-sm) var(--ff-display); color: var(--c-muted); }
+
+/* Progress un balvas */
+.adv-info { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: clamp(20px, 3vw, 40px); padding-block: var(--sp-section, 72px); }
+.adv-progress { display: grid; gap: var(--sp-3); align-content: start; padding: 28px; border-radius: var(--r-lg); background: var(--c-forest); color: var(--c-on-forest); }
+.adv-progress h2 { color: var(--c-bg); font-size: var(--fs-h2); }
+.adv-info-zime { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--c-on-forest-muted); }
+.adv-virtene { display: grid; grid-template-columns: repeat(12, 1fr); gap: 8px 6px; }
+.adv-spuldze { aspect-ratio: 1; max-width: 100%; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--adv-slegts); }
+.adv-spuldze--deg { background: var(--adv-zelts); box-shadow: 0 0 12px var(--adv-zelts); }
+.adv-progress-teksts { color: var(--c-on-forest-muted); }
+.adv-progress .adv-kods { background: rgb(242 196 106 / .15); color: var(--adv-zelts); border-color: var(--adv-zelts); }
+.adv-balvas { display: grid; gap: var(--sp-4); align-content: start; }
+.adv-balvas h2 { color: var(--c-brand); font-size: var(--fs-h2); }
+.adv-balvu-saraksts { display: grid; gap: var(--sp-3); margin: 0; padding: 0; list-style: none; }
+.adv-balvu-saraksts li { display: grid; grid-template-columns: 4.2ch 1fr; gap: 16px; padding: 18px 20px; border: 1px solid var(--c-line); border-radius: var(--r-md); background: var(--c-surface); }
+.adv-balva-zime { font: 600 24px/1.1 var(--ff-display); color: var(--c-accent); }
+.adv-balvu-saraksts h3 { font-size: var(--fs-h3); margin: 0 0 4px; }
+.adv-balvu-saraksts p, .adv-noteikumi { color: var(--c-muted); font-size: var(--fs-sm); }
+
+@media (max-width: 1023px) {
+    .adv-izkartojums { grid-template-columns: 1fr; grid-template-areas: "galva" "egle" "karte"; grid-template-rows: none; }
+    .adv-info { grid-template-columns: 1fr; }
+    .adv-pastkarte-vieta { position: static; }
+}
+@media (max-width: 640px) {
+    .adv-pastkarte { padding: 24px 18px 18px; }
+    .adv-zimogs { width: 56px; height: 66px; top: 20px; right: 14px; }
+    .adv-pk-virsraksts { padding-right: 64px; }
+    .adv-virtene { grid-template-columns: repeat(8, 1fr); }
+    .adv-rotajums text { font-size: 19px; }
+    .adv-balvu-saraksts li { grid-template-columns: 1fr; gap: 6px; }
+}
+
+/* Sākumlapa: atskaites / atvēršanas zīme zem hero pogām un saite uz egli ainavā */
+.adv-sakums { display: none; }
+html.advente-gaida .adv-sakums, html.advente .adv-sakums {
+    display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 8px 18px 8px 12px;
+    border-radius: var(--r-pill); background: rgb(30 46 41 / .88); color: var(--c-on-forest);
+    border: 1px solid rgb(242 196 106 / .5); box-shadow: var(--shadow-2); text-decoration: none;
+    font-size: var(--fs-sm); font-variant-numeric: tabular-nums;
+}
+.adv-sakums:hover { border-color: #F2C46A; color: #fff; }
+.adv-sakums:focus-visible { outline: 2px solid var(--c-focus-dark); outline-offset: 3px; }
+.adv-sakums-zvaigzne { width: 22px; height: 22px; flex: none; fill: #F2C46A; }
+.adv-sakums b { color: #F2C46A; font-weight: 700; }
+.adv-sakums-bulta { width: 16px; height: 16px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.adv-sakums-atverts { display: none; }
+html.advente .adv-sakums-gaida { display: none; }
+html.advente .adv-sakums-atverts { display: inline; }
+
+/* Saite virs egles ainavā (x 934–986, y 495–636 ainavas koordinātēs; rāmis 1440×900 no y −100) */
+.adv-egles-saite { display: none; }
+html.advente .adv-egles-saite {
+    display: block; position: absolute; z-index: 1; left: 64.2%; top: 64.4%; width: 4.9%; height: 17.5%;
+    border-radius: 40% 40% 12px 12px; cursor: pointer;
+}
+html.advente .adv-egles-saite::after {
+    content: ""; position: absolute; inset: -18%; border-radius: 50%;
+    background: radial-gradient(closest-side, rgb(242 196 106 / .45), transparent);
+    animation: adv-egles-mirdz 2.6s ease-in-out infinite alternate;
+}
+html.advente .adv-egles-saite:hover::after { background: radial-gradient(closest-side, rgb(242 196 106 / .75), transparent); }
+@keyframes adv-egles-mirdz { from { opacity: .45; } to { opacity: 1; } }
+
+/* Izvēlnes saite decembrī (sezona.js pievieno a.adv-izvelne) */
+.main-nav a.adv-izvelne::before { content: "✦ "; color: #B07A12; }
+
+/* Pieteikuma logā: atlaides kods */
+.pl-kods { display: grid; gap: 6px; }
+.pl-kods label { font-weight: 600; }
+.pl-kods .lauks { text-transform: uppercase; letter-spacing: .06em; }
+
+/* Empanadillo ragi / zelta cepure (adventes balvas) redzamas arī ārpus html.ziemassvetki */
+.empa-ragi, .empa-zelts { display: inline; }
+
+@media (prefers-reduced-motion: reduce) {
+    .adv-rotajums--sodien .adv-gredzens, .adv-krata, html.advente .adv-egles-saite::after { animation: none; }
+}
+
+/* Adventes dāvanas: vārdu plakāts (advente-plakats.html) un e-kartīte (advente-kartite.html) */
+.adv-dav-lapa { padding-block: var(--sp-6) var(--sp-section, 72px); }
+.adv-dav-riki { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--sp-3); margin-bottom: var(--sp-5); }
+.adv-dav-riki .btn-cta { width: auto; }
+.adv-plakats {
+    display: grid; gap: var(--sp-5); padding: clamp(24px, 4vw, 56px); border-radius: var(--r-lg);
+    background: linear-gradient(180deg, #1E2A38, #2F3A50 60%, #5B4F68); color: var(--c-on-forest);
+}
+.adv-plakats-galva { display: grid; gap: 6px; text-align: center; }
+.adv-plakats-zime { font-size: var(--fs-xs); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #F2C46A; }
+.adv-plakats h1 { font-size: var(--fs-display); color: var(--c-bg); line-height: 1.05; }
+.adv-plakats h1 em { font-weight: 400; color: #F7C9A3; }
+.adv-plakats-kolonnas { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 3vw, 40px); }
+.adv-plakats h2 { display: flex; align-items: center; gap: 10px; margin-bottom: var(--sp-3); font-size: var(--fs-h3); color: var(--c-bg); }
+.adv-plakats h2 span { padding: 2px 10px; border: 1.5px dashed #F2C46A; border-radius: 6px; font-size: .8em; color: #F2C46A; }
+.adv-plakats ul { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.adv-plakats li { display: grid; gap: 2px; padding: 12px 14px; border-radius: var(--r-sm); background: rgb(255 253 248 / .08); border: 1px solid rgb(255 253 248 / .14); }
+.adv-plakats li b { font: 600 1.15rem/1.2 var(--ff-display); color: var(--c-bg); }
+.adv-plakats li span { font-size: var(--fs-sm); color: var(--c-on-forest-muted); }
+.adv-plakats-kaje { text-align: center; font: italic var(--fs-sm) var(--ff-display); color: #F7C9A3; }
+
+.adv-kartite-izk { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+.adv-kartite {
+    position: relative; display: grid; gap: var(--sp-4); padding: clamp(28px, 4vw, 48px); border-radius: var(--r-lg);
+    background: linear-gradient(180deg, #1E2A38, #2F3A50 55%, #8E6F7A); color: var(--c-on-forest); box-shadow: var(--shadow-3);
+}
+.adv-kartite-zvaigzne { width: 44px; height: 44px; fill: #F2C46A; filter: drop-shadow(0 0 12px rgb(242 196 106 / .7)); }
+.adv-kartite-kam { font: italic 600 clamp(24px, 3vw, 32px) var(--ff-display); color: var(--c-bg); overflow-wrap: anywhere; }
+.adv-kartite-sveicieni { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.adv-kartite-sveicieni li { display: grid; gap: 2px; }
+.adv-kartite-sveicieni b { font: 600 clamp(19px, 2.2vw, 24px)/1.25 var(--ff-display); color: #F7C9A3; }
+.adv-kartite-sveicieni span { font-size: var(--fs-xs); letter-spacing: .1em; text-transform: uppercase; color: var(--c-on-forest-muted); }
+.adv-kartite-lv { font-size: var(--fs-lead); }
+.adv-kartite-no { justify-self: end; font: italic var(--fs-lead) var(--ff-display); color: var(--c-bg); overflow-wrap: anywhere; }
+.adv-kartite-forma { display: grid; gap: var(--sp-2); }
+.adv-kartite-virsraksts { font-size: var(--fs-h2); color: var(--c-brand); }
+.adv-kartite-forma label { font-weight: 600; margin-top: var(--sp-2); }
+.adv-kartite-forma .btn-cta { margin-top: var(--sp-3); }
+.adv-kartite-saite { font-size: var(--fs-sm); color: var(--c-muted); overflow-wrap: anywhere; }
+
+@media (max-width: 1023px) { .adv-kartite-izk { grid-template-columns: 1fr; } }
+@media (max-width: 767px) { .adv-plakats-kolonnas { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .adv-plakats ul { grid-template-columns: 1fr; } }
+@media print {
+    @page { size: A3 landscape; margin: 10mm; }
+    .adv-dav-lapa .site-header, body:has(.adv-plakats) .site-header, body:has(.adv-plakats) .site-footer,
+    body:has(.adv-plakats) .adv-dav-riki, body:has(.adv-plakats) .empanadillo { display: none !important; }
+    .adv-plakats { -webkit-print-color-adjust: exact; print-color-adjust: exact; max-width: none; }
+    .adv-plakats ul { grid-template-columns: 1fr 1fr; }
+    .adv-plakats-kolonnas { grid-template-columns: 1fr 1fr; }
+}

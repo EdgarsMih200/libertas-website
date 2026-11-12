@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svētku e-kartīte — Libertas</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body>
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html">Noderīgi materiāli</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Adventes kalendāra 19. durvju dāvana: e-kartīte. Vārdi tikai saites parametros (?kam=&no=), serverī nekas netiek saglabāts -->
+    <main class="adv-dav-lapa">
+        <div class="container adv-dav-riki">
+            <nav class="lapas-cels" aria-label="Atrašanās vieta"><a href="index.html">Sākums</a><span aria-hidden="true">/</span><a href="advente.html#19">Adventes kalendārs</a><span aria-hidden="true">/</span><span aria-current="page">Svētku kartīte</span></nav>
+        </div>
+        <div class="container adv-kartite-izk">
+            <article class="adv-kartite" aria-labelledby="kartite-kam">
+                <svg class="adv-kartite-zvaigzne" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 16.3 6.2 19.8l1.6-6.6L2.6 8.8l6.8-.5z"/></svg>
+                <p class="adv-kartite-kam" id="kartite-kam">Mīļais draugs,</p>
+                <ul class="adv-kartite-sveicieni">
+                    <li lang="es"><b>¡Feliz Navidad y próspero Año Nuevo!</b><span>spāniski</span></li>
+                    <li lang="en"><b>Merry Christmas and a Happy New Year!</b><span>angliski</span></li>
+                    <li lang="nb"><b>God jul og godt nytt år!</b><span>norvēģiski</span></li>
+                    <li lang="sv"><b>God jul och gott nytt år!</b><span>zviedriski</span></li>
+                </ul>
+                <p class="adv-kartite-lv">Priecīgus Ziemassvētkus un laimīgu Jauno gadu!</p>
+                <p class="adv-kartite-no" data-kartite-no></p>
+            </article>
+            <form class="register-card adv-kartite-forma" data-kartite-forma>
+                <h1 class="adv-kartite-virsraksts">Svētku e-kartīte</h1>
+                <p>Ieraksti vārdus, nokopē saiti un nosūti draugam. Vārdi glabājas tikai saitē.</p>
+                <label for="kartite-kam-lauks">Kam</label>
+                <input class="lauks" id="kartite-kam-lauks" name="kam" maxlength="40" autocomplete="off" placeholder="Piem., Anna">
+                <label for="kartite-no-lauks">No kā</label>
+                <input class="lauks" id="kartite-no-lauks" name="no" maxlength="40" autocomplete="off" placeholder="Tavs vārds">
+                <button class="btn-cta" type="submit">Kopēt kartītes saiti</button>
+                <p class="adv-kartite-saite" data-kartite-saite aria-live="polite"></p>
+            </form>
+        </div>
+    </main>
+    <script>
+    (function () {
+        var p = new URLSearchParams(location.search);
+        var f = document.querySelector('[data-kartite-forma]');
+        var kam = document.getElementById('kartite-kam'), no = document.querySelector('[data-kartite-no]');
+        function tirs(s) { return String(s || '').replace(/\s+/g, ' ').trim().slice(0, 40); }
+        function radit(k, n) {
+            kam.textContent = k ? k + ',' : 'Mīļais draugs,';
+            no.textContent = n ? '— ' + n : '';
+        }
+        f.kam.value = tirs(p.get('kam')); f.no.value = tirs(p.get('no'));
+        radit(f.kam.value, f.no.value);
+        f.addEventListener('input', function () { radit(tirs(f.kam.value), tirs(f.no.value)); });
+        f.addEventListener('submit', function (e) {
+            e.preventDefault();
+            var q = new URLSearchParams();
+            if (tirs(f.kam.value)) q.set('kam', tirs(f.kam.value));
+            if (tirs(f.no.value)) q.set('no', tirs(f.no.value));
+            var url = location.origin + location.pathname + (q.toString() ? '?' + q : '');
+            var out = document.querySelector('[data-kartite-saite]');
+            out.textContent = url;
+            if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { out.textContent = 'Nokopēts: ' + url; }, function () {});
+        });
+    })();
+    </script>
+
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>

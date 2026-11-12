@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventes kalendārs — Libertas</title>
+    <meta name="description" content="Libertas adventes kalendārs: 24 durvis ar vārdiem četrās valodās, viktorīnām, atlaidēm un balvu tam, kas atver visas.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body>
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html">Noderīgi materiāli</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Adventes kalendārs: eglīte ar 24 rotājumiem (advente.js zīmē no /api/advente) + pastkartīte. Saturs no worker/advente-saturs.js -->
+    <main class="adv-lapa" id="advente">
+        <section class="adv-skatuve" aria-labelledby="adv-virsraksts">
+            <div class="container adv-izkartojums">
+                <div class="adv-galva">
+                    <nav class="lapas-cels adv-cels" aria-label="Atrašanās vieta"><a href="index.html">Sākums</a><span aria-hidden="true">/</span><span aria-current="page">Adventes kalendārs</span></nav>
+                    <p class="adv-zime-augsa"><span aria-hidden="true">✦</span> 1.–24. decembris</p>
+                    <h1 id="adv-virsraksts">Adventes <em>kalendārs</em></h1>
+                    <p class="adv-ievads">Katru rītu uz eglītes krastā var atvērt vienu rotājumu. Aiz tā — Empanadillo pastkartīte no ceļojumiem: vārds ar izrunu, viktorīna, atlaide vai neliela dāvana. Kas atver visas 24, iededz zvaigzni un piedalās galvenās balvas izlozē.</p>
+                    <p class="adv-statuss" data-adv-statuss aria-live="polite">Ielādē kalendāru…</p>
+                </div>
+                <div class="adv-egle">
+                    <svg class="adv-egle-svg" viewBox="0 0 800 620" role="group" aria-label="Eglīte ar 24 adventes rotājumiem" data-adv-egle>
+                        <defs>
+                            <radialGradient id="adv-mirdzums"><stop offset="0" stop-color="#F2C46A" stop-opacity=".9"/><stop offset="1" stop-color="#F2C46A" stop-opacity="0"/></radialGradient>
+                        </defs>
+                        <g fill="#F4F1EA" opacity=".7"><circle cx="70" cy="70" r="2"/><circle cx="180" cy="150" r="1.6"/><circle cx="660" cy="60" r="2.2"/><circle cx="560" cy="130" r="1.4"/><circle cx="740" cy="200" r="1.8"/><circle cx="110" cy="270" r="1.5"/><circle cx="700" cy="310" r="1.6"/><circle cx="40" cy="380" r="1.4"/></g>
+                        <path d="M0 430 C140 380 280 410 400 390 S640 370 800 360 V620 H0Z" fill="#4E4A66"/>
+                        <path d="M0 480 C160 450 300 465 420 450 S660 440 800 435 V620 H0Z" fill="#5E6A7C"/>
+                        <rect x="0" y="490" width="800" height="60" fill="#8FA3B6" opacity=".4"/>
+                        <path d="M0 555 C200 540 560 547 800 535 V620 H0Z" fill="#F4F1EA"/>
+                        <circle class="adv-zvaigznes-mirdzums" cx="400" cy="58" r="80" fill="url(#adv-mirdzums)"/>
+                        <polygon points="400,70 310,200 490,200" fill="#2F4A40"/>
+                        <polygon points="400,140 250,300 550,300" fill="#2B4038"/>
+                        <polygon points="400,230 190,410 610,410" fill="#26392F"/>
+                        <polygon points="400,330 130,540 670,540" fill="#213229"/>
+                        <path d="M310 200 Q400 186 490 200 M250 300 Q400 282 550 300 M190 410 Q400 388 610 410 M130 540 Q400 516 670 540" stroke="#F4F1EA" stroke-width="9" fill="none" stroke-linecap="round"/>
+                        <path d="M335 160 Q400 190 462 165 M285 240 Q400 285 515 245 M225 345 Q400 395 575 350 M170 470 Q400 520 630 470" stroke="#F2C46A" stroke-width="1.5" fill="none" opacity=".55" stroke-dasharray="2 9" stroke-linecap="round"/>
+                        <rect x="384" y="540" width="32" height="34" fill="#3A2D25"/>
+                        <path class="adv-zvaigzne" d="M400 30l8.8 18 19.8 2.9-14.3 14 3.4 19.7L400 75.3l-17.7 9.3 3.4-19.7-14.3-14 19.8-2.9z"/>
+                        <g data-adv-rotajumi></g>
+                    </svg>
+                    <ul class="adv-lezenda">
+                        <li><i class="adv-punkts adv-punkts--sodien"></i>Šodien</li>
+                        <li><i class="adv-punkts adv-punkts--nokavets"></i>Nokavēts — vēl var atvērt</li>
+                        <li><i class="adv-punkts adv-punkts--slegts"></i>Vēl slēgts</li>
+                        <li><i class="adv-punkts adv-punkts--atverts"></i>Atvērts</li>
+                    </ul>
+                </div>
+                <div class="adv-pastkarte-vieta" data-adv-karte aria-live="polite"></div>
+            </div>
+        </section>
+
+        <section class="container adv-info" aria-labelledby="adv-balva">
+            <div class="adv-progress">
+                <p class="adv-info-zime">Tavs progress</p>
+                <h2 data-adv-progress-virsraksts>0 no 24 iedegtas</h2>
+                <div class="adv-virtene" data-adv-virtene aria-hidden="true"></div>
+                <p class="adv-progress-teksts" data-adv-progress-teksts></p>
+            </div>
+            <div class="adv-balvas">
+                <h2 id="adv-balva">Balva tam, kas atver visas 24</h2>
+                <ul class="adv-balvu-saraksts">
+                    <li><span class="adv-balva-zime">1×</span><div><h3>Vieta Spāņu A1 janvāra grupā</h3><p>Vērtība 280 EUR, grupa sākas 11.01.2027. Izloze 27. decembrī starp visiem, kas atvēruši 24 durvis. Ja uzvarētājs vēlas mācīties patstāvīgi — e-kurss «Spāņu valodas pamati A1» tā vietā.</p></div></li>
+                    <li><span class="adv-balva-zime">−25 %</span><div><h3>Visiem 24/24: atlaides kods 2027. gadam</h3><p>Jebkuram kursam vai e-kursam, derīgs līdz 30.06.2027.</p></div></li>
+                    <li><span class="adv-balva-zime">★</span><div><h3>Zelta cepure Empanadillo</h3><p>Līdz 6. janvārim tavs Empanadillo visā vietnē valkās zelta cepuri.</p></div></li>
+                </ul>
+                <p class="adv-noteikumi">Dalība ir bez maksas un nav saistīta ar pirkumu. Durvis atveras katru dienu plkst. 00:00 (Rīgas laiks); nokavētās var atvērt līdz 24.12. 23:59. Atlaižu kodi ir personīgi, vienu reizi katram kontam, un tos nevar apvienot. <a href="noteikumi.html#advente">Pilni noteikumi</a></p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="advente.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>

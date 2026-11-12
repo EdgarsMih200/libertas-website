@@ -1,6 +1,7 @@
 // Libertas Worker: Google autorizācija, kursu pieteikumi, administrācija.
 import { sutitPieteikumaEpastus } from './epasts.js';
 import { ekMarsruts, pecApmaksas } from './ekursi.js';
+import { adventeMarsruts, parbauditKodu } from './advente.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -169,7 +170,7 @@ async function logout(request, env) {
 
 // ---------- Lietotāja API ----------
 const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at,
-  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz,
+  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz, e.atlaides_kods, e.atlaide_proc,
   (SELECT kods FROM ek_sertifikati s WHERE s.user_id = e.user_id AND s.kurss = e.course_id) AS ek_sertifikats,
   (SELECT COUNT(*) FROM ek_progress p WHERE p.user_id = e.user_id AND p.kurss = e.course_id AND p.nokartots_at IS NOT NULL) AS ek_nokartotas,
   (SELECT COUNT(*) FROM ek_saturs x WHERE x.kurss = e.course_id AND x.fails LIKE 'nodarbiba-%' AND x.gabals = 0) AS ek_nodarbibas
@@ -261,23 +262,29 @@ function parbauditPeriodu(courseId, period, { prasitNakotni = true } = {}) {
 }
 
 async function enroll(request, env, user, ctx, origin) {
-  const { course_id, period } = await readBody(request);
+  const { course_id, period, kods } = await readBody(request);
   if (typeof course_id !== 'string') return fail('Nav norādīts kurss');
   const course = await env.DB.prepare('SELECT id, name, price_eur, schedule, veids, ek_dienas FROM courses WHERE id = ? AND active = 1').bind(course_id).first();
   if (!course) return fail('Kurss nav atrasts', 404);
   const pr = parbauditPeriodu(course_id, period);
   if (pr.kluda) return fail(pr.kluda);
+  // Atlaides kods (adventes kalendārs): nederīgs kods aptur pieteikumu, lai lietotājs to var izlabot
+  let atl = { kods: null, proc: null };
+  if (typeof kods === 'string' && kods.trim()) {
+    atl = await parbauditKodu(env, user, course, kods);
+    if (atl.kluda) return fail(atl.kluda);
+  }
   const pv = pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null];
   const now = new Date().toISOString();
   const existing = await getEnrollment(env, user.id, course_id);
   if (existing) {
     if (existing.status !== 'atteicies') return fail('Jūs jau esat pieteicies šim kursam', 409);
-    await env.DB.prepare("UPDATE enrollments SET status = 'pieteicies', period_start = ?, period_end = ?, period_days = ?, updated_at = ? WHERE id = ?")
-      .bind(...pv, now, existing.id).run();
+    await env.DB.prepare("UPDATE enrollments SET status = 'pieteicies', period_start = ?, period_end = ?, period_days = ?, atlaides_kods = ?, atlaide_proc = ?, updated_at = ? WHERE id = ?")
+      .bind(...pv, atl.kods, atl.proc, now, existing.id).run();
   } else {
     await env.DB.prepare(
-      "INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, created_at, updated_at) VALUES (?, ?, 'pieteicies', 0, ?, ?, ?, ?, ?)"
-    ).bind(user.id, course_id, ...pv, now, now).run();
+      "INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, atlaides_kods, atlaide_proc, created_at, updated_at) VALUES (?, ?, 'pieteicies', 0, ?, ?, ?, ?, ?, ?, ?)"
+    ).bind(user.id, course_id, ...pv, atl.kods, atl.proc, now, now).run();
   }
   const enrollment = await getEnrollment(env, user.id, course_id);
   // Apstiprinājuma e-pasts klientam + paziņojums administratoram (fonā, neaizkavē atbildi)
@@ -429,6 +436,11 @@ export default {
 
       if (path.startsWith('/api/ek/') || path.startsWith('/api/admin/ek') || path.startsWith('/api/sertifikats/')) {
         const atb = await ekMarsruts(request, env, { path, method, user, origin: url.origin, url });
+        if (atb) return atb;
+      }
+
+      if (path === '/api/advente' || path.startsWith('/api/advente/') || path.startsWith('/api/admin/advente')) {
+        const atb = await adventeMarsruts(request, env, { path, method, user, url });
         if (atb) return atb;
       }
 

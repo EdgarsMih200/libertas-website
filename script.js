@@ -177,9 +177,9 @@
         return grafiksP;
     }
 
-    function enroll(btn, id, period) {
+    function enroll(btn, id, period, kods) {
         btn.classList.add('btn-busy');
-        return api('POST', '/api/enroll', { course_id: id, period: period || null }).then(function(d) {
+        return api('POST', '/api/enroll', { course_id: id, period: period || null, kods: kods || undefined }).then(function(d) {
             setBtn(btn, d && d.enrollment ? d.enrollment : { status: 'pieteicies' });
             toast(d && d.email_sent ? 'Paldies! Pieteikums saņemts — apstiprinājumu nosūtījām uz tavu e-pastu.' : 'Paldies! Pieteikums saņemts.');
         }).catch(function(err) {
@@ -290,6 +290,14 @@
         });
         d.appendChild(ol);
 
+        // Atlaides kods (adventes kalendārs) — neobligāts; serveris pārbauda, vai lietotājs to ir atvēris
+        var kw = el('div', 'pl-kods');
+        var kl = el('label', '', 'Atlaides kods (ja ir)'); kl.htmlFor = 'pl-kods';
+        var kodsLauks = el('input', 'lauks'); kodsLauks.id = 'pl-kods'; kodsLauks.type = 'text'; kodsLauks.maxLength = 20;
+        kodsLauks.autocomplete = 'off'; kodsLauks.spellcheck = false; kodsLauks.placeholder = 'Piem., ADV-ES10';
+        kw.appendChild(kl); kw.appendChild(kodsLauks);
+        d.appendChild(kw);
+
         var lbl = el('label', 'pl-piekrisana');
         var cb = el('input'); cb.type = 'checkbox'; cb.required = true;
         lbl.appendChild(cb);
@@ -330,8 +338,9 @@
         ok.addEventListener('click', function() {
             if (!cb.checked || (cb2 && !cb2.checked)) return;
             var per = izv ? izv.value : null;
+            var kods = kodsLauks.value.trim().toUpperCase();
             d.close();
-            apstiprinat(per);
+            apstiprinat(per, kods);
         });
 
         document.body.appendChild(d);
@@ -391,18 +400,20 @@
                 btn.classList.add('btn-busy');
                 grafiks().then(function(G) {
                     btn.classList.remove('btn-busy');
-                    radiLogu(btn, logged, function(period) {
+                    radiLogu(btn, logged, function(period, kods) {
                         if (!logged) {
                             // Apstiprināts pirms ienākšanas — pēc atgriešanās pieteikums tiek iesniegts bez otra loga
                             try {
                                 sessionStorage.setItem('pendingCourse', id);
                                 if (period) sessionStorage.setItem('pendingPeriod', period);
                                 else sessionStorage.removeItem('pendingPeriod');
+                                if (kods) sessionStorage.setItem('pendingKods', kods);
+                                else sessionStorage.removeItem('pendingKods');
                             } catch (x) {}
                             location.href = signInUrl(location.pathname || '/kursi.html');
                             return;
                         }
-                        enroll(btn, id, period);
+                        enroll(btn, id, period, kods);
                     }, G);
                 });
             });
@@ -461,9 +472,10 @@
     // Gaidošais pieteikums pēc ienākšanas (izpilda, kad pogas ir lapā)
     var gaidosais = null;
     try {
-        gaidosais = { kurss: sessionStorage.getItem('pendingCourse'), periods: sessionStorage.getItem('pendingPeriod') };
+        gaidosais = { kurss: sessionStorage.getItem('pendingCourse'), periods: sessionStorage.getItem('pendingPeriod'), kods: sessionStorage.getItem('pendingKods') };
         sessionStorage.removeItem('pendingCourse');
         sessionStorage.removeItem('pendingPeriod');
+        sessionStorage.removeItem('pendingKods');
     } catch (x) {}
     function izpilditGaidoso() {
         var me = window.LIB.me;
@@ -472,7 +484,7 @@
         var pb = document.querySelector('a.btn-cta[data-course="' + pending.replace(/[^a-z0-9-]/gi, '') + '"]');
         if (!pb) return;
         gaidosais = null;
-        if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, null);
+        if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, null, gaidosais.kods);
     }
     window.LIB.piesaistitPogu = function(btn) {
         var me = window.LIB.me;
@@ -505,7 +517,7 @@
             if (pb) {
                 var pending = gaidosais.kurss, pendingPeriod = gaidosais.periods;
                 gaidosais = null;
-                if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, pendingPeriod);
+                if (!(map[pending] && map[pending].status !== 'atteicies')) enroll(pb, pending, pendingPeriod, gaidosais.kods);
             }
         }
         ekKursi(logged, map).then(izpilditGaidoso);

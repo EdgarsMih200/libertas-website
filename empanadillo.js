@@ -13,7 +13,7 @@
     var KRASAS = {
         O: '#4A2810', F: '#8A5020', D: '#A8652A', S: '#B8742E', M: '#D9963F', L: '#F0BE62', H: '#FBE3A0',
         W: '#FFFDF8', K: '#2A1A10', P: '#E8796B', R: '#6B1D1D', A: '#6E3F27', V: '#A9BFA8',
-        Z: '#A9C9DA', X: '#B23A2A', B: '#7E2620', G: '#D9CFC0', Y: '#F2C46A'
+        Z: '#A9C9DA', X: '#B23A2A', B: '#7E2620', G: '#D9CFC0', Y: '#F2C46A', N: '#C98F3A'
     };
 
     // ---- Lielais ķermenis (34×25) ----
@@ -155,8 +155,19 @@
         sveicina: [[M_SOMA, M_A, M_B, M_KERM, M_SIKSNA, M_ACIS]]
     };
 
-    var CEPURES = { santa: [CEPURE, 6, -6, 'empa-cepure'], ballite: [BALLITES_CEPURE, 10, -10, 'empa-ballite'] };
-    var MAZAS_CEPURES = { santa: [MAZA_CEPURE, 6, -6, 'empa-cepure'], ballite: [MAZA_BALLITE, 9, -8, 'empa-ballite'] };
+    // Adventes kalendāra balvas: ziemeļbrieža ragi (12. durvis) un zelta Santa cepure (visas 24 durvis)
+    function spogulis(rindas) { return rindas.map(function (r) { return r.split('').reverse().join(''); }); }
+    function blakus(a, atstarpe, b) { return a.map(function (r, i) { return r + atstarpe + b[i]; }); }
+    var RAGS = ['O...O..', 'FO.OF..', '.FOF..O', '.OFO.OF', '..OFOF.', '..OFFO.', '...OFO.', '...OFO.'];
+    var RAGI = blakus(RAGS, '......', spogulis(RAGS));
+    var MAZS_RAGS = ['O.O..', 'FOF.O', '.OFOF', '.OFO.', '..OF.'];
+    var MAZI_RAGI = blakus(MAZS_RAGS, '....', spogulis(MAZS_RAGS));
+    function zelta(rindas) { return rindas.map(function (r) { return r.replace(/X/g, 'Y').replace(/B/g, 'N'); }); }
+
+    var CEPURES = { santa: [CEPURE, 6, -6, 'empa-cepure'], ballite: [BALLITES_CEPURE, 10, -10, 'empa-ballite'],
+        ragi: [RAGI, 7, -4, 'empa-ragi'], zelts: [zelta(CEPURE), 6, -6, 'empa-zelts'] };
+    var MAZAS_CEPURES = { santa: [MAZA_CEPURE, 6, -6, 'empa-cepure'], ballite: [MAZA_BALLITE, 9, -8, 'empa-ballite'],
+        ragi: [MAZI_RAGI, 8, -3, 'empa-ragi'], zelts: [zelta(MAZA_CEPURE), 6, -6, 'empa-zelts'] };
 
     var VIEWBOX = [-11, -10, 52, 35];       // lielais: ×2 = 104 px, ×3 = 156, ×4 = 208
     var VIEWBOX_MAZAIS = [-2, -8, 32, 27];  // mazais: ×2 = 64 px, ×3 = 96
@@ -214,6 +225,11 @@
     var sodien = new Date();
     var dzimsanasDiena = (sodien.getMonth() === 11 && sodien.getDate() === 5) || /[?&]ballite=1\b/.test(q);
     var cepure = dzimsanasDiena ? 'ballite' : 'santa'; // Santa redzama tikai zem html.ziemassvetki (CSS)
+    // Adventes balva (advente.js saglabā 'ragi' | 'zelts'), redzama līdz 6.01.2027
+    try {
+        var advBalva = localStorage.getItem('adventeEmpa');
+        if ((advBalva === 'ragi' || advBalva === 'zelts') && Date.now() < Date.UTC(2027, 0, 6, 22) && !dzimsanasDiena) cepure = advBalva;
+    } catch (e) {}
     var mazaKustiba = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
     var platsEkrans = window.matchMedia ? matchMedia('(min-width: 900px)') : { matches: true };
 

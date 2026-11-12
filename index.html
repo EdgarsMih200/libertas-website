@@ -157,6 +157,13 @@
                 <a href="kursi.html" class="btn-cta btn-hero" id="exploreBtn">Izvēlies kursu <svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
                 <a href="materiali.html" class="btn-secondary btn-hero">Noderīgi materiāli</a>
             </div>
+            <!-- Adventes kalendārs (sezona.js: html.advente-gaida = atskaite 15.–30. nov., html.advente = 1.–24. dec.; teksts — advente-sakums.js) -->
+            <a class="adv-sakums" href="advente.html">
+                <svg class="adv-sakums-zvaigzne" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.6 6.6L12 16.3 6.2 19.8l1.6-6.6L2.6 8.8l6.8-.5z"/></svg>
+                <span class="adv-sakums-gaida">Adventes kalendārs atvērsies pēc <b data-adv-atskaite>dažām dienām</b></span>
+                <span class="adv-sakums-atverts">Adventes kalendārs: atver <b data-adv-sodien>šodienas</b> durvis</span>
+                <svg class="adv-sakums-bulta" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
         </div>
         <!-- Ainava DOM pēc teksta: tabulēšanas secība teksts → pogas → ceļotājs -->
         <div class="hero-ainava">
@@ -185,6 +192,8 @@
                     <span class="zvans zvans-3" data-nots="1174.7"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
                     <span class="zvans zvans-4" data-nots="1568"><svg viewBox="0 0 40 70"><use href="#zvana-forma"/></svg></span>
                 </div>
+                <!-- Decembrī egle krastā = saite uz adventes kalendāru (tastatūrai — .adv-sakums zīme virs tās) -->
+                <a class="adv-egles-saite" href="advente.html" tabindex="-1" aria-hidden="true" title="Adventes kalendārs"></a>
                 <!-- Šeit empanadillo.js ieliek lielo ceļotāju (×4 / ×3 / ×2) -->
                 <div class="hero-empa" data-empa-hero></div>
             </div>
@@ -414,6 +423,7 @@
     <script src="script.js"></script>
     <script src="snow.js"></script>
     <script src="zvani.js"></script>
+    <script src="advente-sakums.js"></script>
     <script src="empanadillo.js"></script>
 </body>
 </html>

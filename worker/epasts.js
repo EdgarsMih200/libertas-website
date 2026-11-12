@@ -45,6 +45,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
   const rindas = [
     ['Kurss', esc(course.name)],
     ['Cena', esc(cena(course.price_eur))],
+    ['Atlaide', enrollment.atlaides_kods ? esc(`−${enrollment.atlaide_proc} % (kods ${enrollment.atlaides_kods}) — ņemsim vērā rēķinā`) : ''],
     [course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', esc(course.schedule || 'Tiks precizēta')],
     ['Pieteikums iesniegts', esc(datums(enrollment.created_at || enrollment.updated_at))],
   ].filter((r) => r[1]);
@@ -154,6 +155,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
     '',
     `Kurss: ${course.name}`,
     `Cena: ${cena(course.price_eur)}`,
+    ...(enrollment.atlaides_kods ? [`Atlaide: −${enrollment.atlaide_proc} % (kods ${enrollment.atlaides_kods})`] : []),
     `${ek ? 'Piekļuve' : 'Grupa'}: ${course.schedule || 'Tiks precizēta'}`,
     '',
     `Statuss: Gaida apmaksu. ${statusaTeksts}`,
@@ -170,13 +172,13 @@ function klientaVestule({ user, course, enrollment, origin }) {
   return { subject: `Pieteikums saņemts: ${course.name}`, html, text };
 }
 
-function adminaVestule({ user, course, origin }) {
+function adminaVestule({ user, course, enrollment, origin }) {
   const rinda = (k, v) => `<tr><td style="padding:4px 12px 4px 0;color:#5C554D;">${k}</td><td style="padding:4px 0;"><strong>${esc(v)}</strong></td></tr>`;
   const html = `<div style="font-family:${SANS};font-size:15px;color:#24211E;">
 <p>Jauns pieteikums kursam <strong>${esc(course.name)}</strong>.</p>
-<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${rinda(course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', course.schedule || 'Tiks precizēta')}</table>
+<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${enrollment && enrollment.atlaides_kods ? rinda('Atlaide', `−${enrollment.atlaide_proc} % (${enrollment.atlaides_kods})`) : ''}${rinda(course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', course.schedule || 'Tiks precizēta')}</table>
 <p><a href="${origin}/admin.html">Atvērt administrāciju</a></p></div>`;
-  const text = `Jauns pieteikums: ${course.name}\n${user.name || ''} <${user.email}>\nTālrunis: ${user.phone || '—'}\n${origin}/admin.html`;
+  const text = `Jauns pieteikums: ${course.name}\n${user.name || ''} <${user.email}>\nTālrunis: ${user.phone || '—'}${enrollment && enrollment.atlaides_kods ? `\nAtlaide: −${enrollment.atlaide_proc} % (${enrollment.atlaides_kods})` : ''}\n${origin}/admin.html`;
   return { subject: `Jauns pieteikums: ${course.name} — ${user.name || user.email}`, html, text };
 }
 
@@ -197,7 +199,7 @@ export async function sutitPieteikumaEpastus(env, { user, course, enrollment, or
     return;
   }
   const darbi = [sutit(env, user.email, klientaVestule({ user, course, enrollment, origin }), env.EMAIL_REPLY_TO)];
-  if (admins.length) darbi.push(sutit(env, admins, adminaVestule({ user, course, origin }), user.email));
+  if (admins.length) darbi.push(sutit(env, admins, adminaVestule({ user, course, enrollment, origin }), user.email));
   const rez = await Promise.allSettled(darbi);
   rez.forEach((x) => { if (x.status === 'rejected') console.error('E-pasta kļūda', x.reason); });
 }

@@ -64,10 +64,12 @@
         return Promise.all([
             api('GET', '/api/admin/users'), api('GET', '/api/admin/enrollments'), api('GET', '/api/courses'),
             import('/grafiks.js').catch(function() { return null; }),
-            api('GET', '/api/admin/ek').catch(function() { return { kursi: [], dalibnieki: [] }; })
+            api('GET', '/api/admin/ek').catch(function() { return { kursi: [], dalibnieki: [] }; }),
+            api('GET', '/api/admin/advente').catch(function() { return { dalibnieki: [], kodi: [], izloze: null }; })
         ]).then(function(r) {
             G = r[3];
             state.ek = r[4];
+            state.adv = r[5];
             state.users = r[0].users || r[0] || [];
             state.enr = r[1].enrollments || r[1] || [];
             state.courses = r[2].courses || r[2] || [];
@@ -144,7 +146,7 @@
     }
 
     function enrTab() {
-        var t = tableWrap(['Lietotājs', 'Kurss', 'Grupa', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
+        var t = tableWrap(['Lietotājs', 'Kurss', 'Atlaide', 'Grupa', 'Statuss', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
         var q = state.q.toLowerCase();
         state.enr.filter(function(e) {
             return (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&
@@ -155,6 +157,7 @@
             var who = el('div'); who.appendChild(el('strong', '', eName(e))); who.appendChild(el('div', 'muted', eEmail(e)));
             td(tr, who);
             td(tr, e.course_name || courseName(e.course_id));
+            td(tr, e.atlaides_kods ? '−' + e.atlaide_proc + ' % · ' + e.atlaides_kods : '—');
             td(tr, periodaSelect(e.course_id, e.period_start, function(v) {
                 api('PATCH', '/api/admin/enrollments/' + e.id, { period: v || null }).then(function(r) {
                     var n = (r && r.enrollment) || {};
@@ -278,13 +281,55 @@
         return wrap;
     }
 
+    // ---------- ADVENTE: dalībnieki, kodu izmantošana, izloze ----------
+    function advTab() {
+        var A = state.adv || { dalibnieki: [], kodi: [] };
+        var wrap = el('div', 'ek-admin');
+        var cemp = A.dalibnieki.filter(function(d) { return d.atvertas === 24; });
+        var k1 = el('div', 'ek-karte');
+        k1.appendChild(el('h3', '', 'Izloze (' + cemp.length + ' atvēruši visas 24)')).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
+        if (A.izloze) {
+            k1.appendChild(el('p', '', 'Uzvarētājs: ' + (A.izloze.name || '') + ' <' + A.izloze.email + '> · izlozēts ' + fmt(A.izloze.at) + ' no ' + A.izloze.dalibnieki + ' dalībniekiem.'));
+            var at = el('button', 'btn-link btn-danger', 'Atcelt izlozi (testam)'); at.type = 'button';
+            at.addEventListener('click', function() {
+                if (!confirm('Dzēst izlozes rezultātu?')) return;
+                api('DELETE', '/api/admin/advente/izloze').then(function(d) { state.adv = d; render(); }).catch(err);
+            });
+            k1.appendChild(at);
+        } else {
+            var iz = el('button', 'btn-cta', 'Veikt izlozi'); iz.type = 'button';
+            iz.addEventListener('click', function() {
+                if (!confirm('Izlozēt galveno balvu starp ' + cemp.length + ' dalībniekiem? Rezultātu saglabās.')) return;
+                api('POST', '/api/admin/advente/izloze' + location.search.replace(/^\?advente=/, '?diena=')).then(function(d) { state.adv = d; render(); }).catch(err);
+            });
+            k1.appendChild(iz);
+            k1.appendChild(el('p', 'muted', 'Pieejama pēc 24. decembra. Uzvarētāju izvēlas serveris nejauši.'));
+        }
+        wrap.appendChild(k1);
+        var k2 = el('div', 'ek-karte');
+        k2.appendChild(el('h3', '', 'Izmantotie kodi pieteikumos')).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
+        k2.appendChild(el('p', '', A.kodi.length ? A.kodi.map(function(k) { return k.kods + ': ' + k.skaits; }).join(' · ') : 'Vēl nav.'));
+        wrap.appendChild(k2);
+        var t = tableWrap(['Dalībnieks', 'Atvērtas durvis', 'Pēdējoreiz']);
+        var q = state.q.toLowerCase();
+        A.dalibnieki.filter(function(d) { return !q || ((d.name || '') + ' ' + d.email).toLowerCase().indexOf(q) >= 0; }).forEach(function(d) {
+            var tr = el('tr');
+            var who = el('div'); who.appendChild(el('strong', '', d.name || '')); who.appendChild(el('div', 'muted', d.email)); td(tr, who);
+            td(tr, d.atvertas + '/24' + (d.atvertas === 24 ? ' ★' : ''));
+            td(tr, fmt(d.pedeja));
+            t.body.appendChild(tr);
+        });
+        wrap.appendChild(t.wrap);
+        return wrap;
+    }
+
     function render() {
         root.textContent = '';
         root.appendChild(summary());
         root.appendChild(addForm());
 
         var tabs = el('div', 'admin-tabs');
-        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')']].forEach(function(x) {
+        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')']].forEach(function(x) {
             var b = el('button', 'admin-tab' + (state.tab === x[0] ? ' active' : ''), x[1]); b.type = 'button';
             b.addEventListener('click', function() { state.tab = x[0]; render(); });
             tabs.appendChild(b);
@@ -312,7 +357,7 @@
         }
         if (state.tab === 'ek') { root.appendChild(ekTab()); return; }
         root.appendChild(bar);
-        root.appendChild(state.tab === 'enr' ? enrTab() : usersTab());
+        root.appendChild(state.tab === 'enr' ? enrTab() : state.tab === 'adv' ? advTab() : usersTab());
     }
 
     function start(me) {
