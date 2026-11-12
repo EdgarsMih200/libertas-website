@@ -588,14 +588,19 @@
     function eksamens() {
         notirit();
         const E = P.eksamens; const w = el('div', 'ek-tests'); sakne.appendChild(w);
+        if (E.nokartots) {
+            // Nokārtots: rezultāta aplis (kā pēc iesniegšanas) + birka, nosaukums un trīs pogas
+            const { k: kr, t } = rezultataKarte({ nokartots: true, rezultats: E.labakais }, P.kurss.nosaukums, '');
+            const h2 = t.querySelector('h2'); h2.style.margin = '10px 0 6px';
+            t.insertBefore(el('span', 'ek-birka ek-birka--silts', 'Noslēguma eksāmens'), h2);
+            t.appendChild(el('p', '', 'Eksāmens nokārtots ar ' + E.labakais + ' %. Apsveicam!'));
+            const pg = el('div', 'ek-pogas'); pg.appendChild(saite(P.sertifikats ? 'Mans sertifikāts' : 'Saņemt sertifikātu', '#sertifikats', 'btn-cta')); pg.appendChild(saite('Skatīt manas atbildes', '#eksamens/parskats', 'btn-secondary')); pg.appendChild(saite('Ko darīt tālāk', '#talak', 'btn-secondary'));
+            pg.style.gridColumn = '1 / -1'; pg.style.justifyContent = 'center'; kr.appendChild(pg); // pogas visā kartītes platumā zem apļa un teksta
+            w.appendChild(kr); return;
+        }
         const k = karte();
         k.appendChild(el('span', 'ek-birka ek-birka--silts', 'Noslēguma eksāmens'));
         const h = el('h2', '', P.kurss.nosaukums); h.style.margin = '10px 0 6px'; k.appendChild(h);
-        if (E.nokartots) {
-            k.appendChild(el('p', '', 'Eksāmens nokārtots ar ' + E.labakais + ' %. Apsveicam!'));
-            const pg = el('div', 'ek-pogas'); pg.appendChild(saite(P.sertifikats ? 'Mans sertifikāts' : 'Saņemt sertifikātu', '#sertifikats', 'btn-cta')); pg.appendChild(saite('Skatīt manas atbildes', '#eksamens/parskats', 'btn-secondary')); pg.appendChild(saite('Ko darīt tālāk', '#talak', 'btn-secondary')); k.appendChild(pg);
-            w.appendChild(k); return;
-        }
         if (!E.atverts) { k.appendChild(el('p', '', 'Eksāmens atveras, kad nokārtoti visu nodarbību pašpārbaudes testi.')); k.appendChild(saite('Uz kursa sākumu', '#', 'btn-cta')); w.appendChild(k); return; }
         const p = el('p', '', 'Uzdevumi no visām nodarbībām dažādos formātos. Jautājumi atšķiras no pašpārbaudes testiem.'); p.style.cssText = 'margin:0;color:var(--c-muted)'; k.appendChild(p);
         const dati = el('div', 'ek-eks-dati');
