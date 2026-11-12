@@ -3,6 +3,7 @@ import { sutitPieteikumaEpastus } from './epasts.js';
 import { ekMarsruts, pecApmaksas } from './ekursi.js';
 import { adventeMarsruts, parbauditKodu } from './advente.js';
 import { rekiniMarsruts } from './rekini.js';
+import { blogsMarsruts } from './blogs.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -447,6 +448,11 @@ export default {
 
       if (path.startsWith('/api/rekins/') || path.startsWith('/api/admin/rekini') || path === '/api/admin/rekviziti') {
         const atb = await rekiniMarsruts(request, env, { path, method, user, url, pecApmaksas });
+        if (atb) return atb;
+      }
+
+      if (path === '/api/blogs' || path.startsWith('/api/blogs/')) {
+        const atb = await blogsMarsruts(request, env, { path, method, user, url });
         if (atb) return atb;
       }
 

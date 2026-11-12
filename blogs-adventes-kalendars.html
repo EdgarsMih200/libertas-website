@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24 durvis līdz Ziemassvētkiem: mūsu adventes kalendārs — Libertas blogs</title>
+    <meta name="description" content="No 1. decembra egle ezera krastā katru rītu atvērs vienu rotājumu. Aiz tā — pastkartīte no Empanadillo ceļojumiem, un dažreiz arī kas vairāk.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+    <!-- Bloga krāsas: mežs (noklusējums) vai papīrs; izvēle localStorage, lai lapa neieplaiksnītos -->
+    <script>try{if(localStorage.getItem('blogsTema')==='gaiss')document.documentElement.classList.add('blogs-gaiss')}catch(e){}</script>
+</head>
+<body class="blogs-body">
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html">Noderīgi materiāli</a>
+                <a href="blogs.html" aria-current="page">Blogs</a>
+                <!-- "Par mums" atgriezīsies izvēlnē, kad būs saturs (sadaļa #par-mums vēl nav izveidota) -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Bloga raksts. data-blogs-raksts = slug (worker/blogs.js RAKSTI); patīk + komentāri no /api/blogs/<slug> -->
+    <main class="blogs-lapa blogs-raksta-lapa" data-blogs-raksts="adventes-kalendars">
+        <article class="blogs-raksts">
+            <header class="container blogs-raksts-galva">
+                <div class="blogs-raksts-rinda">
+                    <nav class="blogs-cels" aria-label="Ceļš"><a href="index.html">Sākums</a> <span aria-hidden="true">/</span> <a href="blogs.html">Blogs</a></nav>
+                    <div class="blogs-tema" role="group" aria-label="Lapas krāsas">
+                    <button type="button" class="blogs-tema-poga" data-tema="tumss" aria-pressed="true">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12 3l4.5 7h-2.5l3.5 5.5h-3l3 4.5H6.5l3-4.5h-3L10 10H7.5z"/></svg>
+                        Mežs
+                    </button>
+                    <button type="button" class="blogs-tema-poga" data-tema="gaiss" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 12h7M9 16h5"/></svg>
+                        Papīrs
+                    </button>
+                </div>
+                </div>
+                <p class="blogs-meta"><span class="blogs-sadala">Svētki un tradīcijas</span> · <time datetime="2026-11-12">12. nov. 2026</time> · 3 min lasīšanas</p>
+                <h1>24 durvis līdz Ziemassvētkiem: mūsu adventes kalendārs</h1>
+                <p class="blogs-raksts-ievads">No 1. decembra egle ezera krastā katru rītu atvērs vienu rotājumu. Aiz tā — pastkartīte no Empanadillo ceļojumiem, un dažreiz arī kas vairāk.</p>
+            </header>
+            <figure class="container blogs-raksts-vaks" aria-hidden="true">
+                <svg class="blogs-vaks-ainava sc-ziema" viewBox="240 367 800 343" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun" transform="translate(-560 -40)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/><use href="assets/scene/ainava.svg#sc-path"/>
+                                <g class="blogs-vaks-egle"><ellipse cx="640" cy="560" rx="120" ry="150" fill="url(#blogs-mirdzums-l)"/><use href="assets/scene/ainava.svg#pine" x="560" y="400" width="160" height="300"/>
+                                <path class="blogs-vaks-virtene" d="M612 498q28 14 56 0M596 556q44 20 88 0M582 612q58 24 116 0"/>
+                                <circle class="bv-r1" cx="626" cy="506" r="7"/><circle class="bv-r2" cx="656" cy="506" r="7"/><circle class="bv-r3" cx="604" cy="562" r="8"/><circle class="bv-r1" cx="640" cy="568" r="8"/><circle class="bv-r2" cx="676" cy="562" r="8"/><circle class="bv-r2" cx="592" cy="620" r="8"/><circle class="bv-r3" cx="626" cy="628" r="8"/><circle class="bv-r1" cx="660" cy="628" r="8"/><circle class="bv-r3" cx="690" cy="618" r="8"/>
+                                <path class="blogs-vaks-zvaigzne" d="M640 384l6 13 14 1-11 9 4 14-13-8-13 8 4-14-11-9 14-1z"/></g>
+                                <defs><radialGradient id="blogs-mirdzums-l"><stop offset="0" stop-color="#F2C46A" stop-opacity=".45"/><stop offset="1" stop-color="#F2C46A" stop-opacity="0"/></radialGradient></defs></svg>
+            </figure>
+            <div class="container blogs-teksts">
+                <p>Bērnībā adventes kalendārs bija vienkāršs: kartona lodziņš, aiz tā šokolādes gabaliņš, kas garšoja mazliet pēc kartona. Un tomēr katru rītu gribējās celties ātrāk nekā parasti. Šogad mēģinām to sajūtu atdot — tikai bez kartona.</p>
+
+                <h2>Kā tas strādā</h2>
+                <p>Kalendārs ir viena liela egle ezera krastā ar 24 rotājumiem. Katru nakti pulksten divpadsmitos pēc Rīgas laika viens no tiem sāk mirdzēt — tās ir šodienas durvis. Uzklikšķini, un rotājums pārvēršas pastkartītē, ko Empanadillo atsūtījis no saviem ceļojumiem.</p>
+                <p>Pastkartītes nāk no četrām zemēm — Spānijas, Anglijas, Norvēģijas un Zviedrijas —, un katrā ir kaut kas cits:</p>
+                <ul>
+                    <li>vārds vai frāze ar izrunu, ko var noklausīties (un atkārtot, kamēr neviens neredz);</li>
+                    <li>maza viktorīna — ne pārāk grūta, apsolām;</li>
+                    <li>stāsts par kādu svētku tradīciju, par kuru tu, iespējams, vēl neko nezini;</li>
+                    <li>atlaides kods kādam no kursiem;</li>
+                    <li>un dažas nelielas dāvanas, par kurām pagaidām klusēsim.</li>
+                </ul>
+
+                <h2>Ja kādu dienu aizmirsti</h2>
+                <p>Decembris ir trakākais mēnesis gadā — to zinām no pašu pieredzes. Tāpēc nokavētās durvis nekur nepazūd. Tās vienkārši gaida, un tās var atvērt jebkurā brīdī līdz pat 24. decembra vakaram.</p>
+                <p>Viens sīkums: šodienas pastkartīti var izlasīt ikviens, bet, lai atvērtu nokavētās durvis un redzētu atlaižu kodus, jāienāk savā kontā. Tā kalendārs atcerēsies, ko jau esi atvēris, — arī tad, ja nākamajā dienā ienāksi no cita datora vai telefona.</p>
+
+                <h2>Kas notiek, ja izturi līdz galam</h2>
+                <p>Kad atvērti visi 24 rotājumi, egles galotnē iedegas zvaigzne. Un tas nav tikai skaisti:</p>
+                <ul>
+                    <li>visi, kas atvēruši visas durvis, piedalās izlozē, kurā var laimēt <strong>vietu spāņu valodas A1 grupā</strong>, kas sākas 2027. gada 11. janvārī. Ja ērtāk mācīties pašam, tās vietā var saņemt e-kursu. Izloze notiks 27. decembrī;</li>
+                    <li>ikviens, kas tiks līdz 24 no 24, saņems <strong>−25 % atlaides kodu</strong> jebkuram kursam, derīgu līdz 2027. gada jūnija beigām;</li>
+                    <li>un Empanadillo līdz 6. janvārim visā vietnē staigās <strong>zelta cepurē</strong>. Redzēsi to tikai tu, bet lepoties drīkst.</li>
+                </ul>
+                <p>Dalība ir bez maksas un nav saistīta ar pirkumu. Visi sīkumi ir aprakstīti <a href="noteikumi.html#advente">noteikumos</a>.</p>
+
+                <h2>Kāpēc tieši kalendārs?</h2>
+                <p>Valodas mācīšanās lielākoties ir ieradums. Ne divas stundas reizi mēnesī, bet desmit minūtes katru dienu. Adventes kalendārs ir mūsu mazais triks: 24 dienas pēc kārtas atnākt, uzzināt vienu jaunu vārdu vai tradīciju un, iespējams, pat nepamanīt, ka mācies.</p>
+                <blockquote>
+                    <p>Vai var iztikt bez atlaidēm un balvām? Protams. Bet zvaigzni galotnē tomēr būtu jauki iedegt.</p>
+                </blockquote>
+                <p>Kalendārs atvērsies <a href="advente.html">šeit</a> 1. decembrī. Ja tev ir kāda iecienīta svētku tradīcija no citas zemes vai vārds, ko vienmēr esi gribējis zināt spāniski, — uzraksti komentāros. Varbūt nākamgad tas būs aiz kādām no durvīm.</p>
+
+                <p class="blogs-paraksts">Lai jums gaišs advents!<br><span>— Libertas</span></p>
+
+            </div>
+            <footer class="container blogs-raksts-kaje">
+                <ul class="blogs-birkas" aria-label="Birkas"><li><a href="blogs.html?birka=advente">#advente</a></li><li><a href="blogs.html?birka=ziemassvētki">#ziemassvētki</a></li><li><a href="blogs.html?birka=valodas">#valodas</a></li><li><a href="blogs.html?birka=balvas">#balvas</a></li></ul>
+                <div class="blogs-darbibas">
+                    <button type="button" class="blogs-patik" aria-pressed="false" data-blogs-patik>
+                        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+                        <span class="blogs-patik-teksts">Patīk</span>
+                        <span class="blogs-patik-sk" data-patik-skaits aria-label="atzīmes">0</span>
+                    </button>
+                    <button type="button" class="blogs-dalities" data-blogs-dalities>
+                        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+                        Kopēt saiti
+                    </button>
+                </div>
+            </footer>
+        </article>
+
+        <section class="container blogs-komentari" id="komentari" aria-labelledby="komentari-virsraksts">
+            <h2 id="komentari-virsraksts">Komentāri <span class="blogs-kom-sk" data-kom-skaits></span></h2>
+            <div class="blogs-kom-forma-vieta" data-kom-forma><p class="blogs-kom-ielade">Ielādē komentārus…</p></div>
+            <ol class="blogs-kom-saraksts" data-kom-saraksts></ol>
+        </section>
+
+        <nav class="container blogs-citi" aria-label="Citi raksti">
+            <a class="blogs-citi-saite" href="blogs-jauna-majaslapa.html">
+                <span class="blogs-zime">Lasi arī</span>
+                <span class="blogs-citi-virsraksts">Libertas ir jaunas mājas internetā</span>
+            </a>
+            <a class="blogs-citi-visi" href="blogs.html">Visi raksti →</a>
+        </nav>
+    </main>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Par mums" un "Kontakti" parādīsies, kad būs saturs un kontaktinformācija -->
+                        <li><a href="blogs.html">Blogs</a></li>
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="blogs.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>
