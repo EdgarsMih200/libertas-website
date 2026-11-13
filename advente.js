@@ -114,7 +114,7 @@
         var t;
         if (D.diena > 24) t = 'Kalendārs ir noslēdzies. Atvērtās pastkartītes vari pārlasīt jebkurā laikā.';
         else if (!D.lietotajs) t = 'Šodien ir ' + D.diena + '. decembris. Šodienas durvis vari atvērt arī bez konta — lai saglabātu progresu un saņemtu atlaižu kodus, ienāc ar Google.';
-        else if (D.cempions) t = 'Visas 24 durvis atvērtas — zvaigzne deg! Tu piedalies balvas izlozē.';
+        else if (D.cempions) t = 'Visas 24 durvis atvērtas — zvaigzne deg!' + (D.izlozei ? ' Tu piedalies balvas izlozē.' : '');
         else t = 'Šodien ir ' + D.diena + '. decembris. ' + (D.atverts.indexOf(D.diena) >= 0 ? 'Šodienas durvis jau atvērtas — atgriezies rīt!' : 'Atver šodienas durvis — tās mirdz uz eglītes.');
         statuss.appendChild(document.createTextNode(t + ' '));
         if (!D.lietotajs && D.diena <= 24) {
@@ -137,10 +137,11 @@
         if (D.cempions) {
             t.appendChild(document.createTextNode('Tavs kods 2027. gadam: '));
             t.appendChild(el('kbd', 'adv-kods adv-kods--maz', D.cempionaKods));
-            t.appendChild(document.createTextNode(D.izloze.notikusi ? (D.izloze.es ? ' Tu uzvarēji galveno balvu — drīz sazināsimies!' : ' Izloze ir notikusi — paldies, ka piedalījies!') : ' Izloze 27. decembrī.'));
+            if (!D.izlozei) t.appendChild(document.createTextNode(' Izlozē piedalās tikai tie, kas katras durvis atvēra tieši savā dienā.'));
+            else t.appendChild(document.createTextNode(D.izloze.notikusi ? (D.izloze.es ? ' Tu uzvarēji galveno balvu — drīz sazināsimies!' : ' Izloze ir notikusi — paldies, ka piedalījies!') : ' Izloze 27. decembrī.'));
         } else if (D.diena >= 1 && D.diena <= 24) {
             var palikusas = 24 - sk;
-            t.textContent = 'Vēl ' + palikusas + ' durvis līdz zvaigznei. Nokavētās vari atvērt līdz 24. decembrim.';
+            t.textContent = 'Vēl ' + palikusas + ' durvis līdz zvaigznei. Nokavētās vari atvērt līdz 24. decembrim (kods 2027. gadam būs, bet izlozē piedalās tikai tie, kas katras durvis atvēra tieši savā dienā).';
         } else if (D.diena > 24) t.textContent = 'Šogad atvērtas ' + sk + ' durvis. Paldies, ka biji kopā ar mums!';
     }
 
@@ -165,7 +166,17 @@
         var v = speechSynthesis.getVoices();
         return !v.length || v.some(function (x) { return x.lang && x.lang.replace('_', '-').toLowerCase().indexOf(RUNA[l].slice(0, 2).toLowerCase()) === 0; });
     }
-    function runat(teksts, l) {
+    // Zviedru/norvēģu vārdiem — ierakstīts mp3 (lielākajā daļā datoru nav šo valodu sistēmas balss)
+    var IERAKSTI = { 7: 1, 11: 1, 20: 1, 23: 1 };
+    var audio = null;
+    function runat(teksts, l, n) {
+        if (IERAKSTI[n]) {
+            try { speechSynthesis.cancel(); } catch (e) {}
+            if (audio) audio.pause();
+            audio = new Audio('assets/advente/durvis-' + (n < 10 ? '0' : '') + n + '.mp3');
+            audio.play().catch(function () {});
+            return;
+        }
         try {
             var u = new SpeechSynthesisUtterance(teksts);
             u.lang = RUNA[l]; u.rate = .9;
@@ -198,11 +209,11 @@
             ex.appendChild(el('span', '', x.exl));
             c.appendChild(ex);
         }
-        if (x.l && x.t !== 'trad' && x.t !== 'quiz' && varRunat(x.l)) {
+        if (x.l && x.t !== 'trad' && x.t !== 'quiz' && (IERAKSTI[n] || varRunat(x.l))) {
             var sp = el('button', 'adv-pk-runat');
             sp.type = 'button';
             sp.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Klausīties';
-            sp.addEventListener('click', function () { runat(x.ti + (x.ex ? '. ' + x.ex : ''), x.l); });
+            sp.addEventListener('click', function () { runat(x.ti + (x.ex ? '. ' + x.ex : ''), x.l, n); });
             c.appendChild(sp);
         }
         if (x.b) c.appendChild(el('p', 'adv-pk-teksts', x.b));

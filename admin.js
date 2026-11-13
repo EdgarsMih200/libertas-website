@@ -363,9 +363,9 @@
     function advTab() {
         var A = state.adv || { dalibnieki: [], kodi: [] };
         var wrap = el('div', 'ek-admin');
-        var cemp = A.dalibnieki.filter(function(d) { return d.atvertas === 24; });
+        var cemp = A.dalibnieki.filter(function(d) { return d.laika === 24; });
         var k1 = el('div', 'ek-karte');
-        k1.appendChild(el('h3', '', 'Izloze (' + cemp.length + ' atvēruši visas 24)')).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
+        k1.appendChild(el('h3', '', 'Izloze (' + cemp.length + ' atvēruši visas 24 savā dienā)')).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
         if (A.izloze) {
             k1.appendChild(el('p', '', 'Uzvarētājs: ' + (A.izloze.name || '') + ' <' + A.izloze.email + '> · izlozēts ' + fmt(A.izloze.at) + ' no ' + A.izloze.dalibnieki + ' dalībniekiem.'));
             var at = el('button', 'btn-link btn-danger', 'Atcelt izlozi (testam)'); at.type = 'button';
@@ -381,19 +381,20 @@
                 api('POST', '/api/admin/advente/izloze' + location.search.replace(/^\?advente=/, '?diena=')).then(function(d) { state.adv = d; render(); }).catch(err);
             });
             k1.appendChild(iz);
-            k1.appendChild(el('p', 'muted', 'Pieejama pēc 24. decembra. Uzvarētāju izvēlas serveris nejauši.'));
+            k1.appendChild(el('p', 'muted', 'Pieejama pēc 24. decembra. Piedalās tikai tie, kas katras durvis atvēra tieši savā dienā (administratori netiek skaitīti). Uzvarētāju izvēlas serveris nejauši.'));
         }
         wrap.appendChild(k1);
         var k2 = el('div', 'ek-karte');
         k2.appendChild(el('h3', '', 'Izmantotie kodi pieteikumos')).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
         k2.appendChild(el('p', '', A.kodi.length ? A.kodi.map(function(k) { return k.kods + ': ' + k.skaits; }).join(' · ') : 'Vēl nav.'));
         wrap.appendChild(k2);
-        var t = tableWrap(['Dalībnieks', 'Atvērtas durvis', 'Pēdējoreiz']);
+        var t = tableWrap(['Dalībnieks', 'Atvērtas durvis', 'Savā dienā', 'Pēdējoreiz']);
         var q = state.q.toLowerCase();
         A.dalibnieki.filter(function(d) { return !q || ((d.name || '') + ' ' + d.email).toLowerCase().indexOf(q) >= 0; }).forEach(function(d) {
             var tr = el('tr');
             var who = el('div'); who.appendChild(el('strong', '', d.name || '')); who.appendChild(el('div', 'muted', d.email)); td(tr, who);
-            td(tr, d.atvertas + '/24' + (d.atvertas === 24 ? ' ★' : ''));
+            td(tr, d.atvertas + '/24');
+            td(tr, d.laika + '/24' + (d.laika === 24 ? ' ★' : ''));
             td(tr, fmt(d.pedeja));
             t.body.appendChild(tr);
         });

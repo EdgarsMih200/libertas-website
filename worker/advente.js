@@ -23,13 +23,28 @@ function stavoklis(url, user) {
   return { sodien, diena, simulets: sodien !== rigasDatums() };
 }
 
-async function atvertas(env, userId) {
-  const { results } = await env.DB.prepare('SELECT diena FROM advente_atverts WHERE user_id = ? AND gads = ? ORDER BY diena').bind(userId, GADS).all();
-  return results.map((r) => r.diena);
+const durvjuDatums = (n) => `${GADS}-12-${pad(n)}`;
+const adminEpasts = (env, email) =>
+  (env.ADMIN_EMAILS || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean).includes((email || '').toLowerCase());
+
+// Ieraksti, kas atvērti pirms durvju datuma (administratora testi ar ?diena=), īstajā režīmā netiek skaitīti.
+// laika = atvērtas tieši savā dienā (Rīgas laikā) — tikai tās skaitās izlozei.
+function filtret(rows, simulets) {
+  const derigi = simulets ? rows : rows.filter((r) => rigasDatums(new Date(r.at)) >= durvjuDatums(r.diena));
+  return {
+    atverts: derigi.map((r) => r.diena),
+    laika: derigi.filter((r) => rigasDatums(new Date(r.at)) === durvjuDatums(r.diena)).length,
+  };
 }
 
+async function atvertasPilni(env, userId, simulets = false) {
+  const { results } = await env.DB.prepare('SELECT diena, at FROM advente_atverts WHERE user_id = ? AND gads = ? ORDER BY diena').bind(userId, GADS).all();
+  return filtret(results, simulets);
+}
+const atvertas = async (env, userId) => (await atvertasPilni(env, userId)).atverts;
+
 async function dati(env, user, st) {
-  const atverts = user ? await atvertas(env, user.id) : [];
+  const { atverts, laika } = user ? await atvertasPilni(env, user.id, st.simulets) : { atverts: [], laika: 0 };
   const durvis = {};
   for (const n of atverts) durvis[n] = DURVIS[n - 1];
   // Viesis var izlasīt šodienas durvis, bet kodu saņem tikai pēc ienākšanas
@@ -41,7 +56,7 @@ async function dati(env, user, st) {
   const iz = await env.DB.prepare('SELECT user_id, at FROM advente_izloze WHERE gads = ?').bind(GADS).first();
   return {
     gads: GADS, sodien: st.sodien, diena: st.diena, simulets: st.simulets, lietotajs: !!user,
-    atverts, durvis, cempions, cempionaKods: cempions ? 'ADV-CEMPIONS25' : null,
+    atverts, durvis, cempions, izlozei: laika === 24 && !user.is_admin, laika, cempionaKods: cempions ? 'ADV-CEMPIONS25' : null,
     ragi: atverts.includes(12),
     izloze: iz ? { notikusi: true, es: !!(user && iz.user_id === user.id) } : { notikusi: false },
   };
@@ -68,11 +83,28 @@ export async function parbauditKodu(env, user, course, ievade) {
   return { kods, proc: K.proc };
 }
 
-async function adminDati(env) {
-  const { results: dalibnieki } = await env.DB.prepare(
-    `SELECT u.id, COALESCE(u.display_name, u.name) AS name, u.email, COUNT(*) AS atvertas, MAX(a.at) AS pedeja
-     FROM advente_atverts a JOIN users u ON u.id = a.user_id WHERE a.gads = ? GROUP BY u.id ORDER BY atvertas DESC, pedeja ASC`
+// Dalībnieki bez administratoriem; laika = durvis, kas atvērtas tieši savā dienā
+async function dalibniekuSaraksts(env) {
+  const { results } = await env.DB.prepare(
+    `SELECT u.id, COALESCE(u.display_name, u.name) AS name, u.email, a.diena, a.at
+     FROM advente_atverts a JOIN users u ON u.id = a.user_id WHERE a.gads = ?`
   ).bind(GADS).all();
+  const pec = new Map();
+  for (const r of results) {
+    if (adminEpasts(env, r.email)) continue;
+    if (!pec.has(r.id)) pec.set(r.id, { id: r.id, name: r.name, email: r.email, rows: [] });
+    pec.get(r.id).rows.push(r);
+  }
+  return [...pec.values()].map((d) => {
+    const f = filtret(d.rows, false);
+    const pedeja = d.rows.reduce((m, r) => (r.at > m ? r.at : m), '');
+    return { id: d.id, name: d.name, email: d.email, atvertas: f.atverts.length, laika: f.laika, pedeja };
+  }).filter((d) => d.atvertas > 0)
+    .sort((a, b) => b.atvertas - a.atvertas || b.laika - a.laika || (a.pedeja < b.pedeja ? -1 : 1));
+}
+
+async function adminDati(env) {
+  const dalibnieki = await dalibniekuSaraksts(env);
   const { results: kodi } = await env.DB.prepare(
     "SELECT atlaides_kods AS kods, COUNT(*) AS skaits FROM enrollments WHERE atlaides_kods IS NOT NULL AND status != 'atteicies' GROUP BY atlaides_kods"
   ).all();
@@ -120,11 +152,11 @@ export async function adventeMarsruts(request, env, { path, method, user, url })
         if (st.diena < 25) return fail('Izlozi var veikt pēc 24. decembra');
         const jau = await env.DB.prepare('SELECT 1 FROM advente_izloze WHERE gads = ?').bind(GADS).first();
         if (jau) return fail('Izloze jau ir notikusi', 409);
-        const { results } = await env.DB.prepare('SELECT user_id FROM advente_atverts WHERE gads = ? GROUP BY user_id HAVING COUNT(*) = 24').bind(GADS).all();
-        if (!results.length) return fail('Neviens nav atvēris visas 24 durvis');
+        const results = (await dalibniekuSaraksts(env)).filter((d) => d.laika === 24);
+        if (!results.length) return fail('Neviens nav atvēris visas 24 durvis katru savā dienā');
         const r = crypto.getRandomValues(new Uint32Array(1))[0] % results.length;
         await env.DB.prepare('INSERT INTO advente_izloze (gads, user_id, dalibnieki, at) VALUES (?, ?, ?, ?)')
-          .bind(GADS, results[r].user_id, results.length, new Date().toISOString()).run();
+          .bind(GADS, results[r].id, results.length, new Date().toISOString()).run();
         return json(await adminDati(env));
       }
     }
