@@ -73,6 +73,7 @@
             state.ek = r[4];
             state.adv = r[5];
             state.users = r[0].users || r[0] || [];
+            state.viesi = r[0].viesi || null;
             state.enr = r[1].enrollments || r[1] || [];
             state.courses = r[2].courses || r[2] || [];
             render();
@@ -123,7 +124,25 @@
         return f;
     }
 
+    // Nereģistrēto apmeklētāju (viesu) statistika: unikāli apmeklētāji dienā + lapu skatījumi
+    function viesuKartites() {
+        var box = el('div', 'admin-summary');
+        var v = state.viesi;
+        if (!v) { box.appendChild(el('p', 'muted', 'Viesu statistika vēl nav pieejama.')); return box; }
+        [['Šodien', v.sodien], ['7 dienās', v.d7], ['30 dienās', v.d30], ['Kopā', v.kopa]].forEach(function(x) {
+            var card = el('div', 'summary-card');
+            card.appendChild(el('strong', '', 'Viesi · ' + x[0]));
+            card.appendChild(el('div', '', 'Apmeklējumi: ' + ((x[1] && x[1].apmekletaji) || 0)));
+            card.appendChild(el('div', 'muted', 'Lapu skatījumi: ' + ((x[1] && x[1].skatijumi) || 0)));
+            box.appendChild(card);
+        });
+        return box;
+    }
+
     function usersTab() {
+        var frag = document.createDocumentFragment();
+        frag.appendChild(el('p', 'muted', 'Nereģistrēti apmeklētāji (bez sīkdatnēm; viens apmeklējums = viens apmeklētājs dienā):'));
+        frag.appendChild(viesuKartites());
         var t = tableWrap(['', 'Vārds', 'E-pasts', 'Tālrunis', 'Reģistrējies', 'Pēdējā ienākšana', 'Pēdējais apmeklējums', 'Ienākšanas', 'Kursi']);
         var q = state.q.toLowerCase();
         state.users.filter(function(u) {
@@ -144,7 +163,8 @@
             td(tr, cell.childNodes.length ? cell : '—');
             t.body.appendChild(tr);
         });
-        return t.wrap;
+        frag.appendChild(t.wrap);
+        return frag;
     }
 
     function enrTab() {

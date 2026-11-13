@@ -179,8 +179,24 @@ const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_nam
   (SELECT COUNT(*) FROM ek_saturs x WHERE x.kurss = e.course_id AND x.fails LIKE 'nodarbiba-%' AND x.gabals = 0) AS ek_nodarbibas
   FROM enrollments e JOIN courses c ON c.id = e.course_id`;
 
-async function me(request, env, user) {
-  if (!user) return json({ user: null });
+// Viesa apmeklējums: unikāls apmeklētājs dienā (dienas sāls + IP + pārlūks), bez sīkdatnēm.
+async function skaititViesi(request, env) {
+  const ua = request.headers.get('User-Agent') || '';
+  if (/bot|crawl|spider|slurp|preview|headless/i.test(ua)) return;
+  const diena = new Date().toISOString().slice(0, 10);
+  const ip = request.headers.get('CF-Connecting-IP') || '';
+  const kas = await sha256Hex(`${diena}|${env.GOOGLE_CLIENT_SECRET || 'libertas'}|${ip}|${ua}`);
+  await env.DB.prepare(
+    `INSERT INTO viesu_apmeklejumi (diena, kas) VALUES (?, ?)
+     ON CONFLICT(diena, kas) DO UPDATE SET skatijumi = skatijumi + 1`
+  ).bind(diena, kas).run();
+}
+
+async function me(request, env, user, ctx) {
+  if (!user) {
+    if (ctx) ctx.waitUntil(skaititViesi(request, env).catch(() => {}));
+    return json({ user: null });
+  }
   const now = Date.now();
   if (!user.last_seen_at || now - Date.parse(user.last_seen_at) > 5 * 60000) {
     await env.DB.prepare('UPDATE users SET last_seen_at = ? WHERE id = ?').bind(new Date(now).toISOString(), user.id).run();
@@ -326,7 +342,18 @@ async function adminUsers(env) {
     if (!byUser.has(e.user_id)) byUser.set(e.user_id, []);
     byUser.get(e.user_id).push(e);
   }
-  return json({ users: users.map((u) => ({ ...u, name: u.display_name || u.name, enrollments: byUser.get(u.id) || [] })) });
+  return json({ users: users.map((u) => ({ ...u, name: u.display_name || u.name, enrollments: byUser.get(u.id) || [] })), viesi: await viesuStatistika(env) });
+}
+
+async function viesuStatistika(env) {
+  try {
+    const d = (n) => new Date(Date.now() - n * 86400000).toISOString().slice(0, 10);
+    const q = (no) => env.DB.prepare('SELECT COUNT(*) AS apmekletaji, COALESCE(SUM(skatijumi), 0) AS skatijumi FROM viesu_apmeklejumi WHERE diena >= ?').bind(no).first();
+    const [sodien, d7, d30, kopa] = await Promise.all([q(d(0)), q(d(6)), q(d(29)), q('0000')]);
+    return { sodien, d7, d30, kopa };
+  } catch {
+    return null; // tabula vēl nav izveidota
+  }
 }
 
 async function adminEnrollments(env) {
@@ -435,7 +462,7 @@ export default {
       if (method === 'GET' && path === '/api/courses') return await courses(env);
 
       const user = await getUser(request, env);
-      if (method === 'GET' && path === '/api/me') return await me(request, env, user);
+      if (method === 'GET' && path === '/api/me') return await me(request, env, user, ctx);
 
       if (path.startsWith('/api/ek/') || path.startsWith('/api/admin/ek') || path.startsWith('/api/sertifikats/')) {
         const atb = await ekMarsruts(request, env, { path, method, user, origin: url.origin, url });
