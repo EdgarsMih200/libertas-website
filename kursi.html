@@ -67,6 +67,7 @@
             <div class="courses-grid">
                 <!-- Spāņu A1 -->
                 <article class="course-card" data-valoda="spanu" data-veids="grupa">
+                    <span class="course-veids"><svg class="course-veids-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.2c2.6-.4 4.8 1.1 5.4 4.3"/></svg>Grupā · ar pasniedzēju</span>
                     <img src="assets/kursi/spanu-a1.svg" alt="Spāņu valoda A1" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A1</span>
@@ -80,6 +81,7 @@
 
                 <!-- Spāņu A2 -->
                 <article class="course-card" data-valoda="spanu" data-veids="grupa">
+                    <span class="course-veids"><svg class="course-veids-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.2c2.6-.4 4.8 1.1 5.4 4.3"/></svg>Grupā · ar pasniedzēju</span>
                     <img src="assets/kursi/spanu-a2.svg" alt="Spāņu valoda A2" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A2</span>
@@ -93,6 +95,7 @@
 
                 <!-- Spāņu B1.1 -->
                 <article class="course-card" data-valoda="spanu" data-veids="grupa">
+                    <span class="course-veids"><svg class="course-veids-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.2c2.6-.4 4.8 1.1 5.4 4.3"/></svg>Grupā · ar pasniedzēju</span>
                     <img src="assets/kursi/spanu-b1-1.svg" alt="Spāņu valoda B1.1" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">B1.1</span>
@@ -106,6 +109,7 @@
 
                 <!-- Spāņu B1.2 -->
                 <article class="course-card" data-valoda="spanu" data-veids="grupa">
+                    <span class="course-veids"><svg class="course-veids-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.2c2.6-.4 4.8 1.1 5.4 4.3"/></svg>Grupā · ar pasniedzēju</span>
                     <img src="assets/kursi/spanu-b1-2.svg" alt="Spāņu valoda B1.2" width="600" height="320" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">B1.2</span>
@@ -127,6 +131,7 @@
             <div class="courses-grid">
                 <!-- Angļu A1 -->
                 <article class="course-card" data-valoda="anglu" data-veids="grupa">
+                    <span class="course-veids"><svg class="course-veids-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.2c2.6-.4 4.8 1.1 5.4 4.3"/></svg>Grupā · ar pasniedzēju</span>
                     <img src="assets/kursi/anglu-a1.svg" alt="Angļu valoda A1" width="600" height="320" loading="lazy" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A1</span>
@@ -140,6 +145,7 @@
 
                 <!-- Angļu A2 -->
                 <article class="course-card" data-valoda="anglu" data-veids="grupa">
+                    <span class="course-veids"><svg class="course-veids-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.2c2.6-.4 4.8 1.1 5.4 4.3"/></svg>Grupā · ar pasniedzēju</span>
                     <img src="assets/kursi/anglu-a2.svg" alt="Angļu valoda A2" width="600" height="320" loading="lazy" decoding="async">
                     <div class="course-body">
                         <span class="chip chip--limenis">A2</span>
@@ -171,9 +177,9 @@
                 <h2 id="tiessaistes-virsraksts">Tiešsaistes kursi — mācies savā tempā</h2>
                 <span class="kursu-grupa-meta">bez grafika · piekļuve 3 mēnešus</span>
             </div>
-            <div class="ek-piedavajums">
-                <div data-ek-saraksts></div>
-                <aside class="ek-karte ek-ka-notiek">
+            <div class="courses-grid" data-ek-saraksts>
+                <!-- script.js ievieto e-kursu kartītes (article.course-card.course-card--tiessaiste) pirms šī bloka -->
+                <aside class="ek-karte ek-ka-notiek" data-veids="tiessaiste">
                     <h3>Kā notiek pašmācības kurss</h3>
                     <ol>
                         <li><span><strong>Mācies, kad tev ērti.</strong> Katrā nodarbībā — daļas pa ~20 minūtēm, vingrinājumi un praktisks uzdevums.</span></li>

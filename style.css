@@ -1265,6 +1265,49 @@ html .lapas-josla.sc-muertos {
     .course-card img { aspect-ratio: 12 / 5; }
 }
 
+/* KURSA VEIDS uz vāka: grupa (papīrs) vs tiešsaiste (mežs) + tiešsaistes kartītes akcents.
+   .course-veids(--tiessaiste) > svg.course-veids-ikona; .course-card--tiessaiste (script.js ekKursi()); .chip--pasmaciba */
+.course-card { position: relative; }
+.course-veids {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px 5px 9px;
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    line-height: 1.2;
+    box-shadow: var(--shadow-1);
+}
+.course-veids-ikona {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.course-veids--tiessaiste { background: var(--c-forest); color: var(--c-on-forest); }
+.course-card--tiessaiste {
+    border-color: var(--c-sage-ink);
+    border-top-width: 4px;
+}
+.course-card--tiessaiste .course-body { background: linear-gradient(to bottom, var(--c-sage), var(--c-surface) 70%); }
+.course-birkas { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip--pasmaciba { background: var(--c-surface); color: var(--c-sage-ink); border-color: var(--c-sage-ink); }
+.course-card--tiessaiste .course-info:has(+ .course-info) { margin-bottom: 0; }
+/* "Kā notiek pašmācības kurss" aizņem divas šūnas blakus e-kursu kartītēm (kā .pieteiksanas-soli) */
+.ek-kursi-sadala .ek-ka-notiek { grid-column: span 2; }
+@media (max-width: 639px) { .ek-kursi-sadala .ek-ka-notiek { grid-column: auto; } }
+
 /* KURSU KARTĪŠU SAITES (kursi.html): virsraksts = saite uz kursa lapu, "Par kursu" virs "Pieteikties" */
 .course-saite { color: inherit; text-decoration: none; }
 .course-saite:hover { color: var(--c-accent-strong); text-decoration: underline; text-underline-offset: 3px; }
@@ -6252,11 +6295,6 @@ html.ziemassvetki .empa-cepure { display: inline; }
 .ek-noteikumi strong{color:var(--c-ink)}
 
 /* ===== 1. KURSI.HTML — jaunā sadaļa ===== */
-.ek-piedavajums{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:var(--sp-6);align-items:stretch}
-.ek-kursa-karte{display:grid;grid-template-columns:240px 1fr;overflow:hidden;padding:0}
-.ek-kursa-karte img{width:100%;height:100%;object-fit:cover}
-.ek-kursa-karte .ek-k-saturs{padding:var(--sp-6);display:flex;flex-direction:column;gap:10px}
-.ek-kursa-karte h3{margin:0;font-size:var(--fs-h3)}
 .ek-fakti{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;font-size:var(--fs-sm);color:var(--c-muted)}
 .ek-fakti li{display:flex;gap:8px;align-items:center}
 .ek-cena{font-family:var(--ff-display);font-size:1.6rem;color:var(--c-ink);margin:4px 0 0}
@@ -6422,7 +6460,6 @@ html.ziemassvetki .empa-cepure { display: inline; }
  .ek-nod-nav a{white-space:nowrap;border:1px solid var(--c-line)}
 }
 @media (max-width:640px){
- .ek-kursa-karte{grid-template-columns:1fr}.ek-kursa-karte img{aspect-ratio:12/5}
  .ek-fakti,.ek-izvele{grid-template-columns:1fr}
  .ek-eks-dati{grid-template-columns:1fr 1fr}
  .ek-rez{grid-template-columns:1fr;justify-items:center;text-align:center}
@@ -6483,7 +6520,6 @@ html.ziemassvetki .empa-cepure { display: inline; }
 .ek-solis a.ek-solis-saite { color: inherit; text-decoration: none; }
 .ek-solis a.ek-solis-saite:hover h3 { text-decoration: underline; }
 .ek-kursi-sadala[hidden] { display: none; }
-.ek-kursi-sadala .ek-kursa-karte + .ek-kursa-karte { margin-top: var(--sp-5); }
 @media print {
   body.ek-sert-lapa .site-header, body.ek-sert-lapa .site-footer, body.ek-sert-lapa .ek-sert-darb, body.ek-sert-lapa .empanadillo, body.ek-sert-lapa .lapas-josla, body.ek-sert-lapa .ek-piezime-druka { display: none !important; }
   body.ek-sert-lapa .ek-sert-ramis { background: none; padding: 0; }

@@ -548,23 +548,24 @@
         return fetch('/api/ek/kursi', { credentials: 'same-origin' }).then(function(r) { return r.ok ? r.json() : { kursi: [] }; }).then(function(d) {
             var kursi = (d && d.kursi) || [];
             if (!kursi.length) return;
+            var IK_DATORS = '<svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg>';
+            var IK_PULKSTENIS = '<svg class="course-info-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>';
+            function infoRinda(ikona, teksts) { var p = el('p', 'course-info'); p.innerHTML = ikona; p.appendChild(el('span', '', teksts)); return p; }
             kursi.forEach(function(k) {
-                var a = el('article', 'ek-karte ek-kursa-karte');
+                var a = el('article', 'course-card course-card--tiessaiste ek-kursa-karte');
                 a.setAttribute('data-valoda', k.valoda === 'en' ? 'anglu' : 'spanu'); a.setAttribute('data-veids', 'tiessaiste');
+                var z = el('span', 'course-veids course-veids--tiessaiste'); z.innerHTML = IK_DATORS.replace('course-info-ikona', 'course-veids-ikona'); z.appendChild(document.createTextNode('Tiešsaistē · savā tempā')); a.appendChild(z);
                 var img = el('img'); img.src = ekVaks(k); img.alt = ''; img.width = 600; img.height = 320; img.decoding = 'async'; a.appendChild(img);
-                var s = el('div', 'ek-k-saturs');
-                var bi = el('div'); bi.appendChild(el('span', 'ek-birka', 'Pašmācība')); bi.appendChild(document.createTextNode(' ')); bi.appendChild(el('span', 'chip chip--limenis', k.limenis || '')); s.appendChild(bi);
+                var s = el('div', 'course-body');
+                var bi = el('div', 'course-birkas'); bi.appendChild(el('span', 'chip chip--limenis', k.limenis || '')); bi.appendChild(el('span', 'chip chip--pasmaciba', 'Pašmācība')); s.appendChild(bi);
                 var h = el('h3'); var hs = el('a', 'course-saite', k.nosaukums); hs.href = 'ek-kurss.html?k=' + k.id; h.appendChild(hs); s.appendChild(h);
-                if (k.apraksts) { var p = el('p', '', k.apraksts); p.style.cssText = 'margin:0;color:var(--c-muted);font-size:var(--fs-sm)'; s.appendChild(p); }
-                var ul = el('ul', 'ek-fakti');
-                [k.nodarbibas.length + ' nodarbības', k.stundas ? '~' + k.stundas + ' stundas' : null, Math.round((k.dienas || 90) / 30) + ' mēn. piekļuve', 'Sertifikāts'].forEach(function(t) { if (t) ul.appendChild(el('li', '', t)); });
-                s.appendChild(ul);
-                s.appendChild(el('p', 'ek-cena', cenaTeksts(k.cena)));
-                var pg = el('div', 'ek-pogas');
-                var par = el('a', 'btn-secondary btn-card', 'Par kursu'); par.href = 'ek-kurss.html?k=' + k.id; pg.appendChild(par);
-                var b = ekPoga(k); pg.appendChild(b); s.appendChild(pg);
+                s.appendChild(el('p', 'course-price', cenaTeksts(k.cena)));
+                s.appendChild(infoRinda(IK_DATORS, k.nodarbibas.length + ' nodarbības' + (k.stundas ? ' · ~' + k.stundas + ' st.' : '')));
+                s.appendChild(infoRinda(IK_PULKSTENIS, Math.round((k.dienas || 90) / 30) + ' mēn. piekļuve · sertifikāts'));
+                var par = el('a', 'btn-secondary btn-card btn-card--par', 'Par kursu'); par.href = 'ek-kurss.html?k=' + k.id; s.appendChild(par);
+                var b = ekPoga(k); s.appendChild(b);
                 a.appendChild(s);
-                rezgis.appendChild(a);
+                rezgis.insertBefore(a, rezgis.querySelector('.ek-ka-notiek'));
                 piesaistit(b, logged, map);
             });
             vieta.hidden = false;
