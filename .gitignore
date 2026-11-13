@@ -1,5 +1,6 @@
 .wrangler/
 node_modules/
+.dev.vars*
 
 # E-kursu saturs un avoti (apmaksāts saturs, publisks repo) — glabājas privāti
 docs/e-kursi/avoti/
