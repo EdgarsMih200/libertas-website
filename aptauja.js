@@ -79,6 +79,9 @@ function slegta() {
 }
 
 function sakums() {
+  // Jau aizpildīta šajā pārlūkā: tikai paldies (un vai piedalās izlozē), bez pogām
+  const aizpildita = lasit(AIZPILDITA);
+  if (aizpildita) { paldies(aizpildita === 'izloze', true); return; }
   const melnraksts = (() => { try { return JSON.parse(lasit(MELNRAKSTS) || 'null'); } catch (e) { return null; } })();
   ekrans((k) => {
     k.classList.add('apt-karte--sakums');
@@ -86,7 +89,6 @@ function sakums() {
     k.appendChild(el('h2', 'apt-virsraksts apt-virsraksts--liels', 'Palīdzi mums kļūt labākiem!'));
     k.appendChild(el('p', 'apt-teksts', 'Piedalies aptaujā un laimē vienu no trim dāvanām no Tenerifes! Aptauja aizņems ap 5–7 minūtēm, un katrā ekrānā būs tikai viens jautājums.'));
     k.appendChild(el('p', 'apt-teksts apt-teksts--kluss', 'E-pasts nav obligāts: norādi to tikai tad, ja vēlies piedalīties izlozē. Uzvarētājus izlozēsim ' + IZLOZES_DATUMS + ' un informēsim pa e-pastu.'));
-    if (lasit(AIZPILDITA)) k.appendChild(el('p', 'apt-teksts apt-teksts--kluss', 'Tu šajā pārlūkā aptauju jau aizpildīji. Paldies!'));
     const pogas = el('div', 'apt-pogas apt-pogas--sakums');
     if (melnraksts && melnraksts.i >= 0 && JAUTAJUMI[melnraksts.i]) {
       pogas.appendChild(poga('apt-poga apt-poga--galvena', 'Turpināt, kur paliku', () => { s = Object.assign(jauns(), melnraksts); jautajums(); }));
@@ -400,9 +402,10 @@ function iesniegt(btn, kluda, slazds) {
     jaunumi: !!(epasts && s.jaunumi),
     viltus: slazds ? slazds.value : '',
   }).then(() => {
-    glabat(AIZPILDITA, '1');
+    const izloze = !!(epasts && s.izloze);
+    glabat(AIZPILDITA, izloze ? 'izloze' : '1');
     glabat(MELNRAKSTS, null);
-    paldies(!!(epasts && s.izloze));
+    paldies(izloze);
   }).catch((e) => {
     btn.disabled = false;
     btn.textContent = 'Iesniegt';
@@ -411,7 +414,7 @@ function iesniegt(btn, kluda, slazds) {
   });
 }
 
-function paldies(izloze) {
+function paldies(izloze, atkartoti) {
   document.querySelectorAll('.aptaujas-josla').forEach((j) => j.remove());
   ekrans((k) => {
     k.classList.add('apt-karte--paldies');
@@ -424,14 +427,9 @@ function paldies(izloze) {
     const h = el('h2', 'apt-virsraksts apt-virsraksts--liels', '¡Muchas gracias!');
     h.tabIndex = -1;
     k.appendChild(h);
-    k.appendChild(el('p', 'apt-teksts', izloze
-      ? 'Paldies! Tu piedalies izlozē. Uzvarētājus paziņosim ' + IZLOZES_DATUMS + '. 🌴'
-      : 'Paldies par atbildēm! Tās mums ļoti palīdzēs.'));
-    const pogas = el('div', 'apt-pogas apt-pogas--sakums');
-    const a1 = el('a', 'apt-poga apt-poga--galvena', 'Apskatīt kursus'); a1.href = 'kursi.html';
-    const a2 = el('a', 'apt-poga', 'Bezmaksas materiāli'); a2.href = 'materiali.html';
-    pogas.appendChild(a1); pogas.appendChild(a2);
-    k.appendChild(pogas);
+    if (atkartoti) k.appendChild(el('p', 'apt-teksts', 'Tu aptauju jau aizpildīji. Paldies par atbildēm, tās mums ļoti palīdzēs!'));
+    else k.appendChild(el('p', 'apt-teksts', 'Paldies par atbildēm! Tās mums ļoti palīdzēs.'));
+    if (izloze) k.appendChild(el('p', 'apt-teksts apt-teksts--info', 'Tu piedalies izlozē par vienu no 3 dāvanām no Tenerifes. Uzvarētājus izlozēsim ' + IZLOZES_DATUMS + ' un informēsim pa e-pastu. 🌴'));
   }, { fokuss: '.apt-virsraksts' });
 }
 
