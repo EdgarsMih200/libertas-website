@@ -21,7 +21,7 @@ export const JAUTAJUMI = [
     opc: [o('lidz18', 'Līdz 18'), o('18-24', '18–24'), o('25-34', '25–34'), o('35-44', '35–44'), o('45-54', '45–54'), o('55+', '55+')] },
   { id: 'regions', nr: '1.3.', dala: 'par', tips: 'viens', teksts: 'Kur tu dzīvo?',
     opc: [o('riga', 'Rīga'), o('pieriga', 'Pierīga'), o('kurzeme', 'Kurzeme'), o('zemgale', 'Zemgale'), o('vidzeme', 'Vidzeme'), o('latgale', 'Latgale'), o('arzemes', 'Ārpus Latvijas')] },
-  { id: 'nodarbosanas', nr: '1.4.', dala: 'par', tips: 'viens', teksts: 'Ar ko tu nodarbojies?',
+  { id: 'nodarbosanas', nr: '1.4.', dala: 'par', tips: 'vairaki', teksts: 'Kāda ir tava nodarbošanās?', apaksa: 'Vari izvēlēties vairākus.',
     opc: [o('skolens', 'Skolēns'), o('students', 'Students'), o('strada', 'Strādāju'), o('uznemejs', 'Uzņēmējs'), o('majas', 'Esmu mājās ar bērniem'), o('pensionars', 'Pensionārs'), cits()] },
 
   // 2. Libertas
