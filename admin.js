@@ -3,8 +3,9 @@
     var L = window.LIB, el = L.el, api = L.api;
     var root = document.getElementById('admin');
     var ST = Object.keys(L.STATUSI);
-    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, tab: location.hash === '#rekini' ? 'rek' : 'enr', fc: '', fs: '', fp: '', q: '' };
+    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, tab: location.hash === '#rekini' ? 'rek' : location.hash === '#aptauja' ? 'apt' : 'enr', fc: '', fs: '', fp: '', q: '' };
     var G = null; // grafiks.js (grupu periodi)
+    var AJ = null; // aptauja-jautajumi.js (jautājumi rezultātiem)
 
     // Kursa grupas administrācijai: no pagājušā gada līdz nākamajam (arī jau sākušās)
     function kursaPeriodi(courseId) {
@@ -66,8 +67,12 @@
             import('/grafiks.js').catch(function() { return null; }),
             api('GET', '/api/admin/ek').catch(function() { return { kursi: [], dalibnieki: [] }; }),
             api('GET', '/api/admin/advente').catch(function() { return { dalibnieki: [], kodi: [], izloze: null }; }),
-            api('GET', '/api/admin/rekini').catch(function() { return { rekini: [], rekviziti: {} }; })
+            api('GET', '/api/admin/rekini').catch(function() { return { rekini: [], rekviziti: {} }; }),
+            api('GET', '/api/admin/aptauja').catch(function() { return { atbildes: [], izloze: [] }; }),
+            import('/aptauja-jautajumi.js').catch(function() { return null; })
         ]).then(function(r) {
+            state.apt = r[7];
+            AJ = r[8];
             state.rek = r[6];
             G = r[3];
             state.ek = r[4];
@@ -422,15 +427,171 @@
         return wrap;
     }
 
+    // ---------- APTAUJA: kopsavilkums pa jautājumiem, CSV, izloze ----------
+    function aptOpc(q, v) {
+        var o = (q.opc || []).filter(function(x) { return x.v === v; })[0];
+        return o ? o.t : v;
+    }
+    function aptVertiba(q, a) {
+        var v = a[q.id];
+        if (v === undefined) return '';
+        if (Array.isArray(v)) return v.map(function(x) { return aptOpc(q, x); }).join('; ');
+        if (q.opc) return aptOpc(q, v);
+        return String(v);
+    }
+    function aptCsv() {
+        var A = state.apt.atbildes, J = AJ.JAUTAJUMI.filter(function(q) { return q.tips !== 'info' && q.tips !== 'epasts'; });
+        var kol = [['id', 'ID'], ['datums', 'Datums'], ['epasts', 'E-pasts'], ['izloze', 'Izloze'], ['jaunumi', 'Jaunumi']];
+        J.forEach(function(q) {
+            kol.push([q.id, q.nr + ' ' + q.teksts]);
+            if ((q.opc || []).some(function(o) { return o.cits; })) kol.push([q.id + '_cits', q.nr + ' (cits)']);
+            if (q.komentars) kol.push([q.id + '_k', q.nr + ' (komentārs)']);
+        });
+        function sun(x) { x = String(x == null ? '' : x); return /[";\n\r]/.test(x) ? '"' + x.replace(/"/g, '""') + '"' : x; }
+        var rindas = [kol.map(function(k) { return sun(k[1]); }).join(';')];
+        A.slice().reverse().forEach(function(r) {
+            rindas.push(kol.map(function(k) {
+                if (k[0] === 'id') return r.id;
+                if (k[0] === 'datums') return sun(fmt(r.created_at, true));
+                if (k[0] === 'epasts') return sun(r.epasts || '');
+                if (k[0] === 'izloze' || k[0] === 'jaunumi') return r[k[0]] ? 'jā' : '';
+                var q = J.filter(function(x) { return x.id === k[0]; })[0];
+                return sun(q ? aptVertiba(q, r.atbildes) : (r.atbildes[k[0]] || ''));
+            }).join(';'));
+        });
+        var blob = new Blob(['﻿' + rindas.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+        var a = el('a'); a.href = URL.createObjectURL(blob); a.download = 'libertas-aptauja-' + new Date().toISOString().slice(0, 10) + '.csv';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
+    }
+    function aptJosla(teksts, n, kopa) {
+        var w = el('div', 'apt-adm-rinda');
+        var pct = kopa ? Math.round(n / kopa * 100) : 0;
+        w.appendChild(el('span', 'apt-adm-nos', teksts));
+        var b = el('span', 'apt-adm-josla'); var f = el('span'); f.style.width = pct + '%'; b.appendChild(f);
+        w.appendChild(b);
+        w.appendChild(el('span', 'apt-adm-sk', n + ' · ' + pct + '%'));
+        return w;
+    }
+    function aptTeksti(virs, arr) {
+        if (!arr.length) return null;
+        var d = el('details', 'apt-adm-teksti');
+        d.appendChild(el('summary', '', virs + ' (' + arr.length + ')'));
+        var ul = el('ul');
+        arr.forEach(function(t) { ul.appendChild(el('li', '', t)); });
+        d.appendChild(ul);
+        return d;
+    }
+    function aptTab() {
+        var P = state.apt || { atbildes: [], izloze: [] }, A = P.atbildes;
+        var wrap = el('div', 'ek-admin');
+        if (!AJ) { wrap.appendChild(el('p', 'muted', 'Neizdevās ielādēt jautājumus.')); return wrap; }
+
+        // Izloze
+        var dal = A.filter(function(r) { return r.epasts && r.izloze; }).length;
+        var k1 = el('div', 'ek-karte');
+        k1.appendChild(el('h3', '', 'Izloze: 3 dāvanas no Tenerifes · dalībnieki ar e-pastu: ' + dal)).style.cssText = 'margin:0 0 10px;font-size:1.1rem';
+        if (P.izloze.length) {
+            var ol = el('ol');
+            P.izloze.forEach(function(u) { ol.appendChild(el('li', '', u.epasts)); });
+            k1.appendChild(ol);
+            k1.appendChild(el('p', 'muted', 'Izlozēts ' + fmt(P.izloze[0].at, true) + ' no ' + P.izloze[0].dalibnieki + ' dalībniekiem.'));
+            var at = el('button', 'btn-link btn-danger', 'Atcelt izlozi'); at.type = 'button';
+            at.addEventListener('click', function() {
+                if (!confirm('Dzēst izlozes rezultātu?')) return;
+                api('DELETE', '/api/admin/aptauja/izloze').then(function(d) { state.apt = d; render(); }).catch(err);
+            });
+            k1.appendChild(at);
+        } else {
+            var iz = el('button', 'btn-cta', 'Izlozēt 3 uzvarētājus'); iz.type = 'button';
+            iz.disabled = !dal;
+            iz.addEventListener('click', function() {
+                var agri = Date.now() < Date.parse(AJ.BEIGAS) ? '\n\nUZMANĪBU: aptauja vēl nav beigusies (' + fmt(AJ.BEIGAS) + ').' : '';
+                if (!confirm('Izlozēt 3 uzvarētājus starp ' + dal + ' dalībniekiem? Rezultātu saglabās.' + agri)) return;
+                api('POST', '/api/admin/aptauja/izloze').then(function(d) { state.apt = d; render(); }).catch(err);
+            });
+            k1.appendChild(iz);
+            k1.appendChild(el('p', 'muted', 'Piedalās tie, kas norādīja e-pastu un piekrita izlozei (viens e-pasts = viena dalība). Uzvarētājus izvēlas serveris nejauši. Aptauja beidzas ' + fmt(AJ.BEIGAS)));
+        }
+        wrap.appendChild(k1);
+
+        // Kopsavilkums
+        var k2 = el('div', 'ek-karte');
+        var galva = el('div', 'apt-adm-galva');
+        galva.appendChild(el('h3', '', 'Atbildes: ' + A.length + ' · jaunumus vēlas: ' + A.filter(function(r) { return r.jaunumi; }).length));
+        var csv = el('button', 'btn-secondary', 'Lejupielādēt CSV (Excel)'); csv.type = 'button';
+        csv.disabled = !A.length;
+        csv.addEventListener('click', aptCsv);
+        galva.appendChild(csv);
+        k2.appendChild(galva);
+        if (!A.length) k2.appendChild(el('p', 'muted', 'Vēl nav atbilžu.'));
+        wrap.appendChild(k2);
+
+        if (A.length) AJ.JAUTAJUMI.forEach(function(q) {
+            if (q.tips === 'info' || q.tips === 'epasts') return;
+            var ar = A.filter(function(r) { var v = r.atbildes[q.id]; return v !== undefined && v !== '' && !(Array.isArray(v) && !v.length); });
+            var k = el('div', 'ek-karte apt-adm-jaut');
+            k.appendChild(el('h4', '', q.nr + ' ' + q.teksts));
+            k.appendChild(el('p', 'muted', 'Atbildēja: ' + ar.length));
+            if (q.opc) {
+                q.opc.forEach(function(o) {
+                    var n = ar.filter(function(r) { var v = r.atbildes[q.id]; return Array.isArray(v) ? v.indexOf(o.v) >= 0 : v === o.v; }).length;
+                    k.appendChild(aptJosla(o.t, n, ar.length));
+                });
+                var c = aptTeksti('Citas atbildes / paskaidrojumi', A.map(function(r) { return r.atbildes[q.id + '_cits']; }).filter(Boolean));
+                if (c) k.appendChild(c);
+            } else if (q.tips === 'skala' || q.tips === 'nps') {
+                var sk = ar.map(function(r) { return r.atbildes[q.id]; });
+                var vid = sk.length ? (sk.reduce(function(s, x) { return s + x; }, 0) / sk.length) : 0;
+                var t = 'Vidēji: ' + vid.toFixed(1).replace('.', ',');
+                if (q.tips === 'nps' && sk.length) {
+                    var pr = sk.filter(function(x) { return x >= 9; }).length, de = sk.filter(function(x) { return x <= 6; }).length;
+                    t += ' · NPS: ' + Math.round((pr - de) / sk.length * 100) + ' (ieteicēji ' + pr + ', kritiķi ' + de + ')';
+                }
+                k.appendChild(el('p', 'apt-adm-vid', t));
+                for (var n = q.tips === 'nps' ? 0 : 1; n <= (q.tips === 'nps' ? 10 : 5); n++) {
+                    k.appendChild(aptJosla(String(n), sk.filter(function(x) { return x === n; }).length, sk.length));
+                }
+                var km = aptTeksti('Komentāri', A.map(function(r) { return r.atbildes[q.id + '_k']; }).filter(Boolean));
+                if (km) k.appendChild(km);
+            } else {
+                var tx = aptTeksti('Atbildes', ar.map(function(r) { return r.atbildes[q.id]; }));
+                if (tx) { tx.open = true; k.appendChild(tx); }
+            }
+            wrap.appendChild(k);
+        });
+
+        // Atsevišķas atbildes (piem., testa ierakstu dzēšanai)
+        var tb = tableWrap(['Datums', 'E-pasts', 'Izloze', 'Jaunumi', 'Dzirdējis', '']);
+        var qq = state.q.toLowerCase();
+        A.filter(function(r) { return !qq || (r.epasts || '').toLowerCase().indexOf(qq) >= 0; }).forEach(function(r) {
+            var tr = el('tr');
+            td(tr, fmt(r.created_at, true));
+            td(tr, r.epasts || '—');
+            td(tr, r.izloze ? 'jā' : '');
+            td(tr, r.jaunumi ? 'jā' : '');
+            td(tr, r.atbildes.dzirdejis === 'ja' ? 'jā' : r.atbildes.dzirdejis === 'ne' ? 'nē' : '');
+            var del = el('button', 'btn-link btn-danger', 'Dzēst'); del.type = 'button';
+            del.addEventListener('click', function() {
+                if (!confirm('Dzēst šo atbildi' + (r.epasts ? ' (' + r.epasts + ')' : '') + '? To nevarēs atjaunot.')) return;
+                api('DELETE', '/api/admin/aptauja/' + r.id).then(function(d) { state.apt = d; render(); }).catch(err);
+            });
+            td(tr, del);
+            tb.body.appendChild(tr);
+        });
+        wrap.appendChild(tb.wrap);
+        return wrap;
+    }
+
     function render() {
         root.textContent = '';
         root.appendChild(summary());
         root.appendChild(addForm());
 
         var tabs = el('div', 'admin-tabs');
-        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')']].forEach(function(x) {
+        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')'], ['apt', 'Aptauja (' + ((state.apt && state.apt.atbildes) || []).length + ')']].forEach(function(x) {
             var b = el('button', 'admin-tab' + (state.tab === x[0] ? ' active' : ''), x[1]); b.type = 'button';
-            b.addEventListener('click', function() { state.tab = x[0]; history.replaceState(null, '', x[0] === 'rek' ? '#rekini' : location.pathname + location.search); render(); });
+            b.addEventListener('click', function() { state.tab = x[0]; history.replaceState(null, '', x[0] === 'rek' ? '#rekini' : x[0] === 'apt' ? '#aptauja' : location.pathname + location.search); render(); });
             tabs.appendChild(b);
         });
         root.appendChild(tabs);
@@ -456,7 +617,7 @@
         }
         if (state.tab === 'ek') { root.appendChild(ekTab()); return; }
         root.appendChild(bar);
-        root.appendChild(state.tab === 'enr' ? enrTab() : state.tab === 'adv' ? advTab() : state.tab === 'rek' ? rekTab() : usersTab());
+        root.appendChild(state.tab === 'enr' ? enrTab() : state.tab === 'adv' ? advTab() : state.tab === 'apt' ? aptTab() : state.tab === 'rek' ? rekTab() : usersTab());
     }
 
     function start(me) {

@@ -9,6 +9,7 @@
     --c-accent: #B4502A;  --c-accent-strong: #963F20;  --c-accent-soft: #F6E1D5;  --c-on-accent: #FFFFFF;
     --c-sage: #DDE5DA;  --c-sage-ink: #34503F;
     --c-forest: #1E2E29;  --c-forest-2: #2B4038;  --c-on-forest: #E9E4D8;  --c-on-forest-muted: #AFB9B0;
+    --c-forest-3: #34493F;  --c-sage-bright: #B5CCAE;  /* aptauja: kartīte un aktīvā krāsa uz meža fona */
     --c-focus: var(--c-ink);  --c-focus-dark: #F0B999;
     /* semantiskās */
     --c-success: #2E6A47;  --c-success-bg: #E3EFE5;
@@ -7980,3 +7981,302 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 @media print {
     .bju-poga, .bju-logs, .bju-kapnes, .bju-kapejs { display: none !important; }
 }
+
+/* APTAUJA (aptauja.html + aptauja.js): mierīgs tumši zaļš fons, silts gaišs teksts (bez tīri balta), viens jautājums ekrānā.
+   Kontrasts: --c-on-forest uz --c-forest-2 ~10:1, --c-on-forest-muted ~5.5:1, poga --c-forest uz --c-sage-bright ~8:1. */
+.aptaujas-lapa { background: var(--c-forest); }
+.aptaujas-lapa .empanadillo { display: none; } /* talismans ir pašā aptaujā */
+.aptaujas-lapa .kajene-ainava { display: none; }
+.aptaujas-galvena {
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+    padding: clamp(32px, 5vw, 64px) 0 clamp(48px, 6vw, 96px);
+    min-height: 70vh;
+}
+.aptaujas-ietvars { max-width: 720px; }
+.aptaujas-ievads { text-align: center; margin-bottom: var(--sp-6); }
+.aptaujas-h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+    font-weight: 600;
+    color: var(--c-on-forest);
+    margin: 0 0 var(--sp-2);
+}
+.aptaujas-ievads-teksts { color: var(--c-on-forest-muted); margin: 0; font-size: var(--fs-body); }
+.aptauja { scroll-margin-top: 96px; }
+
+.apt-karte {
+    background: var(--c-forest-2);
+    border: 1px solid rgb(233 228 216 / .1);
+    border-radius: var(--r-md);
+    padding: clamp(20px, 4vw, 40px);
+    box-shadow: 0 18px 40px rgb(0 0 0 / .18);
+    color: var(--c-on-forest);
+    font-size: 1.125rem;
+    line-height: 1.6;
+}
+.apt-ienak { animation: apt-ienak .28s ease-out both; }
+@keyframes apt-ienak { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.apt-karte--sakums, .apt-karte--paldies { text-align: center; }
+.apt-zime {
+    display: inline-block;
+    margin: 0 0 var(--sp-4);
+    padding: 4px 14px;
+    border-radius: var(--r-pill);
+    background: rgb(181 204 174 / .14);
+    color: var(--c-sage-bright);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+}
+.apt-virsraksts {
+    font-family: var(--ff-display);
+    font-size: clamp(1.3rem, 1.15rem + .7vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--c-on-forest);
+    margin: 0 0 var(--sp-3);
+}
+.apt-virsraksts:focus { outline: none; }
+.apt-virsraksts--liels { font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2.1rem); }
+.apt-teksts { margin: 0 0 var(--sp-4); }
+.apt-teksts--kluss, .apt-apaksa { color: var(--c-on-forest-muted); }
+.apt-teksts--mazs { font-size: var(--fs-sm); margin: var(--sp-2) 0 0; }
+.apt-teksts--info strong { color: var(--c-sage-bright); }
+.apt-karte a:not(.apt-poga) { color: var(--c-sage-bright); text-underline-offset: 3px; }
+.apt-apaksa { margin: calc(-1 * var(--sp-2)) 0 var(--sp-4); font-size: var(--fs-sm); }
+.apt-nr {
+    margin: 0 0 var(--sp-1);
+    font-size: var(--fs-xs);
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--c-sage-bright);
+}
+
+/* progresa josla */
+.apt-galva {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--sp-3);
+    font-size: var(--fs-sm);
+    color: var(--c-on-forest-muted);
+    margin-bottom: var(--sp-2);
+}
+.apt-dala { font-weight: 600; }
+.apt-skaits { font-variant-numeric: tabular-nums; }
+.apt-progress {
+    height: 8px;
+    border-radius: var(--r-pill);
+    background: rgb(233 228 216 / .1);
+    overflow: hidden;
+    margin-bottom: var(--sp-6);
+}
+.apt-progress-aizpildijums {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--c-sage-bright);
+    transition: width .4s ease;
+}
+
+/* atbilžu varianti */
+.apt-izveles, .apt-skala { border: 0; margin: 0; padding: 0; min-width: 0; }
+.apt-izveles { display: grid; gap: 10px; }
+.apt-sr {
+    position: absolute !important;
+    width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.apt-opc {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 52px;
+    padding: 12px 16px;
+    border-radius: var(--r-sm);
+    border: 1.5px solid rgb(233 228 216 / .16);
+    background: rgb(233 228 216 / .04);
+    cursor: pointer;
+    transition: border-color .15s, background-color .15s;
+}
+.apt-opc:hover { border-color: rgb(233 228 216 / .34); background: rgb(233 228 216 / .07); }
+.apt-opc input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.apt-opc-zime {
+    flex: none;
+    width: 22px; height: 22px;
+    border: 2px solid var(--c-on-forest-muted);
+    border-radius: 50%;
+    display: grid; place-items: center;
+}
+.apt-opc input[type="checkbox"] + .apt-opc-zime { border-radius: 6px; }
+.apt-opc.ir-izvelets { border-color: var(--c-sage-bright); background: rgb(181 204 174 / .13); }
+.apt-opc.ir-izvelets .apt-opc-zime { border-color: var(--c-sage-bright); background: var(--c-sage-bright); }
+.apt-opc.ir-izvelets .apt-opc-zime::after {
+    content: "";
+    width: 10px; height: 6px;
+    border: solid var(--c-forest);
+    border-width: 0 0 2.5px 2.5px;
+    transform: translateY(-1px) rotate(-45deg);
+}
+.apt-opc:has(input:focus-visible) { outline: 3px solid var(--c-focus-dark); outline-offset: 2px; }
+.apt-opc:has(input:disabled), .apt-opc.ir-atslegts { opacity: .45; cursor: not-allowed; }
+.apt-opc--kaste { min-height: 0; align-items: flex-start; font-size: var(--fs-body); }
+.apt-opc--kaste .apt-opc-zime { margin-top: 2px; }
+.apt-piekrisanas { display: grid; gap: 10px; margin-top: var(--sp-4); }
+
+/* teksta lauki */
+.apt-lauks { display: block; }
+.apt-lauks-nosaukums { display: block; margin: var(--sp-5) 0 var(--sp-2); color: var(--c-on-forest-muted); font-size: var(--fs-body); }
+.apt-ievade {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border-radius: var(--r-sm);
+    border: 1.5px solid rgb(233 228 216 / .22);
+    background: var(--c-forest);
+    color: var(--c-on-forest);
+    font: inherit;
+    font-size: 1.0625rem;
+}
+.apt-ievade::placeholder { color: var(--c-on-forest-muted); opacity: .75; }
+.apt-ievade:focus { outline: 3px solid var(--c-focus-dark); outline-offset: 1px; border-color: var(--c-sage-bright); }
+.apt-ievade--teksts { resize: vertical; min-height: 110px; line-height: 1.5; }
+.apt-cits { margin: -2px 0 4px 36px; }
+.apt-cits[hidden], .apt-kluda[hidden] { display: none; }
+.apt-kluda { color: var(--c-focus-dark); font-size: var(--fs-sm); margin: var(--sp-2) 0 0; }
+.apt-slazds { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* skala 1–5 un 0–10 */
+.apt-skala-rinda { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.apt-skala--nps .apt-skala-rinda { grid-template-columns: repeat(11, 1fr); gap: 6px; }
+.apt-skala-punkts { position: relative; cursor: pointer; }
+.apt-skala-punkts input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.apt-skala-punkts span {
+    display: grid; place-items: center;
+    height: 56px;
+    border-radius: var(--r-sm);
+    border: 1.5px solid rgb(233 228 216 / .16);
+    background: rgb(233 228 216 / .04);
+    font-size: 1.2rem; font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    transition: border-color .15s, background-color .15s, color .15s;
+}
+.apt-skala--nps .apt-skala-punkts span { height: 48px; font-size: 1.05rem; }
+.apt-skala-punkts:hover span { border-color: rgb(233 228 216 / .34); }
+.apt-skala-punkts.ir-izvelets span { background: var(--c-sage-bright); border-color: var(--c-sage-bright); color: var(--c-forest); }
+.apt-skala-punkts input:focus-visible + span { outline: 3px solid var(--c-focus-dark); outline-offset: 2px; }
+.apt-skala-galas { display: flex; justify-content: space-between; gap: var(--sp-3); margin-top: var(--sp-2); font-size: var(--fs-sm); color: var(--c-on-forest-muted); }
+
+/* attēli: logo uz papīra kartītes (bordo logo uz zaļa nav salasāms), Empanadillo */
+.apt-attels { margin: 0 0 var(--sp-5); display: flex; justify-content: center; }
+.apt-logo-lapa {
+    background: var(--c-bg);
+    border-radius: var(--r-sm);
+    padding: 18px 28px;
+    text-align: center;
+    max-width: 320px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.apt-logo-lapa img { display: block; width: 100%; height: auto; max-width: 240px; margin: 0 auto; }
+.apt-sauklis { margin: 6px 0 0; font-family: var(--ff-display); font-style: italic; font-size: 1.15rem; color: var(--c-brand); }
+.apt-empa {
+    width: 150px;
+    padding: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 55%, rgb(242 196 106 / .16), transparent 70%);
+}
+.apt-empa svg { display: block; width: 100%; height: auto; }
+.apt-empa--paldies { width: 130px; margin: 0 auto var(--sp-3); }
+
+/* pogas */
+.apt-pogas { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3); margin-top: var(--sp-6); flex-wrap: wrap; }
+.apt-pogas--sakums { justify-content: center; }
+.apt-poga {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 50px;
+    padding: 0 26px;
+    border-radius: var(--r-pill);
+    border: 1.5px solid rgb(233 228 216 / .3);
+    background: transparent;
+    color: var(--c-on-forest);
+    font: inherit; font-weight: 600; font-size: 1.0625rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color .15s, border-color .15s, opacity .15s;
+}
+.apt-poga:hover { border-color: var(--c-on-forest); }
+.apt-poga:focus-visible { outline: 3px solid var(--c-focus-dark); outline-offset: 2px; }
+.apt-poga--galvena { background: var(--c-sage-bright); border-color: var(--c-sage-bright); color: var(--c-forest); margin-left: auto; }
+.apt-pogas--sakums .apt-poga--galvena { margin-left: 0; }
+.apt-poga--galvena:hover { background: var(--c-sage); border-color: var(--c-sage); }
+.apt-poga:disabled { opacity: .4; cursor: not-allowed; }
+.apt-poga--atpakal { border-color: transparent; padding: 0 12px; color: var(--c-on-forest-muted); }
+.apt-poga--atpakal:hover { color: var(--c-on-forest); border-color: transparent; }
+
+@media (max-width: 560px) {
+    .apt-karte { font-size: 1.0625rem; }
+    .apt-skala--nps .apt-skala-rinda { grid-template-columns: repeat(6, 1fr); }
+    .apt-skala-punkts span { height: 52px; }
+    .apt-cits { margin-left: 0; }
+    .apt-pogas--sakums { flex-direction: column; align-items: stretch; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .apt-ienak { animation: none; }
+    .apt-progress-aizpildijums { transition: none; }
+}
+
+/* APTAUJAS JOSLA (script.js, visās publiskajās lapās līdz APTAUJAS_BEIGAS) + saite izvēlnē */
+.aptaujas-josla { background: var(--c-forest); color: var(--c-on-forest); font-size: var(--fs-sm); }
+.aptaujas-josla-iekss {
+    display: flex; align-items: center; justify-content: center; gap: var(--sp-3);
+    min-height: 44px; padding-top: 6px; padding-bottom: 6px;
+}
+.aptaujas-josla p { margin: 0; text-align: center; }
+.aptaujas-josla a.aptaujas-josla-saite {
+    flex: none;
+    display: inline-flex; align-items: center; min-height: 32px;
+    padding: 0 14px;
+    border-radius: var(--r-pill);
+    background: var(--c-sage-bright); color: var(--c-forest);
+    font-weight: 700; text-decoration: none; white-space: nowrap;
+}
+.aptaujas-josla a.aptaujas-josla-saite:hover { background: var(--c-sage); }
+.aptaujas-josla a:focus-visible, .aptaujas-josla button:focus-visible { outline: 2px solid var(--c-focus-dark); outline-offset: 2px; }
+.aptaujas-josla-aizvert {
+    flex: none;
+    width: 36px; height: 36px;
+    border: 0; border-radius: 50%;
+    background: transparent; color: var(--c-on-forest-muted);
+    font-size: 1.3rem; line-height: 1; cursor: pointer;
+}
+.aptaujas-josla-aizvert:hover { color: var(--c-on-forest); background: rgb(233 228 216 / .1); }
+.aptaujas-josla-iss { display: none; }
+@media (max-width: 640px) {
+    .aptaujas-josla-gars { display: none; }
+    .aptaujas-josla-iss { display: inline; }
+}
+.main-nav a.nav-aptauja::before {
+    content: "";
+    width: 7px; height: 7px; margin-right: 7px;
+    border-radius: 50%;
+    background: var(--c-sage-ink);
+}
+@media print { .aptaujas-josla { display: none !important; } }
+
+/* APTAUJA ADMINISTRĀCIJĀ (admin.js aptTab) */
+.apt-adm-galva { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
+.apt-adm-galva h3 { margin: 0; font-size: 1.1rem; }
+.apt-adm-jaut h4 { margin: 0 0 4px; font-size: 1rem; }
+.apt-adm-jaut > .muted { margin: 0 0 10px; font-size: var(--fs-sm); }
+.apt-adm-vid { margin: 0 0 8px; font-weight: 600; }
+.apt-adm-rinda { display: grid; grid-template-columns: minmax(120px, 1.2fr) 2fr 80px; align-items: center; gap: 10px; font-size: var(--fs-sm); padding: 3px 0; }
+.apt-adm-josla { height: 10px; border-radius: var(--r-pill); background: var(--c-sunk); overflow: hidden; }
+.apt-adm-josla span { display: block; height: 100%; background: var(--c-sage-ink); border-radius: inherit; }
+.apt-adm-sk { text-align: right; font-variant-numeric: tabular-nums; color: var(--c-muted); }
+.apt-adm-teksti { margin-top: 10px; font-size: var(--fs-sm); }
+.apt-adm-teksti summary { cursor: pointer; font-weight: 600; }
+.apt-adm-teksti ul { margin: 8px 0 0; padding-left: 18px; max-height: 320px; overflow: auto; }
+.apt-adm-teksti li { margin-bottom: 6px; white-space: pre-wrap; }
+@media (max-width: 560px) { .apt-adm-rinda { grid-template-columns: 1fr 70px; } .apt-adm-josla { grid-column: 1 / -1; grid-row: 2; } }

@@ -737,3 +737,55 @@
     });
     hero.addEventListener('pointerleave', function() { mx = 0; my = 0; sakt(); });
 })();
+
+// Aptauja: josla virs galvenes (aizverama; paslēpta pēc aizpildīšanas) + saite "Aptauja" izvēlnē. Līdz APTAUJAS_BEIGAS.
+// TĀDS PATS datums ir aptauja-jautajumi.js (BEIGAS) — maini abus.
+(function() {
+    var APTAUJAS_BEIGAS = '2026-12-15T23:59:59+02:00';
+    if (Date.now() > Date.parse(APTAUJAS_BEIGAS)) return;
+    var galvene = document.querySelector('.site-header');
+    var nav = document.getElementById('galvena-izvelne');
+    if (!galvene || !nav) return;
+    var sajaLapa = /\/aptauja(\.html)?$/.test(location.pathname);
+
+    var a = document.createElement('a');
+    a.href = '/aptauja.html';
+    a.className = 'nav-aptauja';
+    a.textContent = 'Aptauja';
+    if (sajaLapa) a.setAttribute('aria-current', 'page');
+    nav.appendChild(a);
+
+    function lasit(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    if (sajaLapa || lasit('aptaujaAizpildita') || lasit('aptaujaJoslaAizverta')) return;
+
+    var josla = document.createElement('div');
+    josla.className = 'aptaujas-josla';
+    josla.setAttribute('role', 'region');
+    josla.setAttribute('aria-label', 'Aptauja');
+    var iekss = document.createElement('div');
+    iekss.className = 'container aptaujas-josla-iekss';
+    var p = document.createElement('p');
+    var gars = document.createElement('span');
+    gars.className = 'aptaujas-josla-gars';
+    gars.textContent = '🌴 Aizpildi īsu aptauju un laimē vienu no 3 dāvanām no Tenerifes!';
+    var iss = document.createElement('span');
+    iss.className = 'aptaujas-josla-iss';
+    iss.textContent = '🌴 Laimē dāvanu no Tenerifes!';
+    p.appendChild(gars); p.appendChild(iss);
+    var saite = document.createElement('a');
+    saite.className = 'aptaujas-josla-saite';
+    saite.href = '/aptauja.html';
+    saite.textContent = 'Aizpildīt aptauju →';
+    var aizv = document.createElement('button');
+    aizv.type = 'button';
+    aizv.className = 'aptaujas-josla-aizvert';
+    aizv.setAttribute('aria-label', 'Aizvērt aptaujas paziņojumu');
+    aizv.textContent = '×';
+    aizv.addEventListener('click', function() {
+        try { localStorage.setItem('aptaujaJoslaAizverta', '1'); } catch (e) {}
+        josla.remove();
+    });
+    iekss.appendChild(p); iekss.appendChild(saite); iekss.appendChild(aizv);
+    josla.appendChild(iekss);
+    galvene.parentNode.insertBefore(josla, galvene);
+})();
