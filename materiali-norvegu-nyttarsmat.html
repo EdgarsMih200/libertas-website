@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaungada ēdieni norvēģu valodā (A1) — Noderīgi materiāli — Libertas</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body class="mat-lapa mat-nodarbiba mat-norvegu">
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html" aria-current="page">Noderīgi materiāli</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="par-mums.html">Par mums</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Materiāla virsraksts (.sc-ziema = ziemas vakars visu gadu) -->
+    <section class="mat-hero lapas-josla lapas-josla--augsta sc-ziema">
+        <div class="lapas-josla-ainava" aria-hidden="true">
+            <svg viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-clouds"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+        </div>
+        <div class="container mat-hero-iekssa lapas-josla-saturs">
+            <a href="materiali.html" class="mat-atpakal"><svg class="mat-atpakal-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Visi materiāli</a>
+            <div class="mat-birkas">
+                <span class="mat-limenis">A1</span>
+                <span class="mat-valoda">Norvēģu valoda · bokmål</span>
+            </div>
+            <h1><span lang="nb" class="mat-hero-es">Nyttårsmat i Norge</span> Jaungada ēdieni Norvēģijā</h1>
+            <p class="mat-hero-teksts">
+                Kopā ar Idu svini Vecgada vakaru Norvēģijā: garneles, tītars, <span lang="nb">kransekake</span>
+                un salūts pusnaktī. Spied <svg class="ikona-skana" viewBox="0 0 24 24" role="img" aria-label="skaļruņa pogu" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none"/></svg>, lai dzirdētu, kā to izrunā norvēģis.
+            </p>
+            <ul class="mat-statistika">
+                <li><strong>10</strong> vārdi</li>
+                <li><strong>8</strong> tradīcijas</li>
+                <li><strong>4</strong> uzdevumi</li>
+                <li><strong>~25</strong> min</li>
+            </ul>
+            <div class="mat-hero-pogas">
+                <a href="#vardi" class="btn-cta">Sākt nodarbību</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mat-izkartojums">
+        <!-- Satura rādītājs (sānos) -->
+        <nav class="mat-saturs" aria-label="Saturs">
+            <span class="mat-saturs-virsraksts">Saturs</span>
+            <a href="#vardi"><span>1</span> Vārdi</a>
+            <a href="#teksts"><span>2</span> Teksts</a>
+            <a href="#tradicijas"><span>3</span> Jaungada galds</a>
+            <a href="#krustvardi"><span>4</span> Krustvārdu mīkla</a>
+        </nav>
+
+        <main class="mat-galvenais nor">
+
+            <!-- 1. VĀRDI -->
+            <section class="mat-sadala" id="vardi">
+                <h2><span class="mat-nr">1</span> Jaunie vārdi</h2>
+                <p class="mat-ievads">Izvēlies vārdu un tad uzspied uz pareizā attēla. Kad atrasts, vari klausīties izrunu.</p>
+                <div class="nor-izvele" id="chips" role="group" aria-label="Norvēģu vārdi"></div>
+                <div class="nor-attelu-rezgis" id="grid"></div>
+            </section>
+
+            <!-- 2. TEKSTS -->
+            <section class="mat-sadala" id="teksts">
+                <h2><span class="mat-nr">2</span> Lasi tekstu</h2>
+                <div class="nor-stasta-galva">
+                    <svg viewBox="0 0 100 100" id="ida" role="img" aria-label="Ida"></svg>
+                    <div>
+                        <p class="mat-ievads">Izlasi Idas stāstu par Vecgada vakaru. Ja vajag, ieslēdz tulkojumu latviski.</p>
+                        <div class="nor-rinda">
+                            <button type="button" class="mat-poga-maza" id="nor-klausities-visu" aria-pressed="false"><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg>Klausīties visu</button>
+                            <label class="mat-sledzis"><input type="checkbox" id="nor-tulkojums"> Rādīt tulkojumu</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="nor-stasts" id="story"></div>
+                <div class="nor-vardini">
+                    <h3>Vārdiņi</h3>
+                    <ul id="words"></ul>
+                </div>
+                <aside class="nor-padoms">
+                    <strong>Vai zināji?</strong> Vārds <b lang="nb">kransekake</b> sastāv no diviem vārdiem: <b lang="nb">krans</b> (vainags) + <b lang="nb">kake</b> (kūka).
+                    Tāpat <b lang="nb">pinnekjøtt</b> = <b lang="nb">pinne</b> (kociņš) + <b lang="nb">kjøtt</b> (gaļa).
+                    Norvēģu valodā garus vārdus bieži saliek kā no klucīšiem!
+                </aside>
+            </section>
+
+            <!-- 3. TRADĪCIJAS -->
+            <section class="mat-sadala" id="tradicijas">
+                <h2><span class="mat-nr">3</span> Norvēģu Jaungada galds</h2>
+                <p class="mat-ievads">Iepazīsti, ko norvēģi ēd un dara Vecgada vakarā. Beigās — mazs tests.</p>
+                <ul class="nor-tradicijas" id="trad"></ul>
+                <h3>Vai atceries?</h3>
+                <div id="mcq"></div>
+            </section>
+
+            <!-- 4. KRUSTVĀRDU MĪKLA (nor-kv-*) -->
+            <section class="mat-sadala" id="krustvardi">
+                <h2><span class="mat-nr">4</span> Krustvārdu mīkla</h2>
+                <p class="mat-ievads">Ieraksti vārdus norvēģiski. Uzspied uz rūtiņas vai uz uzdevuma. Pareizs vārds kļūst zaļš. Uzspied uz rūtiņas vēlreiz, lai mainītu virzienu →/↓.</p>
+                <div class="nor-burti">Norvēģu burti: <button type="button" data-l="æ">æ</button><button type="button" data-l="ø">ø</button><button type="button" data-l="å">å</button></div>
+                <div class="nor-kv">
+                    <div class="nor-kv-rezgis" id="cw" lang="nb"></div>
+                    <div class="nor-kv-uzdevumi">
+                        <h3>→ Horizontāli</h3>
+                        <div id="cla"></div>
+                        <h3>↓ Vertikāli</h3>
+                        <div id="cld"></div>
+                    </div>
+                </div>
+                <div class="uzd-darbibas">
+                    <button type="button" class="mat-poga-maza" id="cwhint">Viens burts</button>
+                    <button type="button" class="mat-poga-maza" id="cwcheck">Parādīt kļūdas</button>
+                    <span class="uzd-rezultats" id="cwfb" aria-live="polite"></span>
+                </div>
+            </section>
+
+            <!-- Beigas: parādās, kad savākti visi punkti -->
+            <section class="mat-sadala nor-beigas" id="nor-beigas" hidden aria-live="polite">
+                <svg viewBox="0 0 100 100" id="finalpic" aria-hidden="true"></svg>
+                <h2 lang="nb">Fantastisk!</h2>
+                <p>Tu zini visu par norvēģu Jaungada galdu! <b lang="nb">Takk for i år og godt nytt år!</b><br>Paldies par šo gadu un laimīgu Jauno gadu!</p>
+            </section>
+
+            <!-- Punktu josla (lipīga apakšā, kamēr redzama nodarbība) -->
+            <div class="nor-rezultats">
+                <span class="nor-rezultats-skaits">Punkti: <b id="sc">0</b> / <span id="tot">0</span></span>
+                <span class="nor-josla" aria-hidden="true"><i id="barfill"></i></span>
+                <button type="button" class="nor-apturet" id="nor-apturet">Apturēt skaņu</button>
+                <button type="button" class="nor-no-jauna" id="nor-no-jauna">Sākt no jauna</button>
+            </div>
+
+            <!-- Aicinājums -->
+            <aside class="mat-cta">
+                <div>
+                    <h2>Gribi apgūt vēl kādu valodu?</h2>
+                    <p>Libertas piedāvā spāņu un angļu valodas kursus — ar dzīvu sarunu praksi.</p>
+                </div>
+                <a href="kursi.html" class="btn-cta">Apskatīt kursus</a>
+            </aside>
+            <p class="nor-autors">Materiāls: Pigeon Polly Art Lab</p>
+        </main>
+    </div>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-norvegu-nyttarsmat.html">Norvēģu A1 — Jaungada ēdieni</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Kontakti" parādīsies, kad būs kontaktinformācija -->
+                        <li><a href="par-mums.html">Par mums</a></li>
+                        <li><a href="blogs.html">Blogs</a></li>
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="materiali.js"></script>
+    <script src="materiali-norvegu-nyttarsmat.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>
