@@ -487,7 +487,7 @@ export default {
 
       if (path === '/api/bju') return await bjuMarsruts(request, env, { path, method, user });
 
-      if (path === '/api/aptauja' || path.startsWith('/api/admin/aptauja')) {
+      if (path === '/api/aptauja' || path.startsWith('/api/aptauja/') || path.startsWith('/api/admin/aptauja')) {
         const atb = await aptaujaMarsruts(request, env, { path, method, user });
         if (atb) return atb;
       }

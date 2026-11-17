@@ -1,6 +1,7 @@
 // APTAUJA: viens jautājums ekrānā, progresa josla, zarošanās pēc atbildēm (aptauja-jautajumi.js → ja(a)).
 // Melnraksts tiek glabāts šajā pārlūkā (localStorage aptaujaMelnraksts), pēc iesniegšanas — aptaujaAizpildita (paslēpj joslu).
-// Iesniegšana: POST /api/aptauja. Visi lietotāja dati tiek rādīti ar textContent.
+// Iesniegšana: POST /api/aptauja. Pieteicies lietotājs: GET /api/aptauja (jau aizpildīta jebkurā ierīcē → paldies).
+// E-pasta solī: POST /api/aptauja/parbaude — ja ar šo e-pastu jau aizpildīta, tālāk netiek. Visi lietotāja dati tiek rādīti ar textContent.
 import { JAUTAJUMI, DALAS, BEIGAS, IZLOZES_DATUMS } from './aptauja-jautajumi.js';
 
 const root = document.getElementById('aptauja');
@@ -371,10 +372,34 @@ function jautajums() {
       e.preventDefault();
       if (!derigs(Q) || talak.disabled) return;
       if (pedejais) iesniegt(talak, kluda, form.querySelector('.apt-slazds'));
+      else if (Q.tips === 'epasts' && (s.a.epasts || '').trim()) parbauditEpastu(talak, kluda);
       else iet(nakamais(s.i));
     });
     k.appendChild(form);
   }, { fokuss: '.apt-virsraksts' });
+}
+
+// Vai ar šo e-pastu aptauja jau aizpildīta (citā ierīcē)
+function parbauditEpastu(btn, kluda) {
+  const teksts = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = 'Pārbauda…';
+  kluda.hidden = true;
+  window.LIB.api('POST', '/api/aptauja/parbaude', { epasts: s.a.epasts.trim() }).then((d) => {
+    btn.textContent = teksts;
+    if (d && d.aizpildita) {
+      kluda.textContent = 'Ar šo e-pastu aptauja jau ir aizpildīta. Katrs var piedalīties tikai vienu reizi. Paldies!';
+      kluda.hidden = false;
+      atjaunotPogu();
+      return;
+    }
+    iet(nakamais(s.i));
+  }).catch((e) => {
+    btn.textContent = teksts;
+    atjaunotPogu();
+    kluda.textContent = e.message || 'Neizdevās pārbaudīt e-pastu. Pamēģini vēlreiz.';
+    kluda.hidden = false;
+  });
 }
 
 // Tikai redzamo jautājumu atbildes (ja respondents atgriezās un mainīja zaru)
@@ -407,6 +432,8 @@ function iesniegt(btn, kluda, slazds) {
     glabat(MELNRAKSTS, null);
     paldies(izloze);
   }).catch((e) => {
+    const me = window.LIB.me;
+    if (e.status === 409 && me && me.user) { glabat(AIZPILDITA, '1'); glabat(MELNRAKSTS, null); paldies(false, true); return; }
     btn.disabled = false;
     btn.textContent = 'Iesniegt';
     kluda.textContent = e.message || 'Neizdevās nosūtīt. Pamēģini vēlreiz.';
@@ -433,5 +460,21 @@ function paldies(izloze, atkartoti) {
   }, { fokuss: '.apt-virsraksts' });
 }
 
+// Pieteicies lietotājs: vienreiz uz kontu (jebkurā ierīcē) — servera statuss
+function sakt() {
+  if (lasit(AIZPILDITA)) { sakums(); return; }
+  const parbaudit = (me) => {
+    if (!me || !me.user) { sakums(); return; }
+    window.LIB.api('GET', '/api/aptauja').then((d) => {
+      if (d && d.aizpildita) {
+        glabat(AIZPILDITA, d.izloze ? 'izloze' : '1');
+        glabat(MELNRAKSTS, null);
+      }
+    }).catch(() => {}).then(sakums);
+  };
+  if (window.LIB && window.LIB.me) parbaudit(window.LIB.me);
+  else document.addEventListener('lib:me', (e) => parbaudit(e.detail), { once: true });
+}
+
 if (Date.now() > Date.parse(BEIGAS)) slegta();
-else sakums();
+else sakt();

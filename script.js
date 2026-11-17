@@ -758,6 +758,16 @@
     function lasit(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
     if (sajaLapa || lasit('aptaujaAizpildita') || lasit('aptaujaJoslaAizverta')) return;
 
+    // Pieteicies lietotājs, kas aptauju aizpildīja citā ierīcē: paslēpj joslu
+    document.addEventListener('lib:me', function(e) {
+        if (!e.detail || !e.detail.user) return;
+        window.LIB.api('GET', '/api/aptauja').then(function(d) {
+            if (!d || !d.aizpildita) return;
+            try { localStorage.setItem('aptaujaAizpildita', d.izloze ? 'izloze' : '1'); } catch (er) {}
+            josla.remove();
+        }).catch(function() {});
+    }, { once: true });
+
     var josla = document.createElement('div');
     josla.className = 'aptaujas-josla';
     josla.setAttribute('role', 'region');

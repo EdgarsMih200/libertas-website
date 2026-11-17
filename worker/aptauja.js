@@ -1,5 +1,8 @@
 // Klientu aptauja.
 // POST /api/aptauja { atbildes, epasts?, izloze, jaunumi, viltus } — publisks (arī viesiem), līdz BEIGAS.
+// GET /api/aptauja — pieteicies lietotājs: vai jau aizpildīta (pēc user_id vai konta e-pasta), viesis: { aizpildita: false }.
+// POST /api/aptauja/parbaude { epasts } — vai ar šo e-pastu jau aizpildīta (≤ 30 stundā no IP).
+// Viens e-pasts = viena aizpildīšana; pieteicies lietotājs — viena aizpildīšana uz kontu (jebkurā ierīcē).
 // Admin: GET /api/admin/aptauja, POST|DELETE /api/admin/aptauja/izloze, DELETE /api/admin/aptauja/:id
 // Aizsardzība: Origin pārbaude (index.js), slazds `viltus`, izmēra limiti, ≤ 5 iesniegumi stundā no vienas IP (Cache API).
 import { BEIGAS } from '../aptauja-jautajumi.js';
@@ -13,14 +16,14 @@ const json = (data, status = 200) => new Response(JSON.stringify(data), {
 });
 const fail = (error, status = 400) => json({ error }, status);
 
-async function parsniegtsLimits(request) {
+async function parsniegtsLimits(request, veids = 'iesniegt', limits = LIMITS) {
   try {
     const ip = request.headers.get('CF-Connecting-IP') || 'nezinama';
-    const atslega = new Request(`https://aptauja-limits.libertas.invalid/${encodeURIComponent(ip)}`);
+    const atslega = new Request(`https://aptauja-limits.libertas.invalid/${veids}/${encodeURIComponent(ip)}`);
     const kesa = caches.default;
     const ir = await kesa.match(atslega);
     const sk = ir ? Number(await ir.text()) || 0 : 0;
-    if (sk >= LIMITS) return true;
+    if (sk >= limits) return true;
     await kesa.put(atslega, new Response(String(sk + 1), { headers: { 'Cache-Control': 'max-age=3600' } }));
   } catch (e) {
     console.error('Aptaujas limits', e);
@@ -45,6 +48,31 @@ function tiritAtbildes(a) {
   return r;
 }
 
+// Lietotāja iepriekšējā aizpildīšana (pēc konta vai konta e-pasta)
+async function lietotajaRinda(env, user) {
+  if (!user) return null;
+  const ep = String(user.email || '').trim().toLowerCase();
+  return env.DB.prepare('SELECT izloze FROM aptaujas_atbildes WHERE user_id = ? OR (epasts IS NOT NULL AND epasts = ?) LIMIT 1')
+    .bind(user.id, ep || null).first();
+}
+
+async function statuss(env, user) {
+  const r = await lietotajaRinda(env, user);
+  return json({ aizpildita: !!r, izloze: !!(r && r.izloze) });
+}
+
+async function parbaude(request, env) {
+  let b = {};
+  try { b = await request.json(); } catch { b = {}; }
+  const epasts = String(b.epasts || '').trim().toLowerCase().slice(0, 120);
+  if (!EPASTS_RE.test(epasts)) return fail('Pārbaudi e-pasta adresi.');
+  if (await parsniegtsLimits(request, 'parbaude', 30)) return fail('Pārāk daudz mēģinājumu. Pamēģini vēlāk.', 429);
+  const r = await env.DB.prepare('SELECT 1 FROM aptaujas_atbildes WHERE epasts = ? LIMIT 1').bind(epasts).first();
+  return json({ aizpildita: !!r });
+}
+
+const JAU_AR_EPASTU = 'Ar šo e-pastu aptauja jau ir aizpildīta. Katrs var piedalīties tikai vienu reizi.';
+
 async function iesniegt(request, env, user) {
   if (Date.now() > Date.parse(BEIGAS)) return fail('Aptauja ir noslēgusies.', 410);
   let b = {};
@@ -55,13 +83,14 @@ async function iesniegt(request, env, user) {
   const epasts = b.epasts ? String(b.epasts).trim().toLowerCase().slice(0, 120) : null;
   if (epasts && !EPASTS_RE.test(epasts)) return fail('Pārbaudi e-pasta adresi.');
   if (epasts && !b.izloze) return fail('Lai piedalītos izlozē, atzīmē piekrišanu.');
+  if (user && await lietotajaRinda(env, user)) return fail('Tu aptauju jau aizpildīji.', 409);
   if (await parsniegtsLimits(request)) return fail('Pārāk daudz mēģinājumu. Pamēģini vēlāk.', 429);
   try {
     await env.DB.prepare('INSERT INTO aptaujas_atbildes (created_at, epasts, izloze, jaunumi, user_id, atbildes) VALUES (?, ?, ?, ?, ?, ?)')
       .bind(new Date().toISOString(), epasts, epasts && b.izloze ? 1 : 0, epasts && b.jaunumi ? 1 : 0, user ? user.id : null, JSON.stringify(atbildes))
       .run();
   } catch (e) {
-    if (/UNIQUE/i.test(String(e && e.message))) return fail('Ar šo e-pastu aptauja jau ir aizpildīta. Lai iesniegtu atbildes bez dalības izlozē, atgriezies 1. jautājumā un izdzēs e-pastu.', 409);
+    if (/UNIQUE/i.test(String(e && e.message))) return fail(JAU_AR_EPASTU, 409);
     throw e;
   }
   return json({ ok: true });
@@ -102,8 +131,14 @@ async function izloze(env) {
 
 export async function aptaujaMarsruts(request, env, { path, method, user }) {
   if (path === '/api/aptauja') {
+    if (method === 'GET') return statuss(env, user);
     if (method !== 'POST') return fail('Nav atļauts', 405);
     return iesniegt(request, env, user);
+  }
+  if (path === '/api/aptauja/parbaude') {
+    if (method !== 'POST') return fail('Nav atļauts', 405);
+    if (Date.now() > Date.parse(BEIGAS)) return fail('Aptauja ir noslēgusies.', 410);
+    return parbaude(request, env);
   }
   if (!path.startsWith('/api/admin/aptauja')) return null;
   if (!user || !user.is_admin) return fail('Nav piekļuves', 403);
