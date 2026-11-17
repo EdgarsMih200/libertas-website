@@ -8,7 +8,9 @@
 //   uz nākamo tās pašas grupas nodarbības dienu (kurss beidzas dažas dienas vēlāk, pauzes laikā).
 // - Bloku cikls (atkārtojas nepārtraukti, arī pāri gadu mijai, lai grupas var turpināt nākamo līmeni tajās pašās dienās):
 //     1) B1.2 (O/C) + A1 (P/T)   2) A1 (O/C) + A2 (P/T)   3) A2 (O/C) + B1.1 (P/T)   4) B1.1 (O/C) + B1.2 (P/T)
-// - Angļu kursiem grafiks vēl nav: tiem periods = "nākamā grupa, datumi tiks precizēti".
+// - Fiksētās grupas (FIKSETAS_GRUPAS) neiet pa ciklu: dots sākuma datums un nedēļas diena(s).
+//   Angļu A1: 1× nedēļā ceturtdienās no 07.01.2027., 13 nodarbības + 14. = noslēguma eksāmens.
+// - Pārējiem angļu kursiem grafiks vēl nav: tiem periods = "nākamā grupa, datumi tiks precizēti".
 
 export const SAKUMA_GADS = 2027;
 export const LAIKS = '18:00–21:00';
@@ -19,6 +21,7 @@ const BLOKA_NEDELAS = 9;
 export const DIENAS = {
   'pr-tr': { dienas: [1, 3], teksts: 'Pirmdienās un trešdienās', iss: 'P un T' },
   'ot-ce': { dienas: [2, 4], teksts: 'Otrdienās un ceturtdienās', iss: 'O un C' },
+  'ce': { dienas: [4], teksts: 'Ceturtdienās', iss: 'C' },
 };
 
 const CIKLS = [
@@ -28,7 +31,12 @@ const CIKLS = [
   { 'spain-b1-1': 'ot-ce', 'spain-b1-2': 'pr-tr' },
 ];
 
-export const AR_GRAFIKU = ['spain-a1', 'spain-a2', 'spain-b1-1', 'spain-b1-2'];
+// Grupas ar noteiktu sākuma datumu (ārpus CIKLS). Pēdējā (14.) nodarbība = noslēguma eksāmens.
+const FIKSETAS_GRUPAS = {
+  'english-a1': [{ sakums: '2027-01-07', dienas: 'ce' }],
+};
+
+export const AR_GRAFIKU = ['spain-a1', 'spain-a2', 'spain-b1-1', 'spain-b1-2', 'english-a1'];
 
 // Valdības papildu brīvdienas (pārceltās darba dienas u. c.), ja tādas izsludina: 'YYYY-MM-DD'.
 // 2027. gadā darba dienas netiek pārceltas (Labklājības ministrija, 14.10.2026.).
@@ -115,6 +123,11 @@ function grupa(kurssId, sakumaPirmdiena, dienasKods) {
 
 // Visas kursa grupas gadā
 export function gadaPeriodi(kurssId, y) {
+  if (FIKSETAS_GRUPAS[kurssId]) {
+    return FIKSETAS_GRUPAS[kurssId]
+      .filter((g) => g.sakums.startsWith(y + '-'))
+      .map((g) => grupa(kurssId, noIso(g.sakums), g.dienas));
+  }
   if (y < SAKUMA_GADS) return [];
   const out = [];
   const s = gadaSakums(y);

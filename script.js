@@ -229,7 +229,7 @@
         d.appendChild(galva);
 
         var dl = el('dl', 'pl-dati');
-        [['Līmenis', k.limenis], ['Cena', k.cena], ['Apjoms', ek ? btn.getAttribute('data-apjoms') : '14 nodarbības · 7 nedēļas'], ['Piekļuve', ek ? (btn.getAttribute('data-dienas') || 90) + ' dienas no apmaksas' : '']].forEach(function(r) {
+        [['Līmenis', k.limenis], ['Cena', k.cena], ['Apjoms', btn.getAttribute('data-apjoms') || (ek ? '' : '14 nodarbības · 7 nedēļas')], ['Piekļuve', ek ? (btn.getAttribute('data-dienas') || 90) + ' dienas no apmaksas' : '']].forEach(function(r) {
             if (!r[1]) return;
             var w = el('div');
             w.appendChild(el('dt', '', r[0]));
