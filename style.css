@@ -8363,3 +8363,221 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .apt-adm-teksti ul { margin: 8px 0 0; padding-left: 18px; max-height: 320px; overflow: auto; }
 .apt-adm-teksti li { margin-bottom: 6px; white-space: pre-wrap; }
 @media (max-width: 560px) { .apt-adm-rinda { grid-template-columns: 1fr 70px; } .apt-adm-josla { grid-column: 1 / -1; grid-row: 2; } }
+
+/* GRUPU KURSU TELPA (kursa-telpa.html + kursa-telpa.js; izkārtojums no E-KURSI ek-* klasēm) */
+.gk-meta{color:var(--c-muted);font-size:var(--fs-sm);margin:0}
+.gk-ievads,.gk-kursa-ievads{max-width:68ch;margin:0 0 var(--sp-5)}
+.gk-kursa-ievads p{margin:0 0 6px;font-size:var(--fs-lead);line-height:1.55}
+.gk-kursu-rezgis{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:var(--sp-5)}
+.gk-kursa-karte{display:grid;gap:10px;align-content:start}
+.gk-kursa-karte h2{margin:0;font-size:var(--fs-h3)}
+.gk-birka{display:inline-flex;align-items:center;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:var(--r-pill);background:var(--c-sage);color:var(--c-sage-ink)}
+.gk-birka--slepta{background:var(--c-warn-bg);color:var(--c-warn)}
+/* kursa sākums */
+.gk-solis-meta{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:4px 0 2px!important}
+.gk-solis-meta .ek-ikona{width:16px;height:16px}
+.gk-solis-labais{display:flex;gap:12px;align-items:center}
+.gk-uzd-skaits{display:inline-flex;gap:6px;align-items:center;font-size:var(--fs-sm);font-weight:700;color:var(--c-muted);white-space:nowrap}
+.gk-uzd-skaits.gatavs{color:var(--c-success)}
+.gk-jauna{margin-top:var(--sp-4)}
+.gk-jauna>summary{list-style:none;display:inline-flex;cursor:pointer}
+.gk-jauna>summary::-webkit-details-marker{display:none}
+.gk-jauna[open]>summary{margin-bottom:var(--sp-4)}
+.gk-forma{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.gk-forma[hidden]{display:none}
+.gk-forma--rezgis{margin:var(--sp-4) 0}
+.gk-lauks{display:grid;gap:4px;flex:1 1 220px}
+.gk-lauks label,.gk-forma>label{font-size:var(--fs-sm);font-weight:600}
+.gk-lauks input[type=file]{font:inherit;font-size:var(--fs-sm);min-height:44px}
+.gk-rinda{display:flex;gap:8px;width:100%}
+.gk-rinda .lauks{flex:1;min-width:0}
+.gk-checkbox{display:inline-flex;gap:8px;align-items:center;min-height:48px;font-size:var(--fs-sm)}
+.gk-checkbox input{width:20px;height:20px;accent-color:var(--c-sage-ink)}
+/* Google Meet karte */
+.gk-meet{border-top:4px solid var(--c-forest);display:grid;gap:12px}
+.gk-meet-galva{display:flex;gap:12px;align-items:center}
+.gk-meet-galva h2{margin:0;font-size:1.2rem}
+.gk-meet-galva p{margin:2px 0 0;font-size:var(--fs-sm);color:var(--c-muted)}
+.gk-meet-ikona{width:44px;height:44px;flex:none;padding:10px;border-radius:50%;background:var(--c-forest);stroke:var(--c-on-forest);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gk-nakama{display:flex;gap:8px;align-items:flex-start;margin:0;font-size:var(--fs-sm);font-weight:600;line-height:1.45}
+.gk-nakama .ek-ikona{margin-top:1px}
+.gk-lapa .gk-meet-poga{width:100%;justify-content:center}
+.gk-meet-poga .ek-ikona{stroke:currentColor}
+.gk-meet-url{margin:-4px 0 0;font-size:12px;color:var(--c-muted);text-align:center;word-break:break-all}
+.gk-meet-tukss{margin:0;padding:10px 12px;border-radius:var(--r-md);background:var(--c-sunk);font-size:var(--fs-sm);color:var(--c-muted)}
+.gk-meet-forma{border-top:1px solid var(--c-line);padding-top:12px}
+.gk-pasn-karte h3{margin:0 0 12px;font-size:1.05rem}
+.gk-pogu-kolonna{display:grid;gap:8px}
+.gk-lapa .gk-pogu-kolonna>*{width:100%;justify-content:center}
+/* nodarbība */
+.gk-nod-galva{display:grid;gap:var(--sp-4);margin-bottom:var(--sp-6)}
+.gk-apraksts{margin:0;max-width:68ch}
+.gk-lejupielades{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.gk-lej-karte{display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow-1);color:var(--c-ink);text-decoration:none}
+.gk-lej-karte>span:not(.gk-lej-pogas){display:grid;flex:1;min-width:140px}
+.gk-lej-karte small,.gk-materials small{color:var(--c-muted);font-size:12px}
+.gk-lej-pogas{display:flex;gap:8px;flex-wrap:wrap}
+.gk-lej-karte--meet{border-color:var(--c-forest);background:var(--c-forest);color:var(--c-on-forest)}
+.gk-lej-karte--meet small{color:var(--c-on-forest-muted)}
+.gk-lej-karte--meet:hover{background:var(--c-forest-2)}
+.gk-lej-ikona{width:36px;height:36px;flex:none;padding:7px;border-radius:var(--r-md);background:var(--c-accent-soft);stroke:var(--c-accent-strong);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gk-lej-karte--meet .gk-lej-ikona{background:rgba(255,255,255,.12);stroke:var(--c-on-forest)}
+.gk-pasn-panelis{border:1.5px dashed var(--c-line-strong);border-radius:var(--r-lg);padding:12px 16px;margin-bottom:var(--sp-6);background:var(--c-surface)}
+.gk-pasn-panelis>summary{cursor:pointer;font-weight:700;display:flex;gap:8px;align-items:center;min-height:32px}
+.gk-prez-augsup{display:grid;gap:8px;margin:var(--sp-4) 0}
+.gk-prez-rinda{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:10px 0;border-top:1px solid var(--c-line)}
+.gk-prez-rinda>span{display:grid;flex:1;min-width:160px}
+.gk-prez-rinda small{color:var(--c-muted);font-size:12px}
+.gk-ikonpoga{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:50%;border:1px solid var(--c-line);background:var(--c-surface);color:var(--c-ink);cursor:pointer}
+.gk-ikonpoga:hover{background:var(--c-sunk)}
+.gk-ikonpoga--dzest{color:var(--c-error)}
+.gk-bloks{scroll-margin-top:calc(var(--header-h,76px) + 16px)}
+.gk-bloks-iekss{margin-bottom:var(--sp-6)}
+.gk-bloka-virs{font-size:1.15rem;margin:0 0 10px}
+.gk-piezime{border-left:4px solid var(--c-sage-ink);background:var(--c-surface);padding:10px 14px;border-radius:0 var(--r-md) var(--r-md) 0;margin:12px 0;max-width:68ch;font-size:var(--fs-sm);line-height:1.55}
+.gk-uzd-apraksts{color:var(--c-muted);margin:0 0 12px;max-width:68ch}
+/* vārdu tabula */
+.gk-vardi{width:100%;max-width:760px;border-collapse:collapse;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);overflow:hidden}
+.gk-vardi td{padding:7px 12px;border-bottom:1px solid var(--c-line);vertical-align:middle}
+.gk-vardi tr:nth-child(even) td{background:var(--c-bg)}
+.gk-vardi-es{font-family:var(--ff-display);font-size:1.08rem;color:var(--c-brand)}
+.gk-vardi-es .ek-skana-poga{width:30px;height:30px;display:inline-grid;vertical-align:middle;margin-right:8px}
+.gk-vardi-es .ek-skana-poga svg{width:16px;height:16px}
+.gk-vardi-lv{color:var(--c-ink);width:45%}
+.gk-vardi--bulta .gk-vardi-lv{font-family:var(--ff-display);color:var(--c-sage-ink)}
+.gk-vardi--bulta .gk-vardi-lv::before{content:"→ ";color:var(--c-muted)}
+.gk-vardi--slepts .gk-vardi-es:not(.atklats) .gk-es-teksts{color:transparent;background:var(--c-sunk);border-radius:6px;cursor:pointer;user-select:none}
+.gk-slept{display:inline-flex;gap:8px;align-items:center;margin-top:10px;min-height:40px;font-size:var(--fs-sm);color:var(--c-muted);cursor:pointer}
+.gk-slept input{width:18px;height:18px;accent-color:var(--c-sage-ink)}
+/* prezentāciju teksti */
+.gk-teksts{max-width:72ch;line-height:1.65}
+.gk-teksts .es{color:var(--c-brand);cursor:pointer;text-decoration:underline dotted;text-decoration-color:var(--c-line-strong);text-underline-offset:3px}
+.gk-teksts b.es{font-weight:700}
+.gk-teksts .es:hover{background:var(--c-accent-soft);border-radius:3px}
+.gk-teksts ul.dash{list-style:none;padding:0;margin:0 0 1em;display:grid;gap:6px}
+.gk-teksts ul.dash>li{padding-left:22px;position:relative}
+.gk-teksts ul.dash>li::before{content:"–";position:absolute;left:4px;color:var(--c-accent)}
+.gk-teksts ol.ex{padding-left:1.5em;display:grid;gap:6px;margin:0 0 1em}
+.gk-teksts .note{border-left:4px solid var(--c-sage-ink);background:var(--c-surface);padding:8px 14px;border-radius:0 var(--r-md) var(--r-md) 0;font-size:var(--fs-sm)}
+.gk-teksts span.note{display:block;margin-top:4px}
+.gk-teksts .card{background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);padding:12px 16px;box-shadow:var(--shadow-1)}
+.gk-teksts table{border-collapse:collapse;margin:0 0 1em;background:var(--c-surface);font-size:var(--fs-sm);display:block;overflow-x:auto;max-width:100%}
+.gk-teksts td,.gk-teksts th{padding:7px 12px;border:1px solid var(--c-line);text-align:left;vertical-align:top}
+.gk-teksts th{background:var(--c-sunk)}
+.gk-teksts .vrow{margin:0 0 4px}
+.gk-teksts .cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px}
+.gk-teksts [style]{font-size:inherit!important}
+/* vingrinājumi */
+.gk-vingr{padding-left:1.6em;margin:0;display:grid;gap:12px;max-width:820px;line-height:2}
+.gk-vingr>li{font-family:var(--ff-display);font-size:1.08rem}
+.gk-tuks{display:inline-block;min-height:38px;padding:2px 8px;margin:0 3px;font-family:var(--ff-body);font-size:1rem;vertical-align:baseline;max-width:100%}
+.lauks.pareizi{border-color:var(--c-success);background:var(--c-success-bg)}
+.lauks.nepareizi{border-color:var(--c-error);background:var(--c-error-bg)}
+.lauks.gandriz{background:var(--c-warn-bg);border-color:var(--c-warn)}
+.gk-izvele-opc{display:inline-flex;flex-wrap:wrap;gap:6px;margin-left:6px;vertical-align:middle;line-height:1.2}
+.gk-izvele-opc .ek-cips{min-height:36px;padding:4px 12px;font-size:1rem}
+.ek-cips.pareizi{border-color:var(--c-success);background:var(--c-success-bg);color:var(--c-success)}
+.ek-cips.nepareizi{border-color:var(--c-error);background:var(--c-error-bg);color:var(--c-error);text-decoration:line-through}
+.gk-izvele-vieta{border-bottom:2px solid var(--c-accent);padding:0 4px;font-weight:700}
+.gk-parveido>li{display:grid;gap:6px;line-height:1.4}
+.gk-parveido .lauks{max-width:560px;font-family:var(--ff-body)}
+.gk-pn>li,.gk-tests>li{line-height:1.5}
+.gk-pn .gk-izvele-opc,.gk-tests .gk-izvele-opc{display:flex;margin:6px 0 0}
+.gk-runa{list-style:none;padding:0;margin:0;display:grid;gap:8px;max-width:760px}
+.gk-runa li{display:flex;gap:12px;align-items:center;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);padding:8px 12px;font-family:var(--ff-display);font-size:1.08rem}
+.gk-minet{display:grid;gap:var(--sp-4);max-width:760px}
+.gk-minet-kartite{min-height:120px;display:grid;place-items:center;align-content:center;gap:4px;text-align:center;border-radius:var(--r-lg);background:var(--c-forest);color:var(--c-on-forest);padding:20px;cursor:pointer;font-weight:600;box-shadow:var(--shadow-2)}
+.gk-minet-kartite b{font-family:var(--ff-display);font-size:1.6rem;font-weight:500}
+.gk-minet-kartite small{color:var(--c-on-forest-muted)}
+.gk-majasdarbs{max-width:760px;display:grid;gap:12px}
+.gk-majasdarbs p,.gk-majasdarbs h3{margin:0}
+.gk-materiali{list-style:none;padding:0;margin:0 0 var(--sp-5);display:grid;gap:8px;max-width:760px}
+.gk-materials{display:flex;gap:12px;align-items:center;background:var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-md);padding:10px 12px}
+.gk-materials>span{display:grid;flex:1;min-width:0}
+.gk-materials a{font-weight:700;color:var(--c-accent-strong);overflow-wrap:anywhere}
+.gk-mat-forma{border:1.5px dashed var(--c-line-strong);border-radius:var(--r-lg);padding:16px;max-width:760px;display:grid;gap:12px}
+.gk-mat-forma h3{margin:0;font-size:1.05rem}
+.gk-cilnes{display:inline-flex;gap:4px;padding:4px;border-radius:var(--r-pill);background:var(--c-sunk);justify-self:start}
+.gk-cilne{min-height:40px;padding:6px 16px;border:0;border-radius:var(--r-pill);background:none;font:inherit;font-size:var(--fs-sm);font-weight:600;cursor:pointer;color:var(--c-muted)}
+.gk-cilne[aria-pressed=true]{background:var(--c-surface);color:var(--c-ink);box-shadow:var(--shadow-1)}
+.gk-dal-tabula td small{display:block;color:var(--c-muted)}
+.gk-dal-sk{text-align:center;font-variant-numeric:tabular-nums}
+.gk-dal-sk.gatavs{color:var(--c-success);font-weight:700}
+/* spēles */
+.gk-speles-bloks{background:linear-gradient(var(--c-sage),var(--c-sage)) top/100% 4px no-repeat,var(--c-surface);border:1px solid var(--c-line);border-radius:var(--r-lg);padding:var(--sp-5) var(--sp-6)}
+.gk-spele{display:grid;gap:var(--sp-4)}
+.gk-pabeigts{font-weight:600}
+/* krustvārdi */
+.gk-kv,.gk-vm{display:flex;flex-wrap:wrap;gap:var(--sp-5) var(--sp-6);align-items:flex-start}
+.gk-kv-jautajumi,.gk-vm-labais{flex:1 1 240px;min-width:0}
+.gk-kv-wrap{padding:4px;flex:none;max-width:100%}
+.gk-kv-rezgis{--s:32px;display:grid;grid-template-columns:repeat(var(--kol),var(--s));grid-template-rows:repeat(var(--rin),var(--s));gap:2px}
+.gk-kv-suna{position:relative;background:var(--c-bg);border:1.5px solid var(--c-line-strong);border-radius:4px}
+.gk-kv-suna input{width:100%;height:100%;border:0;background:none;text-align:center;font:700 calc(var(--s)*.5)/1 var(--ff-body);text-transform:uppercase;color:var(--c-ink);padding:0;caret-color:var(--c-accent);border-radius:3px}
+.gk-kv-suna input:focus{outline:none;background:var(--c-accent-soft)}
+.gk-kv-suna.iezime{background:var(--c-sage)}
+.gk-kv-suna.nepareizi{background:var(--c-error-bg);border-color:var(--c-error)}
+.gk-kv-suna.atklats input{color:var(--c-info)}
+.gk-kv-suna:focus-within{border-color:var(--c-accent);box-shadow:0 0 0 2px var(--c-accent)}
+.gk-kv-nr{position:absolute;top:1px;left:2px;font-size:9px;line-height:1;color:var(--c-muted);pointer-events:none}
+.gk-kv-jautajumi{display:grid;gap:var(--sp-4)}
+.gk-kv-jautajumi h4{margin:0 0 6px;font-size:1rem}
+.gk-kv-jautajumi ol{list-style:none;padding:0;margin:0;display:grid;gap:2px}
+.gk-kv-jaut{width:100%;text-align:left;border:0;background:none;font:inherit;font-size:var(--fs-sm);padding:6px 8px;border-radius:var(--r-sm);cursor:pointer;color:var(--c-ink);min-height:36px}
+.gk-kv-jaut:hover{background:var(--c-sunk)}
+.gk-kv-jaut small{color:var(--c-muted)}
+.gk-kv-jautajumi li.tagad .gk-kv-jaut{background:var(--c-sage)}
+.gk-kv-jautajumi li.gatavs .gk-kv-jaut{color:var(--c-success);text-decoration:line-through}
+/* vārdu meklēšana */
+.gk-vm-rezgis{--s:30px;flex:none;display:grid;grid-template-columns:repeat(var(--n),var(--s));gap:2px;user-select:none;touch-action:manipulation}
+.gk-vm-suna{width:var(--s);height:var(--s);border:0;border-radius:6px;background:var(--c-bg);font:700 calc(var(--s)*.46)/1 var(--ff-body);color:var(--c-ink);cursor:pointer;padding:0}
+.gk-vm-suna:hover,.gk-vm-suna.priekss{background:var(--c-sunk)}
+.gk-vm-suna.sakums{background:var(--c-accent);color:#fff}
+.gk-vm-suna.kluda{background:var(--c-error-bg);color:var(--c-error)}
+.gk-vm-suna.atrasts{color:#fff}
+.gk-vm-suna.k0{background:var(--c-success)}.gk-vm-suna.k1{background:var(--c-info)}.gk-vm-suna.k2{background:var(--c-accent-strong)}.gk-vm-suna.k3{background:var(--c-brand)}.gk-vm-suna.k4{background:var(--c-sage-ink)}.gk-vm-suna.k5{background:var(--c-warn)}
+.gk-vm h4{margin:0 0 8px;font-size:1rem}
+.gk-vm-saraksts{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.gk-vm-saraksts li{display:flex;justify-content:space-between;gap:12px;padding:6px 10px;border-radius:var(--r-sm);background:var(--c-bg);font-size:var(--fs-sm)}
+.gk-vm-es{font-family:var(--ff-display);font-weight:500;color:var(--c-muted);letter-spacing:.1em}
+.gk-vm-saraksts li.atrasts{background:var(--c-success-bg)}
+.gk-vm-saraksts li.atrasts .gk-vm-es{color:var(--c-success);letter-spacing:0}
+/* atmiņas spēle */
+.gk-atm{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:720px}
+.gk-atm-karte{aspect-ratio:4/3;border:0;background:none;padding:0;perspective:800px;cursor:pointer;font:inherit}
+.gk-atm-iekss{position:relative;display:block;width:100%;height:100%;transition:transform .4s var(--ease,ease);transform-style:preserve-3d}
+.gk-atm-karte.atverta .gk-atm-iekss,.gk-atm-karte.paris .gk-atm-iekss{transform:rotateY(180deg)}
+.gk-atm-mugura,.gk-atm-prieksa{position:absolute;inset:0;border-radius:var(--r-md);backface-visibility:hidden;display:grid;place-items:center;padding:8px;text-align:center;line-height:1.25;font-size:clamp(12px,2.6vw,15px)}
+.gk-atm-mugura{background:var(--c-forest);box-shadow:var(--shadow-1)}
+.gk-atm-mugura::after{content:"?";font-family:var(--ff-display);font-size:1.6rem;color:var(--c-on-forest-muted)}
+.gk-atm-prieksa{transform:rotateY(180deg);background:var(--c-surface);border:1.5px solid var(--c-line);font-weight:600;color:var(--c-ink)}
+.gk-atm--es{font-family:var(--ff-display);font-weight:500;color:var(--c-brand)}
+.gk-atm-karte.paris .gk-atm-prieksa{background:var(--c-success-bg);border-color:var(--c-success)}
+.gk-atm-karte:focus-visible{outline:3px solid var(--c-focus);outline-offset:2px;border-radius:var(--r-md)}
+/* burtu jucekļi */
+.gk-juc{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.gk-juc-v{background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-md);padding:12px;display:grid;gap:8px}
+.gk-juc-lv{font-weight:600}
+.gk-juc-atb{min-height:44px;display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px dashed var(--c-line-strong);padding-bottom:6px}
+.gk-juc-atb.kluda{animation:gk-krata .4s}
+.gk-juc-burti{display:flex;flex-wrap:wrap;gap:4px}
+.gk-juc-burts{width:36px;height:40px;border:1.5px solid var(--c-line);border-radius:6px;background:var(--c-surface);font:700 1.1rem/1 var(--ff-display);cursor:pointer;color:var(--c-ink)}
+.gk-juc-burts:disabled{opacity:.3;cursor:default}
+.gk-juc-v.gatavs{background:var(--c-success-bg);border-color:var(--c-success)}
+.gk-juc-v.gatavs .gk-juc-atb .gk-juc-burts{opacity:1;border-color:var(--c-success);color:var(--c-success)}
+.gk-juc-v.gatavs .gk-juc-burti,.gk-juc-v.gatavs .gk-juc-pal{display:none}
+.gk-juc-pal{justify-self:start;font-size:var(--fs-sm)}
+/* teikumu secība */
+.gk-sec{padding-left:1.4em;margin:0;display:grid;gap:14px;max-width:820px}
+.gk-sec-t.gatavs .ek-seciba-atbilde{border-style:solid;border-color:var(--c-success);background:var(--c-success-bg)}
+.gk-sec-t.gatavs .ek-seciba-elementi{display:none}
+.ek-seciba-atbilde.kluda{animation:gk-krata .4s;border-color:var(--c-error)}
+@keyframes gk-krata{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@media (max-width:640px){
+ .gk-atm{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .gk-speles-bloks{padding:var(--sp-4)}
+ .gk-solis-labais{grid-column:2}
+ .gk-vardi td{padding:6px 8px}
+ .gk-juc{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.gk-atm-iekss{transition:none}}

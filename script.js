@@ -98,6 +98,7 @@
             }
             saite('Mans profils', 'konts.html#profils');
             saite('Mani kursi', 'konts.html#kursi');
+            if (u.pasniedzejs) saite('Kursu telpas', 'kursa-telpa.html');
             if (u.is_admin) saite('Administrācija', 'admin.html');
             var out = el('button', 'user-menu-iziet', 'Iziet'); out.type = 'button';
             out.addEventListener('click', function() {

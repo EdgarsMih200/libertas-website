@@ -5,3 +5,6 @@ node_modules/
 # E-kursu saturs un avoti (apmaksāts saturs, publisks repo) — glabājas privāti
 docs/e-kursi/avoti/
 e-kursi-saturs/
+
+# Grupu kursu saturs un prezentācijas (apmaksāts saturs) — glabājas KV, ne repo
+grupu-kursi-saturs/

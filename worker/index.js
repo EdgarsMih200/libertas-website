@@ -6,6 +6,7 @@ import { rekiniMarsruts } from './rekini.js';
 import { blogsMarsruts } from './blogs.js';
 import { bjuMarsruts } from './bju.js';
 import { aptaujaMarsruts } from './aptauja.js';
+import { gkMarsruts, irPasniedzejs } from './grupu-kursi.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -74,6 +75,7 @@ async function readBody(request) {
 // picture: paša augšupielādētais foto (ja ir), citādi Google foto. ?v= maina adresi pēc katras nomaiņas (kešs).
 const publicUser = (u) => ({
   id: u.id, email: u.email, name: u.name, phone: u.phone, is_admin: !!u.is_admin, created_at: u.created_at,
+  loma: u.loma || 'students', pasniedzejs: irPasniedzejs(u),
   picture: u.avatar_at ? `/api/me/avatar?v=${encodeURIComponent(u.avatar_at)}` : u.picture,
   google_picture: u.picture, custom_picture: !!u.avatar_at,
 });
@@ -495,6 +497,11 @@ export default {
 
       if (path === '/api/aptauja' || path.startsWith('/api/aptauja/') || path.startsWith('/api/admin/aptauja')) {
         const atb = await aptaujaMarsruts(request, env, { path, method, user });
+        if (atb) return atb;
+      }
+
+      if (path === '/api/gk' || path.startsWith('/api/gk/') || /^\/api\/admin\/lietotaji\/\d+\/loma$/.test(path)) {
+        const atb = await gkMarsruts(request, env, { path, method, user, url });
         if (atb) return atb;
       }
 

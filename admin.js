@@ -148,7 +148,7 @@
         var frag = document.createDocumentFragment();
         frag.appendChild(el('p', 'muted', 'Nereģistrēti apmeklētāji (bez sīkdatnēm; viens apmeklējums = viens apmeklētājs dienā):'));
         frag.appendChild(viesuKartites());
-        var t = tableWrap(['', 'Vārds', 'E-pasts', 'Tālrunis', 'Reģistrējies', 'Pēdējā ienākšana', 'Pēdējais apmeklējums', 'Ienākšanas', 'Kursi']);
+        var t = tableWrap(['', 'Vārds', 'E-pasts', 'Loma', 'Tālrunis', 'Reģistrējies', 'Pēdējā ienākšana', 'Pēdējais apmeklējums', 'Ienākšanas', 'Kursi']);
         var q = state.q.toLowerCase();
         state.users.filter(function(u) {
             return !q || ((u.name || '') + ' ' + u.email + ' ' + (u.phone || '')).toLowerCase().indexOf(q) >= 0;
@@ -158,7 +158,14 @@
             if (u.picture) { av = el('img', 'user-avatar'); av.src = u.picture; av.alt = ''; av.referrerPolicy = 'no-referrer'; }
             else av = el('span', 'user-avatar user-avatar-ph', (u.name || u.email || '?').charAt(0).toUpperCase());
             td(tr, av);
-            td(tr, u.name); td(tr, u.email); td(tr, u.phone);
+            td(tr, u.name); td(tr, u.email);
+            // Loma: Pasniedzējs var rediģēt grupu kursu telpas (kursa-telpa.html); administrators vienmēr ir pasniedzējs
+            var loma = select([['students', 'Students'], ['pasniedzejs', 'Pasniedzējs']], u.loma || 'students', function(v) {
+                api('PATCH', '/api/admin/lietotaji/' + u.id + '/loma', { loma: v }).then(function() { u.loma = v; L.toast('Loma nomainīta: ' + (v === 'pasniedzejs' ? 'Pasniedzējs' : 'Students')); }).catch(err);
+            });
+            loma.setAttribute('aria-label', 'Loma: ' + (u.name || u.email));
+            td(tr, loma);
+            td(tr, u.phone);
             td(tr, fmt(u.created_at)); td(tr, fmt(u.last_login_at, true)); td(tr, fmt(u.last_seen_at, true));
             td(tr, String(u.login_count || 0));
             var cell = el('div', 'summary-chips');

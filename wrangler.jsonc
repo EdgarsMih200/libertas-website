@@ -20,6 +20,10 @@
       "migrations_dir": "migrations"
     }
   ],
+  // Grupu kursu telpas: lekciju PDF/HTML, pasniedzēja materiāli un nodarbību saturs (JSON). Saturs nav publiskajā repo.
+  "kv_namespaces": [
+    { "binding": "GK_FAILI", "id": "23a89256a67c43f3a094ac52abba02d7" }
+  ],
   "vars": {
     "ADMIN_EMAILS": "edza7112@gmail.com",
     "GOOGLE_CLIENT_ID": "107664836932-r5b9n8divtdlfbgel2v812q9vgj9ccm5.apps.googleusercontent.com",

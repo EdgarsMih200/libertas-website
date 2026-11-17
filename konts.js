@@ -250,6 +250,11 @@
         if (pz) b.appendChild(el('p', 'mans-kurss-piezime', pz));
 
         var apaksa = el('div', 'mans-kurss-apaksa');
+        // Pēc apmaksas grupas kursam atveras kursa telpa (nodarbības, prezentācijas, Google Meet saite)
+        if (en.paid || ['uznemts', 'sacis', 'pabeidzis'].indexOf(en.status) >= 0) {
+            var telpa = el('a', 'btn-cta btn-card', 'Atvērt kursa telpu'); telpa.href = 'kursa-telpa.html?k=' + encodeURIComponent(en.course_id);
+            apaksa.appendChild(telpa);
+        }
         apaksa.appendChild(el('span', 'muted', 'Pieteikts ' + fmt(en.created_at)));
         if (en.status === 'pieteicies' && !en.paid) {
             var x = el('button', 'btn-link btn-danger', 'Atcelt pieteikumu'); x.type = 'button';
