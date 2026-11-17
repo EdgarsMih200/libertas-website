@@ -543,6 +543,28 @@ svg { display: block; }
 .dr-griez--2 .dr-griez-aizm { transform: none; }
 .dr-griez--2 .dr-griez-aizm span { font-size: 11pt; }
 
+/* uzdevumu režģis, kas aizpilda visu atlikušo lapu (norvēģu Jaungads 4. lapa) */
+.dr-sadala--aug { display: flex; flex-direction: column; }
+.dr-sadala--aug > .dr-uzd-rezgis { flex: 1; min-height: 0; grid-auto-rows: 1fr; }
+.dr-sadala--aug .dr-uzd > ol { flex: 1; justify-content: space-evenly; }
+
+/* krustvārdu mīkla (norvēģu Jaungads): 12×12 režģis + uzdevumi ar attēliem divās kolonnās */
+.dr-kv-rezgis {
+    display: grid; grid-template-columns: repeat(12, 11mm); grid-auto-rows: 11mm;
+    justify-content: center; margin: 1mm auto 0; padding-bottom: 1.2mm;
+}
+.dr-kv-s { position: relative; border: .35mm solid var(--t-ink); margin: 0 -.35mm -.35mm 0; background: #fff; }
+.dr-kv-s i { position: absolute; left: .6mm; top: .3mm; font: 700 5.6pt/1 var(--ff-body); font-style: normal; color: var(--t-ink); }
+.dr-kv-uzdevumi { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6mm; }
+.dr-kv-uzdevumi > div { display: flex; flex-direction: column; }
+.dr-kv-uzdevumi h3 { font: 600 10.5pt/1.2 var(--ff-display); color: var(--t-ink); margin-bottom: 1mm; }
+.dr-kv-uzdevumi ol { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; }
+.dr-kv-uzdevumi li { display: flex; align-items: center; gap: 2mm; font-size: 9pt; line-height: 1.25; border-top: .3mm dashed var(--c-line); padding: .8mm 0; }
+.dr-kv-uzdevumi li:first-child { border-top: 0; }
+.dr-kv-uzdevumi li b { min-width: 5mm; font: 700 9pt/1 var(--ff-body); color: var(--t-1); }
+.dr-kv-uzdevumi li svg { flex: none; width: 10mm; height: 10mm; padding: .5mm; border-radius: 50%; background: var(--t-soft); }
+.dr-kv-uzdevumi small { color: var(--c-muted); }
+
 /* ---------- ekrāns: mazos ekrānos loksnes samazina (mērogu liek JS, drukā vienmēr 1) ---------- */
 @media (max-width: 860px) {
     .dr-rikjosla-logo { display: none; }
