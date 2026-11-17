@@ -501,7 +501,7 @@ export default {
       }
 
       if (path === '/api/gk' || path.startsWith('/api/gk/') || /^\/api\/admin\/lietotaji\/\d+\/loma$/.test(path)) {
-        const atb = await gkMarsruts(request, env, { path, method, user, url });
+        const atb = await gkMarsruts(request, env, { path, method, user, url, ctx });
         if (atb) return atb;
       }
 

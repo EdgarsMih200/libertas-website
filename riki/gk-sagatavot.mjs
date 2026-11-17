@@ -211,10 +211,19 @@ function sagatavot(nr) {
   ];
   if (sek.length >= 4) uzdevumi.push({ id: 'seciba', tips: 'seciba', virsraksts: 'Saliec teikumu', apraksts: 'Spied uz vārdiem pareizā secībā, lai saliktu teikumu.', teikumi: sek });
 
+  // Mājasdarba pārbaudes (kā prezentācijā): avoti/NN.majasdarbs.json {teksts?, parbaudes:[{id, teksts, tips teikumi|vardi|skaits|nav, …}]}
+  const fMd = path.join(AVOTI, nn + '.majasdarbs.json');
+  let majasdarbs = avots.homework || null;
+  if (fs.existsSync(fMd)) {
+    const md = JSON.parse(fs.readFileSync(fMd, 'utf8'));
+    majasdarbs = { ...(majasdarbs || {}), ...md, prasibas: md.parbaudes.map((x) => x.teksts) };
+    for (const x of md.parbaudes) if (x.re) new RegExp(x.re.replace(/⟨/g, '(?<![a-záéíóúüñ])').replace(/⟩/g, '(?![a-záéíóúüñ])'), 'g'); // sintakses pārbaude
+  } else if (majasdarbs) console.warn(`  ! ${nn}: nav ${nn}.majasdarbs.json — mājasdarbam nebūs automātisko pārbaužu`);
+
   const bloki = S.filter((s) => !['img', 'overview', 'homework'].includes(s.type));
   const out = {
     nr, nosaukums: avots.head || `${nr}. nodarbība`, temas: avots.items || [],
-    bloki, majasdarbs: avots.homework || null, uzdevumi,
+    bloki, majasdarbs, uzdevumi,
   };
   const fOut = path.join(DIR, nn + '.json');
   fs.writeFileSync(fOut, JSON.stringify(out));

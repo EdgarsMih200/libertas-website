@@ -8580,4 +8580,41 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
  .gk-vardi td{padding:6px 8px}
  .gk-juc{grid-template-columns:1fr}
 }
+/* --- Grupu kursa mājasdarbi (kursa-telpa.js: majasdarbaRedaktors, iesniegumaKarte, #majasdarbi) --- */
+.gk-majasdarbs{max-width:none}
+.gk-md-uzdevums{font-size:var(--fs-lead);line-height:1.55;max-width:72ch}
+.gk-md-statuss{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:var(--fs-sm);color:var(--c-muted)}
+.gk-md-izk{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:var(--sp-5);align-items:start}
+.gk-md-teksts{min-height:260px;font-family:var(--ff-display);font-size:1.08rem;line-height:1.6}
+.gk-md-teksts[readonly]{background:var(--c-sunk);color:var(--c-ink)}
+.gk-md-kr{background:var(--c-bg);border:1px solid var(--c-line);border-radius:var(--r-md);padding:14px 16px;display:grid;gap:10px}
+.gk-md-kr h4{margin:0;font-size:1rem}
+.gk-md-prasibas{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:var(--fs-sm);line-height:1.4}
+.gk-md-prasibas li{display:grid;grid-template-columns:22px 1fr auto;gap:8px;align-items:start}
+.gk-md-zime{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--c-line-strong);display:grid;place-items:center;font-size:13px;font-weight:700}
+.gk-md-prasibas li.izpildits .gk-md-zime{background:var(--c-success);border-color:var(--c-success);color:#fff}
+.gk-md-prasibas li.izpildits{color:var(--c-success)}
+.gk-md-prasibas li.bridinajums{color:var(--c-error);font-weight:600}
+.gk-md-prasibas li.bridinajums .gk-md-zime{background:var(--c-error);border-color:var(--c-error);color:#fff}
+.gk-md-v{font-weight:700;color:var(--c-muted);font-variant-numeric:tabular-nums}
+.gk-md-vertejums{border-left:4px solid var(--c-success);background:var(--c-success-bg);border-radius:0 var(--r-md) var(--r-md) 0;padding:12px 16px;display:grid;gap:4px}
+.gk-md-vertejums--jalabo{border-left-color:var(--c-warn);background:var(--c-warn-bg)}
+.gk-md-vertejums p{margin:0;white-space:pre-wrap}
+.gk-birka--md{background:var(--c-accent-soft);color:var(--c-accent-strong)}
+.gk-birka--md-iesniegts{background:var(--c-info-bg);color:var(--c-info)}
+.gk-birka--md-novertets{background:var(--c-success-bg);color:var(--c-success)}
+.gk-birka--md-jalabo{background:var(--c-warn-bg);color:var(--c-warn)}
+.gk-md-lapa{display:grid;gap:var(--sp-5)}
+.gk-md-saraksts{display:grid;gap:var(--sp-4)}
+.gk-md-iesniegums{background:var(--c-surface);border:1px solid var(--c-line);border-left:4px solid var(--c-info);border-radius:var(--r-lg);padding:var(--sp-5);display:grid;gap:12px;box-shadow:var(--shadow-1)}
+.gk-md-iesniegums--novertets{border-left-color:var(--c-success)}
+.gk-md-iesniegums--jalabo{border-left-color:var(--c-warn)}
+.gk-md-iesn-galva{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.gk-md-iesn-galva small{display:block;color:var(--c-muted);font-size:12px}
+.gk-md-iesn-teksts{white-space:pre-wrap;font-family:var(--ff-display);font-size:1.05rem;line-height:1.6;background:var(--c-bg);border-radius:var(--r-md);padding:12px 14px;max-height:420px;overflow:auto}
+.gk-md-vertet{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.gk-md-vertet .gk-lauks{flex:0 1 260px}
+.gk-lauks--plats{flex:1 1 100%!important}
+.gk-md-vertet .ek-uzd-pogas{margin-top:0}
+@media (max-width:1199px){.gk-md-izk{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.gk-atm-iekss{transition:none}}

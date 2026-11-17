@@ -3,6 +3,8 @@
 // Lomas: users.loma = 'students' | 'pasniedzejs'; administrators vienmēr ir arī pasniedzējs.
 // Faili un nodarbību saturs: KV GK_FAILI (fails/<id>, saturs/<kurss>/<nr>); metadati D1 (migrations/0011_grupu_kursi.sql).
 
+import { sutit } from './epasts.js';
+
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });
 const fail = (msg, status = 400) => json({ error: msg }, status);
@@ -103,7 +105,16 @@ async function parskats(env, user, kurss) {
   const { results: prog } = await env.DB.prepare('SELECT nr, uzdevums, rezultats FROM gk_progress WHERE user_id = ? AND course_id = ?').bind(user.id, kurss).all();
   const progress = {};
   prog.forEach((r) => { (progress[r.nr] = progress[r.nr] || {})[r.uzdevums] = r.rezultats; });
+  const majasdarbi = {};
+  if (pasn) {
+    const { results: md } = await env.DB.prepare("SELECT nr, COUNT(*) AS n FROM gk_majasdarbi WHERE course_id = ? AND statuss = 'iesniegts' GROUP BY nr").bind(kurss).all();
+    md.forEach((r) => { majasdarbi[r.nr] = r.n; });
+  } else {
+    const { results: md } = await env.DB.prepare('SELECT nr, statuss, vertejums FROM gk_majasdarbi WHERE user_id = ? AND course_id = ?').bind(user.id, kurss).all();
+    md.forEach((r) => { majasdarbi[r.nr] = { statuss: r.statuss, vertejums: r.vertejums }; });
+  }
   return json({
+    majasdarbi, // pasniedzējam: nepārbaudīto skaits pa nodarbībām; studentam: sava mājasdarba statuss
     piekluve: { ok: true, pasniedzejs: pasn, students: !!P.students },
     kurss: { id: kurss, name: t.name, schedule: t.schedule, meet_url: t.meet_url || '', ievads: t.ievads || '' },
     grupa: gr ? { laiks: gr.laiks, teksts: gr.teksts, sakums: gr.nodarbibas[0], beigas: gr.nodarbibas[gr.nodarbibas.length - 1] } : null,
@@ -132,6 +143,7 @@ async function nodarbiba(env, user, kurss, nr) {
     saturs, materiali: mat,
     progress: Object.fromEntries(prog.map((r) => [r.uzdevums, r.rezultats])),
     pasniedzejs: !!P.pasniedzejs,
+    majasdarbs: await env.DB.prepare('SELECT * FROM gk_majasdarbi WHERE user_id = ? AND course_id = ? AND nr = ?').bind(user.id, kurss, nr).first(),
   });
 }
 
@@ -171,6 +183,94 @@ async function saglabatProgresu(request, env, user, kurss) {
     `INSERT INTO gk_progress (user_id, course_id, nr, uzdevums, rezultats, at) VALUES (?, ?, ?, ?, ?, ?)
      ON CONFLICT(user_id, course_id, nr, uzdevums) DO UPDATE SET rezultats = MAX(rezultats, excluded.rezultats), at = excluded.at`
   ).bind(user.id, kurss, nr, uzd, rez, nowIso()).run();
+  return json({ ok: true });
+}
+
+// ---------- mājasdarbi ----------
+const escH = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function vestule(virsraksts, rindas, poga, saite) {
+  const html = `<div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;color:#24211E">
+    <div style="background:#2F4A3A;color:#F6F1E8;padding:18px 22px;border-radius:12px 12px 0 0;font-size:18px;font-weight:bold">${escH(virsraksts)}</div>
+    <div style="background:#F6F1E8;padding:20px 22px;border-radius:0 0 12px 12px;line-height:1.55">${rindas.map((r) => `<p style="margin:0 0 10px">${r}</p>`).join('')}
+    <p style="margin:18px 0 0"><a href="${escH(saite)}" style="background:#B4502A;color:#fff;padding:12px 20px;border-radius:999px;text-decoration:none;font-weight:bold">${escH(poga)}</a></p></div></div>`;
+  const text = [virsraksts, ...rindas.map((r) => r.replace(/<[^>]+>/g, '')), `${poga}: ${saite}`].join('\n\n');
+  return { subject: virsraksts, html, text };
+}
+function pazinot(env, ctx, darbs) {
+  if (!env.RESEND_API_KEY || !env.EMAIL_FROM) return;
+  const p = darbs().catch((e) => console.error('Mājasdarba e-pasts', e));
+  if (ctx && ctx.waitUntil) ctx.waitUntil(p);
+}
+const MD_STATUSI = ['iesniegts', 'novertets', 'jalabo'];
+
+// Students saglabā melnrakstu vai iesniedz. Novērtētu vairs nevar mainīt; «jalabo» = var iesniegt vēlreiz.
+async function saglabatMajasdarbu(request, env, user, kurss, nr, origin, ctx) {
+  const P = await piekluve(env, user, kurss);
+  if (!P.ok) return fail('Nav piekļuves', 403);
+  const n = await env.DB.prepare('SELECT nosaukums, redzama FROM gk_nodarbibas WHERE course_id = ? AND nr = ?').bind(kurss, nr).first();
+  if (!n || (!n.redzama && !P.pasniedzejs)) return fail('Nodarbība nav atrasta', 404);
+  const b = await readBody(request);
+  const t = typeof b.teksts === 'string' ? b.teksts.replace(/\r\n/g, '\n').slice(0, 20000) : '';
+  const iesniegt = !!b.iesniegt;
+  const vecs = await env.DB.prepare('SELECT * FROM gk_majasdarbi WHERE user_id = ? AND course_id = ? AND nr = ?').bind(user.id, kurss, nr).first();
+  if (vecs && vecs.statuss === 'novertets') return fail('Mājasdarbs jau novērtēts — to vairs nevar mainīt', 409);
+  if (vecs && vecs.statuss === 'iesniegts' && !iesniegt) return fail('Mājasdarbs jau iesniegts', 409);
+  if (iesniegt && t.trim().length < 20) return fail('Uzraksti mājasdarbu, pirms to iesniedz');
+  let parb = null;
+  if (b.parbaudes && typeof b.parbaudes === 'object') {
+    parb = {};
+    for (const [k, v] of Object.entries(b.parbaudes).slice(0, 20)) if (/^[a-z0-9_-]{1,20}$/.test(k) && Array.isArray(v)) parb[k] = [v[0] ? 1 : 0, String(v[1] ?? '').slice(0, 10)];
+    parb = JSON.stringify(parb);
+  }
+  const now = nowIso();
+  const statuss = iesniegt ? 'iesniegts' : 'melnraksts';
+  await env.DB.prepare(
+    `INSERT INTO gk_majasdarbi (user_id, course_id, nr, teksts, parbaudes, statuss, reizes, iesniegts_at, atjaunots_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+     ON CONFLICT(user_id, course_id, nr) DO UPDATE SET teksts = excluded.teksts, parbaudes = COALESCE(excluded.parbaudes, parbaudes),
+       statuss = excluded.statuss, reizes = reizes + excluded.reizes, iesniegts_at = COALESCE(excluded.iesniegts_at, iesniegts_at), atjaunots_at = excluded.atjaunots_at`
+  ).bind(user.id, kurss, nr, t, parb, statuss, iesniegt ? 1 : 0, iesniegt ? now : null, now).run();
+  if (iesniegt && !P.pasniedzejs) {
+    pazinot(env, ctx, async () => {
+      const { results } = await env.DB.prepare("SELECT email FROM users WHERE loma = 'pasniedzejs'").all();
+      const kam = [...new Set([...(env.ADMIN_EMAILS || '').split(','), ...results.map((r) => r.email)].map((x) => x.trim()).filter(Boolean))];
+      if (!kam.length) return;
+      const kursaNos = (P.telpa && P.telpa.name) || kurss;
+      await sutit(env, kam, vestule(`Jauns mājasdarbs: ${user.name || user.email} · ${nr}. nodarbība`, [
+        `<b>${escH(user.name || user.email)}</b> iesniedza mājasdarbu kursā <b>${escH(kursaNos)}</b> (${nr}. ${escH(n.nosaukums)})${vecs && vecs.reizes ? ' — labotā versija' : ''}.`,
+        `<i>${escH(t.slice(0, 600))}${t.length > 600 ? '…' : ''}</i>`,
+      ], 'Pārbaudīt kursa telpā', `${origin}/kursa-telpa.html?k=${kurss}#majasdarbi`), user.email);
+    });
+  }
+  return json({ ok: true, statuss });
+}
+
+async function majasdarbuSaraksts(env, kurss, url) {
+  const nr = Number(url.searchParams.get('nr')) || null;
+  const { results } = await env.DB.prepare(
+    `SELECT m.id, m.nr, m.teksts, m.parbaudes, m.statuss, m.reizes, m.vertejums, m.komentars, m.iesniegts_at, m.novertets_at,
+            u.id AS user_id, COALESCE(u.display_name, u.name) AS name, u.email, n.nosaukums
+     FROM gk_majasdarbi m JOIN users u ON u.id = m.user_id LEFT JOIN gk_nodarbibas n ON n.course_id = m.course_id AND n.nr = m.nr
+     WHERE m.course_id = ? AND m.statuss != 'melnraksts' ${nr ? 'AND m.nr = ?' : ''} ORDER BY (m.statuss = 'iesniegts') DESC, m.iesniegts_at DESC`
+  ).bind(...(nr ? [kurss, nr] : [kurss])).all();
+  return json({ majasdarbi: results.map((r) => ({ ...r, parbaudes: r.parbaudes ? JSON.parse(r.parbaudes) : null })) });
+}
+
+async function novertetMajasdarbu(request, env, kurss, id, origin, ctx) {
+  const b = await readBody(request);
+  const m = await env.DB.prepare('SELECT m.*, u.email FROM gk_majasdarbi m JOIN users u ON u.id = m.user_id WHERE m.id = ? AND m.course_id = ?').bind(id, kurss).first();
+  if (!m) return fail('Nav atrasts', 404);
+  const statuss = MD_STATUSI.includes(b.statuss) ? b.statuss : 'novertets';
+  const vert = teksts(b.vertejums, 40), kom = teksts(b.komentars, 4000);
+  const now = nowIso();
+  await env.DB.prepare('UPDATE gk_majasdarbi SET statuss = ?, vertejums = ?, komentars = ?, novertets_at = ?, atjaunots_at = ? WHERE id = ?')
+    .bind(statuss, vert || null, kom || null, statuss === 'iesniegts' ? null : now, now, id).run();
+  if (statuss !== 'iesniegts') {
+    pazinot(env, ctx, () => sutit(env, m.email, vestule(
+      statuss === 'jalabo' ? `Mājasdarbs jāpalabo · ${m.nr}. nodarbība` : `Mājasdarbs novērtēts · ${m.nr}. nodarbība`,
+      [statuss === 'jalabo' ? 'Pasniedzējs atgrieza tavu mājasdarbu labošanai. Izlabo to un iesniedz vēlreiz kursa telpā.' : 'Pasniedzējs ir pārbaudījis tavu mājasdarbu.',
+        vert ? `Vērtējums: <b>${escH(vert)}</b>` : '', kom ? `Komentārs: <i>${escH(kom)}</i>` : ''].filter(Boolean),
+      'Atvērt mājasdarbu', `${origin}/kursa-telpa.html?k=${kurss}#n/${m.nr}`), env.EMAIL_REPLY_TO));
+  }
   return json({ ok: true });
 }
 
@@ -306,7 +406,7 @@ async function mainitLomu(request, env, id) {
 }
 
 // ---------- maršruti ----------
-export async function gkMarsruts(request, env, { path, method, user, url }) {
+export async function gkMarsruts(request, env, { path, method, user, url, ctx }) {
   let m;
   if ((m = path.match(/^\/api\/admin\/lietotaji\/(\d+)\/loma$/)) && method === 'PATCH') {
     if (!user?.is_admin) return fail('Nav piekļuves', 403);
@@ -326,6 +426,7 @@ export async function gkMarsruts(request, env, { path, method, user, url }) {
   if ((r = rest.match(/^nodarbiba\/(\d+)$/)) && method === 'GET') return nodarbiba(env, user, kurss, Number(r[1]));
   if ((r = rest.match(/^fails\/(\d+)$/)) && method === 'GET') return fails(env, user, kurss, Number(r[1]), url);
   if (rest === 'progress' && method === 'POST') return saglabatProgresu(request, env, user, kurss);
+  if ((r = rest.match(/^majasdarbs\/(\d+)$/)) && method === 'PUT') return saglabatMajasdarbu(request, env, user, kurss, Number(r[1]), url.origin, ctx);
 
   // Turpmāk tikai pasniedzējam
   if (!irPasniedzejs(user)) return fail('Nav piekļuves', 403);
@@ -334,6 +435,8 @@ export async function gkMarsruts(request, env, { path, method, user, url }) {
   if (!telpa) return fail('Kursa telpa nav izveidota', 404);
   if (rest === '' && method === 'PATCH') return labotKursu(request, env, kurss);
   if (rest === 'dalibnieki' && method === 'GET') return dalibnieki(env, kurss);
+  if (rest === 'majasdarbi' && method === 'GET') return majasdarbuSaraksts(env, kurss, url);
+  if ((r = rest.match(/^majasdarbi\/(\d+)$/)) && method === 'PATCH') return novertetMajasdarbu(request, env, kurss, Number(r[1]), url.origin, ctx);
   if (rest === 'nodarbibas' && method === 'POST') return jaunaNodarbiba(request, env, kurss);
   if ((r = rest.match(/^nodarbiba\/(\d+)$/))) {
     if (method === 'PATCH') return labotNodarbibu(request, env, kurss, Number(r[1]));

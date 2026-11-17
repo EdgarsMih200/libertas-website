@@ -197,6 +197,9 @@
             if (pap) birkas.push(pap + ' papildmateriāli');
             birkas.forEach((b) => meta.appendChild(el('span', 'gk-birka', b)));
             if (!n.redzama) meta.appendChild(el('span', 'gk-birka gk-birka--slepta', 'Paslēpta studentiem'));
+            const md = P.majasdarbi && P.majasdarbi[n.nr];
+            if (pasn && md) meta.appendChild(el('span', 'gk-birka gk-birka--md', md + (md % 10 === 1 && md % 100 !== 11 ? ' mājasdarbs' : ' mājasdarbi') + ' jāpārbauda'));
+            if (!pasn && md && md.statuss !== 'melnraksts') meta.appendChild(el('span', 'gk-birka gk-birka--md-' + md.statuss, 'Mājasdarbs: ' + MD_NOS[md.statuss] + (md.statuss === 'novertets' && md.vertejums ? ' ' + md.vertejums : '')));
             t.appendChild(meta);
             if (n.temas && n.temas.length) t.appendChild(el('p', '', n.temas.map((x) => x.replace(/^\d+\.\d+\.\s*/, '')).join(' · ')));
             li.appendChild(t);
@@ -227,6 +230,8 @@
             k2.appendChild(el('h3', '', P.piekluve.students ? 'Studenta skats' : 'Pasniedzēja rīki'));
             const sk = el('div', 'gk-pogu-kolonna');
             if (pasn) {
+                const jap = Object.values(P.majasdarbi || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+                sk.appendChild(saite('Mājasdarbi' + (jap ? ' (' + jap + ' jāpārbauda)' : ''), '#majasdarbi', (jap ? 'btn-cta' : 'btn-secondary') + ' ek-poga-maza'));
                 sk.appendChild(saite('Dalībnieki un progress', '#dalibnieki', 'btn-secondary ek-poga-maza'));
                 sk.appendChild(poga('Skatīt kā students', 'btn-secondary ek-poga-maza', () => iestatitSkatu(true)));
             } else sk.appendChild(poga('Atpakaļ uz pasniedzēja skatu', 'btn-secondary ek-poga-maza', () => iestatitSkatu(false)));
@@ -326,15 +331,18 @@
             });
             // 3. mājasdarbs
             if (S.majasdarbs) {
-                const s = sadala('majasdarbs', 'Mājasdarbs');
-                const k = karte('gk-majasdarbs');
-                k.appendChild(el('p', '', S.majasdarbs.teksts));
-                if (S.majasdarbs.prasibas && S.majasdarbs.prasibas.length) {
-                    k.appendChild(el('h3', '', 'Prasības'));
-                    const ul = el('ul', 'ek-merki'); S.majasdarbs.prasibas.forEach((p) => ul.appendChild(el('li', '', p))); k.appendChild(ul);
-                }
-                k.appendChild(el('p', 'gk-meta', 'Mājasdarbu iesniedz pasniedzējam nodarbībā vai pa e-pastu.'));
-                s.appendChild(k);
+                const M = d.majasdarbs;
+                const iesn = M && M.statuss !== 'melnraksts';
+                const meta = pasn ? (P.majasdarbi[nr] ? P.majasdarbi[nr] + ' jāpārbauda' : '') : M ? MD_NOS[M.statuss] : '';
+                const s = sadala('majasdarbs', 'Mājasdarbs', meta, 'Mājasdarbs', !pasn && iesn);
+                if (pasn) {
+                    const k = karte('gk-majasdarbs'); k.appendChild(el('p', '', S.majasdarbs.teksts));
+                    if (S.majasdarbs.prasibas) { const ul = el('ul', 'ek-merki'); S.majasdarbs.prasibas.forEach((p) => ul.appendChild(el('li', '', p))); k.appendChild(ul); }
+                    s.appendChild(k);
+                    s.appendChild(el('h3', 'gk-bloka-virs', 'Iesniegtie mājasdarbi')).style.marginTop = 'var(--sp-5)';
+                    const sar = el('div', 'gk-md-saraksts'); s.appendChild(sar);
+                    iesniegumi(sar, nr);
+                } else s.appendChild(majasdarbaRedaktors(S, nr, M));
             }
             // 4. papildmateriāli
             const pap = d.materiali.filter((m) => m.tips === 'fails' || m.tips === 'saite');
@@ -890,6 +898,148 @@
     }
 
     // ===================================================================
+    // MĀJASDARBI: students raksta un iesniedz, pasniedzējs novērtē
+    // ===================================================================
+    const MD_NOS = { melnraksts: 'melnraksts', iesniegts: 'iesniegts · gaida pārbaudi', novertets: 'novērtēts', jalabo: 'jāpalabo' };
+    const MD_KL = { melnraksts: 'pieteicies', iesniegts: 'uznemts', novertets: 'pabeidzis', jalabo: 'atteicies' };
+    const BURTI = 'a-záéíóúüñ';
+    const mdRe = (re, g) => new RegExp(re.replace(/⟨/g, '(?<![' + BURTI + '])').replace(/⟩/g, '(?![' + BURTI + '])'), g || 'g');
+    // Pārbaudes kā prezentācijā (noteikumi no riki/gk-sagatavot.mjs → majasdarbs.parbaudes)
+    function parbauditMd(parb, t, bloki) {
+        const low = t.toLowerCase();
+        return (parb || []).map((x) => {
+            let v = 0, ok = false, brid = null;
+            if (x.tips === 'teikumi') { v = t.split(/[.!?…]+/).map((y) => y.trim()).filter((y) => y.split(/\s+/).length >= 3).length; ok = v >= x.min && v <= (x.max || 999); }
+            else if (x.tips === 'vardi') {
+                const kopa = new RegExp(x.kopas);
+                const vardi = [...new Set((bloki || []).filter((b) => b.type === 'vocab' && b.id && kopa.test(b.id)).flatMap((b) => b.pairs.map((p) => (b.dir === 'es' ? p[0] : p[1])))
+                    .flatMap((y) => y.replace(/\([^)]*\)/g, '').split('/')).map((y) => y.trim().toLowerCase().replace(/^(el|la|los|las|un|una)\s+/, '').replace(/^(el|la)\s*$/, '')).filter((y) => y.length > 2))];
+                v = vardi.filter((w) => mdRe('⟨' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '⟩', '').test(low)).length; ok = v >= x.min;
+            } else if (x.tips === 'skaits') { v = ((x.originals ? t : low).match(mdRe(x.re)) || []).length; ok = v >= x.min; if (x.min === 1) v = ok ? '✓' : '–'; }
+            else if (x.tips === 'nav') { const ir = mdRe(x.re, 'i').test(low); ok = !ir; v = ''; if (ir) brid = x.bridinajums; }
+            return { id: x.id, teksts: brid || x.teksts, ok, v, brid: !!brid };
+        });
+    }
+    function checklist(rez) {
+        const ul = el('ul', 'gk-md-prasibas');
+        rez.forEach((r) => { const li = el('li', r.ok ? 'izpildits' : r.brid ? 'bridinajums' : ''); li.appendChild(el('span', 'gk-md-zime', r.ok ? '✓' : r.brid ? '!' : '')); li.appendChild(el('span', '', r.teksts)); if (r.v !== '' && r.v != null) li.appendChild(el('b', 'gk-md-v', '(' + r.v + ')')); ul.appendChild(li); });
+        return ul;
+    }
+    function vertejumaKaste(M) {
+        const k = el('div', 'gk-md-vertejums gk-md-vertejums--' + M.statuss);
+        k.appendChild(el('strong', '', M.statuss === 'jalabo' ? 'Pasniedzējs lūdz palabot' : 'Pasniedzēja vērtējums' + (M.vertejums ? ': ' + M.vertejums : '')));
+        if (M.komentars) k.appendChild(el('p', '', M.komentars));
+        return k;
+    }
+    function majasdarbaRedaktors(S, nr, M) {
+        const md = S.majasdarbs, w = karte('gk-majasdarbs');
+        const lsKey = 'gk-md-' + kurss + '-' + nr;
+        w.appendChild(el('p', 'gk-md-uzdevums', md.teksts));
+        if (M && M.statuss !== 'melnraksts') {
+            const st = el('p', 'gk-md-statuss'); st.appendChild(el('span', 'badge badge-' + MD_KL[M.statuss], MD_NOS[M.statuss]));
+            if (M.iesniegts_at) st.appendChild(document.createTextNode(' Iesniegts ' + lvDat(M.iesniegts_at.slice(0, 10)) + (M.reizes > 1 ? ' (' + M.reizes + '. reizi)' : '')));
+            w.appendChild(st);
+        }
+        if (M && (M.statuss === 'novertets' || M.statuss === 'jalabo')) w.appendChild(vertejumaKaste(M));
+        const lasit = M && (M.statuss === 'novertets' || M.statuss === 'iesniegts');
+        const izk = el('div', 'gk-md-izk');
+        const ta = el('textarea', 'ek-textarea gk-md-teksts'); ta.lang = 'es'; ta.spellcheck = false; ta.setAttribute('aria-label', 'Tavs mājasdarbs');
+        ta.placeholder = 'Raksti šeit spāniski…';
+        let ls = null; try { ls = localStorage.getItem(lsKey); } catch (e) {}
+        ta.value = M && M.teksts ? (M.statuss !== 'iesniegts' && M.statuss !== 'novertets' && ls && ls.length > M.teksts.length ? ls : M.teksts) : (ls || '');
+        ta.readOnly = !!lasit;
+        const kr = el('div', 'gk-md-kr'); kr.appendChild(el('h4', '', 'Prasības'));
+        const sk = el('p', 'gk-meta');
+        const listeVieta = el('div'); kr.appendChild(listeVieta); kr.appendChild(sk);
+        let rez = [];
+        const atj = () => {
+            rez = md.parbaudes ? parbauditMd(md.parbaudes, ta.value, S.bloki) : (md.prasibas || []).map((p) => ({ teksts: p, ok: false, v: '' }));
+            listeVieta.textContent = ''; listeVieta.appendChild(checklist(rez));
+            const v = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+            sk.textContent = v + ' vārdi' + (md.parbaudes ? ' · izpildītas ' + rez.filter((r) => r.ok).length + '/' + rez.length + ' prasības' : '');
+        };
+        ta.addEventListener('input', () => { atj(); try { localStorage.setItem(lsKey, ta.value); } catch (e) {} });
+        atj();
+        izk.appendChild(ta); izk.appendChild(kr); w.appendChild(izk);
+        const pg = el('div', 'ek-uzd-pogas');
+        const sutit = (iesniegt) => {
+            if (iesniegt) {
+                const neizp = rez.filter((r) => md.parbaudes && !r.ok).length;
+                if (neizp && !confirm('Vēl nav izpildītas ' + neizp + ' prasības. Tomēr iesniegt pasniedzējam?')) return;
+            }
+            const parb = {}; rez.forEach((r) => { if (r.id) parb[r.id] = [r.ok ? 1 : 0, r.v]; });
+            api('PUT', '/api/gk/' + kurss + '/majasdarbs/' + nr, { teksts: ta.value, iesniegt, parbaudes: parb })
+                .then(() => { if (iesniegt) { try { localStorage.removeItem(lsKey); } catch (e) {} } toast(iesniegt ? '¡Enviado! Mājasdarbs iesniegts pasniedzējam.' : 'Melnraksts saglabāts'); return atjaunot(); })
+                .catch((e) => toast(e.message, true));
+        };
+        if (!M || M.statuss === 'melnraksts' || M.statuss === 'jalabo') {
+            pg.appendChild(poga(M && M.statuss === 'jalabo' ? 'Iesniegt labojumu' : 'Iesniegt pasniedzējam', 'btn-cta ek-poga-maza', () => sutit(true)));
+            pg.appendChild(poga('Saglabāt melnrakstu', 'btn-secondary ek-poga-maza', () => sutit(false)));
+        } else if (M.statuss === 'iesniegts') {
+            const lab = poga('Labot iesniegto', 'btn-secondary ek-poga-maza', () => {
+                ta.readOnly = false; ta.focus(); lab.remove();
+                pg.appendChild(poga('Iesniegt vēlreiz', 'btn-cta ek-poga-maza', () => sutit(true)));
+            });
+            pg.appendChild(lab);
+        }
+        if (pg.children.length) w.appendChild(pg);
+        w.appendChild(el('p', 'gk-meta', M && M.statuss === 'novertets' ? 'Mājasdarbs ir novērtēts.' : 'Teksts tiek glabāts šajā pārlūkā, kamēr raksti. Pēc iesniegšanas pasniedzējs saņems paziņojumu.'));
+        return w;
+    }
+
+    // --- pasniedzējs: iesniegumu saraksts un vērtēšana ---
+    function iesniegumi(vieta, nr, filtrs) {
+        vieta.textContent = ''; vieta.appendChild(el('p', 'gk-meta', 'Ielādē…'));
+        return api('GET', '/api/gk/' + kurss + '/majasdarbi' + (nr ? '?nr=' + nr : '')).then((d) => {
+            vieta.textContent = '';
+            let L = d.majasdarbi;
+            if (filtrs === 'japarbauda') L = L.filter((m) => m.statuss === 'iesniegts');
+            if (!L.length) { vieta.appendChild(el('p', 'gk-meta', filtrs === 'japarbauda' ? 'Visi iesniegtie mājasdarbi ir pārbaudīti. ¡Genial!' : 'Vēl neviens nav iesniedzis mājasdarbu.')); return; }
+            L.forEach((m) => vieta.appendChild(iesniegumaKarte(m, !nr, () => iesniegumi(vieta, nr, filtrs))));
+        }).catch((e) => { vieta.textContent = ''; vieta.appendChild(el('p', 'gk-meta', e.message)); });
+    }
+    function iesniegumaKarte(m, radNodarbibu, parlādēt) {
+        const k = el('article', 'gk-md-iesniegums gk-md-iesniegums--' + m.statuss);
+        const g = el('div', 'gk-md-iesn-galva');
+        const kas = el('div'); kas.appendChild(el('b', '', m.name || m.email));
+        kas.appendChild(el('small', '', (radNodarbibu ? m.nr + '. ' + (m.nosaukums || 'nodarbība') + ' · ' : '') + 'iesniegts ' + lvDat((m.iesniegts_at || '').slice(0, 10)) + (m.reizes > 1 ? ' · ' + m.reizes + '. versija' : '')));
+        g.appendChild(kas); g.appendChild(el('span', 'badge badge-' + MD_KL[m.statuss], MD_NOS[m.statuss] + (m.statuss === 'novertets' && m.vertejums ? ': ' + m.vertejums : '')));
+        k.appendChild(g);
+        k.appendChild(el('div', 'gk-md-iesn-teksts', m.teksts));
+        const vardi = m.teksts.trim() ? m.teksts.trim().split(/\s+/).length : 0;
+        const info = el('p', 'gk-meta', vardi + ' vārdi');
+        if (m.parbaudes) { const v = Object.values(m.parbaudes); info.textContent += ' · automātiskās pārbaudes: ' + v.filter((x) => x[0]).length + '/' + v.length + ' izpildītas'; }
+        k.appendChild(info);
+        const f = el('form', 'gk-md-vertet');
+        const v = lauks(f, 'Vērtējums (piem., 9/10 vai «Teicami»)', 'text', m.vertejums || ''); v.maxLength = 40;
+        const kw = el('div', 'gk-lauks gk-lauks--plats'); const kl = el('label', '', 'Komentārs studentam'); const ka = el('textarea', 'ek-textarea'); ka.value = m.komentars || ''; ka.rows = 3; ka.id = 'gk-k-' + m.id; kl.htmlFor = ka.id; kw.appendChild(kl); kw.appendChild(ka); f.appendChild(kw);
+        const pg = el('div', 'ek-uzd-pogas');
+        const sut = (statuss) => api('PATCH', '/api/gk/' + kurss + '/majasdarbi/' + m.id, { statuss, vertejums: v.value, komentars: ka.value })
+            .then(() => { toast(statuss === 'jalabo' ? 'Atgriezts labošanai — students saņems e-pastu' : 'Novērtēts — students saņems e-pastu'); return ieladetParskatu().then(parlādēt); }).catch((e) => toast(e.message, true));
+        const b1 = el('button', 'btn-cta ek-poga-maza', m.statuss === 'novertets' ? 'Saglabāt vērtējumu' : 'Novērtēt'); b1.type = 'submit'; pg.appendChild(b1);
+        pg.appendChild(poga('Atgriezt labošanai', 'btn-secondary ek-poga-maza', () => sut('jalabo')));
+        f.appendChild(pg);
+        f.addEventListener('submit', (e) => { e.preventDefault(); sut('novertets'); });
+        k.appendChild(f);
+        return k;
+    }
+    function majasdarbiLapa() {
+        notirit();
+        virsraksts.textContent = 'Mājasdarbi';
+        const k = el('div', 'gk-md-lapa');
+        const atp = saite('← Kursa sākums', '#', 'mat-atpakal'); atp.style.padding = '0'; k.appendChild(atp);
+        const cil = el('div', 'gk-cilnes'); const sar = el('div', 'gk-md-saraksts');
+        let filtrs = 'japarbauda';
+        const c1 = poga('Jāpārbauda', 'gk-cilne'), c2 = poga('Visi', 'gk-cilne');
+        const rad = (f) => { filtrs = f; c1.setAttribute('aria-pressed', f === 'japarbauda'); c2.setAttribute('aria-pressed', f !== 'japarbauda'); iesniegumi(sar, null, filtrs); };
+        c1.addEventListener('click', () => rad('japarbauda')); c2.addEventListener('click', () => rad('visi'));
+        cil.appendChild(c1); cil.appendChild(c2); k.appendChild(cil); k.appendChild(sar);
+        sakne.appendChild(k);
+        rad('japarbauda');
+        return Promise.resolve();
+    }
+
+    // ===================================================================
     // DALĪBNIEKI (pasniedzējam)
     // ===================================================================
     function dalibnieki() {
@@ -933,6 +1083,7 @@
         let p;
         if ((m = h.match(/^n\/(\d+)$/))) p = nodarbiba(Number(m[1]));
         else if (h === 'dalibnieki' && P.piekluve.pasniedzejs) p = dalibnieki();
+        else if (h === 'majasdarbi' && P.piekluve.pasniedzejs) p = majasdarbiLapa();
         else { p = Promise.resolve(sakums()); }
         return p.catch(kluda).then(() => ielade(false));
     }
