@@ -1,6 +1,7 @@
 // APTAUJA: viens jautājums ekrānā, progresa josla, zarošanās pēc atbildēm (aptauja-jautajumi.js → ja(a)).
 // Melnraksts tiek glabāts šajā pārlūkā (localStorage aptaujaMelnraksts), pēc iesniegšanas — aptaujaAizpildita (paslēpj joslu).
-// Iesniegšana: POST /api/aptauja. Pieteicies lietotājs: GET /api/aptauja (jau aizpildīta jebkurā ierīcē → paldies).
+// Iesniegšana: POST /api/aptauja. Pieteicies lietotājs: GET /api/aptauja ir noteicošais (viens konts = viena aizpildīšana,
+// jebkurā ierīcē; šī pārlūka atzīme netiek ņemta vērā). Viesim — šī pārlūka atzīme + e-pasta pārbaude.
 // E-pasta solī: POST /api/aptauja/parbaude — ja ar šo e-pastu jau aizpildīta, tālāk netiek. Visi lietotāja dati tiek rādīti ar textContent.
 import { JAUTAJUMI, DALAS, BEIGAS, IZLOZES_DATUMS } from './aptauja-jautajumi.js';
 
@@ -90,6 +91,14 @@ function sakums() {
     k.appendChild(el('h2', 'apt-virsraksts apt-virsraksts--liels', 'Palīdzi mums kļūt labākiem!'));
     k.appendChild(el('p', 'apt-teksts', 'Piedalies aptaujā un laimē vienu no trim dāvanām no Tenerifes! Aptauja aizņems ap 5–7 minūtēm, un katrā ekrānā būs tikai viens jautājums.'));
     k.appendChild(el('p', 'apt-teksts apt-teksts--kluss', 'E-pasts nav obligāts: norādi to tikai tad, ja vēlies piedalīties izlozē. Uzvarētājus izlozēsim ' + IZLOZES_DATUMS + ' un informēsim pa e-pastu.'));
+    const me = window.LIB && window.LIB.me;
+    if ((!me || !me.user) && window.LIB && window.LIB.signInUrl) {
+      const p = el('p', 'apt-teksts apt-teksts--kluss', 'Ieteicams pieslēgties ar savu kontu — tad atbildes būs piesaistītas tev, un aptauju varēsi turpināt jebkurā ierīcē. ');
+      const a = el('a', '', 'Pieslēgties');
+      a.href = window.LIB.signInUrl(location.pathname);
+      p.appendChild(a);
+      k.appendChild(p);
+    }
     const pogas = el('div', 'apt-pogas apt-pogas--sakums');
     if (melnraksts && melnraksts.i >= 0 && JAUTAJUMI[melnraksts.i]) {
       pogas.appendChild(poga('apt-poga apt-poga--galvena', 'Turpināt, kur paliku', () => { s = Object.assign(jauns(), melnraksts); jautajums(); }));
@@ -460,15 +469,17 @@ function paldies(izloze, atkartoti) {
   }, { fokuss: '.apt-virsraksts' });
 }
 
-// Pieteicies lietotājs: vienreiz uz kontu (jebkurā ierīcē) — servera statuss
+// Pieteicies lietotājs: vienreiz uz kontu (jebkurā ierīcē) — noteicošs ir servera statuss, ne šī pārlūka atzīme
+// (citādi otrs ģimenes loceklis tajā pašā datorā netiktu pie aptaujas).
 function sakt() {
-  if (lasit(AIZPILDITA)) { sakums(); return; }
   const parbaudit = (me) => {
     if (!me || !me.user) { sakums(); return; }
     window.LIB.api('GET', '/api/aptauja').then((d) => {
       if (d && d.aizpildita) {
         glabat(AIZPILDITA, d.izloze ? 'izloze' : '1');
         glabat(MELNRAKSTS, null);
+      } else if (d) {
+        glabat(AIZPILDITA, null);
       }
     }).catch(() => {}).then(sakums);
   };
