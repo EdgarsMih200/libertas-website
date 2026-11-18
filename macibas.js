@@ -60,17 +60,23 @@
 
     // ---------- runa ----------
     const VALODAS = { es: 'es-ES', en: 'en-GB', de: 'de-DE', fr: 'fr-FR', it: 'it-IT', lv: 'lv-LV' };
-    function runat(teksts) {
+    // avots = nospiestā poga: otrs klikšķis uz tās pašas aptur skaņu
+    let skanAvots = null;
+    function beigtSkanu() { if (skanAvots) { skanAvots.classList.remove('skan'); skanAvots.removeAttribute('aria-pressed'); } skanAvots = null; }
+    function runat(teksts, avots) {
         if (!('speechSynthesis' in window)) { toast('Šī pārlūkprogramma neatbalsta skaņu', true); return; }
-        speechSynthesis.cancel();
+        const apturet = avots && avots === skanAvots && (speechSynthesis.speaking || speechSynthesis.pending);
+        speechSynthesis.cancel(); beigtSkanu();
+        if (apturet) return;
         const u = new SpeechSynthesisUtterance(teksts);
         u.lang = VALODAS[(P && P.kurss.valoda) || 'es'] || 'es-ES';
         u.rate = 0.85;
         const b = speechSynthesis.getVoices().find((v) => v.lang === u.lang) || speechSynthesis.getVoices().find((v) => v.lang.slice(0, 2) === u.lang.slice(0, 2));
         if (b) u.voice = b;
+        if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); u.onend = u.onerror = () => { if (skanAvots === avots) beigtSkanu(); }; }
         speechSynthesis.speak(u);
     }
-    function skanasPoga(teksts, cls) { const b = el('button', cls || 'ek-skana-poga'); b.type = 'button'; b.setAttribute('aria-label', 'Klausīties: ' + teksts); b.appendChild(ikona('skana')); b.addEventListener('click', () => runat(teksts)); return b; }
+    function skanasPoga(teksts, cls) { const b = el('button', cls || 'ek-skana-poga'); b.type = 'button'; b.setAttribute('aria-label', 'Klausīties: ' + teksts); b.appendChild(ikona('skana')); b.addEventListener('click', () => runat(teksts, b)); return b; }
 
     // ---------- materiāla bloki ----------
     function bloks(b) {
@@ -140,7 +146,7 @@
         let vert = sakuma;
         const set = (v) => { vert = v; if (onMaina) onMaina(v); };
         if (j.fragments) w.appendChild(el('div', 'ek-fragments', j.fragments));
-        if (j.tips === 'klausies' && j.runa) { const b = poga('', 'btn-secondary ek-poga-maza'); b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Atskaņot')); b.addEventListener('click', () => runat(j.runa)); b.style.marginBottom = '12px'; w.appendChild(b); }
+        if (j.tips === 'klausies' && j.runa) { const b = poga('', 'btn-secondary ek-poga-maza'); b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Atskaņot')); b.addEventListener('click', () => runat(j.runa, b)); b.style.marginBottom = '12px'; w.appendChild(b); }
         if (j.jautajums && j.tips !== 'tuksumi') w.appendChild(el('p', 'ek-jaut-teksts', j.jautajums));
         if (j.varianti) {
             const g = el('div', 'ek-varianti'); const vair = j.tips === 'vairakas';
@@ -268,7 +274,7 @@
                 }).catch(() => toast('Mikrofons nav atļauts', true));
             });
             r.appendChild(b); r.appendChild(audio);
-            r.appendChild(poga('Paraugs', 'btn-secondary ek-poga-maza', () => runat(paraugi.join('. '))));
+            r.appendChild(poga('Paraugs', 'btn-secondary ek-poga-maza', (e) => runat(paraugi.join('. '), e.currentTarget)));
             k.appendChild(r);
         }
         if (u.tips === 'rakstit') {
@@ -650,7 +656,7 @@
             const li = el('li', a.ok ? 'ok' : 'nav'); li.dataset.ok = a.ok ? '1' : '';
             li.appendChild(el('b', '', (i + 1) + '. ' + (a.teksts || '') + (a.jautajums ? ' ' + a.jautajums : '')));
             if (a.fragments) { const f = el('div', '', a.fragments); f.style.cssText = 'white-space:pre-line;color:var(--c-muted);margin:4px 0'; li.appendChild(f); }
-            if (a.runa) { const b = poga('', 'btn-secondary ek-poga-maza'); b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Atskaņot')); b.style.margin = '6px 0'; b.addEventListener('click', () => runat(a.runa)); li.appendChild(b); }
+            if (a.runa) { const b = poga('', 'btn-secondary ek-poga-maza'); b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Atskaņot')); b.style.margin = '6px 0'; b.addEventListener('click', () => runat(a.runa, b)); li.appendChild(b); }
             li.appendChild(el('div', '', 'Tava atbilde: ' + a.mana));
             if (!a.ok) li.appendChild(el('div', '', 'Pareizi: ' + a.pareiza));
             if (a.skaidrojums) li.appendChild(el('small', '', a.skaidrojums));

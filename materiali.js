@@ -39,11 +39,38 @@
             .then(function (j) { IERAKSTI = j || {}; }).catch(function () {});
     }
     var atskanotajs = null;
+    // Poga, kas pašlaik skan (.skan): otrs klikšķis uz tās pašas pogas aptur skaņu
+    var skanPoga = null, skanasId = 0;
+
+    function atzimet(poga) {
+        skanPoga = poga;
+        poga.classList.add('skan');
+        poga.setAttribute('aria-pressed', 'true');
+        if (poga === dialogaPoga) dialogaTeksts('Apturēt dialogu');
+        return ++skanasId;
+    }
+
+    function atbrivot() {
+        if (skanPoga) {
+            skanPoga.classList.remove('skan');
+            skanPoga.setAttribute('aria-pressed', 'false');
+            if (skanPoga === dialogaPoga) dialogaTeksts('Klausīties visu dialogu');
+        }
+        skanPoga = null;
+        skanasId++;
+    }
+
+    function dialogaTeksts(t) {
+        var n = dialogaPoga && dialogaPoga.lastChild;
+        if (n && n.nodeType === 3) n.nodeValue = t;
+    }
 
     function apturet() {
         if (atskanotajs) { atskanotajs.onended = null; atskanotajs.onerror = null; atskanotajs.pause(); atskanotajs = null; }
         if (runaIr) speechSynthesis.cancel();
         if (dialogaPoga) dialogaPoga.dataset.karta = ''; // aptur arī dialoga virkni
+        if (cats) [].forEach.call(cats.querySelectorAll('.replika.runa'), function (x) { x.classList.remove('runa'); });
+        atbrivot();
     }
 
     // Izrunā d = { teksts, valoda }; o.sakums / o.beigas — notikumi (dialogam), o.pitch — sintēzei
@@ -90,10 +117,14 @@
             poga.textContent = '🔊';
             poga.setAttribute('aria-label', 'Klausīties: ' + d.teksts);
             poga.title = 'Klausīties izrunu';
+            poga.setAttribute('aria-pressed', 'false');
             poga.addEventListener('click', function (e) {
                 e.stopPropagation();
+                var bija = skanPoga === poga;
                 apturet();
-                izrunat(d);
+                if (bija) return; // otrs klikšķis = apturēt
+                var id = atzimet(poga);
+                izrunat(d, { beigas: function () { if (id === skanasId) atbrivot(); } });
             });
             var vieta = el.querySelector('[data-runa-vieta]');
             if (vieta) vieta.appendChild(poga);
@@ -120,14 +151,19 @@
     var dialogaPoga = document.getElementById('klausities-dialogu');
     if (cats && dialogaPoga && (runaIr || balssMape)) {
         dialogaPoga.hidden = false;
+        dialogaPoga.setAttribute('aria-pressed', 'false');
         dialogaPoga.addEventListener('click', function () {
+            var bija = skanPoga === dialogaPoga;
             apturet();
+            if (bija) return; // otrs klikšķis = apturēt dialogu
+            atzimet(dialogaPoga);
             var replikas = [].slice.call(cats.querySelectorAll('.replika'));
             var karta = Date.now();
             dialogaPoga.dataset.karta = karta;
             function nakama(i) {
+                if (dialogaPoga.dataset.karta !== String(karta)) return;
                 replikas.forEach(function (x) { x.classList.remove('runa'); });
-                if (i >= replikas.length || dialogaPoga.dataset.karta !== String(karta)) return;
+                if (i >= replikas.length) { dialogaPoga.dataset.karta = ''; atbrivot(); return; }
                 var r = replikas[i];
                 izrunat(runasDati(r), {
                     // sintēzē divi balss augstumi, lai atšķirtu runātājus (ierakstos jau divas balsis)

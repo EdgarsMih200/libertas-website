@@ -3393,6 +3393,43 @@ html .lapas-josla.sc-muertos {
     outline-offset: 2px;
 }
 
+/* Kamēr skan: akcenta krāsa + «stop» kvadrāts (otrs klikšķis aptur). JS liek .skan (materiali.js, macibas.js,
+   kursa-telpa.js, advente.js) vai .nor-atskan (norvēģu materiāli). button. — lai pārspētu vietējos pogu stilus */
+button.runat-poga.skan,
+button.runat-poga.nor-atskan,
+button.ek-skana-poga.skan,
+button.ek-poga-maza.skan,
+button.mat-poga-maza.skan,
+button.adv-pk-runat.skan {
+    background: var(--c-accent);
+    border-color: var(--c-accent);
+    color: var(--c-on-accent);
+}
+@supports ((-webkit-mask: none) or (mask: none)) {
+    button.runat-poga.skan::before,
+    button.runat-poga.nor-atskan::before {
+        -webkit-mask: none;
+        mask: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 2px;
+    }
+}
+button.ek-skana-poga.skan svg,
+button.adv-pk-runat.skan svg,
+button.mat-poga-maza.skan .btn-ikona { display: none; }
+button.ek-skana-poga.skan::before,
+button.adv-pk-runat.skan::before,
+button.mat-poga-maza.skan::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: currentColor;
+}
+.gk-teksts .es.skan { background: var(--c-accent-soft); border-radius: 3px; }
+
 /* 1. Vārdu kartītes (apgriežamas): priekša papīrs + Lora, aizmugure salvija */
 .vardu-rezgis {
     list-style: none;

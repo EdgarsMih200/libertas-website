@@ -74,16 +74,22 @@
     }
 
     // ---------- runa (spāņu) ----------
-    function runat(teksts) {
+    // avots = nospiestā poga/teksts: otrs klikšķis uz tā paša aptur skaņu
+    let skanAvots = null;
+    function beigtSkanu() { if (skanAvots) { skanAvots.classList.remove('skan'); skanAvots.removeAttribute('aria-pressed'); } skanAvots = null; }
+    function runat(teksts, avots) {
         if (!('speechSynthesis' in window)) { toast('Šī pārlūkprogramma neatbalsta skaņu', true); return; }
-        speechSynthesis.cancel();
+        const apturet = avots && avots === skanAvots && (speechSynthesis.speaking || speechSynthesis.pending);
+        speechSynthesis.cancel(); beigtSkanu();
+        if (apturet) return;
         const u = new SpeechSynthesisUtterance(String(teksts).replace(/\([^)]*\)/g, ''));
         u.lang = 'es-ES'; u.rate = 0.9;
         const b = speechSynthesis.getVoices().find((v) => v.lang === 'es-ES') || speechSynthesis.getVoices().find((v) => v.lang.slice(0, 2) === 'es');
         if (b) u.voice = b;
+        if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); u.onend = u.onerror = () => { if (skanAvots === avots) beigtSkanu(); }; }
         speechSynthesis.speak(u);
     }
-    function skanasPoga(teksts) { const b = el('button', 'ek-skana-poga'); b.type = 'button'; b.setAttribute('aria-label', 'Klausīties: ' + teksts); b.appendChild(ikona('skana')); b.addEventListener('click', (e) => { e.stopPropagation(); runat(teksts); }); return b; }
+    function skanasPoga(teksts) { const b = el('button', 'ek-skana-poga'); b.type = 'button'; b.setAttribute('aria-label', 'Klausīties: ' + teksts); b.appendChild(ikona('skana')); b.addEventListener('click', (e) => { e.stopPropagation(); runat(teksts, b); }); return b; }
 
     // ---------- stāvokļi ----------
     function ielade(ir) { lapa.setAttribute('aria-busy', ir ? 'true' : 'false'); }
@@ -516,7 +522,7 @@
         return w;
     }
     function ierakstitTekstuAr(es, cel) { // klikšķis uz .es = izruna
-        cel.querySelectorAll('.es').forEach((x) => { x.tabIndex = 0; x.setAttribute('role', 'button'); x.title = 'Klausīties'; const r = () => runat(x.textContent); x.addEventListener('click', r); x.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); r(); } }); });
+        cel.querySelectorAll('.es').forEach((x) => { x.tabIndex = 0; x.setAttribute('role', 'button'); x.title = 'Klausīties'; const r = () => runat(x.textContent, x); x.addEventListener('click', r); x.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); r(); } }); });
     }
     function rVocab(b, w) {
         const esPirmais = b.dir === 'es';

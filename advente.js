@@ -168,13 +168,20 @@
     }
     // Zviedru/norvēģu vārdiem — ierakstīts mp3 (lielākajā daļā datoru nav šo valodu sistēmas balss)
     var IERAKSTI = { 7: 1, 11: 1, 20: 1, 23: 1 };
-    var audio = null;
-    function runat(teksts, l, n) {
+    var audio = null, skanPoga = null;
+    function beigt(poga) { if (poga && skanPoga !== poga) return; if (skanPoga) { skanPoga.classList.remove('skan'); skanPoga.setAttribute('aria-pressed', 'false'); } skanPoga = null; }
+    // poga — nospiestā poga: otrs klikšķis aptur skaņu
+    function runat(teksts, l, n, poga) {
+        var apturet = poga && poga === skanPoga;
+        try { speechSynthesis.cancel(); } catch (e) {}
+        if (audio) { audio.onended = null; audio.pause(); audio = null; }
+        beigt();
+        if (apturet) return;
+        if (poga) { skanPoga = poga; poga.classList.add('skan'); poga.setAttribute('aria-pressed', 'true'); }
         if (IERAKSTI[n]) {
-            try { speechSynthesis.cancel(); } catch (e) {}
-            if (audio) audio.pause();
             audio = new Audio('assets/advente/durvis-' + (n < 10 ? '0' : '') + n + '.mp3');
-            audio.play().catch(function () {});
+            audio.onended = function () { beigt(poga); };
+            audio.play().catch(function () { beigt(poga); });
             return;
         }
         try {
@@ -182,8 +189,9 @@
             u.lang = RUNA[l]; u.rate = .9;
             var v = speechSynthesis.getVoices().filter(function (x) { return x.lang && x.lang.replace('_', '-').indexOf(RUNA[l]) === 0; })[0];
             if (v) u.voice = v;
-            speechSynthesis.cancel(); speechSynthesis.speak(u);
-        } catch (e) {}
+            u.onend = u.onerror = function () { beigt(poga); };
+            speechSynthesis.speak(u);
+        } catch (e) { beigt(poga); }
     }
 
     function radit(n) {
@@ -213,7 +221,7 @@
             var sp = el('button', 'adv-pk-runat');
             sp.type = 'button';
             sp.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8a5 5 0 0 1 0 8M18.5 5.5a8.5 8.5 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Klausīties';
-            sp.addEventListener('click', function () { runat(x.ti + (x.ex ? '. ' + x.ex : ''), x.l, n); });
+            sp.addEventListener('click', function () { runat(x.ti + (x.ex ? '. ' + x.ex : ''), x.l, n, sp); });
             c.appendChild(sp);
         }
         if (x.b) c.appendChild(el('p', 'adv-pk-teksts', x.b));
