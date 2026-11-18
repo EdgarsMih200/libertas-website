@@ -22,13 +22,21 @@ const LOMAS = ['students', 'pasniedzejs'];
 
 export const irPasniedzejs = (user) => !!user && (user.is_admin || user.loma === 'pasniedzejs');
 
+// Pasniedzējs šajā kursā: globālā loma/administrators vai pieteikums šim kursam ar lomu 'pasniedzejs'
+async function kursaPasniedzejs(env, user, kurss) {
+  if (!user) return false;
+  if (irPasniedzejs(user)) return true;
+  const r = await env.DB.prepare("SELECT 1 FROM enrollments WHERE user_id = ? AND course_id = ? AND loma = 'pasniedzejs' AND status != 'atteicies'").bind(user.id, kurss).first();
+  return !!r;
+}
+
 // ---------- piekļuve ----------
 async function piekluve(env, user, kurss) {
   const telpa = await env.DB.prepare(
     'SELECT g.*, c.name, c.veids, c.schedule FROM gk_kursi g JOIN courses c ON c.id = g.course_id WHERE g.course_id = ?'
   ).bind(kurss).first();
   if (!user) return { ok: false, iemesls: 'ienakt', telpa };
-  if (irPasniedzejs(user) && !user.gk_students) return { ok: true, pasniedzejs: true, telpa };
+  if (user.gk_pasn) return { ok: true, pasniedzejs: true, telpa };
   if (user.gk_students) return { ok: !!telpa, students: true, telpa, iemesls: telpa ? null : 'nav_telpas' };
   const enr = await env.DB.prepare('SELECT * FROM enrollments WHERE user_id = ? AND course_id = ?').bind(user.id, kurss).first();
   if (!enr || enr.status === 'atteicies') return { ok: false, iemesls: 'nav', telpa };
@@ -64,13 +72,14 @@ async function saraksts(env, user) {
     ({ results: kursi } = await env.DB.prepare(
       `SELECT c.id, c.name, c.schedule, g.course_id AS telpa, g.meet_url,
               (SELECT COUNT(*) FROM gk_nodarbibas n WHERE n.course_id = c.id) AS nodarbibas,
-              (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id AND e.status != 'atteicies' AND (e.paid = 1 OR e.status IN ('uznemts','sacis','pabeidzis'))) AS studenti
+              (SELECT COUNT(*) FROM enrollments e WHERE e.course_id = c.id AND e.status != 'atteicies' AND COALESCE(e.loma, 'students') != 'pasniedzejs' AND (e.paid = 1 OR e.status IN ('uznemts','sacis','pabeidzis'))) AS studenti
        FROM courses c LEFT JOIN gk_kursi g ON g.course_id = c.id WHERE COALESCE(c.veids, 'grupa') = 'grupa' ORDER BY c.id`
     ).all());
   } else {
     ({ results: kursi } = await env.DB.prepare(
-      `SELECT c.id, c.name, c.schedule, g.course_id AS telpa, e.status, e.paid,
-              (SELECT COUNT(*) FROM gk_nodarbibas n WHERE n.course_id = c.id AND n.redzama = 1) AS nodarbibas
+      `SELECT c.id, c.name, c.schedule, g.course_id AS telpa, e.status, e.paid, COALESCE(e.loma, 'students') AS loma,
+              (SELECT COUNT(*) FROM gk_nodarbibas n WHERE n.course_id = c.id AND (n.redzama = 1 OR e.loma = 'pasniedzejs')) AS nodarbibas,
+              (SELECT COUNT(*) FROM enrollments s WHERE s.course_id = c.id AND s.status != 'atteicies' AND COALESCE(s.loma, 'students') != 'pasniedzejs' AND (s.paid = 1 OR s.status IN ('uznemts','sacis','pabeidzis'))) AS studenti
        FROM enrollments e JOIN courses c ON c.id = e.course_id LEFT JOIN gk_kursi g ON g.course_id = c.id
        WHERE e.user_id = ? AND e.status != 'atteicies' AND COALESCE(c.veids, 'grupa') = 'grupa' ORDER BY e.created_at DESC`
     ).bind(user.id).all());
@@ -231,7 +240,9 @@ async function saglabatMajasdarbu(request, env, user, kurss, nr, origin, ctx) {
   ).bind(user.id, kurss, nr, t, parb, statuss, iesniegt ? 1 : 0, iesniegt ? now : null, now).run();
   if (iesniegt && !P.pasniedzejs) {
     pazinot(env, ctx, async () => {
-      const { results } = await env.DB.prepare("SELECT email FROM users WHERE loma = 'pasniedzejs'").all();
+      const { results } = await env.DB.prepare(
+        "SELECT email FROM users WHERE loma = 'pasniedzejs' OR id IN (SELECT user_id FROM enrollments WHERE course_id = ? AND loma = 'pasniedzejs' AND status != 'atteicies')"
+      ).bind(kurss).all();
       const kam = [...new Set([...(env.ADMIN_EMAILS || '').split(','), ...results.map((r) => r.email)].map((x) => x.trim()).filter(Boolean))];
       if (!kam.length) return;
       const kursaNos = (P.telpa && P.telpa.name) || kurss;
@@ -278,7 +289,7 @@ async function novertetMajasdarbu(request, env, kurss, id, origin, ctx) {
 async function dalibnieki(env, kurss) {
   const { results: st } = await env.DB.prepare(
     `SELECT u.id, COALESCE(u.display_name, u.name) AS name, u.email, e.status, e.paid, e.period_start
-     FROM enrollments e JOIN users u ON u.id = e.user_id WHERE e.course_id = ? AND e.status != 'atteicies' ORDER BY name`
+     FROM enrollments e JOIN users u ON u.id = e.user_id WHERE e.course_id = ? AND e.status != 'atteicies' AND COALESCE(e.loma, 'students') != 'pasniedzejs' ORDER BY name`
   ).bind(kurss).all();
   const { results: pr } = await env.DB.prepare('SELECT user_id, nr, COUNT(*) AS izpilditi, MAX(at) AS pedejais FROM gk_progress WHERE course_id = ? GROUP BY user_id, nr').bind(kurss).all();
   const k = {};
@@ -418,8 +429,10 @@ export async function gkMarsruts(request, env, { path, method, user, url, ctx })
   if (!m) return null;
   const [, kurss, rest = ''] = m;
   if (!user) return method === 'GET' && rest === '' ? parskats(env, null, kurss) : fail('Nepieciešama pieteikšanās', 401);
-  // Pasniedzēja «studenta skats» (gk-skats localStorage → galvene)
-  if (irPasniedzejs(user) && request.headers.get('X-Gk-Skats') === 'students') user = { ...user, is_admin: false, loma: 'students', gk_students: true };
+  // gk_pasn = pasniedzējs šajā kursā; «studenta skats» (gk-skats localStorage → galvene) to izslēdz
+  const pasn = await kursaPasniedzejs(env, user, kurss);
+  if (pasn && request.headers.get('X-Gk-Skats') === 'students') user = { ...user, is_admin: false, loma: 'students', gk_students: true, gk_pasn: false };
+  else user = { ...user, gk_pasn: pasn };
 
   if (method === 'GET' && rest === '') return parskats(env, user, kurss);
   let r;
@@ -428,8 +441,8 @@ export async function gkMarsruts(request, env, { path, method, user, url, ctx })
   if (rest === 'progress' && method === 'POST') return saglabatProgresu(request, env, user, kurss);
   if ((r = rest.match(/^majasdarbs\/(\d+)$/)) && method === 'PUT') return saglabatMajasdarbu(request, env, user, kurss, Number(r[1]), url.origin, ctx);
 
-  // Turpmāk tikai pasniedzējam
-  if (!irPasniedzejs(user)) return fail('Nav piekļuves', 403);
+  // Turpmāk tikai šī kursa pasniedzējam
+  if (!user.gk_pasn) return fail('Nav piekļuves', 403);
   if (rest === '' && method === 'POST') return izveidotTelpu(env, kurss);
   const telpa = await env.DB.prepare('SELECT course_id FROM gk_kursi WHERE course_id = ?').bind(kurss).first();
   if (!telpa) return fail('Kursa telpa nav izveidota', 404);

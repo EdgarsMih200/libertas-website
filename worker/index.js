@@ -176,7 +176,7 @@ async function logout(request, env) {
 
 // ---------- Lietotāja API ----------
 const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at,
-  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz, e.atlaides_kods, e.atlaide_proc,
+  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz, e.atlaides_kods, e.atlaide_proc, COALESCE(e.loma, 'students') AS loma,
   (SELECT kods FROM ek_sertifikati s WHERE s.user_id = e.user_id AND s.kurss = e.course_id) AS ek_sertifikats,
   (SELECT COUNT(*) FROM ek_progress p WHERE p.user_id = e.user_id AND p.kurss = e.course_id AND p.nokartots_at IS NOT NULL) AS ek_nokartotas,
   (SELECT COUNT(*) FROM ek_saturs x WHERE x.kurss = e.course_id AND x.fails LIKE 'nodarbiba-%' AND x.gabals = 0) AS ek_nodarbibas
@@ -205,7 +205,10 @@ async function me(request, env, user, ctx) {
     await env.DB.prepare('UPDATE users SET last_seen_at = ? WHERE id = ?').bind(new Date(now).toISOString(), user.id).run();
   }
   const { results } = await env.DB.prepare(`${ENROLL_SELECT} WHERE e.user_id = ? ORDER BY e.created_at DESC`).bind(user.id).all();
-  return json({ user: publicUser(user), enrollments: results.map(({ user_id, ...rest }) => rest) });
+  // Kursa pasniedzējs (pieteikums ar lomu 'pasniedzejs') arī redz «Kursu telpas»
+  const pu = publicUser(user);
+  if (results.some((e) => e.loma === 'pasniedzejs' && e.status !== 'atteicies')) pu.pasniedzejs = true;
+  return json({ user: pu, enrollments: results.map(({ user_id, ...rest }) => rest) });
 }
 
 // Profila labošana: tālrunis un/vai vārds (tukšs vārds = atpakaļ uz Google vārdu)
@@ -364,9 +367,13 @@ async function adminEnrollments(env) {
   return json({ enrollments: results });
 }
 
+const KURSA_LOMAS = ['students', 'pasniedzejs'];
+
 async function adminAddEnrollment(request, env) {
-  const { user_id, course_id, status, period } = await readBody(request);
-  const st = status === undefined ? 'pieteicies' : status;
+  const { user_id, course_id, status, period, loma = 'students' } = await readBody(request);
+  if (!KURSA_LOMAS.includes(loma)) return fail('Nepareiza loma');
+  // Pasniedzējs nemaksā: uzreiz «uzņemts», lai atveras kursa telpa
+  const st = status === undefined ? (loma === 'pasniedzejs' ? 'uznemts' : 'pieteicies') : status;
   if (!Number.isInteger(user_id) || typeof course_id !== 'string') return fail('Nepilnīgi dati');
   if (!STATUSES.includes(st)) return fail('Nederīgs statuss');
   const u = await env.DB.prepare('SELECT id FROM users WHERE id = ?').bind(user_id).first();
@@ -379,8 +386,8 @@ async function adminAddEnrollment(request, env) {
   const pv = pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null];
   const now = new Date().toISOString();
   const r = await env.DB.prepare(
-    'INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, created_at, updated_at) VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?)'
-  ).bind(user_id, course_id, st, ...pv, now, now).run();
+    'INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, loma, created_at, updated_at) VALUES (?, ?, ?, 0, ?, ?, ?, ?, ?, ?)'
+  ).bind(user_id, course_id, st, ...pv, loma, now, now).run();
   const row = await env.DB.prepare(`${ADMIN_ENROLL_SELECT} WHERE e.id = ?`).bind(r.meta.last_row_id).first();
   return json({ enrollment: row }, 201);
 }
@@ -407,6 +414,10 @@ async function adminPatchEnrollment(request, env, id) {
     if (pr.kluda) return fail(pr.kluda);
     sets.push('period_start = ?', 'period_end = ?', 'period_days = ?');
     vals.push(...(pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null]));
+  }
+  if (body.loma !== undefined) {
+    if (!KURSA_LOMAS.includes(body.loma)) return fail('Nepareiza loma');
+    sets.push('loma = ?'); vals.push(body.loma);
   }
   if (body.notes !== undefined) {
     if (body.notes !== null && typeof body.notes !== 'string') return fail('Nederīgas piezīmes');

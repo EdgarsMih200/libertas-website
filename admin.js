@@ -118,12 +118,15 @@
             var jauns = periodaSelect(v, '');
             f.replaceChild(jauns, ps); ps = jauns;
         });
+        // Loma šajā kursā: pasniedzējs rediģē tikai šī kursa telpu, nemaksā (statuss uzreiz «uzņemts»)
+        var ls = select([['students', 'Students'], ['pasniedzejs', 'Pasniedzējs']], 'students');
+        ls.setAttribute('aria-label', 'Loma kursā');
         var b = el('button', 'btn-cta btn-small', 'Pievienot'); b.type = 'submit';
-        f.appendChild(us); f.appendChild(cs); f.appendChild(ps); f.appendChild(b);
+        f.appendChild(us); f.appendChild(cs); f.appendChild(ps); f.appendChild(ls); f.appendChild(b);
         f.addEventListener('submit', function(e) {
             e.preventDefault();
             if (!us.value || !cs.value) return L.toast('Izvēlieties lietotāju un kursu.', true);
-            api('POST', '/api/admin/enrollments', { user_id: Number(us.value), course_id: cs.value, period: ps.value || null })
+            api('POST', '/api/admin/enrollments', { user_id: Number(us.value), course_id: cs.value, period: ps.value || null, loma: ls.value })
                 .then(function() { L.toast('Pievienots.'); return load(); }).catch(err);
         });
         return f;
@@ -148,7 +151,7 @@
         var frag = document.createDocumentFragment();
         frag.appendChild(el('p', 'muted', 'Nereģistrēti apmeklētāji (bez sīkdatnēm; viens apmeklējums = viens apmeklētājs dienā):'));
         frag.appendChild(viesuKartites());
-        var t = tableWrap(['', 'Vārds', 'E-pasts', 'Loma', 'Tālrunis', 'Reģistrējies', 'Pēdējā ienākšana', 'Pēdējais apmeklējums', 'Ienākšanas', 'Kursi']);
+        var t = tableWrap(['', 'Vārds', 'E-pasts', 'Loma (visi kursi)', 'Tālrunis', 'Reģistrējies', 'Pēdējā ienākšana', 'Pēdējais apmeklējums', 'Ienākšanas', 'Kursi']);
         var q = state.q.toLowerCase();
         state.users.filter(function(u) {
             return !q || ((u.name || '') + ' ' + u.email + ' ' + (u.phone || '')).toLowerCase().indexOf(q) >= 0;
@@ -180,7 +183,7 @@
     }
 
     function enrTab() {
-        var t = tableWrap(['Lietotājs', 'Kurss', 'Atlaide', 'Grupa', 'Statuss', 'Rēķins', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
+        var t = tableWrap(['Lietotājs', 'Kurss', 'Loma', 'Atlaide', 'Grupa', 'Statuss', 'Rēķins', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
         var q = state.q.toLowerCase();
         state.enr.filter(function(e) {
             return (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&
@@ -191,6 +194,11 @@
             var who = el('div'); who.appendChild(el('strong', '', eName(e))); who.appendChild(el('div', 'muted', eEmail(e)));
             td(tr, who);
             td(tr, e.course_name || courseName(e.course_id));
+            var lm = select([['students', 'Students'], ['pasniedzejs', 'Pasniedzējs']], e.loma || 'students', function(v) {
+                api('PATCH', '/api/admin/enrollments/' + e.id, { loma: v }).then(function() { e.loma = v; L.toast('Loma kursā: ' + (v === 'pasniedzejs' ? 'Pasniedzējs' : 'Students')); }).catch(function(x) { err(x); render(); });
+            });
+            lm.setAttribute('aria-label', 'Loma kursā: ' + eName(e));
+            td(tr, lm);
             td(tr, e.atlaides_kods ? '−' + e.atlaide_proc + ' % · ' + e.atlaides_kods : '—');
             td(tr, periodaSelect(e.course_id, e.period_start, function(v) {
                 api('PATCH', '/api/admin/enrollments/' + e.id, { period: v || null }).then(function(r) {

@@ -251,7 +251,7 @@
 
         var apaksa = el('div', 'mans-kurss-apaksa');
         // Pēc apmaksas grupas kursam atveras kursa telpa (nodarbības, prezentācijas, Google Meet saite)
-        if (en.paid || ['uznemts', 'sacis', 'pabeidzis'].indexOf(en.status) >= 0) {
+        if (en.loma === 'pasniedzejs' || en.paid || ['uznemts', 'sacis', 'pabeidzis'].indexOf(en.status) >= 0) {
             var telpa = el('a', 'btn-cta btn-card', 'Atvērt kursa telpu'); telpa.href = 'kursa-telpa.html?k=' + encodeURIComponent(en.course_id);
             apaksa.appendChild(telpa);
         }

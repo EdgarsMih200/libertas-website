@@ -104,16 +104,18 @@
             const g = el('div', 'gk-kursu-rezgis');
             kursi.forEach((k) => {
                 const c = karte('gk-kursa-karte');
+                const kPasn = d.pasniedzejs || k.loma === 'pasniedzejs'; // pasniedzējs visos kursos vai tikai šajā
                 c.appendChild(el('h2', '', k.name));
+                if (!d.pasniedzejs && k.loma === 'pasniedzejs') c.appendChild(el('span', 'badge badge-uznemts', 'Pasniedzējs'));
                 const meta = el('p', 'gk-meta');
-                meta.textContent = (k.telpa ? k.nodarbibas + ' nodarbības' : 'Telpa vēl nav izveidota') + (d.pasniedzejs && k.telpa ? ' · ' + k.studenti + ' studenti' : '');
+                meta.textContent = (k.telpa ? k.nodarbibas + ' nodarbības' : 'Telpa vēl nav izveidota') + (kPasn && k.telpa ? ' · ' + k.studenti + ' studenti' : '');
                 c.appendChild(meta);
                 const pg = el('div', 'ek-pogas');
                 if (k.telpa) {
-                    const pieejams = d.pasniedzejs || k.paid || ['uznemts', 'sacis', 'pabeidzis'].includes(k.status);
+                    const pieejams = kPasn || k.paid || ['uznemts', 'sacis', 'pabeidzis'].includes(k.status);
                     if (pieejams) pg.appendChild(saite('Atvērt kursu', 'kursa-telpa.html?k=' + encodeURIComponent(k.id), 'btn-cta'));
                     else pg.appendChild(el('span', 'badge badge-pieteicies', 'Atvērsies pēc apmaksas'));
-                } else if (d.pasniedzejs) {
+                } else if (kPasn) {
                     pg.appendChild(poga('Izveidot kursa telpu', 'btn-cta', () => api('POST', '/api/gk/' + k.id).then(() => { location.href = 'kursa-telpa.html?k=' + k.id; }).catch((e) => toast(e.message, true))));
                 } else pg.appendChild(el('span', 'gk-meta', 'Kursa telpa tiek gatavota'));
                 c.appendChild(pg); g.appendChild(c);
