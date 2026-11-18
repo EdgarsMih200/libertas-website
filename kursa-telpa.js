@@ -41,6 +41,7 @@
         kal: '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>',
         cek: '<path d="M6 12l4 4 8-8"/>', slot: '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
         acs: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+        acsX: '<path d="M10.6 5.1A9.7 9.7 0 0112 5c6 0 10 7 10 7a17 17 0 01-3.1 3.9M6.6 6.6C3.8 8.4 2 12 2 12s4 7 10 7a9.4 9.4 0 005.4-1.6"/><path d="M9.9 9.9a3 3 0 004.2 4.2M3 3l18 18"/>',
         speles: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M16.5 13v7M13 16.5h7"/>',
         grupa: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 016 4.8"/>',
         x: '<path d="M6 6l12 12M18 6L6 18"/>', zimulis: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>'
@@ -48,18 +49,38 @@
     function ikona(n, cls) { const s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('class', cls || 'ek-ikona'); s.setAttribute('aria-hidden', 'true'); s.innerHTML = IKONAS[n] || ''; return s; }
     function poga(teksts, cls, fn) { const b = el('button', cls || 'btn-secondary ek-poga-maza', teksts); b.type = 'button'; if (fn) b.addEventListener('click', fn); return b; }
     function saite(teksts, href, cls) { const a = el('a', cls || 'btn-secondary', teksts); a.href = href; return a; }
-    // Pasniedzējam: viena klikšķa «Paslēpt/Rādīt studentiem» (nodarbības pēc noklusējuma ir redzamas)
-    function redzamibasPoga(n) {
-        const b = poga(n.redzama ? 'Paslēpt' : 'Rādīt', 'btn-secondary ek-poga-maza gk-redzamiba', () => {
+    // Pasniedzējam: mazas ikonpogas ar uzrakstu, uzbraucot ar peli (data-tips): acs = Paslēpt/Rādīt, X = Dzēst
+    function ikonPoga(ik, tips, aria, fn, cls) {
+        const b = el('button', 'gk-ikonpoga gk-ikonpoga--maza' + (cls ? ' ' + cls : '')); b.type = 'button';
+        b.setAttribute('data-tips', tips); b.setAttribute('aria-label', aria); b.appendChild(ikona(ik));
+        b.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); fn(b); });
+        return b;
+    }
+    function nodarbibasPogas(n) {
+        const w = el('span', 'gk-ikonpogas');
+        const nos = n.nr + '. ' + n.nosaukums;
+        const r = ikonPoga(n.redzama ? 'acsX' : 'acs', n.redzama ? 'Paslēpt' : 'Rādīt', (n.redzama ? 'Paslēpt studentiem: ' : 'Rādīt studentiem: ') + nos, (b) => {
             b.disabled = true;
             api('PATCH', '/api/gk/' + kurss + '/nodarbiba/' + n.nr, { redzama: !n.redzama })
                 .then(() => { toast(n.redzama ? 'Nodarbība paslēpta studentiem' : 'Nodarbība atkal redzama studentiem'); return atjaunot(); })
                 .catch((e) => { b.disabled = false; toast(e.message, true); });
-        });
-        b.setAttribute('aria-pressed', String(!n.redzama));
-        b.setAttribute('aria-label', (n.redzama ? 'Paslēpt studentiem: ' : 'Rādīt studentiem: ') + n.nr + '. ' + n.nosaukums);
-        b.title = n.redzama ? 'Studenti šo nodarbību neredzēs' : 'Studenti atkal redzēs šo nodarbību';
-        return b;
+        }, 'gk-redzamiba');
+        r.setAttribute('aria-pressed', String(!n.redzama));
+        w.appendChild(r);
+        w.appendChild(ikonPoga('x', 'Dzēst', 'Dzēst nodarbību: ' + nos, () => dzestNodarbibu(n), 'gk-ikonpoga--dzest'));
+        return w;
+    }
+    function dzestNodarbibu(n) {
+        if (!confirm('Dzēst ' + n.nr + '. nodarbību «' + n.nosaukums + '» ar visiem tās materiāliem un studentu progresu? To nevar atsaukt.')) return;
+        api('DELETE', '/api/gk/' + kurss + '/nodarbiba/' + n.nr).then(() => { toast('Nodarbība dzēsta'); location.hash = ''; return atjaunot(); }).catch((e) => toast(e.message, true));
+    }
+    // Nodarbības sadaļas stāvoklis: 'redzama' | 'slepta' | 'dzesta'
+    function sadalasStav(N, id) { return (N.sadalas && N.sadalas[id]) || 'redzama'; }
+    function mainitSadalu(N, id, stavoklis, b) {
+        if (b) b.disabled = true;
+        return api('PATCH', '/api/gk/' + kurss + '/nodarbiba/' + N.nr, { sadala: { id, stavoklis } })
+            .then(() => { toast(stavoklis === 'slepta' ? 'Sadaļa paslēpta studentiem' : stavoklis === 'dzesta' ? 'Sadaļa dzēsta' : 'Sadaļa atkal redzama'); return atjaunot(); })
+            .catch((e) => { if (b) b.disabled = false; toast(e.message, true); });
     }
     function karte(cls) { return el('div', 'ek-karte' + (cls ? ' ' + cls : '')); }
     function jaukt(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
@@ -148,7 +169,10 @@
     // KURSA SĀKUMS
     // ===================================================================
     function ieladetParskatu() { return api('GET', '/api/gk/' + kurss).then((d) => { P = d; return d; }); }
-    const izpilditi = (nr) => Object.keys((P.progress && P.progress[nr]) || {}).length;
+    const izpilditi = (nr) => {
+        const n = P.nodarbibas.find((x) => x.nr === nr), sd = (n && n.sadalas) || {};
+        return Object.keys((P.progress && P.progress[nr]) || {}).filter((id) => { const st = sd['u-' + id]; return !st || (st === 'slepta' && P.piekluve && P.piekluve.pasniedzejs); }).length;
+    };
 
     function meetKarte() {
         const K = P.kurss, pasn = P.piekluve.pasniedzejs;
@@ -227,7 +251,7 @@
             li.appendChild(t);
             const lab = el('div', 'gk-solis-labais');
             if (visi) { const r = el('span', 'gk-uzd-skaits' + (gatavs ? ' gatavs' : ''), pasn ? visi + ' uzd.' : izp + '/' + visi); r.title = 'Izpildītie uzdevumi'; r.insertBefore(ikona('speles'), r.firstChild); lab.appendChild(r); }
-            if (pasn) lab.appendChild(redzamibasPoga(n));
+            if (pasn) lab.appendChild(nodarbibasPogas(n));
             lab.appendChild(saite(tagad && !izp ? 'Sākt' : 'Atvērt', '#n/' + n.nr, (tagad ? 'btn-cta' : 'btn-secondary') + ' ek-poga-maza'));
             li.appendChild(lab);
             ol.appendChild(li);
@@ -301,10 +325,20 @@
             const navOl = el('ol'); nav.appendChild(navOl);
             const sat = el('div', 'gk-nod-saturs');
             let sk = 0;
+            // vai sadaļu rādīt: dzēstās nerāda nevienam, paslēptās — tikai pasniedzējam
+            const rada = (id) => { const st = sadalasStav(N, id); return st === 'redzama' || (st === 'slepta' && pasn); };
             const sadala = (id, virs, meta, navTeksts, gatavs) => {
-                const s = el('section', 'ek-bloks gk-bloks'); s.id = 'gk-' + id;
+                const slepta = sadalasStav(N, id) === 'slepta';
+                const s = el('section', 'ek-bloks gk-bloks' + (slepta ? ' gk-bloks--slepta' : '')); s.id = 'gk-' + id;
                 const g = el('div', 'ek-bloks-galva'); g.appendChild(el('span', 'mat-nr', String(++sk))); const h = el('h2', '', virs); g.appendChild(h);
+                if (slepta) g.appendChild(el('span', 'gk-birka gk-birka--slepta', 'Paslēpta studentiem'));
                 if (meta) g.appendChild(el('span', 'ek-bloks-meta', meta));
+                if (pasn) {
+                    const pg = el('span', 'gk-ikonpogas gk-ikonpogas--sadala');
+                    pg.appendChild(ikonPoga(slepta ? 'acs' : 'acsX', slepta ? 'Rādīt' : 'Paslēpt', (slepta ? 'Rādīt studentiem sadaļu: ' : 'Paslēpt studentiem sadaļu: ') + virs, (b) => mainitSadalu(N, id, slepta ? 'redzama' : 'slepta', b), 'gk-redzamiba'));
+                    pg.appendChild(ikonPoga('x', 'Dzēst', 'Dzēst sadaļu: ' + virs, (b) => { if (confirm('Dzēst sadaļu «' + virs + '»? Studenti to vairs neredzēs. (Atjaunot var nodarbības augšā.)')) mainitSadalu(N, id, 'dzesta', b); }, 'gk-ikonpoga--dzest'));
+                    g.appendChild(pg);
+                }
                 s.appendChild(g); sat.appendChild(s);
                 const li = el('li', gatavs ? 'gatavs' : ''); const a = el('a'); a.href = '#gk-' + id;
                 a.appendChild(el('span', 'nr', gatavs ? '✓' : String(sk))); a.appendChild(document.createTextNode(navTeksts || virs));
@@ -318,7 +352,11 @@
             if (pasn) {
                 const rj = el('p', 'gk-redzamiba-josla');
                 rj.appendChild(el('span', 'gk-birka' + (N.redzama ? '' : ' gk-birka--slepta'), N.redzama ? 'Redzama studentiem' : 'Paslēpta studentiem'));
-                rj.appendChild(redzamibasPoga(N));
+                rj.appendChild(nodarbibasPogas(N));
+                const dz = Object.keys(N.sadalas || {}).filter((id) => N.sadalas[id] === 'dzesta').length;
+                if (dz) rj.appendChild(poga('Atjaunot dzēstās sadaļas (' + dz + ')', 'btn-link ek-poga-maza', () => {
+                    api('PATCH', '/api/gk/' + kurss + '/nodarbiba/' + N.nr, { atjaunotSadalas: true }).then(() => { toast('Sadaļas atjaunotas'); return atjaunot(); }).catch((e) => toast(e.message, true));
+                }));
                 gal.appendChild(rj);
             }
             if (N.datums) { const p = el('p', 'gk-nakama'); p.appendChild(ikona('kal')); p.appendChild(document.createTextNode(nedDiena(N.datums) + ', ' + lvDat(N.datums) + (P.grupa ? ' · ' + P.grupa.laiks : ''))); gal.appendChild(p); }
@@ -342,16 +380,18 @@
             if (bloki.length) {
                 const grupas = grupetBlokus(bloki);
                 grupas.forEach((gr, i) => {
+                    if (!rada('s' + i)) return;
                     const s = sadala('s' + i, gr.virs, gr.meta, gr.virs);
                     gr.bloki.forEach((b, j) => s.appendChild(renderBloks(b, bloki, j === 0 && b.title === gr.virs)));
                 });
-            } else {
+            } else if (rada('saturs')) {
                 const s = sadala('saturs', 'Nodarbības saturs');
                 s.appendChild(el('p', 'gk-meta', prez.length ? 'Šīs nodarbības materiāls ir prezentācijā — atver vai lejupielādē to augstāk.' : 'Saturs tiks pievienots drīzumā.'));
             }
             // 2. uzdevumi
             const U = S.uzdevumi || [];
             U.forEach((u) => {
+                if (!rada('u-' + u.id)) return;
                 const pab = d.progress[u.id] != null;
                 const s = sadala('u-' + u.id, u.virsraksts, pab ? '✓ izpildīts' : 'uzdevums', '✎ ' + u.virsraksts, pab);
                 s.classList.add('gk-speles-bloks');
@@ -359,7 +399,7 @@
                 s.appendChild(renderUzdevums(u, nr));
             });
             // 3. mājasdarbs
-            if (S.majasdarbs) {
+            if (S.majasdarbs && rada('majasdarbs')) {
                 const M = d.majasdarbs;
                 const iesn = M && M.statuss !== 'melnraksts';
                 const meta = pasn ? (P.majasdarbi[nr] ? P.majasdarbi[nr] + ' jāpārbauda' : '') : M ? MD_NOS[M.statuss] : '';
@@ -375,7 +415,7 @@
             }
             // 4. papildmateriāli
             const pap = d.materiali.filter((m) => m.tips === 'fails' || m.tips === 'saite');
-            if (pap.length || pasn) {
+            if ((pap.length || pasn) && rada('materiali')) {
                 const s = sadala('materiali', 'Papildmateriāli', pap.length ? pap.length + '' : '');
                 if (!pap.length) s.appendChild(el('p', 'gk-meta', 'Vēl nav pievienots neviens papildmateriāls.'));
                 const ul = el('ul', 'gk-materiali');

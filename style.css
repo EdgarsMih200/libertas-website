@@ -8473,6 +8473,19 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .gk-ikonpoga{width:40px;height:40px;flex:none;display:grid;place-items:center;border-radius:50%;border:1px solid var(--c-line);background:var(--c-surface);color:var(--c-ink);cursor:pointer}
 .gk-ikonpoga:hover{background:var(--c-sunk)}
 .gk-ikonpoga--dzest{color:var(--c-error)}
+/* Mazās ikonpogas pasniedzējam (acs = Paslēpt/Rādīt, X = Dzēst) ar uzrakstu, uzbraucot ar peli */
+.gk-ikonpogas{display:inline-flex;gap:4px;align-items:center;flex:none}
+.gk-ikonpogas--sadala{margin-left:auto;align-self:center}
+.gk-ikonpoga--maza{width:30px;height:30px;position:relative;color:var(--c-muted)}
+.gk-ikonpoga--maza .ek-ikona{width:16px;height:16px}
+.gk-ikonpoga--maza:hover,.gk-ikonpoga--maza:focus-visible{color:var(--c-ink)}
+.gk-ikonpoga--maza.gk-ikonpoga--dzest:hover,.gk-ikonpoga--maza.gk-ikonpoga--dzest:focus-visible{color:var(--c-error);border-color:var(--c-error)}
+.gk-ikonpoga--maza[aria-pressed="true"]{color:var(--c-ink);background:var(--c-sunk)}
+.gk-ikonpoga--maza:disabled{opacity:.5;cursor:wait}
+.gk-ikonpoga[data-tips]::after{content:attr(data-tips);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translate(-50%,4px);padding:3px 8px;border-radius:6px;background:var(--c-ink);color:var(--c-surface);font-size:12px;font-weight:600;line-height:1.4;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s,transform .15s;z-index:5}
+.gk-ikonpoga[data-tips]:hover::after,.gk-ikonpoga[data-tips]:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.gk-bloks--slepta > :not(.ek-bloks-galva){opacity:.55}
+.ek-bloks-meta + .gk-ikonpogas--sadala{margin-left:0}
 .gk-bloks{scroll-margin-top:calc(var(--header-h,76px) + 16px)}
 .gk-bloks-iekss{margin-bottom:var(--sp-6)}
 .gk-bloka-virs{font-size:1.15rem;margin:0 0 10px}

@@ -100,6 +100,13 @@ async function materialuKarte(env, kurss) {
   return k;
 }
 
+// Sadaļu stāvoklis (migrācija 0014): {"<id>": "slepta"|"dzesta"}
+function sadaluKarte(j) { try { const o = j ? JSON.parse(j) : {}; return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+// Uzdevumi, kas neskaitās progresā: dzēstie visiem, paslēptie studentiem
+function neredzamiUzdevumi(j, pasn) {
+  return Object.entries(sadaluKarte(j)).filter(([id, st]) => id.startsWith('u-') && (st === 'dzesta' || !pasn)).length;
+}
+
 async function parskats(env, user, kurss) {
   const P = await piekluve(env, user, kurss);
   if (!P.ok) return json({ piekluve: { ok: false, iemesls: P.iemesls }, kurss: P.telpa ? { id: kurss, name: P.telpa.name } : null });
@@ -107,7 +114,7 @@ async function parskats(env, user, kurss) {
   if (!t) return fail('Kursa telpa nav izveidota', 404);
   const pasn = !!P.pasniedzejs;
   const { results: nod } = await env.DB.prepare(
-    `SELECT nr, nosaukums, apraksts, temas, datums, redzama, ir_saturs, uzdevumi FROM gk_nodarbibas WHERE course_id = ? ${pasn ? '' : 'AND redzama = 1'} ORDER BY nr`
+    `SELECT * FROM gk_nodarbibas WHERE course_id = ? ${pasn ? '' : 'AND redzama = 1'} ORDER BY nr`
   ).bind(kurss).all();
   const mat = await materialuKarte(env, kurss);
   const gr = await grupasDatumi(kurss, P.enr);
@@ -129,6 +136,8 @@ async function parskats(env, user, kurss) {
     grupa: gr ? { laiks: gr.laiks, teksts: gr.teksts, sakums: gr.nodarbibas[0], beigas: gr.nodarbibas[gr.nodarbibas.length - 1] } : null,
     nodarbibas: nod.map((n) => ({
       ...n,
+      sadalas: sadaluKarte(n.sadalas),
+      uzdevumi: Math.max(0, (n.uzdevumi || 0) - neredzamiUzdevumi(n.sadalas, pasn)),
       temas: n.temas ? JSON.parse(n.temas) : [],
       redzama: !!n.redzama, ir_saturs: !!n.ir_saturs,
       datums: n.datums || (gr && gr.nodarbibas[n.nr - 1]) || null,
@@ -148,7 +157,7 @@ async function nodarbiba(env, user, kurss, nr) {
   const { results: prog } = await env.DB.prepare('SELECT uzdevums, rezultats FROM gk_progress WHERE user_id = ? AND course_id = ? AND nr = ?').bind(user.id, kurss, nr).all();
   const gr = await grupasDatumi(kurss, P.enr);
   return json({
-    nodarbiba: { nr: n.nr, nosaukums: n.nosaukums, apraksts: n.apraksts, temas: n.temas ? JSON.parse(n.temas) : [], redzama: !!n.redzama, datums: n.datums || (gr && gr.nodarbibas[nr - 1]) || null },
+    nodarbiba: { nr: n.nr, nosaukums: n.nosaukums, apraksts: n.apraksts, temas: n.temas ? JSON.parse(n.temas) : [], redzama: !!n.redzama, datums: n.datums || (gr && gr.nodarbibas[nr - 1]) || null, sadalas: sadaluKarte(n.sadalas) },
     saturs, materiali: mat,
     progress: Object.fromEntries(prog.map((r) => [r.uzdevums, r.rezultats])),
     pasniedzejs: !!P.pasniedzejs,
@@ -302,6 +311,19 @@ async function labotKursu(request, env, kurss) {
   const sets = [], v = [];
   if ('meet_url' in b) { const u = tiraUrl(b.meet_url); if (u === null) return fail('Saitei jāsākas ar https://'); sets.push('meet_url = ?'); v.push(u); }
   if ('ievads' in b) { sets.push('ievads = ?'); v.push(teksts(b.ievads, 4000)); }
+  // Viena sadaļa: {sadala: {id, stavoklis: 'redzama'|'slepta'|'dzesta'}}; {atjaunotSadalas: true} atjauno dzēstās
+  if (b.sadala || b.atjaunotSadalas) {
+    const n = await env.DB.prepare('SELECT sadalas FROM gk_nodarbibas WHERE course_id = ? AND nr = ?').bind(kurss, nr).first();
+    if (!n) return fail('Nodarbība nav atrasta', 404);
+    const k = sadaluKarte(n.sadalas);
+    if (b.sadala) {
+      const id = String(b.sadala.id || ''), st = b.sadala.stavoklis;
+      if (!/^[a-z0-9-]{1,60}$/.test(id) || !['redzama', 'slepta', 'dzesta'].includes(st)) return fail('Nepareiza sadaļa');
+      if (st === 'redzama') delete k[id]; else k[id] = st;
+    }
+    if (b.atjaunotSadalas) Object.keys(k).forEach((id) => { if (k[id] === 'dzesta') delete k[id]; });
+    sets.push('sadalas = ?'); v.push(Object.keys(k).length ? JSON.stringify(k) : null);
+  }
   if (!sets.length) return fail('Nav ko mainīt');
   sets.push('atjaunots_at = ?'); v.push(nowIso());
   await env.DB.prepare(`UPDATE gk_kursi SET ${sets.join(', ')} WHERE course_id = ?`).bind(...v, kurss).run();
@@ -330,6 +352,19 @@ async function labotNodarbibu(request, env, kurss, nr) {
     const d = b.datums == null || b.datums === '' ? null : String(b.datums);
     if (d && !/^\d{4}-\d{2}-\d{2}$/.test(d)) return fail('Nepareizs datums');
     sets.push('datums = ?'); v.push(d);
+  }
+  // Viena sadaļa: {sadala: {id, stavoklis: 'redzama'|'slepta'|'dzesta'}}; {atjaunotSadalas: true} atjauno dzēstās
+  if (b.sadala || b.atjaunotSadalas) {
+    const n = await env.DB.prepare('SELECT sadalas FROM gk_nodarbibas WHERE course_id = ? AND nr = ?').bind(kurss, nr).first();
+    if (!n) return fail('Nodarbība nav atrasta', 404);
+    const k = sadaluKarte(n.sadalas);
+    if (b.sadala) {
+      const id = String(b.sadala.id || ''), st = b.sadala.stavoklis;
+      if (!/^[a-z0-9-]{1,60}$/.test(id) || !['redzama', 'slepta', 'dzesta'].includes(st)) return fail('Nepareiza sadaļa');
+      if (st === 'redzama') delete k[id]; else k[id] = st;
+    }
+    if (b.atjaunotSadalas) Object.keys(k).forEach((id) => { if (k[id] === 'dzesta') delete k[id]; });
+    sets.push('sadalas = ?'); v.push(Object.keys(k).length ? JSON.stringify(k) : null);
   }
   if (!sets.length) return fail('Nav ko mainīt');
   sets.push('atjaunots_at = ?'); v.push(nowIso());
