@@ -3416,9 +3416,11 @@ button.adv-pk-runat.skan {
     }
 }
 button.ek-skana-poga.skan svg,
+button.ek-poga-maza.skan svg,
 button.adv-pk-runat.skan svg,
 button.mat-poga-maza.skan .btn-ikona { display: none; }
 button.ek-skana-poga.skan::before,
+button.ek-poga-maza.skan::before,
 button.adv-pk-runat.skan::before,
 button.mat-poga-maza.skan::before {
     content: "";
@@ -3428,6 +3430,8 @@ button.mat-poga-maza.skan::before {
     border-radius: 2px;
     background: currentColor;
 }
+button.gk-klausit { display: inline-flex; flex-direction: row; align-items: center; gap: 8px; width: auto; margin-bottom: 10px; }
+button.gk-klausit svg { width: 18px; height: 18px; }
 .gk-teksts .es.skan { background: var(--c-accent-soft); border-radius: 3px; }
 
 /* 1. Vārdu kartītes (apgriežamas): priekša papīrs + Lora, aizmugure salvija */

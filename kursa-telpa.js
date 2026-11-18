@@ -76,7 +76,8 @@
     // ---------- runa (spāņu) ----------
     // avots = nospiestā poga/teksts: otrs klikšķis uz tā paša aptur skaņu
     let skanAvots = null;
-    function beigtSkanu() { if (skanAvots) { skanAvots.classList.remove('skan'); skanAvots.removeAttribute('aria-pressed'); } skanAvots = null; }
+    function beigtSkanu() { if (skanAvots) { skanAvots.classList.remove('skan'); skanAvots.removeAttribute('aria-pressed'); pogasTeksts(skanAvots, 'Klausīties tekstu'); } skanAvots = null; }
+    function pogasTeksts(b, t) { const n = b.classList.contains('gk-klausit') && b.lastChild; if (n && n.nodeType === 3) n.nodeValue = ' ' + t; }
     function runat(teksts, avots) {
         if (!('speechSynthesis' in window)) { toast('Šī pārlūkprogramma neatbalsta skaņu', true); return; }
         const apturet = avots && avots === skanAvots && (speechSynthesis.speaking || speechSynthesis.pending);
@@ -86,7 +87,7 @@
         u.lang = 'es-ES'; u.rate = 0.9;
         const b = speechSynthesis.getVoices().find((v) => v.lang === 'es-ES') || speechSynthesis.getVoices().find((v) => v.lang.slice(0, 2) === 'es');
         if (b) u.voice = b;
-        if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); u.onend = u.onerror = () => { if (skanAvots === avots) beigtSkanu(); }; }
+        if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); pogasTeksts(avots, 'Apturēt'); u.onend = u.onerror = () => { if (skanAvots === avots) beigtSkanu(); }; }
         speechSynthesis.speak(u);
     }
     function skanasPoga(teksts) { const b = el('button', 'ek-skana-poga'); b.type = 'button'; b.setAttribute('aria-label', 'Klausīties: ' + teksts); b.appendChild(ikona('skana')); b.addEventListener('click', (e) => { e.stopPropagation(); runat(teksts, b); }); return b; }
@@ -522,7 +523,15 @@
         return w;
     }
     function ierakstitTekstuAr(es, cel) { // klikšķis uz .es = izruna
-        cel.querySelectorAll('.es').forEach((x) => { x.tabIndex = 0; x.setAttribute('role', 'button'); x.title = 'Klausīties'; const r = () => runat(x.textContent, x); x.addEventListener('click', r); x.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); r(); } }); });
+        cel.querySelectorAll('.es').forEach((x) => {
+            x.tabIndex = 0; x.setAttribute('role', 'button'); x.title = 'Klausīties';
+            let r = () => runat(x.textContent, x);
+            if (x.textContent.trim().length > 80) { // garam tekstam — redzama poga «Klausīties tekstu» / «Apturēt»; klikšķis uz teksta dara to pašu
+                const b = poga('', 'btn-secondary ek-poga-maza gk-klausit', () => runat(x.textContent, b));
+                b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Klausīties tekstu'));
+                let kur = x.closest('p, li, .card'); if (!kur || !cel.contains(kur)) kur = x; kur.parentNode.insertBefore(b, kur);
+                x.title = 'Klausīties / apturēt'; r = () => b.click();
+            } x.addEventListener('click', r); x.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); r(); } }); });
     }
     function rVocab(b, w) {
         const esPirmais = b.dir === 'es';
