@@ -8377,6 +8377,7 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .gk-solis-meta{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;margin:4px 0 2px!important}
 .gk-solis-meta .ek-ikona{width:16px;height:16px}
 .gk-solis-labais{display:flex;gap:12px;align-items:center}
+.gk-redzamiba-josla{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 12px}
 .gk-uzd-skaits{display:inline-flex;gap:6px;align-items:center;font-size:var(--fs-sm);font-weight:700;color:var(--c-muted);white-space:nowrap}
 .gk-uzd-skaits.gatavs{color:var(--c-success)}
 .gk-jauna{margin-top:var(--sp-4)}
