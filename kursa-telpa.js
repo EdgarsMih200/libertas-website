@@ -539,8 +539,8 @@
             const atk = /^Atkārtojums/i.test(b.title || '');
             const iepr = cur && cur.bloki[cur.bloki.length - 1];
             // Jauna sadaļa: katrs teksts (ja iepriekšējais nav teksts), vārdu krājums pēc vingrinājuma vai aktivitātes
-            const sakas = b.type === 'text' ? iepr.type !== 'text' || !String(b.title || '').startsWith(String(cur.virs).split(':')[0])
-                : b.type === 'vocab' ? iepr.type !== 'text' && iepr.type !== 'vocab'
+            const sakas = b.type === 'text' ? iepr?.type !== 'text' || !String(b.title || '').startsWith(String(cur.virs).split(':')[0])
+                : b.type === 'vocab' ? iepr?.type !== 'text' && iepr?.type !== 'vocab'
                 : false;
             if (!cur) jauna(atk ? 'Atkārtojums' : b.title);
             else if (atk) { if (cur.virs !== 'Atkārtojums') jauna('Atkārtojums'); }

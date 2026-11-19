@@ -8521,6 +8521,9 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .gk-teksts th{background:var(--c-sunk)}
 .gk-teksts .vrow{margin:0 0 4px}
 .gk-teksts .cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px}
+.gk-teksts .cols2>p{margin:0}
+.gk-teksts .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px;margin:0 0 1em}
+.gk-teksts .big{font-family:var(--font-heading);font-size:var(--fs-lead);font-weight:700;color:var(--c-accent);margin:0 0 6px}
 .gk-teksts [style]{font-size:inherit!important}
 /* vingrinājumi */
 .gk-vingr{padding-left:1.6em;margin:0;display:grid;gap:12px;max-width:820px;line-height:2}
