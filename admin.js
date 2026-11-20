@@ -3,7 +3,7 @@
     var L = window.LIB, el = L.el, api = L.api;
     var root = document.getElementById('admin');
     var ST = Object.keys(L.STATUSI);
-    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, tab: location.hash === '#rekini' ? 'rek' : location.hash === '#aptauja' ? 'apt' : 'enr', fc: '', fs: '', fp: '', q: '' };
+    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, tab: location.hash === '#rekini' ? 'rek' : location.hash === '#dalibnieki' ? 'dal' : location.hash === '#aptauja' ? 'apt' : 'enr', fc: '', fs: '', fp: '', q: '' };
     var G = null; // grafiks.js (grupu periodi)
     var AJ = null; // aptauja-jautajumi.js (jautājumi rezultātiem)
 
@@ -182,14 +182,24 @@
         return frag;
     }
 
-    function enrTab() {
+    // Kursu dalībnieki = uzņemti (apmaksājuši un reģistrēti); pārējie paliek «Pieteikumos»
+    var DAL_ST = ['uznemts', 'sacis', 'pabeidzis'];
+    function irDal(e) { return DAL_ST.indexOf(e.status) >= 0; }
+    function tabST(tab) { return ST.filter(function(s) { return (DAL_ST.indexOf(s) >= 0) === (tab === 'dal'); }); }
+
+    function enrTab(dal) {
         var t = tableWrap(['Lietotājs', 'Kurss', 'Loma', 'Atlaide', 'Grupa', 'Statuss', 'Rēķins', 'Apmaksāts', 'Apmaksas datums', 'Piezīmes', 'Iesniegts', '']);
         var q = state.q.toLowerCase();
-        state.enr.filter(function(e) {
-            return (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&
+        var rows = state.enr.filter(function(e) {
+            return irDal(e) === !!dal && (!state.fc || e.course_id === state.fc) && (!state.fs || e.status === state.fs) &&
                 (!state.fp || (state.fp === '-' ? !e.period_start : e.period_start === state.fp)) &&
                 (!q || (eName(e) + ' ' + eEmail(e)).toLowerCase().indexOf(q) >= 0);
-        }).forEach(function(e) {
+        });
+        if (!rows.length) {
+            var tukss = el('tr'), tc = el('td', 'muted', dal ? 'Nav neviena dalībnieka ar šiem filtriem.' : 'Nav jaunu pieteikumu.');
+            tc.colSpan = 12; tukss.appendChild(tc); t.body.appendChild(tukss);
+        }
+        rows.forEach(function(e) {
             var tr = el('tr');
             var who = el('div'); who.appendChild(el('strong', '', eName(e))); who.appendChild(el('div', 'muted', eEmail(e)));
             td(tr, who);
@@ -208,7 +218,11 @@
                 }).catch(function(x) { err(x); render(); });
             }));
             td(tr, select(ST.map(function(s) { return [s, L.STATUSI[s]]; }), e.status, function(v) {
-                api('PATCH', '/api/admin/enrollments/' + e.id, { status: v }).then(function() { e.status = v; render(); }).catch(function(x) { err(x); render(); });
+                api('PATCH', '/api/admin/enrollments/' + e.id, { status: v }).then(function() {
+                    var bija = irDal(e); e.status = v;
+                    if (bija !== irDal(e)) L.toast(irDal(e) ? 'Pārcelts uz «Kursu dalībnieki».' : 'Pārcelts uz «Pieteikumi».');
+                    render();
+                }).catch(function(x) { err(x); render(); });
             }));
             td(tr, rekinaSuna(e));
             var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!e.paid;
@@ -604,9 +618,14 @@
         root.appendChild(addForm());
 
         var tabs = el('div', 'admin-tabs');
-        [['enr', 'Pieteikumi (' + state.enr.length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')'], ['apt', 'Aptauja (' + ((state.apt && state.apt.atbildes) || []).length + ')']].forEach(function(x) {
+        [['enr', 'Pieteikumi (' + state.enr.filter(function(e) { return !irDal(e); }).length + ')'], ['dal', 'Kursu dalībnieki (' + state.enr.filter(irDal).length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')'], ['apt', 'Aptauja (' + ((state.apt && state.apt.atbildes) || []).length + ')']].forEach(function(x) {
             var b = el('button', 'admin-tab' + (state.tab === x[0] ? ' active' : ''), x[1]); b.type = 'button';
-            b.addEventListener('click', function() { state.tab = x[0]; history.replaceState(null, '', x[0] === 'rek' ? '#rekini' : x[0] === 'apt' ? '#aptauja' : location.pathname + location.search); render(); });
+            b.addEventListener('click', function() {
+                if (state.tab !== x[0]) state.fs = '';
+                state.tab = x[0];
+                history.replaceState(null, '', x[0] === 'rek' ? '#rekini' : x[0] === 'apt' ? '#aptauja' : x[0] === 'dal' ? '#dalibnieki' : location.pathname + location.search);
+                render();
+            });
             tabs.appendChild(b);
         });
         root.appendChild(tabs);
@@ -619,20 +638,21 @@
             var nq = root.querySelector('input[type=search]'); nq.focus(); nq.setSelectionRange(pos, pos);
         });
         bar.appendChild(q);
-        if (state.tab === 'enr') {
+        if (state.tab === 'enr' || state.tab === 'dal') {
+            var dalT = state.tab === 'dal';
             bar.appendChild(select([['', 'Visi kursi']].concat(state.courses.map(function(c) { return [c.id, c.name]; })), state.fc, function(v) { state.fc = v; render(); }));
-            bar.appendChild(select([['', 'Visi statusi']].concat(ST.map(function(s) { return [s, L.STATUSI[s]]; })), state.fs, function(v) { state.fs = v; render(); }));
+            bar.appendChild(select([['', 'Visi statusi']].concat(tabST(state.tab).map(function(s) { return [s, L.STATUSI[s]]; })), state.fs, function(v) { state.fs = v; render(); }));
             // Grupu filtrs: periodi, kuriem ir pieteikumi (izvēlētajam kursam vai visiem)
             var redzami = {};
             state.enr.forEach(function(e) {
-                if ((!state.fc || e.course_id === state.fc) && e.period_start) redzami[e.period_start] = periodaNos(e.period_start, e.period_end, e.period_days);
+                if (irDal(e) === dalT && (!state.fc || e.course_id === state.fc) && e.period_start) redzami[e.period_start] = periodaNos(e.period_start, e.period_end, e.period_days);
             });
             var popts = [['', 'Visas grupas'], ['-', 'Bez grupas']].concat(Object.keys(redzami).sort().map(function(k) { return [k, redzami[k]]; }));
             bar.appendChild(select(popts, state.fp, function(v) { state.fp = v; render(); }));
         }
         if (state.tab === 'ek') { root.appendChild(ekTab()); return; }
         root.appendChild(bar);
-        root.appendChild(state.tab === 'enr' ? enrTab() : state.tab === 'adv' ? advTab() : state.tab === 'apt' ? aptTab() : state.tab === 'rek' ? rekTab() : usersTab());
+        root.appendChild(state.tab === 'enr' ? enrTab(false) : state.tab === 'dal' ? enrTab(true) : state.tab === 'adv' ? advTab() : state.tab === 'apt' ? aptTab() : state.tab === 'rek' ? rekTab() : usersTab());
     }
 
     function start(me) {
