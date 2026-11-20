@@ -208,7 +208,7 @@ function sagatavot(nr) {
     { id: 'vardu-meklesana', tips: 'meklesana', virsraksts: 'Vārdu meklēšana', apraksts: 'Atrodi tabulā spāņu vārdus: noklikšķini uz pirmā un pēdējā burta. Vārdi iet → ↓ ↘ ↗.', ...vm_ },
     { id: 'atmina', tips: 'atmina', virsraksts: 'Atmiņas spēle', apraksts: 'Apgriez kartītes un atrodi pārus: latviski ↔ spāniski.', pari: atm },
     { id: 'jucekli', tips: 'jucekli', virsraksts: 'Burtu jucekļi', apraksts: 'Saliec burtus pareizā secībā, lai iegūtu spāņu vārdu.', vardi: juc },
-  ];
+  ].filter((u) => (u.vardi || u.pari || []).length >= (u.tips === 'jucekli' ? 3 : 4)); // spēli ar pārāk maz vārdiem neveido
   if (sek.length >= 4) uzdevumi.push({ id: 'seciba', tips: 'seciba', virsraksts: 'Saliec teikumu', apraksts: 'Spied uz vārdiem pareizā secībā, lai saliktu teikumu.', teikumi: sek });
 
   // Mājasdarba pārbaudes (kā prezentācijā): avoti/NN.majasdarbs.json {teksts?, parbaudes:[{id, teksts, tips teikumi|vardi|skaits|nav, …}]}

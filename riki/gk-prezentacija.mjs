@@ -30,14 +30,20 @@ const sc = D.lastIndexOf('<script>');
 let galva = D.slice(0, sc)
   .replace(/--blue:#[0-9a-f]{6}/i, '--blue:' + krasa)
   .replace(/--accent:#[0-9a-f]{6}/i, '--accent:' + akcents)
-  .replace(/rgba\(1,39,118,\.08\)/g, 'rgba(196,66,26,.08)');
+  .replace(/rgba\(1,39,118,\.08\)/g, `rgba(${[1, 3, 5].map((i) => parseInt(krasa.slice(i, i + 2), 16)).join(',')},.08)`);
 let js = D.slice(D.indexOf('/* ================= HELPERS', sc));
+// vārdu testam pāri vienmēr [latviski, spāniski] (dir:"es" sarakstos spāņu vārds ir pirmais)
+js = js.replace('.flatMap(x=>x.pairs).map(', '.flatMap(x=>x.dir==="es"&&!x.arrow?x.pairs.map(p=>[p[1],p[0]]):x.pairs).map(');
 const aizvietot = (no, lidz, jauns) => {
   const i = js.indexOf(no), j = js.indexOf(lidz, i + no.length);
   if (i < 0 || j < 0) throw new Error('Dzinējā nav atrasts: ' + no);
   js = js.slice(0, i) + jauns + js.slice(j);
 };
 js = js.replace(/"svb1_"/, 'KODS');
+// satura slaids: garš virsraksts var aizņemt 2 rindas — saraksts plūst zem tā, nevis fiksētā augstumā
+js = js.replace('<div class="ov-bold" style="top:190px">${esc(s.head)}</div>\n   <div class="ov-items" style="top:290px">',
+  '<div style="position:absolute;left:80px;top:170px;width:920px"><div class="ov-bold" style="position:static;width:auto">${esc(s.head)}</div>\n   <div class="ov-items" style="position:static;width:auto;margin-top:34px">')
+  .replace('.join("")}</div>`}; },', '.join("")}</div></div>`}; },');
 // mājasdarbs: teksts un pārbaudes no HW (tās pašas kā kursa telpā, kursa-telpa.js parbauditMd)
 aizvietot(' homework(s){', '\n};\n\n/* ================= BUILD', ` homework(s){
    const ch = HW.parbaudes || [];
