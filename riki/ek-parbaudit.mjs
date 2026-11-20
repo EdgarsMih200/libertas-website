@@ -130,7 +130,7 @@ for (const np of nodPlani) {
   for (const p of PRASMES) if (!ir.has(p) && !np.prasmes_izlaist?.[p]) kl(f, 'prasmes', `prasme "${p}" netiek trenēta (vai pamato plans.nodarbibas[].prasmes_izlaist)`);
 
   const teksts = virknes(n).join(' ');
-  if (/�|Ã.|Ä./.test(teksts)) kl(f, '-', 'bojāti simboli (kodējums)');
+  if (/�|[ÃÄÅ][\u0080-¿ŒœŠšŸŽžƒˆ˜–-›]/.test(teksts)) kl(f, '-', 'bojāti simboli (kodējums)');
   if (teksts.length > 500 && !LV.test(teksts)) kl(f, '-', 'nav latviešu garumzīmju — vai teksts ir latviski?');
   if (!(n.kopsavilkums?.punkti?.length >= 3)) kl(f, 'kopsavilkums', 'vajag ≥ 3 punktus');
   pirmsLaika(f, np.nr, { ...n, saites: null }); // saites.sagatavo drīkst minēt nākamās tēmas

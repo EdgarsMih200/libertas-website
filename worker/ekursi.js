@@ -234,7 +234,7 @@ async function parskats(env, user, kurss) {
   const pk = await piekluve(env, user, kurss);
   const plans = await saturs(env, kurss, 'plans');
   if (!plans) return fail('Kursa saturs vēl nav publicēts', 404);
-  const pamata = { id: kurss, nosaukums: course.name, limenis: plans.limenis, valoda: plans.valoda, cena: course.price_eur, dienas: course.ek_dienas };
+  const pamata = { id: kurss, nosaukums: course.name, limenis: plans.limenis, valoda: plans.valoda, audio: !!plans.audio, cena: course.price_eur, dienas: course.ek_dienas };
   if (!pk.ok) {
     const s = user ? await sertifikats(env, user.id, kurss) : null;
     return json({ kurss: pamata, piekluve: { ok: false, iemesls: pk.iemesls, lidz: pk.enr?.ek_lidz || null }, sertifikats: s });
@@ -272,8 +272,21 @@ async function nodarbiba(env, user, kurss, nr) {
     atkartojums: jaukt(atk).slice(0, 3),
     progress: prog[nr] || null,
     nakama: plans.nodarbibas[i + 1]?.nr || null,
-    kurss: { id: kurss, nosaukums: plans.nosaukums, valoda: plans.valoda },
+    kurss: { id: kurss, nosaukums: plans.nosaukums, valoda: plans.valoda, audio: !!plans.audio },
   });
+}
+
+// Ierakstītā izruna (riki/ek-audio.py → ek_audio, migrations/0015): mp3 pa gabaliem, atslēga = sha1(teksts)[:16]
+async function audio(env, user, kurss, atslega) {
+  const pk = await piekluve(env, user, kurss);
+  if (!pk.ok) return fail('Nav piekļuves', 403);
+  const { results } = await env.DB.prepare('SELECT dati FROM ek_audio WHERE kurss = ? AND atslega = ? ORDER BY gabals').bind(kurss, atslega).all();
+  if (!results.length) return fail('Nav ieraksta', 404);
+  const dalas = results.map((x) => new Uint8Array(x.dati));
+  const buf = new Uint8Array(dalas.reduce((n, d) => n + d.length, 0));
+  let i = 0;
+  for (const d of dalas) { buf.set(d, i); i += d.length; }
+  return new Response(buf, { headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'private, max-age=31536000, immutable' } });
 }
 
 async function saglabatProgresu(request, env, user, kurss, nr) {
@@ -519,6 +532,7 @@ export async function ekMarsruts(request, env, { path, method, user, origin, url
     ]);
     return json({ ok: true });
   }
+  if ((r = rest.match(/^audio\/([0-9a-f]{16})$/)) && method === 'GET') return audio(env, user, kurss, r[1]);
   if ((r = rest.match(/^nodarbiba\/(\d+)$/)) && method === 'GET') return nodarbiba(env, user, kurss, Number(r[1]));
   if ((r = rest.match(/^nodarbiba\/(\d+)\/progress$/)) && method === 'POST') return saglabatProgresu(request, env, user, kurss, Number(r[1]));
   if ((r = rest.match(/^tests\/(\d+)$/)) && method === 'POST') return testsSakt(env, user, kurss, Number(r[1]));

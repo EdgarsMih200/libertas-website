@@ -59,15 +59,37 @@
     }
 
     // ---------- runa ----------
-    const VALODAS = { es: 'es-ES', en: 'en-GB', de: 'de-DE', fr: 'fr-FR', it: 'it-IT', lv: 'lv-LV' };
+    const VALODAS = { es: 'es-ES', en: 'en-GB', de: 'de-DE', fr: 'fr-FR', it: 'it-IT', lv: 'lv-LV', et: 'et-EE' };
     // avots = nospiestā poga: otrs klikšķis uz tās pašas aptur skaņu
-    let skanAvots = null;
+    let skanAvots = null, skanAudio = null;
     function beigtSkanu() { if (skanAvots) { skanAvots.classList.remove('skan'); skanAvots.removeAttribute('aria-pressed'); } skanAvots = null; }
+    function apturetVisu() { if (skanAudio) { skanAudio.pause(); skanAudio = null; } if ('speechSynthesis' in window) speechSynthesis.cancel(); beigtSkanu(); }
+    function sakSkanu(avots) { if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); } }
+    // Ierakstītā izruna (kursam ar plans.audio): /api/ek/<kurss>/audio/<sha1(teksts)[:16]>; ja nav — runas sintēze
+    async function audioAtslega(teksts) {
+        const h = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(String(teksts).normalize('NFC')));
+        return Array.from(new Uint8Array(h).slice(0, 8), (b) => b.toString(16).padStart(2, '0')).join('');
+    }
     function runat(teksts, avots) {
+        const skan = avots && avots === skanAvots;
+        apturetVisu();
+        if (skan) return;
+        if (P && P.kurss && P.kurss.audio && window.crypto && crypto.subtle) {
+            sakSkanu(avots);
+            audioAtslega(teksts).then((k) => {
+                if (avots && skanAvots !== avots) return; // pa to laiku nospiesta cita poga
+                const a = new Audio('/api/ek/' + encodeURIComponent(kurss) + '/audio/' + k);
+                skanAudio = a;
+                a.onended = () => { if (skanAudio === a) { skanAudio = null; beigtSkanu(); } };
+                a.onerror = () => { if (skanAudio === a) { skanAudio = null; beigtSkanu(); sintezet(teksts, avots); } };
+                a.play().catch(() => { if (skanAudio === a) { skanAudio = null; beigtSkanu(); sintezet(teksts, avots); } });
+            }).catch(() => { beigtSkanu(); sintezet(teksts, avots); });
+            return;
+        }
+        sintezet(teksts, avots);
+    }
+    function sintezet(teksts, avots) {
         if (!('speechSynthesis' in window)) { toast('Šī pārlūkprogramma neatbalsta skaņu', true); return; }
-        const apturet = avots && avots === skanAvots && (speechSynthesis.speaking || speechSynthesis.pending);
-        speechSynthesis.cancel(); beigtSkanu();
-        if (apturet) return;
         const u = new SpeechSynthesisUtterance(teksts);
         u.lang = VALODAS[(P && P.kurss.valoda) || 'es'] || 'es-ES';
         u.rate = 0.85;
@@ -762,7 +784,7 @@
     // ---------- maršrutēšana ----------
     function marsruts() {
         if (!P) return;
-        if (window.speechSynthesis) try { speechSynthesis.cancel(); } catch (e) {}
+        try { apturetVisu(); } catch (e) {}
         if (!P.piekluve.ok) return navPiekluves();
         const h = location.hash.replace(/^#/, '');
         let m;
