@@ -44,6 +44,12 @@ function noHtml(f) {
   return { head, items, homework, S };
 }
 
+// Valodas teksti spēlēm (avots.valoda; noklusējums spāņu)
+const VALODAS = {
+  es: { nos: 'spāņu', iski: 'spāniski', akc: 'Garumzīmes nav jāraksta.' },
+  et: { nos: 'igauņu', iski: 'igauniski', akc: 'Punktiņus un vilnīti (õ, ä, ö, ü) var nerakstīt.' },
+};
+
 // ---------- sēklots nejaušums ----------
 function rng(seed) {
   let a = [...seed].reduce((h, c) => (Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0), 2166136261);
@@ -59,12 +65,15 @@ function pirmaisVariants(s) {
   return d.find((x) => !/^(el|la|los|las)$/i.test(x)) || d[0] || '';
 }
 const burti = (s) => s.toUpperCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-function vardnica(S) {
+function vardnica(S, valoda = 'es') {
   const pari = [];
+  // ne-spāņu valodām izsaukuma/jautājuma zīme vārda galā nav problēma (Kohtumiseni!), to vienkārši noņem
+  const tirit = valoda === 'es' ? (x) => x : (x) => String(x).replace(/^—\s*/, '').replace(/[!?.]+$/, '').trim();
   for (const s of S) {
     if (s.type !== 'vocab' || !Array.isArray(s.pairs)) continue;
     if (/rupj|viltīg|eifēm/i.test(s.title || '')) continue; // spēlēs neliekam rupjības un to aizstājējus
-    for (const p of s.pairs) {
+    for (const p0 of s.pairs) {
+      const p = p0.map(tirit);
       const [lv0, es] = s.dir === 'es' ? [p[1], p[0]] : [p[0], p[1]];
       if (/[¡!]/.test(es) || /vulgār/i.test(lv0)) continue; // izsauksmes vārdi nav piemēroti spēlēm
       const lv = lv0.replace(/^(Spānijā|Latīņamerikā|Meksikā):\s*/, '');
@@ -77,12 +86,13 @@ function vardnica(S) {
 function vienvardi(pari, min = 4, max = 11) {
   const redz = new Set();
   return pari.map((p) => ({ ...p, vards: p.es.replace(ARTIKULI, '') }))
-    .filter((p) => /^[a-záéíóúüñ]+$/i.test(p.vards) && p.vards.length >= min && p.vards.length <= max && p.lv.length <= 40)
+    .filter((p) => /^[a-záéíóúüñõäöšž]+$/i.test(p.vards) && p.vards.length >= min && p.vards.length <= max && p.lv.length <= 40)
     .filter((p) => { const k = burti(p.vards); if (redz.has(k)) return false; redz.add(k); return true; });
 }
 
 // ---------- krustvārdu mīkla ----------
 function krustvardi(vardi, r) {
+  if (vardi.length < 2) return { platums: 0, augstums: 0, vardi: [] }; // nodarbība tikai ar frāzēm — spēli neveido
   let labakais = null;
   for (let meg = 0; meg < 60; meg++) {
     const sar = jaukt(vardi, r).sort((a, b) => b.burti.length - a.burti.length + (r() - 0.5) * 3);
@@ -138,6 +148,7 @@ function krustvardi(vardi, r) {
 // ---------- vārdu meklēšana ----------
 const ALFABETS = 'AAAAABCCDDEEEEEFGHIIIJLLLMMNNNOOOOPQRRRSSSSTTUUVYZ';
 function meklesana(vardi, r, izm = 12) {
+  if (vardi.length < 2) return { izmers: izm, rindas: [], vardi: [] };
   for (let meg = 0; meg < 200; meg++) {
     const rez = Array.from({ length: izm }, () => Array(izm).fill(''));
     const virzieni = [[1, 0], [0, 1], [1, 1], [1, -1]];
@@ -172,6 +183,7 @@ function meklesana(vardi, r, izm = 12) {
 function teikumi(S) {
   const out = [];
   for (const s of S) {
+    if (s.noSent) continue; // vingrinājumi ar latviskiem jautājumiem (riki/ek-uz-gk.mjs) teikumu spēlei neder
     if (s.type === 'fill') for (const it of s.items || []) out.push(it.replace(/\{([^}|]+)(\|[^}]*)?\}/g, '$1'));
     if (s.type === 'choice') for (const it of s.items || []) if (it.a) out.push(String(it.q).replace(/\[[^\]]*\]/, it.a));
   }
@@ -187,7 +199,7 @@ function sagatavot(nr) {
   const avots = fs.existsSync(fJson) ? JSON.parse(fs.readFileSync(fJson, 'utf8')) : noHtml(fHtml);
   const S = avots.S;
   const r = rng(kurss + ':' + nr);
-  const pari = vardnica(S);
+  const pari = vardnica(S, avots.valoda || 'es');
   const vv = jaukt(vienvardi(pari), r);
   if (vv.length < 18) console.warn(`  ! ${nn}: tikai ${vv.length} viena vārda kandidāti`);
   const izmantoti = new Set();
@@ -203,11 +215,12 @@ function sagatavot(nr) {
     .filter((p, i, a) => a.findIndex((q) => q.es === p.es || q.lv === p.lv) === i).slice(0, 8).map((p) => [p.lv, p.es]);
   const sek = jaukt(teikumi(S), r).slice(0, 6);
 
+  const V = VALODAS[avots.valoda || 'es'] || VALODAS.es;
   const uzdevumi = [
-    { id: 'krustvardi', tips: 'krustvardi', virsraksts: 'Krustvārdu mīkla', apraksts: 'Ieraksti spāņu vārdus pēc latviskajiem jautājumiem. Garumzīmes nav jāraksta.', ...kv },
-    { id: 'vardu-meklesana', tips: 'meklesana', virsraksts: 'Vārdu meklēšana', apraksts: 'Atrodi tabulā spāņu vārdus: noklikšķini uz pirmā un pēdējā burta. Vārdi iet → ↓ ↘ ↗.', ...vm_ },
-    { id: 'atmina', tips: 'atmina', virsraksts: 'Atmiņas spēle', apraksts: 'Apgriez kartītes un atrodi pārus: latviski ↔ spāniski.', pari: atm },
-    { id: 'jucekli', tips: 'jucekli', virsraksts: 'Burtu jucekļi', apraksts: 'Saliec burtus pareizā secībā, lai iegūtu spāņu vārdu.', vardi: juc },
+    { id: 'krustvardi', tips: 'krustvardi', virsraksts: 'Krustvārdu mīkla', apraksts: `Ieraksti ${V.nos} vārdus pēc latviskajiem jautājumiem. ${V.akc}`, ...kv },
+    { id: 'vardu-meklesana', tips: 'meklesana', virsraksts: 'Vārdu meklēšana', apraksts: `Atrodi tabulā ${V.nos} vārdus: noklikšķini uz pirmā un pēdējā burta. Vārdi iet → ↓ ↘ ↗.`, ...vm_ },
+    { id: 'atmina', tips: 'atmina', virsraksts: 'Atmiņas spēle', apraksts: `Apgriez kartītes un atrodi pārus: latviski ↔ ${V.iski}.`, pari: atm },
+    { id: 'jucekli', tips: 'jucekli', virsraksts: 'Burtu jucekļi', apraksts: `Saliec burtus pareizā secībā, lai iegūtu ${V.nos} vārdu.`, vardi: juc },
   ].filter((u) => (u.vardi || u.pari || []).length >= (u.tips === 'jucekli' ? 3 : 4)); // spēli ar pārāk maz vārdiem neveido
   if (sek.length >= 4) uzdevumi.push({ id: 'seciba', tips: 'seciba', virsraksts: 'Saliec teikumu', apraksts: 'Spied uz vārdiem pareizā secībā, lai saliktu teikumu.', teikumi: sek });
 
@@ -223,6 +236,7 @@ function sagatavot(nr) {
   const bloki = S.filter((s) => !['img', 'overview', 'homework'].includes(s.type));
   const out = {
     nr, nosaukums: avots.head || `${nr}. nodarbība`, temas: avots.items || [],
+    ...(avots.valoda ? { valoda: avots.valoda } : {}), ...(avots.audio ? { audio: true } : {}),
     bloki, majasdarbs, uzdevumi,
   };
   const fOut = path.join(DIR, nn + '.json');

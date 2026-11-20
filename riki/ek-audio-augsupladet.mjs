@@ -1,5 +1,5 @@
 // E-kursi: ierakstītās izrunas (riki/ek-audio.py) augšupielāde D1 tabulā ek_audio (migrations/0015_ek_audio.sql).
-// Lietošana: node riki/ek-audio-augsupladet.mjs <kurss> [--remote | --local] [--viss]
+// Lietošana: node riki/ek-audio-augsupladet.mjs <kurss> [--remote | --local] [--viss] [--gk]
 //   Augšupielādē tikai jaunās atslēgas (--viss = visas no jauna) un dzēš tās, kuru vairs nav audio/saraksts.json.
 //   mp3 dala gabalos ≤ 45 KB (hex SQL literālis < 100 KB D1 vaicājuma limita); SQL faili ≤ ~4 MB.
 import { execFileSync } from 'node:child_process';
@@ -10,7 +10,7 @@ import path from 'node:path';
 const [kurss, ...opc] = process.argv.slice(2);
 if (!kurss) { console.error('Lietošana: node riki/ek-audio-augsupladet.mjs <kurss> [--remote|--local] [--viss]'); process.exit(1); }
 const kur = opc.includes('--remote') ? '--remote' : '--local';
-const mape = path.join('e-kursi-saturs', kurss, 'audio');
+const mape = path.join(opc.includes('--gk') ? 'grupu-kursi-saturs' : 'e-kursi-saturs', kurss, 'audio'); // --gk = grupu kursa telpa
 const saraksts = JSON.parse(fs.readFileSync(path.join(mape, 'saraksts.json'), 'utf8'));
 const q = (s) => `'${String(s).replace(/'/g, "''")}'`;
 const wr = (args, json) => execFileSync('npx', ['--no-install', 'wrangler', 'd1', 'execute', 'libertas-db', kur, ...args, ...(json ? ['--json'] : ['-y'])],

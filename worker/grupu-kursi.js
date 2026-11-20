@@ -165,6 +165,20 @@ async function nodarbiba(env, user, kurss, nr) {
   });
 }
 
+// ---------- ierakstītā izruna ----------
+// mp3 no D1 ek_audio (kurss = kursa id), atslēga = sha1(teksts)[:16]; ģenerē riki/ek-audio.py --gk, augšupielādē riki/ek-audio-augsupladet.mjs --gk
+async function audio(env, user, kurss, atslega) {
+  const P = await piekluve(env, user, kurss);
+  if (!P.ok) return fail('Nav piekļuves', 403);
+  const { results } = await env.DB.prepare('SELECT dati FROM ek_audio WHERE kurss = ? AND atslega = ? ORDER BY gabals').bind(kurss, atslega).all();
+  if (!results.length) return fail('Nav ieraksta', 404);
+  const dalas = results.map((x) => new Uint8Array(x.dati));
+  const buf = new Uint8Array(dalas.reduce((n, d) => n + d.length, 0));
+  let i = 0;
+  for (const d of dalas) { buf.set(d, i); i += d.length; }
+  return new Response(buf, { headers: { 'Content-Type': 'audio/mpeg', 'Cache-Control': 'private, max-age=31536000, immutable' } });
+}
+
 // ---------- faili ----------
 async function fails(env, user, kurss, id, url) {
   const P = await piekluve(env, user, kurss);
@@ -471,6 +485,7 @@ export async function gkMarsruts(request, env, { path, method, user, url, ctx })
 
   if (method === 'GET' && rest === '') return parskats(env, user, kurss);
   let r;
+  if ((r = rest.match(/^audio\/([0-9a-f]{16})$/)) && method === 'GET') return audio(env, user, kurss, r[1]);
   if ((r = rest.match(/^nodarbiba\/(\d+)$/)) && method === 'GET') return nodarbiba(env, user, kurss, Number(r[1]));
   if ((r = rest.match(/^fails\/(\d+)$/)) && method === 'GET') return fails(env, user, kurss, Number(r[1]), url);
   if (rest === 'progress' && method === 'POST') return saglabatProgresu(request, env, user, kurss);

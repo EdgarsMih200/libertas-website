@@ -94,19 +94,50 @@
         return 0;
     }
 
-    // ---------- runa (spāņu) ----------
+    // ---------- kursa valoda ----------
+    // Nodarbības saturs var norādīt valoda ('es' noklusējums, 'et') un audio: true (ierakstītā izruna, riki/ek-audio.py --gk)
+    const VAL = {
+        es: { bcp: 'es-ES', nos: 'spāņu', iski: 'spāniski', labi: '¡Muy bien!', fant: '¡Fantástico!', bravo: '¡Bravo!', genial: '¡Genial!', sutits: '¡Enviado!' },
+        et: { bcp: 'et-EE', nos: 'igauņu', iski: 'igauniski', labi: 'Väga hea!', fant: 'Suurepärane!', bravo: 'Tubli!', genial: 'Vahva!', sutits: 'Saadetud!' },
+    };
+    let VALODA = 'es', AUDIO = false;
+    const V = () => VAL[VALODA];
+
+    // ---------- runa ----------
     // avots = nospiestā poga/teksts: otrs klikšķis uz tā paša aptur skaņu
-    let skanAvots = null;
+    let skanAvots = null, skanAudio = null;
     function beigtSkanu() { if (skanAvots) { skanAvots.classList.remove('skan'); skanAvots.removeAttribute('aria-pressed'); pogasTeksts(skanAvots, 'Klausīties tekstu'); } skanAvots = null; }
     function pogasTeksts(b, t) { const n = b.classList.contains('gk-klausit') && b.lastChild; if (n && n.nodeType === 3) n.nodeValue = ' ' + t; }
+    async function audioAtslega(teksts) { // = sha1(teksts NFC)[:16], tāpat kā riki/ek-audio.py
+        const h = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(String(teksts).normalize('NFC')));
+        return Array.from(new Uint8Array(h).slice(0, 8), (x) => x.toString(16).padStart(2, '0')).join('');
+    }
     function runat(teksts, avots) {
+        const bija = avots && avots === skanAvots;
+        if (skanAudio) { skanAudio.pause(); skanAudio = null; }
+        if ('speechSynthesis' in window) speechSynthesis.cancel();
+        beigtSkanu();
+        if (bija) return;
+        if (AUDIO && window.crypto && crypto.subtle) {
+            if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); pogasTeksts(avots, 'Apturēt'); }
+            const atpakal = () => { beigtSkanu(); sintezet(teksts, avots); };
+            audioAtslega(teksts).then((k) => {
+                if (avots && skanAvots !== avots) return;
+                const a = new Audio('/api/gk/' + encodeURIComponent(kurss) + '/audio/' + k); skanAudio = a;
+                a.onended = () => { if (skanAudio === a) { skanAudio = null; beigtSkanu(); } };
+                a.onerror = () => { if (skanAudio === a) { skanAudio = null; atpakal(); } };
+                a.play().catch(() => { if (skanAudio === a) { skanAudio = null; atpakal(); } });
+            }).catch(atpakal);
+            return;
+        }
+        sintezet(teksts, avots);
+    }
+    function sintezet(teksts, avots) {
         if (!('speechSynthesis' in window)) { toast('Šī pārlūkprogramma neatbalsta skaņu', true); return; }
-        const apturet = avots && avots === skanAvots && (speechSynthesis.speaking || speechSynthesis.pending);
-        speechSynthesis.cancel(); beigtSkanu();
-        if (apturet) return;
         const u = new SpeechSynthesisUtterance(String(teksts).replace(/\([^)]*\)/g, ''));
-        u.lang = 'es-ES'; u.rate = 0.9;
-        const b = speechSynthesis.getVoices().find((v) => v.lang === 'es-ES') || speechSynthesis.getVoices().find((v) => v.lang.slice(0, 2) === 'es');
+        const bcp = V().bcp;
+        u.lang = bcp; u.rate = 0.9;
+        const b = speechSynthesis.getVoices().find((v) => v.lang === bcp) || speechSynthesis.getVoices().find((v) => v.lang.slice(0, 2) === bcp.slice(0, 2));
         if (b) u.voice = b;
         if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); pogasTeksts(avots, 'Apturēt'); u.onend = u.onerror = () => { if (skanAvots === avots) beigtSkanu(); }; }
         speechSynthesis.speak(u);
@@ -317,6 +348,7 @@
         return nodarbibaDati(nr).then((d) => {
             notirit();
             const N = d.nodarbiba, S = d.saturs || {}, pasn = d.pasniedzejs;
+            VALODA = VAL[S.valoda] ? S.valoda : 'es'; AUDIO = !!S.audio;
             virsraksts.textContent = N.nr + '. ' + N.nosaukums;
             document.title = N.nr + '. nodarbība — ' + P.kurss.name + ' — Libertas';
             const lay = el('div', 'ek-nod gk-nod');
@@ -565,8 +597,9 @@
     function ierakstitTekstuAr(es, cel) { // klikšķis uz .es = izruna
         cel.querySelectorAll('.es').forEach((x) => {
             x.tabIndex = 0; x.setAttribute('role', 'button'); x.title = 'Klausīties';
-            let r = () => runat(x.textContent, x);
-            if (x.textContent.trim().length > 80) { // garam tekstam — redzama poga «Klausīties tekstu» / «Apturēt»; klikšķis uz teksta dara to pašu
+            const tx = x.dataset.runa || x.textContent;
+            let r = () => runat(tx, x);
+            if (!x.dataset.runa && x.textContent.trim().length > 80) { // garam tekstam — redzama poga «Klausīties tekstu» / «Apturēt»; klikšķis uz teksta dara to pašu
                 const b = poga('', 'btn-secondary ek-poga-maza gk-klausit', () => runat(x.textContent, b));
                 b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Klausīties tekstu'));
                 let kur = x.closest('p, li, .card'); if (!kur || !cel.contains(kur)) kur = x; kur.parentNode.insertBefore(b, kur);
@@ -591,7 +624,7 @@
         if (b.note) w.appendChild(el('p', 'gk-piezime', b.note));
         const sl = el('label', 'gk-slept'); const c = el('input'); c.type = 'checkbox';
         c.addEventListener('change', () => tb.classList.toggle('gk-vardi--slepts', c.checked));
-        sl.appendChild(c); sl.appendChild(document.createTextNode(' Paslēpt spāņu vārdus (pārbaudi sevi)'));
+        sl.appendChild(c); sl.appendChild(document.createTextNode(' Paslēpt ' + V().nos + ' vārdus (pārbaudi sevi)'));
         w.appendChild(sl);
         tb.addEventListener('click', (e) => { const td = e.target.closest('.gk-vardi--slepts .gk-vardi-es'); if (td) td.classList.toggle('atklats'); });
     }
@@ -599,7 +632,7 @@
     function rezultats(w, labi, visi) {
         let r = w.querySelector('.ek-atgriezeniska'); if (!r) { r = el('div'); w.appendChild(r); }
         r.className = 'ek-atgriezeniska ' + (labi === visi ? 'ek-atgriezeniska--labi' : 'ek-atgriezeniska--slikti');
-        r.textContent = labi === visi ? '¡Muy bien! Viss pareizi (' + labi + '/' + visi + ').' : 'Pareizi ' + labi + ' no ' + visi + '. Izlabo sarkanos un pārbaudi vēlreiz.';
+        r.textContent = labi === visi ? V().labi + ' Viss pareizi (' + labi + '/' + visi + ').' : 'Pareizi ' + labi + ' no ' + visi + '. Izlabo sarkanos un pārbaudi vēlreiz.';
     }
     function atzimet(inp, v) { inp.classList.remove('pareizi', 'nepareizi', 'gandriz'); if (v === 2) inp.classList.add('pareizi'); else if (v === 1) inp.classList.add('pareizi', 'gandriz'); else inp.classList.add('nepareizi'); inp.setAttribute('aria-invalid', v ? 'false' : 'true'); }
     function rFill(b, w) {
@@ -608,7 +641,7 @@
             const li = el('li');
             it.split(/(\{[^}]+\})/).forEach((d) => {
                 const m = d.match(/^\{([^}]+)\}$/);
-                if (m) { const v = m[1].split('|'); const i = el('input', 'lauks gk-tuks'); i.type = 'text'; i.autocomplete = 'off'; i.spellcheck = false; i.lang = 'es'; i.setAttribute('aria-label', 'Atbilde'); i.style.width = Math.max(5, v[0].length + 2) + 'ch'; i.dataset.v = m[1]; lauki.push(i); li.appendChild(i); }
+                if (m) { const v = m[1].split('|'); const i = el('input', 'lauks gk-tuks'); i.type = 'text'; i.autocomplete = 'off'; i.spellcheck = false; i.lang = VALODA; i.setAttribute('aria-label', 'Atbilde'); i.style.width = Math.max(5, v[0].length + 2) + 'ch'; i.dataset.v = m[1]; lauki.push(i); li.appendChild(i); }
                 else if (d) li.appendChild(document.createTextNode(d));
             });
             ol.appendChild(li);
@@ -650,8 +683,8 @@
     function rTransform(b, w) {
         const ol = el('ol', 'gk-vingr gk-parveido'); const lauki = [];
         b.items.forEach((it) => {
-            const li = el('li'); li.appendChild(el('span', 'gk-parveido-q', it.q));
-            const i = el('input', 'lauks'); i.type = 'text'; i.placeholder = b.ph || ''; i.lang = 'es'; i.spellcheck = false; i.autocomplete = 'off'; i.setAttribute('aria-label', 'Pārveidots teikums: ' + it.q); i._a = it.a; lauki.push(i);
+            const li = el('li'); if (it.runa) li.appendChild(skanasPoga(it.runa)); li.appendChild(el('span', 'gk-parveido-q', it.q));
+            const i = el('input', 'lauks'); i.type = 'text'; i.placeholder = b.ph || ''; i.lang = VALODA; i.spellcheck = false; i.autocomplete = 'off'; i.setAttribute('aria-label', 'Pārveidots teikums: ' + it.q); i._a = it.a; lauki.push(i);
             li.appendChild(i); ol.appendChild(li);
         });
         w.appendChild(ol);
@@ -799,7 +832,7 @@
             return visi;
         };
         let beigts = false;
-        const parbBeigas = () => { if (!beigts && parbauditVisu(false)) { beigts = true; gatavs(atklati ? Math.max(40, 100 - atklati * 5) : 100, '¡Fantástico! Krustvārdu mīkla atrisināta' + (atklati ? ' (atklāti ' + atklati + ' burti).' : '!')); } };
+        const parbBeigas = () => { if (!beigts && parbauditVisu(false)) { beigts = true; gatavs(atklati ? Math.max(40, 100 - atklati * 5) : 100, V().fant + ' Krustvārdu mīkla atrisināta' + (atklati ? ' (atklāti ' + atklati + ' burti).' : '!')); } };
         Object.values(sunas).forEach((s) => {
             s.inp.addEventListener('focus', () => { if (aktivs == null || !s.vardi.includes(aktivs)) izveletiesVardu(s); else izcelt(); s.inp.select(); });
             s.inp.addEventListener('mousedown', () => { if (document.activeElement === s.inp && s.vardi.length > 1) { virziens = virziens === 'h' ? 'v' : 'h'; izveletiesVardu(s); } });
@@ -877,9 +910,9 @@
             l.forEach(([a, b]) => suna(a, b).classList.add('atrasts', 'k' + krasa));
             liKarte[i].classList.add('atrasts'); liKarte[i].querySelector('.gk-vm-es').textContent = u.vardi[i].vards;
             runat(u.vardi[i].vards);
-            if (atrasti.size === u.vardi.length) gatavs(100, '¡Bravo! Visi ' + u.vardi.length + ' vārdi atrasti.');
+            if (atrasti.size === u.vardi.length) gatavs(100, V().bravo + ' Visi ' + u.vardi.length + ' vārdi atrasti.');
         };
-        const izk = el('div', 'gk-vm'); izk.appendChild(g); const lab = el('div', 'gk-vm-labais'); lab.appendChild(el('h4', '', 'Atrodi spāniski:')); lab.appendChild(sar); izk.appendChild(lab);
+        const izk = el('div', 'gk-vm'); izk.appendChild(g); const lab = el('div', 'gk-vm-labais'); lab.appendChild(el('h4', '', 'Atrodi ' + V().iski + ':')); lab.appendChild(sar); izk.appendChild(lab);
         w.appendChild(izk);
         pielagotSunas(w, g, N, 36);
     }
@@ -904,7 +937,7 @@
                     const [[b1, k1], [b2, k2]] = atv; atv = [];
                     if (k1.i === k2.i && k1.val !== k2.val) {
                         b1.classList.add('paris'); b2.classList.add('paris'); pari++;
-                        if (pari === u.pari.length) gatavs(gajieni <= u.pari.length + 4 ? 100 : gajieni <= u.pari.length * 2 + 2 ? 85 : 70, '¡Genial! Visi pāri atrasti ar ' + gajieni + ' gājieniem.');
+                        if (pari === u.pari.length) gatavs(gajieni <= u.pari.length + 4 ? 100 : gajieni <= u.pari.length * 2 + 2 ? 85 : 70, V().genial + ' Visi pāri atrasti ar ' + gajieni + ' gājieniem.');
                     } else { slegts = true; setTimeout(() => { [b1, b2].forEach((x) => { x.classList.remove('atverta'); x.setAttribute('aria-label', 'Aizvērta kartīte'); }); slegts = false; }, 1000); }
                 });
                 g.appendChild(b);
@@ -930,7 +963,7 @@
                 burti.querySelectorAll('button').forEach((b, bi) => { b.disabled = izm.includes(bi) || li.classList.contains('gatavs'); });
                 if (izm.length === v.vards.length) {
                     const s = izm.map((bi) => v.jauktie[bi]).join('');
-                    if (s === v.vards) { li.classList.add('gatavs'); atb.querySelectorAll('button').forEach((b) => { b.disabled = true; }); runat(v.vards); atrisinati++; if (atrisinati === u.vardi.length) gatavs(Math.max(40, 100 - palidziba * 10), '¡Excelente! Visi vārdi salikti.'); }
+                    if (s === v.vards) { li.classList.add('gatavs'); atb.querySelectorAll('button').forEach((b) => { b.disabled = true; }); runat(v.vards); atrisinati++; if (atrisinati === u.vardi.length) gatavs(Math.max(40, 100 - palidziba * 10), V().bravo + ' Visi vārdi salikti.'); }
                     else { atb.classList.add('kluda'); setTimeout(() => atb.classList.remove('kluda'), 600); }
                 }
             };
@@ -964,7 +997,7 @@
                 izm.forEach((vi, n) => { const c = el('button', 'ek-cips', vardi[vi]); c.type = 'button'; c.addEventListener('click', () => { if (li.classList.contains('gatavs')) return; izm.splice(n, 1); rad(); }); atb.appendChild(c); });
                 el2.querySelectorAll('button').forEach((b) => { b.disabled = izm.includes(Number(b.dataset.i)) || li.classList.contains('gatavs'); });
                 if (izm.length === vardi.length) {
-                    if (izm.map((i) => vardi[i]).join(' ') === t) { li.classList.add('gatavs'); atb.querySelectorAll('button').forEach((b) => { b.disabled = true; }); runat(t); labi++; if (labi === u.teikumi.length) gatavs(100, '¡Perfecto! Visi teikumi salikti.'); }
+                    if (izm.map((i) => vardi[i]).join(' ') === t) { li.classList.add('gatavs'); atb.querySelectorAll('button').forEach((b) => { b.disabled = true; }); runat(t); labi++; if (labi === u.teikumi.length) gatavs(100, V().labi + ' Visi teikumi salikti.'); }
                     else { atb.classList.add('kluda'); setTimeout(() => atb.classList.remove('kluda'), 600); }
                 }
             };
@@ -1020,8 +1053,8 @@
         if (M && (M.statuss === 'novertets' || M.statuss === 'jalabo')) w.appendChild(vertejumaKaste(M));
         const lasit = M && (M.statuss === 'novertets' || M.statuss === 'iesniegts');
         const izk = el('div', 'gk-md-izk');
-        const ta = el('textarea', 'ek-textarea gk-md-teksts'); ta.lang = 'es'; ta.spellcheck = false; ta.setAttribute('aria-label', 'Tavs mājasdarbs');
-        ta.placeholder = 'Raksti šeit spāniski…';
+        const ta = el('textarea', 'ek-textarea gk-md-teksts'); ta.lang = VALODA; ta.spellcheck = false; ta.setAttribute('aria-label', 'Tavs mājasdarbs');
+        ta.placeholder = 'Raksti šeit ' + V().iski + '…';
         let ls = null; try { ls = localStorage.getItem(lsKey); } catch (e) {}
         ta.value = M && M.teksts ? (M.statuss !== 'iesniegts' && M.statuss !== 'novertets' && ls && ls.length > M.teksts.length ? ls : M.teksts) : (ls || '');
         ta.readOnly = !!lasit;
@@ -1046,7 +1079,7 @@
             }
             const parb = {}; rez.forEach((r) => { if (r.id) parb[r.id] = [r.ok ? 1 : 0, r.v]; });
             api('PUT', '/api/gk/' + kurss + '/majasdarbs/' + nr, { teksts: ta.value, iesniegt, parbaudes: parb })
-                .then(() => { if (iesniegt) { try { localStorage.removeItem(lsKey); } catch (e) {} } toast(iesniegt ? '¡Enviado! Mājasdarbs iesniegts pasniedzējam.' : 'Melnraksts saglabāts'); return atjaunot(); })
+                .then(() => { if (iesniegt) { try { localStorage.removeItem(lsKey); } catch (e) {} } toast(iesniegt ? V().sutits + ' Mājasdarbs iesniegts pasniedzējam.' : 'Melnraksts saglabāts'); return atjaunot(); })
                 .catch((e) => toast(e.message, true));
         };
         if (!M || M.statuss === 'melnraksts' || M.statuss === 'jalabo') {

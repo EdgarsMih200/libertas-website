@@ -1,5 +1,5 @@
 # E-kursi: ierakstītā izruna (mp3) visiem tekstiem, ko macibas.js runat() atskaņo.
-# Lietošana: python -I riki/ek-audio.py <kurss> [--parrakstit]
+# Lietošana: python -I riki/ek-audio.py <kurss> [--parrakstit]  |  grupu kursa telpai: <kurss> --gk [--no e-kursi-saturs/<ek>/audio]
 #   → e-kursi-saturs/<kurss>/audio/<atslēga>.mp3 + audio/saraksts.json {atslēga: teksts}
 # Atslēga = sha1(teksts NFC)[:16] — tieši tas pats teksts, ko saņem runat() (macibas.js audioAtslega()).
 # Balsis: Edge neirālās (pakete edge-tts). Kad mp3 gatavi: node riki/ek-audio-augsupladet.mjs <kurss> --remote
@@ -67,24 +67,72 @@ def savakt(sakne):
     return out
 
 
+def savakt_gk(sakne):
+    """Grupu kursa telpa (grupu-kursi-saturs/<kurss>/NN.json): teksti, ko kursa-telpa.js runat() atskaņo."""
+    import html as H
+    out = []
+    es_re = re.compile(r'<(?:b|i|span)\s+class="es[^"]*"(?:\s+data-runa="([^"]*)")?[^>]*>(.*?)</(?:b|i|span)>', re.S)
+    def no_html(h):
+        for runa, t in es_re.findall(h or ''):
+            out.append((H.unescape(runa), 1) if runa else (H.unescape(re.sub(r'<[^>]+>', '', t)), 0))
+    valoda = None
+    for f in sorted(sakne.glob('[0-9][0-9].json')):
+        n = json.loads(f.read_text('utf-8'))
+        valoda = valoda or n.get('valoda')
+        for b in n.get('bloki', []):
+            t = b.get('type')
+            if t == 'vocab' and not b.get('nospeak'):
+                dial = 0
+                for p in b.get('pairs', []):
+                    x = p[0] if b.get('dir') == 'es' else p[1]
+                    if x.lstrip().startswith('—'): out.append((x, dial % 2)); dial += 1
+                    else: out.append((x, 0))
+            elif t == 'text': no_html(b.get('html'))
+            elif t == 'choice':
+                for it in b.get('items', []): no_html(it.get('q'))
+            elif t == 'transform':
+                for it in b.get('items', []):
+                    if it.get('runa'): out.append((it['runa'], 1))
+            elif t == 'speak':
+                for q in b.get('questions', []): out.append((q, 0))
+        for u in n.get('uzdevumi', []):
+            if u.get('tips') in ('meklesana', 'jucekli'):
+                for v in u.get('vardi', []): out.append((v['vards'], 0))
+            elif u.get('tips') == 'atmina':
+                for p in u.get('pari', []): out.append((p[1], 0))
+            elif u.get('tips') == 'seciba':
+                for t in u.get('teikumi', []): out.append((t, 0))
+    return out, valoda or 'es'
+
+
 async def main():
-    if len(sys.argv) < 2:
-        sys.exit('Lietošana: python -I riki/ek-audio.py <kurss> [--parrakstit]')
-    kurss, parrakstit = sys.argv[1], '--parrakstit' in sys.argv
-    sakne = Path('e-kursi-saturs') / kurss
-    plans = json.loads((sakne / 'plans.json').read_text('utf-8'))
-    balsis = BALSIS.get(plans['valoda'])
+    arg = [a for a in sys.argv[1:] if not a.startswith('--')]
+    if not arg:
+        sys.exit('Lietošana: python -I riki/ek-audio.py <kurss> [--gk] [--parrakstit] [--no <mape ar gataviem mp3>]')
+    kurss, parrakstit, gk = arg[0], '--parrakstit' in sys.argv, '--gk' in sys.argv
+    if gk:
+        sakne = Path('grupu-kursi-saturs') / kurss
+        teksti, valoda = savakt_gk(sakne)
+    else:
+        sakne = Path('e-kursi-saturs') / kurss
+        valoda = json.loads((sakne / 'plans.json').read_text('utf-8'))['valoda']
+        teksti = savakt(sakne)
+    balsis = BALSIS.get(valoda)
     if not balsis:
-        sys.exit(f"Nav balss valodai {plans['valoda']} — papildini BALSIS")
+        sys.exit(f"Nav balss valodai {valoda} — papildini BALSIS")
     mape = sakne / 'audio'
     mape.mkdir(exist_ok=True)
+    # --no <mape>: jau ģenerētos mp3 (tā pati atslēga = tas pats teksts) pārkopē, nevis ģenerē no jauna
+    no = Path(sys.argv[sys.argv.index('--no') + 1]) if '--no' in sys.argv else None
     saraksts, darbi = {}, []
-    for teksts, b in savakt(sakne):
+    for teksts, b in teksti:
         k = atslega(teksts)
         if k in saraksts: continue
         saraksts[k] = teksts
         runa = tirit(teksts)
         cels = mape / f'{k}.mp3'
+        if no and not parrakstit and not cels.exists() and (no / f'{k}.mp3').exists():
+            cels.write_bytes((no / f'{k}.mp3').read_bytes())
         if runa and (parrakstit or not cels.exists()):
             darbi.append((runa, balsis[b], cels))
     sem = asyncio.Semaphore(6)
