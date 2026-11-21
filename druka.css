@@ -2,7 +2,7 @@
    Katra lapa = viena A4 loksne (.dr-lapa, 210 × 297 mm). Uz ekrāna loksnes stāv viena zem otras uz papīra fona,
    drukājot katra ir savā lappusē. Lai lapās nepaliek tukši caurumi, katras loksnes pēdējais bloks izplešas
    (.dr-aug: līniju laukums, kartītes, rakstīšanas rāmis) un aizpilda atlikušo vietu.
-   Tēmas: body.dr--ziema (spāņu Ziemassvētki), .dr--anglu, .dr--muertos, .dr--norvegu, .dr--zviedru */
+   Tēmas: body.dr--ziema (spāņu Ziemassvētki), .dr--anglu, .dr--muertos, .dr--norvegu, .dr--zviedru, .dr--kafija */
 
 :root {
     --c-bg: #F6F1E8; --c-surface: #FFFDF8; --c-sunk: #EDE5D8; --c-line: #D9CFC0; --c-line-strong: #8C8273;
@@ -29,6 +29,7 @@
 }
 .dr--norvegu { --t-1: #4A3550; --t-2: #5FA37A; --t-soft: #ECE4F0; --t-soft-2: #E0F0E6; --t-ink: #4A3550; }
 .dr--zviedru { --t-1: #9E2B25; --t-2: #2F5878; --t-soft: #F5E0DD; --t-soft-2: #E2EBF2; --t-ink: #6B1D1D; }
+.dr--kafija { --t-1: #8B4A22; --t-2: #2F7A8C; --t-soft: #F3E4D6; --t-soft-2: #DCEBEE; --t-ink: #4A2C1D; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -169,6 +170,8 @@ svg { display: block; }
 .dr-vaks-zime b { display: block; font: italic 600 13pt/1 var(--ff-display); letter-spacing: 0; text-transform: none; color: var(--c-glow); margin: .6mm 0; }
 .dr--muertos .dr-vaks { color: #fff; }
 .dr--muertos .dr-vaks::after { background: linear-gradient(90deg, rgb(64 26 54 / .86) 0%, rgb(64 26 54 / .6) 46%, rgb(64 26 54 / 0) 74%); }
+.dr--kafija .dr-vaks { color: #fff; }
+.dr--kafija .dr-vaks::after { background: linear-gradient(90deg, rgb(58 34 22 / .86) 0%, rgb(58 34 22 / .6) 46%, rgb(58 34 22 / 0) 74%); }
 .dr-vaks:has(.dr-vaks-attels--pilns) .dr-vaks-zime { display: none; }   /* ilustrētajos vākos zīmogs aizsegtu zīmējumu */
 
 /* vārds / datums / pašvērtējums */
@@ -343,6 +346,10 @@ svg { display: block; }
 .dr-zini strong { font: italic 600 12pt/1.2 var(--ff-display); color: var(--t-ink); }
 .dr-zini p { font-size: 8.6pt; line-height: 1.38; color: #34302b; }
 .dr-zini em { font-family: var(--ff-display); }
+/* En la cafetería: iekrāsojamā barraquito glāze "Vai zināji?" vietā */
+.dr-zini > .kaf-dr-glaze { flex: 1 1 0; width: 100%; height: auto; min-height: 45mm; margin: 1mm 0; }
+.kaf-dr-banka { font: italic 500 9pt/1.4 var(--ff-display) !important; color: var(--t-ink) !important; }
+
 .dr-divi--55 { grid-template-columns: 1.05fr .95fr; }
 
 /* ---------- līniju laukums (aizpilda atlikušo vietu) ---------- */

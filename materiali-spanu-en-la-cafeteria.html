@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>En la cafetería: kafejnīcā spāņu valodā (A1) — Noderīgi materiāli — Libertas</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body class="mat-lapa mat-nodarbiba mat-kafija">
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="materiali.html" aria-current="page">Noderīgi materiāli</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="par-mums.html">Par mums</a>
+            </nav>
+        </div>
+    </header>
+
+
+    <!-- Materiāla virsraksts (.sc-kafija = Kanāriju salu pēcpusdiena, bez sniega) -->
+    <section class="mat-hero lapas-josla lapas-josla--augsta sc-kafija">
+        <div class="lapas-josla-ainava" aria-hidden="true">
+            <svg viewBox="0 200 1440 430" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-clouds"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+        </div>
+        <div class="container mat-hero-iekssa lapas-josla-saturs">
+            <a href="materiali.html" class="mat-atpakal"><svg class="mat-atpakal-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Visi materiāli</a>
+            <div class="mat-birkas">
+                <span class="mat-limenis">A1</span>
+                <span class="mat-valoda">Spāņu valoda</span>
+            </div>
+            <h1><span lang="es" class="mat-hero-es">En la cafetería</span> Kafejnīcā spāņu valodā</h1>
+            <p class="mat-hero-teksts">
+                Kā pasūtīt kafiju Spānijā un nesajaukt <span lang="es">cortado</span> ar <span lang="es">café con leche</span>: kafijas veidi,
+                pieklājīgas frāzes, spāņu kafijas paradumi un Tenerifes lepnums — <span lang="es">barraquito</span>. Spied <svg class="ikona-skana" viewBox="0 0 24 24" role="img" aria-label="skaļruņa pogu" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" fill="none"/></svg>, lai dzirdētu izrunu.
+            </p>
+            <ul class="mat-statistika">
+                <li><strong>20</strong> vārdi</li>
+                <li><strong>10</strong> frāzes</li>
+                <li><strong>4</strong> uzdevumi</li>
+                <li><strong>~30</strong> min</li>
+            </ul>
+            <div class="mat-hero-pogas">
+                <a href="#vardi" class="btn-cta">Sākt nodarbību</a>
+                <a href="materiali-spanu-en-la-cafeteria-druka.html" class="btn-secondary mat-poga-druka"><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"/><path d="M7 14h10v6H7z"/></svg>Drukāt / PDF</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mat-izkartojums">
+        <!-- Satura rādītājs (sānos) -->
+        <nav class="mat-saturs" aria-label="Saturs">
+            <span class="mat-saturs-virsraksts">Saturs</span>
+            <a href="#vardi"><span>1</span> Vārdi</a>
+            <a href="#frazes"><span>2</span> Frāzes</a>
+            <a href="#gramatika"><span>3</span> Gramatika</a>
+            <a href="#dialogs"><span>4</span> Dialogs</a>
+            <a href="#kafijas"><span>5</span> Kafijas ceļvedis</a>
+            <a href="#kultura"><span>6</span> Kafijas kultūra</a>
+            <a href="#uzdevumi"><span>7</span> Uzdevumi</a>
+        </nav>
+
+        <main class="mat-galvenais">
+
+            <!-- 1. VĀRDI (ilustrācijas: assets/materiali/en-la-cafeteria/ikonas.svg) -->
+            <section class="mat-sadala" id="vardi">
+                <h2><span class="mat-nr">1</span> Kafejnīcas vārdi</h2>
+                <p class="mat-ievads">Uzklikšķini uz kartītes, lai redzētu tulkojumu. Mācies vārdu kopā ar artikulu:
+                    <span class="art-el">el / los</span> — vīriešu dzimte, <span class="art-la">la / las</span> — sieviešu dzimte.</p>
+                <ul class="vardu-rezgis">
+                    <li class="vards" data-es="el café solo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-solo"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> café solo</span></span>
+                            <span class="vards-puse vards-aizmugure">melnā kafija — mazs espreso</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el cortado">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-cortado"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> cortado</span></span>
+                            <span class="vards-puse vards-aizmugure">espreso ar nedaudz piena</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el café con leche">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-conleche"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> café con leche</span></span>
+                            <span class="vards-puse vards-aizmugure">kafija ar pienu (uz pusēm)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el café americano">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-americano"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> café americano</span></span>
+                            <span class="vards-puse vards-aizmugure">espreso, atšķaidīts ar karstu ūdeni</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el café bombón">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-bombon"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> café bombón</span></span>
+                            <span class="vards-puse vards-aizmugure">espreso ar iebiezināto pienu</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el barraquito">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-barraquito"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> barraquito</span></span>
+                            <span class="vards-puse vards-aizmugure">Tenerifes slāņu kafija</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el carajillo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-carajillo"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> carajillo</span></span>
+                            <span class="vards-puse vards-aizmugure">espreso ar brendiju vai rumu</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el descafeinado">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-descafeinado"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> descafeinado</span></span>
+                            <span class="vards-puse vards-aizmugure">kafija bez kofeīna</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el café con hielo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-hielo"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> café con hielo</span></span>
+                            <span class="vards-puse vards-aizmugure">kafija + glāze ar ledu</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la leche">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-leche"/></svg><span class="vards-es" lang="es"><span class="art-la">la</span> leche</span></span>
+                            <span class="vards-puse vards-aizmugure">piens</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el azúcar">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-azucar"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> azúcar</span></span>
+                            <span class="vards-puse vards-aizmugure">cukurs (paciņā: el sobre)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la leche condensada">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-condensada"/></svg><span class="vards-es" lang="es"><span class="art-la">la</span> leche condensada</span></span>
+                            <span class="vards-puse vards-aizmugure">iebiezinātais piens</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el vaso de agua">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-agua"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> vaso de agua</span></span>
+                            <span class="vards-puse vards-aizmugure">ūdens glāze</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el cruasán">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-cruasan"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> cruasán</span></span>
+                            <span class="vards-puse vards-aizmugure">kruasāns</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la tostada">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-tostada"/></svg><span class="vards-es" lang="es"><span class="art-la">la</span> tostada</span></span>
+                            <span class="vards-puse vards-aizmugure">grauzdiņš (bieži ar tomātu un eļļu)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="los churros">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-churros"/></svg><span class="vards-es" lang="es"><span class="art-el">los</span> churros</span></span>
+                            <span class="vards-puse vards-aizmugure">čurosi — cepti mīklas stienīši</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el bocadillo">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-bocadillo"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> bocadillo</span></span>
+                            <span class="vards-puse vards-aizmugure">sviestmaize no bagetes</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el zumo de naranja">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-zumo"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> zumo de naranja</span></span>
+                            <span class="vards-puse vards-aizmugure">apelsīnu sula</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="el camarero">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-camarero"/></svg><span class="vards-es" lang="es"><span class="art-el">el</span> camarero</span></span>
+                            <span class="vards-puse vards-aizmugure">viesmīlis (la camarera — viesmīle)</span>
+                        </button>
+                    </li>
+                    <li class="vards" data-es="la cuenta">
+                        <button type="button" class="vards-karte" aria-pressed="false">
+                            <span class="vards-puse vards-prieksa"><svg class="vards-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-cuenta"/></svg><span class="vards-es" lang="es"><span class="art-la">la</span> cuenta</span></span>
+                            <span class="vards-puse vards-aizmugure">rēķins</span>
+                        </button>
+                    </li>
+                </ul>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> <strong lang="es">el azúcar</strong> un <strong lang="es">el agua</strong> ir izņēmumi: <em lang="es">agua</em> ir sieviešu dzimtē (<em lang="es">el agua fría</em>), bet artikuls <em lang="es">el</em>, jo vārds sākas ar uzsvērtu <em>a</em>. <em lang="es">Azúcar</em> drīkst būt abās dzimtēs — <em lang="es">el azúcar</em> vai <em lang="es">la azúcar</em>.</p>
+            </section>
+
+            <!-- 2. FRĀZES -->
+            <section class="mat-sadala" id="frazes">
+                <h2><span class="mat-nr">2</span> Frāzes</h2>
+                <ul class="frazu-saraksts">
+                    <li data-es="¡Buenos días! ¿Qué le pongo?"><span class="fraze-teksts"><span class="es" lang="es">¡Buenos días! ¿Qué le pongo?</span><span class="lv">Labrīt! Ko jums atnest?</span></span></li>
+                    <li data-es="Quería un café con leche, por favor."><span class="fraze-teksts"><span class="es" lang="es">Quería un café con leche, por favor.</span><span class="lv">Es vēlētos kafiju ar pienu, lūdzu.</span></span></li>
+                    <li data-es="¿Me pone un cortado?"><span class="fraze-teksts"><span class="es" lang="es">¿Me pone un cortado?</span><span class="lv">Vai varat man iedot kortado?</span></span></li>
+                    <li data-es="Para mí, un barraquito."><span class="fraze-teksts"><span class="es" lang="es">Para mí, un barraquito.</span><span class="lv">Man — barraquito.</span></span></li>
+                    <li data-es="¿Con leche o sin leche?"><span class="fraze-teksts"><span class="es" lang="es">¿Con leche o sin leche?</span><span class="lv">Ar pienu vai bez piena?</span></span></li>
+                    <li data-es="Sin azúcar, por favor."><span class="fraze-teksts"><span class="es" lang="es">Sin azúcar, por favor.</span><span class="lv">Bez cukura, lūdzu.</span></span></li>
+                    <li data-es="¿Tienen leche de avena?"><span class="fraze-teksts"><span class="es" lang="es">¿Tienen leche de avena?</span><span class="lv">Vai jums ir auzu piens?</span></span></li>
+                    <li data-es="¿Algo más?"><span class="fraze-teksts"><span class="es" lang="es">¿Algo más?</span><span class="lv">Vēl kaut ko?</span></span></li>
+                    <li data-es="¿Me cobra, por favor? ¿Cuánto es?"><span class="fraze-teksts"><span class="es" lang="es">¿Me cobra, por favor? ¿Cuánto es?</span><span class="lv">Lūdzu, rēķinu! Cik es esmu parādā?</span></span></li>
+                    <li data-es="Son tres euros con cincuenta."><span class="fraze-teksts"><span class="es" lang="es">Son tres euros con cincuenta.</span><span class="lv">Tie ir trīs eiro piecdesmit.</span></span></li>
+                </ul>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> Spānijā viesmīli uzrunā vienkārši: <em lang="es">¡Perdona!</em> vai <em lang="es">¡Oiga, por favor!</em> Un nebrīnies, ja tevi uzrunās ar <em lang="es">tú</em> — kafejnīcā tas ir normāli.</p>
+            </section>
+
+            <!-- 3. GRAMATIKA -->
+            <section class="mat-sadala" id="gramatika">
+                <h2><span class="mat-nr">3</span> Gramatika</h2>
+
+                <h3>Nenoteiktie artikuli — viens, kāds</h3>
+                <div class="artikulu-rezgis" lang="es">
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">un</span><span>café</span><small lang="lv">vīr. dz. · vsk.</small></div>
+                    <div class="artikuls artikuls--el"><span class="artikuls-vards">unos</span><span>churros</span><small lang="lv">vīr. dz. · dsk.</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">una</span><span>tostada</span><small lang="lv">siev. dz. · vsk.</small></div>
+                    <div class="artikuls artikuls--la"><span class="artikuls-vards">unas</span><span>tostadas</span><small lang="lv">siev. dz. · dsk.</small></div>
+                </div>
+
+                <h3>Kā pieklājīgi pasūtīt</h3>
+                <div class="likumu-rezgis">
+                    <div class="likums"><span class="likums-galotne" lang="es">Quería…</span><p>Es vēlētos… (maigāk nekā <em lang="es">quiero</em> — es gribu)</p><span lang="es"><b>Quería</b> un cortado.</span></div>
+                    <div class="likums"><span class="likums-galotne" lang="es">¿Me pone…?</span><p>Vai varat man iedot…? Tā runā Spānijā.</p><span lang="es"><b>¿Me pone</b> un café?</span></div>
+                    <div class="likums"><span class="likums-galotne" lang="es">Para mí…</span><p>Man… — kad pasūta vairāki cilvēki.</p><span lang="es"><b>Para mí</b>, un zumo.</span></div>
+                </div>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> Neaizmirsti burvju vārdus: <strong lang="es">por favor</strong> (lūdzu) un <strong lang="es">gracias</strong> (paldies). Spāņi bieži pasūta ļoti īsi: <em lang="es">Un cortado, por favor.</em> — un tas ir pilnīgi pieklājīgi.</p>
+
+                <h3>Darbības vārds <em lang="es">tomar</em> — ņemt, dzert, ēst</h3>
+                <div class="locijumi">
+                    <div data-es="yo tomo"><span lang="es">yo <b>tomo</b></span><small>es dzeru / ņemu</small></div>
+                    <div data-es="nosotros tomamos"><span lang="es">nosotros <b>tomamos</b></span><small>mēs dzeram</small></div>
+                    <div data-es="tú tomas"><span lang="es">tú <b>tomas</b></span><small>tu dzer</small></div>
+                    <div data-es="vosotros tomáis"><span lang="es">vosotros <b>tomáis</b></span><small>jūs dzerat</small></div>
+                    <div data-es="él toma"><span lang="es">él / ella <b>toma</b></span><small>viņš / viņa dzer</small></div>
+                    <div data-es="ellos toman"><span lang="es">ellos / ellas <b>toman</b></span><small>viņi / viņas dzer</small></div>
+                </div>
+                <p class="mat-padoms"><span aria-hidden="true">💡</span> <em lang="es">Tomar</em> ir regulārs <strong>-ar</strong> darbības vārds. Kafejnīcā to dzirdēsi visbiežāk: <em lang="es">¿Qué vas a tomar?</em> — Ko tu ņemsi? · <em lang="es">¿Tomamos un café?</em> — Iedzersim kafiju?</p>
+            </section>
+
+            <!-- 4. DIALOGS -->
+            <section class="mat-sadala" id="dialogs">
+                <h2><span class="mat-nr">4</span> Dialogs: kafejnīcā Tenerifē</h2>
+                <div class="dialoga-riki">
+                    <button type="button" class="mat-poga-maza" id="klausities-dialogu" hidden><svg class="btn-ikona" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5.5v13l10.5-6.5z"/></svg>Klausīties visu dialogu</button>
+                    <label class="mat-sledzis"><input type="checkbox" id="radit-tulkojumu"> Rādīt tulkojumu</label>
+                </div>
+                <div class="cats">
+                    <div class="replika replika--p" data-es="¡Buenos días! ¿Qué les pongo?">
+                        <span class="replika-avatars" aria-hidden="true">C</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Camarero</strong>
+                            <span class="es" lang="es">¡Buenos días! ¿Qué les pongo?</span>
+                            <span class="lv">Labrīt! Ko jums atnest?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Buenos días. Quería un barraquito, por favor.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Laura</strong>
+                            <span class="es" lang="es">Buenos días. Quería un barraquito, por favor.</span>
+                            <span class="lv">Labrīt. Es vēlētos barraquito, lūdzu.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="¿Con licor o sin licor?">
+                        <span class="replika-avatars" aria-hidden="true">C</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Camarero</strong>
+                            <span class="es" lang="es">¿Con licor o sin licor?</span>
+                            <span class="lv">Ar liķieri vai bez liķiera?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Con licor. ¿Qué lleva exactamente?">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Laura</strong>
+                            <span class="es" lang="es">Con licor. ¿Qué lleva exactamente?</span>
+                            <span class="lv">Ar liķieri. Kas tieši tajā ir?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="Leche condensada, Licor 43, café, leche, canela y limón.">
+                        <span class="replika-avatars" aria-hidden="true">C</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Camarero</strong>
+                            <span class="es" lang="es">Leche condensada, Licor 43, café, leche, canela y limón.</span>
+                            <span class="lv">Iebiezinātais piens, Licor 43, kafija, piens, kanēlis un citrons.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="¡Qué rico! Y para mi amigo, un cortado leche y leche.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Laura</strong>
+                            <span class="es" lang="es">¡Qué rico! Y para mi amigo, un cortado leche y leche.</span>
+                            <span class="lv">Cik garšīgi! Un manam draugam — kortado ar diviem pieniem.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="Muy bien. ¿Algo para comer?">
+                        <span class="replika-avatars" aria-hidden="true">C</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Camarero</strong>
+                            <span class="es" lang="es">Muy bien. ¿Algo para comer?</span>
+                            <span class="lv">Labi. Kaut ko ēst?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Sí, una tostada con tomate, por favor.">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Laura</strong>
+                            <span class="es" lang="es">Sí, una tostada con tomate, por favor.</span>
+                            <span class="lv">Jā, grauzdiņu ar tomātu, lūdzu.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="Aquí tienen. ¡Que aproveche!">
+                        <span class="replika-avatars" aria-hidden="true">C</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Camarero</strong>
+                            <span class="es" lang="es">Aquí tienen. ¡Que aproveche!</span>
+                            <span class="lv">Lūdzu! Labu apetīti!</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Gracias. ¿Me cobra, por favor? ¿Cuánto es?">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Laura</strong>
+                            <span class="es" lang="es">Gracias. ¿Me cobra, por favor? ¿Cuánto es?</span>
+                            <span class="lv">Paldies. Lūdzu, rēķinu! Cik tas maksā?</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--p" data-es="Son cinco euros con ochenta.">
+                        <span class="replika-avatars" aria-hidden="true">C</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Camarero</strong>
+                            <span class="es" lang="es">Son cinco euros con ochenta.</span>
+                            <span class="lv">Pieci eiro astoņdesmit.</span>
+                        </div>
+                    </div>
+                    <div class="replika replika--a" data-es="Aquí tiene. ¡Hasta luego!">
+                        <span class="replika-avatars" aria-hidden="true">L</span>
+                        <div class="replika-burbulis" data-runa-vieta>
+                            <strong>Laura</strong>
+                            <span class="es" lang="es">Aquí tiene. ¡Hasta luego!</span>
+                            <span class="lv">Lūdzu. Uz redzēšanos!</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. KAFIJAS CEĻVEDIS (glāžu zīmējumi no ikonas.svg, slāņi no apakšas uz augšu) -->
+            <section class="mat-sadala" id="kafijas">
+                <h2><span class="mat-nr">5</span> Kafijas ceļvedis: kas ir glāzē?</h2>
+                <p class="mat-ievads">Spānijā kafijas kartē reti ir “latte” vai “cappuccino”. Lūk, ko pasūtīt, lai tevi saprastu kā vietējo.</p>
+                <ul class="kaf-celvedis">
+                    <li class="kaf-karte">
+                        <svg class="kaf-karte-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-solo"/></svg>
+                        <span class="kaf-karte-kur">Visa Spānija</span>
+                        <h3 lang="es">Café solo</h3>
+                        <ul class="kaf-slani"><li style="--k: #4A2C1D">espreso</li></ul>
+                        <p>Ja prasīsi vienkārši <em lang="es">un café</em>, saņemsi tieši šo — mazu, stipru espreso.</p>
+                    </li>
+                    <li class="kaf-karte">
+                        <svg class="kaf-karte-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-cortado"/></svg>
+                        <span class="kaf-karte-kur">Visa Spānija</span>
+                        <h3 lang="es">Cortado</h3>
+                        <ul class="kaf-slani"><li style="--k: #4A2C1D">espreso</li><li style="--k: #E8D6BC">nedaudz piena</li><li style="--k: #FBF4E6">putas</li></ul>
+                        <p>“Nogriezts” ar nedaudz piena. Pēcpusdienas klasika, ko pasniedz mazā glāzītē.</p>
+                    </li>
+                    <li class="kaf-karte">
+                        <svg class="kaf-karte-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-conleche"/></svg>
+                        <span class="kaf-karte-kur">Brokastīs</span>
+                        <h3 lang="es">Café con leche</h3>
+                        <ul class="kaf-slani"><li style="--k: #C69C72">espreso + daudz karsta piena</li><li style="--k: #FBF4E6">putas</li></ul>
+                        <p>Liela tase, kafija un piens uz pusēm. Spāņi to dzer galvenokārt no rīta.</p>
+                    </li>
+                    <li class="kaf-karte">
+                        <svg class="kaf-karte-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-bombon"/></svg>
+                        <span class="kaf-karte-kur">Valensija</span>
+                        <h3 lang="es">Café bombón</h3>
+                        <ul class="kaf-slani"><li style="--k: #F3E3BC">iebiezinātais piens</li><li style="--k: #4A2C1D">espreso</li></ul>
+                        <p>Divi slāņi glāzē: apakšā salds iebiezinātais piens, virsū espreso. Pirms dzeršanas samaisa.</p>
+                    </li>
+                    <li class="kaf-karte">
+                        <svg class="kaf-karte-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-carajillo"/></svg>
+                        <span class="kaf-karte-kur">Pēc pusdienām</span>
+                        <h3 lang="es">Carajillo</h3>
+                        <ul class="kaf-slani"><li style="--k: #4A2C1D">espreso</li><li style="--k: #E0A43A">brendijs vai rums</li></ul>
+                        <p>Espreso ar brendiju, rumu vai anīsa liķieri. Dažreiz liķieri pirms tam aizdedzina.</p>
+                    </li>
+                    <li class="kaf-karte">
+                        <svg class="kaf-karte-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-hielo"/></svg>
+                        <span class="kaf-karte-kur">Vasarā</span>
+                        <h3 lang="es">Café con hielo</h3>
+                        <ul class="kaf-slani"><li style="--k: #4A2C1D">karsts espreso</li><li style="--k: #E3F2F7">ledus atsevišķā glāzē</li></ul>
+                        <p>Atnes karstu kafiju un atsevišķu glāzi ar ledu. Cukuru iemaisa karstajā kafijā, tad pārlej pāri ledum!</p>
+                    </li>
+                </ul>
+
+                <div class="kaf-barraquito">
+                    <svg class="kaf-barraquito-attels" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><use href="assets/materiali/en-la-cafeteria/ikonas.svg#k-barraquito"/></svg>
+                    <div>
+                        <span class="kaf-karte-kur">Tenerife · Kanāriju salas</span>
+                        <h3 lang="es">El barraquito</h3>
+                        <p>Tenerifes slavenākā kafija, ko pasniedz augstā glāzē, lai redzami visi slāņi:</p>
+                        <ol class="kaf-slani"><li style="--k: #F3E3BC"><span><b lang="es">leche condensada</b> — iebiezinātais piens</span></li><li style="--k: #E0A43A"><span><b lang="es">Licor 43</b> — saldais vaniļas un citrusu liķieris</span></li><li class="tumss" style="--k: #4A2C1D"><span><b lang="es">café</b> — karsts espreso</span></li><li style="--k: #E8D6BC"><span><b lang="es">leche</b> — karsts piens</span></li><li style="--k: #FBF4E6"><span><b lang="es">espuma</b> — piena putas</span></li><li class="tumss" style="--k: #8B4A22"><span><b lang="es">canela y limón</b> — kanēlis virsū + citrona miziņa</span></li></ol>
+                        <p>Stāsta, ka nosaukums cēlies no kāda Santakrusas kafejnīcas pastāvīgā klienta ar iesauku <em lang="es">Barraquito</em>, kurš vienmēr lūdza pagatavot kafiju tieši tā. Daudzi pirms dzeršanas visu samaisa, citi dzer pa slānim.</p>
+                        <p>Ja negribi alkoholu, pasūti <em lang="es">un barraquito sin licor</em>. Kanāriju salās to piedāvā gandrīz katrā bārā — un cena parasti nepārsniedz pāris eiro.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. KAFIJAS KULTŪRA -->
+            <section class="mat-sadala" id="kultura">
+                <h2><span class="mat-nr">6</span> Kafijas diena Spānijā</h2>
+                <ol class="laika-josla laika-josla--ikonas">
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18 12h3M16.3 7.7l2.1-2.1"/><path d="M7 15a5 5 0 0 1 10 0"/><path d="M3 18h18"/></svg></span><div><span class="laika-datums">7.30–10.00</span><strong lang="es">El desayuno</strong><p>Brokastis bieži ēd kafejnīcā stāvus pie letes: <span lang="es">café con leche</span> un <span lang="es">tostada con tomate</span> vai kruasāns. Ātri, lēti un sarunājoties ar bārmeni.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg></span><div><span class="laika-datums">ap 11.00</span><strong lang="es">La media mañana</strong><p>Darbā ir otrā kafijas pauze — <span lang="es">el almuerzo</span> vai <span lang="es">la media mañana</span>: kafija ar bagetes sviestmaizi (<span lang="es">bocadillo</span>).</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 11h13v3a6 6 0 0 1-6 6h-1a6 6 0 0 1-6-6z"/><path d="M17 12h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 4v3M12 3v4"/></svg></span><div><span class="laika-datums">pēc 15.00</span><strong lang="es">La sobremesa</strong><p>Pēc pusdienām pie galda sēž vēl ilgi un runājas. Tad dzer mazu un stipru kafiju: <span lang="es">solo</span>, <span lang="es">cortado</span> vai <span lang="es">carajillo</span>. Kafija ar pienu pēc pusdienām spāņiem šķiet dīvaina.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M6 20v-6h12v6"/><path d="M4 14l8-9 8 9"/></svg></span><div><span class="laika-datums">Bārā vai terasē</span><strong lang="es">La barra o la terraza</strong><p>Pie letes (<span lang="es">en la barra</span>) kafija bieži ir lētāka nekā terasē. Par cenu neviens nebrīnās — terasē maksā par sauli un skatu.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><div><span class="laika-datums">Rēķins</span><strong lang="es">La cuenta</strong><p>Spānijā maksā beigās, nevis pasūtot. Pasauc viesmīli: <span lang="es">¿Me cobra, por favor?</span> Dzeramnaudu atstāj pēc vēlēšanās — parasti dažas monētas.</p></div></li>
+                    <li><span class="laika-emoji" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-11.5a7 7 0 0 1 14 0C19 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><div><span class="laika-datums">Kanāriju salas</span><strong lang="es">Leche y leche</strong><p>Kanāriju salās iecienīts <span lang="es">cortado leche y leche</span> — kortado ar abiem pieniem: iebiezināto un parasto. Un, protams, <span lang="es">barraquito</span>!</p></div></li>
+                </ol>
+            </section>
+
+            <!-- 7. UZDEVUMI -->
+            <section class="mat-sadala" id="uzdevumi">
+                <h2><span class="mat-nr">7</span> Uzdevumi</h2>
+                <p class="mat-ievads">Ieraksti atbildes un spied “Pārbaudīt”. Garumzīmes un pieturzīmes var nerakstīt.</p>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">1</span> Ieraksti nenoteikto artikulu: <em>un, una, unos</em> vai <em>unas</em></h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="un" aria-label="Atbilde" autocomplete="off" spellcheck="false"> café solo</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="una" aria-label="Atbilde" autocomplete="off" spellcheck="false"> tostada</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="unos" aria-label="Atbilde" autocomplete="off" spellcheck="false"> churros</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="un" aria-label="Atbilde" autocomplete="off" spellcheck="false"> cortado</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="unas" aria-label="Atbilde" autocomplete="off" spellcheck="false"> tostadas</li>
+                        <li><input type="text" class="uzd-lauks uzd-lauks--s" data-atbilde="un" aria-label="Atbilde" autocomplete="off" spellcheck="false"> zumo de naranja</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. un café solo · 2. una tostada · 3. unos churros · 4. un cortado · 5. unas tostadas · 6. un zumo de naranja</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">2</span> Ieraksti pareizo <em>tomar</em> formu</h3>
+                    <ol class="uzdevums" lang="es">
+                        <li>Yo <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="tomo" aria-label="Atbilde" autocomplete="off" spellcheck="false"> un café solo.</li>
+                        <li>¿Tú <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="tomas" aria-label="Atbilde" autocomplete="off" spellcheck="false"> azúcar?</li>
+                        <li>Laura <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="toma" aria-label="Atbilde" autocomplete="off" spellcheck="false"> un barraquito.</li>
+                        <li>Nosotros <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="tomamos" aria-label="Atbilde" autocomplete="off" spellcheck="false"> churros con chocolate.</li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. tomo · 2. tomas · 3. toma · 4. tomamos</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">3</span> Kas tā par kafiju? Ieraksti nosaukumu</h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><span lang="lv">Espreso ar nedaudz piena.</span> <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="cortado|el cortado|un cortado|cafe cortado" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Apakšā iebiezinātais piens, virsū espreso.</span> <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="bombon|cafe bombon|el cafe bombon|un cafe bombon|el bombon" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Tenerifes slāņu kafija ar Licor 43.</span> <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="barraquito|el barraquito|un barraquito" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Espreso ar brendiju vai rumu.</span> <input type="text" class="uzd-lauks uzd-lauks--m" data-atbilde="carajillo|el carajillo|un carajillo" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. el cortado · 2. el café bombón · 3. el barraquito · 4. el carajillo</p>
+                    </details>
+                </div>
+
+                <div class="uzdevums-bloks">
+                    <h3><span class="uzd-nr">4</span> Pārtulko spāniski</h3>
+                    <ol class="uzdevums" lang="es">
+                        <li><span lang="lv">Es vēlētos kafiju ar pienu, lūdzu.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="queria un cafe con leche por favor|quiero un cafe con leche por favor|un cafe con leche por favor|me pone un cafe con leche por favor" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Bez cukura, lūdzu.</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="sin azucar por favor|sin azucar" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Cik maksā?</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="cuanto es|cuanto cuesta|cuanto vale" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                        <li><span lang="lv">Lūdzu, rēķinu!</span> <input type="text" class="uzd-lauks uzd-lauks--l" data-atbilde="la cuenta por favor|me cobra por favor|la cuenta|me cobras por favor" aria-label="Atbilde" autocomplete="off" spellcheck="false"></li>
+                    </ol>
+                    <div class="uzd-darbibas">
+                        <button type="button" class="btn-cta uzd-parbaudit">Pārbaudīt</button>
+                        <span class="uzd-rezultats" aria-live="polite"></span>
+                    </div>
+                    <details class="atbildes">
+                        <summary>Rādīt atbildes</summary>
+                        <p lang="es">1. Quería un café con leche, por favor. · 2. Sin azúcar, por favor. · 3. ¿Cuánto es? · 4. ¿Me cobra, por favor? / La cuenta, por favor.</p>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Aicinājums -->
+            <aside class="mat-cta">
+                <div>
+                    <h2>Gribi pasūtīt kafiju Spānijā bez vilcināšanās?</h2>
+                    <p>7 nedēļu kurss “Spāņu valodas pamati (A1)” — ar dzīvu sarunu praksi.</p>
+                </div>
+                <a href="kursi.html#spanu" class="btn-cta">Apskatīt kursu</a>
+            </aside>
+        </main>
+    </div>
+
+    </div>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-norvegu-nyttarsmat.html">Norvēģu A1 — Jaungada ēdieni</a></li>
+                        <li><a href="materiali-spanu-en-la-cafeteria.html">Spāņu A1 — En la cafetería</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Kontakti" parādīsies, kad būs kontaktinformācija -->
+                        <li><a href="par-mums.html">Par mums</a></li>
+                        <li><a href="blogs.html">Blogs</a></li>
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="materiali.js"></script>
+    <script src="empanadillo.js"></script>
+</body>
+</html>
