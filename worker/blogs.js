@@ -6,7 +6,7 @@
 //   DELETE /api/blogs/komentari/<id>        → savs komentārs vai administrators
 //   GET    /api/blogs/foto/<userId>         → paša augšupielādētais foto (tikai komentāru autoriem)
 // Jaunu rakstu pievieno RAKSTI sarakstam (citiem slug API atbild 404 — lai neviens nevar pildīt DB ar izdomātiem rakstiem).
-export const RAKSTI = ['jauna-majaslapa', 'adventes-kalendars'];
+export const RAKSTI = ['jauna-majaslapa', 'adventes-kalendars', 'ka-izveleties-limeni'];
 
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' } });

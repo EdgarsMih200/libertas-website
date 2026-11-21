@@ -7117,6 +7117,13 @@ html.blogs-gaiss .blogs-tema-poga[aria-pressed="true"] { background: var(--c-sur
 .bv-r2 { fill: #F2C46A; }
 .bv-r3 { fill: #E9E4D8; }
 .blogs-vaks-zvaigzne { fill: #F2C46A; }
+/* ceļa rādītājs A1/A2/B1 (raksts ka-izveleties-limeni) */
+.blogs-vaks-zimes { filter: drop-shadow(0 8px 14px rgb(30 46 41 / .25)); }
+.blogs-vaks-zimes path { fill: #FFFDF8; }
+.blogs-vaks-zimes .bvz-stabs { fill: #6B4A33; }
+.blogs-vaks-zimes .bvz-b1 { fill: #B4502A; }
+.blogs-vaks-zimes text { fill: #6B1D1D; font: 700 26px "Source Sans 3", sans-serif; text-anchor: middle; }
+.blogs-vaks-zimes .bvz-b1-t { fill: #FFFDF8; }
 
 .blogs-meta { color: var(--b-zime); margin: 0 0 var(--sp-3); letter-spacing: .12em; font-variant-numeric: lining-nums; }
 .blogs-karte h2 { font-size: var(--fs-h2); font-weight: 500; line-height: 1.15; margin: 0 0 var(--sp-3); }
