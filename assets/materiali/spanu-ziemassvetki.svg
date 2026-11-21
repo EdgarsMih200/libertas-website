@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" width="600" height="320">
+  <!-- Spāņu Ziemassvētki: Betlēmes zvaigzne virs balta Andalūzijas ciematiņa (belén) un roscón de Reyes priekšplānā.
+       Galvenais motīvs labajā pusē, lai sveiciens apakšā pa kreisi būtu salasāms. -->
+  <defs>
+    <linearGradient id="debesis" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1B1E3F"/>
+      <stop offset=".6" stop-color="#33305A"/>
+      <stop offset="1" stop-color="#5B4566"/>
+    </linearGradient>
+    <radialGradient id="mirdzums" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#F6C46A" stop-opacity=".7"/>
+      <stop offset="1" stop-color="#F6C46A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="aste" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6D58A" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#F6D58A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="600" height="320" fill="url(#debesis)"/>
+
+  <!-- zvaigznes -->
+  <g fill="#F6F1E8" opacity=".85">
+    <circle cx="40" cy="30" r="1.4"/><circle cx="110" cy="62" r="1.2"/><circle cx="182" cy="24" r="1.6"/>
+    <circle cx="250" cy="70" r="1.1"/><circle cx="300" cy="22" r="1.4"/><circle cx="360" cy="98" r="1"/>
+    <circle cx="560" cy="30" r="1.5"/><circle cx="586" cy="110" r="1.1"/><circle cx="70" cy="118" r="1"/>
+  </g>
+  <g fill="none" stroke="#F2C46A" stroke-width="1.8" stroke-linecap="round" opacity=".6">
+    <path d="M150 96v10M145 101h10"/><path d="M528 70v8M524 74h8"/>
+  </g>
+
+  <!-- Betlēmes zvaigzne ar asti -->
+  <path d="M448 62 Q390 120 318 178 Q396 124 456 66 Z" fill="#F6D58A" opacity=".35"/>
+  <circle cx="452" cy="58" r="46" fill="url(#mirdzums)"/>
+  <path d="M452 30 L457 53 L480 58 L457 63 L452 86 L447 63 L424 58 L447 53 Z" fill="#F6D58A"/>
+  <path d="M452 44 L455 55 L466 58 L455 61 L452 72 L449 61 L438 58 L449 55 Z" fill="#FFF6E2"/>
+
+  <!-- tālie kalni -->
+  <path d="M0 196 Q80 168 170 184 T340 170 T600 178 V320 H0Z" fill="#4A3F62"/>
+  <!-- olīvkoki / cipreses -->
+  <g fill="#2F4A40">
+    <path d="M58 190c-4-14 2-30 6-38 4 8 10 24 6 38z"/>
+    <path d="M214 182c-3-12 2-24 5-30 3 6 8 18 5 30z"/>
+    <ellipse cx="120" cy="190" rx="18" ry="10"/><rect x="118" y="190" width="4" height="10" fill="#2A2235"/>
+  </g>
+
+  <!-- pakalns ar ciematu -->
+  <path d="M250 214 Q330 140 430 136 Q530 134 600 170 V320 H250Z" fill="#6C5470"/>
+
+  <!-- baltās mājiņas (pueblo blanco) -->
+  <g>
+    <!-- baznīcas tornis -->
+    <rect x="424" y="96" width="26" height="54" fill="#F6F1E8"/>
+    <path d="M420 98 L437 76 L454 98Z" fill="#B4502A"/>
+    <path d="M432 108h10v14h-10z" fill="#2A2235"/>
+    <path d="M437 70v8M433 73h8" stroke="#F2C46A" stroke-width="2" stroke-linecap="round"/>
+    <!-- mājas -->
+    <rect x="346" y="134" width="44" height="34" fill="#F6F1E8"/>
+    <path d="M342 136 L368 122 L394 136Z" fill="#B4502A"/>
+    <rect x="384" y="146" width="48" height="30" fill="#ECE3D2"/>
+    <path d="M380 148 L384 140 H432 L436 148Z" fill="#963F20"/>
+    <rect x="450" y="128" width="52" height="40" fill="#F6F1E8"/>
+    <path d="M446 130 L476 114 L506 130Z" fill="#B4502A"/>
+    <rect x="500" y="148" width="44" height="30" fill="#ECE3D2"/>
+    <path d="M496 150 L500 142 H544 L548 150Z" fill="#963F20"/>
+    <rect x="300" y="162" width="40" height="28" fill="#ECE3D2"/>
+    <path d="M296 164 L320 152 L344 164Z" fill="#963F20"/>
+    <rect x="540" y="164" width="44" height="30" fill="#F6F1E8"/>
+    <path d="M536 166 L562 154 L588 166Z" fill="#B4502A"/>
+    <!-- deg logi -->
+    <g fill="#F2C46A">
+      <rect x="356" y="144" width="8" height="10" rx="4"/><rect x="374" y="144" width="8" height="10" rx="4"/>
+      <rect x="396" y="154" width="8" height="10" rx="4"/><rect x="414" y="154" width="8" height="10" rx="4"/>
+      <rect x="462" y="140" width="9" height="12" rx="4.5"/><rect x="482" y="140" width="9" height="12" rx="4.5"/>
+      <rect x="512" y="156" width="8" height="10" rx="4"/><rect x="310" y="170" width="8" height="10" rx="4"/>
+      <rect x="552" y="172" width="8" height="10" rx="4"/>
+    </g>
+    <g fill="#7A2F16"><rect x="470" y="156" width="12" height="12" rx="6"/><rect x="326" y="176" width="9" height="14" rx="4.5"/></g>
+  </g>
+
+  <!-- priekšplāna galds -->
+  <path d="M0 250 Q300 236 600 248 V320 H0Z" fill="#3B2A3A"/>
+  <path d="M0 262 Q300 250 600 262 V320 H0Z" fill="#2A1F2B"/>
+
+  <!-- roscón de Reyes -->
+  <g transform="translate(476 262)">
+    <ellipse cx="0" cy="22" rx="100" ry="16" fill="#1A1219" opacity=".5"/>
+    <ellipse cx="0" cy="12" rx="94" ry="24" fill="#F6F1E8"/>
+    <!-- gredzens -->
+    <path d="M-80 0 a80 26 0 1 0 160 0 a80 26 0 1 0 -160 0Z M-34 -2 a34 10 0 1 1 68 0 a34 10 0 1 1 -68 0Z" fill="#C9822F" fill-rule="evenodd"/>
+    <path d="M-80 -8 a80 26 0 1 0 160 0 a80 26 0 1 0 -160 0Z M-36 -8 a36 11 0 1 1 72 0 a36 11 0 1 1 -72 0Z" fill="#E0A43A" fill-rule="evenodd"/>
+    <!-- cukurs -->
+    <g fill="#FFF6E2">
+      <ellipse cx="-56" cy="-12" rx="9" ry="3"/><ellipse cx="-20" cy="10" rx="10" ry="3"/>
+      <ellipse cx="46" cy="-18" rx="9" ry="3"/><ellipse cx="54" cy="8" rx="8" ry="2.6"/>
+      <ellipse cx="-62" cy="6" rx="7" ry="2.4"/><ellipse cx="12" cy="-26" rx="8" ry="2.6"/>
+    </g>
+    <!-- sukādes -->
+    <g>
+      <ellipse cx="-40" cy="-20" rx="7" ry="4" fill="#B8432F"/>
+      <ellipse cx="-4" cy="16" rx="7" ry="4" fill="#5F7C6D"/>
+      <ellipse cx="30" cy="-28" rx="6" ry="3.6" fill="#5F7C6D"/>
+      <ellipse cx="66" cy="-4" rx="7" ry="4" fill="#B8432F"/>
+      <ellipse cx="-70" cy="-2" rx="6" ry="3.6" fill="#F2C230"/>
+      <ellipse cx="34" cy="12" rx="6" ry="3.6" fill="#F2C230"/>
+      <ellipse cx="-18" cy="-28" rx="6" ry="3.4" fill="#F2C230"/>
+    </g>
+    <!-- mazā kronīte -->
+    <g transform="translate(-4 -40)">
+      <path d="M-14 10 L-14 -4 L-7 3 L0 -8 L7 3 L14 -4 L14 10Z" fill="#F2C46A" stroke="#B07A1F" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cy="5" r="2.2" fill="#B8432F"/>
+    </g>
+  </g>
+
+  <!-- flor de Pascua (puansetija) pa kreisi no roscón -->
+  <g transform="translate(346 270)">
+    <g fill="#B8432F">
+      <path d="M0 0c-6-16-2-30 0-34 2 4 6 18 0 34z"/>
+      <path d="M0 0c-6-16-2-30 0-34 2 4 6 18 0 34z" transform="rotate(72)"/>
+      <path d="M0 0c-6-16-2-30 0-34 2 4 6 18 0 34z" transform="rotate(144)"/>
+      <path d="M0 0c-6-16-2-30 0-34 2 4 6 18 0 34z" transform="rotate(216)"/>
+      <path d="M0 0c-6-16-2-30 0-34 2 4 6 18 0 34z" transform="rotate(288)"/>
+    </g>
+    <g fill="#8E2A22">
+      <path d="M0 0c-4-10-1-20 0-22 1 2 4 12 0 22z" transform="rotate(36)"/>
+      <path d="M0 0c-4-10-1-20 0-22 1 2 4 12 0 22z" transform="rotate(108)"/>
+      <path d="M0 0c-4-10-1-20 0-22 1 2 4 12 0 22z" transform="rotate(180)"/>
+      <path d="M0 0c-4-10-1-20 0-22 1 2 4 12 0 22z" transform="rotate(252)"/>
+      <path d="M0 0c-4-10-1-20 0-22 1 2 4 12 0 22z" transform="rotate(324)"/>
+    </g>
+    <g fill="#F2C46A"><circle r="3"/><circle cx="4" cy="-3" r="1.8"/><circle cx="-4" cy="2" r="1.8"/></g>
+  </g>
+</svg>
