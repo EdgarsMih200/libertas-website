@@ -598,8 +598,19 @@ button.chip:hover { border-color: var(--c-line-strong); }
     text-transform: uppercase;
     color: var(--c-ink);
     white-space: nowrap;
+    text-decoration: none;
     transform: translate(calc(-50% + var(--px, 0) * -.55vw), -100%);
+    transition: background-color .2s, color .2s, box-shadow .2s;
 }
+
+.hero-orientieris:hover,
+.hero-orientieris:focus-visible {
+    background: var(--c-ink);
+    color: var(--c-surface);
+    box-shadow: var(--shadow-3, var(--shadow-2));
+}
+
+.hero-orientieris:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
 
 .hero-orientieris::before {
     content: "";
@@ -640,7 +651,10 @@ button.chip:hover { border-color: var(--c-line-strong); }
     gap: var(--sp-5);
     padding-top: clamp(40px, 5vw, 88px);
     text-align: center;
+    pointer-events: none; /* ļauj klikšķināt ainavas čipus (.hero-orientieris) zem tukšās daļas */
 }
+
+.hero-container > * { pointer-events: auto; }
 
 .hero-text {
     display: grid;
