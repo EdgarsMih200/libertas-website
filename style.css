@@ -6112,9 +6112,19 @@ html.ziema .hero-ainava-svg {
 .ainava-ziema { display: none; }
 html.ziema .ainava-laternas, html.ziemassvetki .ainava-egle { display: inline; }
 
-/* Sākumlapa ziemā: papīra fons nedaudz tumšāks (tikai lapas fons, ne --c-bg, ko hero teksts lieto kā krāsu) */
-html.ziema body:has(.hero-section) { --ziemas-fons: #ECE3D4; background-color: var(--ziemas-fons); }
-html.ziema body:has(.hero-section) .hero-prieksrocibas { background: var(--ziemas-fons); }
+/* Sākumlapa ziemā: pelēcīgi zils krēslas fons (tikai lapas fons, ne --c-bg, ko hero teksts lieto kā krāsu);
+   teksts tieši uz fona = papīrs (≥4.6:1), kartītes paliek papīra */
+html.ziema body:has(.hero-section) { --ziemas-fons: #646A88; background-color: var(--ziemas-fons); }
+html.ziema body:has(.hero-section) .hero-prieksrocibas {
+    background: var(--ziemas-fons);
+    border-bottom-color: rgb(246 241 232 / .22);
+    color: var(--c-bg);
+}
+html.ziema body:has(.hero-section) .prieksrociba + .prieksrociba { border-left-color: rgb(246 241 232 / .22); }
+html.ziema body:has(.hero-section) :is(.sadalas-zime, .bento-zime, .sadalas-virsraksts, .bento-virsraksts, .sadalas-ievads, .bento-ievads) { color: var(--c-bg); }
+html.ziema body:has(.hero-section) :is(.sadalas-virsraksts, .bento-virsraksts) em { color: #F7C9A3; }
+html.ziema body:has(.hero-section) .sadalas-zime::before,
+html.ziema body:has(.hero-section) .bento-zime-punkts { background: #F7C9A3; }
 
 /* Iekšlapu josla: papīra migla plašāka, lai virsraksts paliktu uz gaiša fona arī pie krēslas */
 html.ziema .lapas-josla { --josla-migla: 72%; }
