@@ -297,11 +297,11 @@
     // Viesis spiež → Empanadillo pamāj un saka "¡No, no, no!"; Worker sūta viesus atpakaļ ar ?slegts=<valoda>
     var slegtas = document.querySelectorAll('.mat-karte[data-slegts]');
     function lietotajs() { return window.LIB && window.LIB.me && window.LIB.me.user; }
-    function noNoNo(karte) {
+    function noNoNo(karte, skaits) {
         var saite = karte && karte.querySelector('.mat-karte-saite');
         var atpakal = saite ? saite.getAttribute('href') : location.pathname;
         var pieslegties = window.LIB && window.LIB.signInUrl ? window.LIB.signInUrl('/' + atpakal) : '/auth/google';
-        var teksts = '<b>¡No, no, no!</b> Šis materiāls ir tikai reģistrētiem lietotājiem. ' +
+        var teksts = (skaits >= 5 ? '<b>Ei, ei! Uzmanīgāk ar to slēdzeni…</b> ' : '<b>¡No, no, no!</b> ') + 'Šis materiāls ir tikai reģistrētiem lietotājiem. ' +
             '<a href="' + pieslegties + '">Pieslēdzies vai reģistrējies</a> — un tas atvērsies!';
         if (karte) {
             karte.classList.remove('mat-karte--klauve');
@@ -311,13 +311,44 @@
         if (window.EMPANADILLO && window.EMPANADILLO.runat) window.EMPANADILLO.runat(teksts, { liedz: true });
         else if (window.LIB && window.LIB.toast) window.LIB.toast('Šis materiāls ir tikai reģistrētiem lietotājiem.');
     }
+    // Lieldienu ola: kartīte ar data-slots-ola="<vērtība>" — 10 ātri klikšķi salauž slēdzeni.
+    // Sīkdatne lib_slots=<vērtība> (1 diena) ļauj Worker laist viesi iekšā (worker/index.js SLEGTIE_MATERIALI)
+    function salauzts(k) {
+        var ola = k.getAttribute('data-slots-ola');
+        return !!ola && new RegExp('(?:^|;\\s*)lib_slots=' + ola + '(?:;|$)').test(document.cookie);
+    }
+    function salauzt(k) {
+        var ola = k.getAttribute('data-slots-ola');
+        document.cookie = 'lib_slots=' + ola + '; path=/; max-age=86400; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+        k.classList.add('mat-karte--lauz');
+        var saite = k.querySelector('.mat-karte-saite');
+        setTimeout(function () {
+            k.classList.remove('mat-karte--slegta', 'mat-karte--lauz', 'mat-karte--klauve');
+            k.classList.add('mat-karte--salauzta');
+        }, 900);
+        var teksts = '<i>*apskata slēdzeni no visām pusēm*</i> … <b>Brīnišķīgi, tu salauzi slēdzeni!</b> ' +
+            'Labi, labi — <a href="' + (saite ? saite.getAttribute('href') : '#') + '">ej skaties, kas tur ir iekšā</a>.';
+        setTimeout(function () {
+            if (window.EMPANADILLO && window.EMPANADILLO.runat) window.EMPANADILLO.runat(teksts);
+            else if (window.LIB && window.LIB.toast) window.LIB.toast('Slēdzene salauzta! Ej skaties.');
+        }, 700);
+    }
     if (slegtas.length) {
         slegtas.forEach(function (k) {
+            var skaits = 0, pedejais = 0;
+            if (salauzts(k)) { k.classList.remove('mat-karte--slegta'); k.classList.add('mat-karte--salauzta'); }
             k.addEventListener('click', function (e) {
                 // kamēr /api/me vēl nav atbildējis, ļauj iet: Worker pats pārbaudīs sesiju
-                if (!window.LIB || !window.LIB.me || lietotajs()) return;
+                if (!window.LIB || !window.LIB.me || lietotajs() || !k.classList.contains('mat-karte--slegta')) return;
                 e.preventDefault();
-                noNoNo(k);
+                if (k.classList.contains('mat-karte--lauz')) return;
+                if (k.hasAttribute('data-slots-ola')) {
+                    var tagad = Date.now();
+                    skaits = tagad - pedejais < 1200 ? skaits + 1 : 1;
+                    pedejais = tagad;
+                    if (skaits >= 10) { skaits = 0; salauzt(k); return; }
+                }
+                noNoNo(k, skaits);
             });
         });
         document.addEventListener('lib:me', function () {
