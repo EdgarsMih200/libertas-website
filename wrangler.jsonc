@@ -8,7 +8,7 @@
     "directory": ".",
     "binding": "ASSETS",
     // /materiali-zviedru*, /materiali-norvegu-nyttarsmat* = materiāli tikai reģistrētiem (Worker pārbauda sesiju; saraksts worker/index.js SLEGTIE_MATERIALI)
-    "run_worker_first": ["/api/*", "/auth/*", "/materiali-zviedru*", "/materiali-norvegu-nyttarsmat*"],
+    "run_worker_first": ["/api/*", "/auth/*", "/materiali-zviedru*", "/materiali-norvegu-nyttarsmat*", "/materiali-spanu-en-la-cafeteria*"],
     // nezināmām adresēm rāda 404.html (statuss 404)
     "not_found_handling": "404-page"
   },

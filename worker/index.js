@@ -442,6 +442,7 @@ async function adminDeleteEnrollment(env, id) {
 const SLEGTIE_MATERIALI = [
   ['/materiali-zviedru', 'zviedru'],
   ['/materiali-norvegu-nyttarsmat', 'norvegu'],
+  ['/materiali-spanu-en-la-cafeteria', 'spanu'],
 ];
 
 async function tikaiRegistretiem(request, env, url, valoda) {
