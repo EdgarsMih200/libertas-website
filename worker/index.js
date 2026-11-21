@@ -439,18 +439,15 @@ async function adminDeleteEnrollment(env, id) {
 
 // ---------- Materiāli tikai reģistrētiem (wrangler.jsonc run_worker_first: tie paši prefiksi) ----------
 // Bez sesijas: lapa → materiali.html?slegts=<valoda> (tur Empanadillo paskaidro), skripts → 403. Ar sesiju: parastais fails, bez koplietota keša
-// [prefikss, valoda, lieldienu ola?] — trešais: sīkdatnes vērtība, ar kuru slēdzene "salauzta"
-// (materiali.js: 10 ātri klikšķi uz kartītes → lib_slots=<vērtība>), tad viesis drīkst skatīties
 const SLEGTIE_MATERIALI = [
   ['/materiali-zviedru', 'zviedru'],
   ['/materiali-norvegu-nyttarsmat', 'norvegu'],
-  ['/materiali-spanu-en-la-cafeteria', 'spanu', 'cafeteria'],
+  ['/materiali-spanu-en-la-cafeteria', 'spanu'],
 ];
 
-async function tikaiRegistretiem(request, env, url, valoda, ola) {
+async function tikaiRegistretiem(request, env, url, valoda) {
   let user = null;
-  if (ola && new RegExp('(?:^|;\\s*)lib_slots=' + ola + '(?:;|$)').test(request.headers.get('Cookie') || '')) user = true;
-  if (!user) try { user = await getUser(request, env); } catch { user = null; }
+  try { user = await getUser(request, env); } catch { user = null; }
   if (!user) {
     if (/\.(js|json|mp3|svg)$/.test(url.pathname)) return new Response('Tikai reģistrētiem lietotājiem', { status: 403, headers: { 'Cache-Control': 'no-store' } });
     return new Response(null, { status: 302, headers: { Location: '/materiali.html?slegts=' + valoda, 'Cache-Control': 'no-store' } });
@@ -469,7 +466,7 @@ export default {
     const method = request.method;
 
     const slegts = SLEGTIE_MATERIALI.find(([prefikss]) => path.startsWith(prefikss));
-    if (slegts) return await tikaiRegistretiem(request, env, url, slegts[1], slegts[2]);
+    if (slegts) return await tikaiRegistretiem(request, env, url, slegts[1]);
     if (!path.startsWith('/api/') && !path.startsWith('/auth/')) return env.ASSETS.fetch(request);
 
     try {
