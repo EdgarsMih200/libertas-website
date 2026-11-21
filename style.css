@@ -2441,6 +2441,77 @@ html .lapas-josla.sc-muertos {
     .lapas-josla--maza .lapas-josla-ainava svg { aspect-ratio: 1440 / 180; transform: none; }
 }
 
+/* SĀKUMLAPAS ATSAUKSMES: Google atsauksmes aicinājums + atgriezušos dalībnieku atlaide (pirms kājenes) */
+.atsauksmes-sadala {
+    padding-bottom: var(--sp-section);
+}
+
+.atsauksmes-rezgis {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-5);
+}
+
+.atsauksmes-karte {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-3);
+    padding: var(--sp-6);
+    background: var(--c-surface);
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-1);
+}
+
+.atsauksmes-karte p { color: var(--c-muted); max-width: 52ch; }
+.atsauksmes-karte strong { color: var(--c-ink); }
+
+.atsauksmes-karte--atlaide { background: var(--c-sage); border-color: transparent; }
+.atsauksmes-karte--atlaide p { color: var(--c-sage-ink); }
+.atsauksmes-karte--atlaide strong { color: var(--c-sage-ink); }
+
+.atsauksmes-karte-virsraksts {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--c-ink);
+}
+
+.atsauksmes-zvaigznes { display: flex; gap: 4px; }
+
+.atsauksmes-zvaigznes svg {
+    width: 22px;
+    height: 22px;
+    fill: var(--c-season-glow);
+}
+
+.atsauksmes-atlaide {
+    padding: 4px 14px;
+    border-radius: var(--r-pill);
+    background: var(--c-surface);
+    font-family: var(--ff-display);
+    font-size: var(--fs-h3);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--c-brand);
+}
+
+.atsauksmes-poga {
+    flex-direction: row;
+    gap: .5em;
+    margin-top: auto;
+}
+
+@media (max-width: 1023px) {
+    .atsauksmes-rezgis { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+    .atsauksmes-karte { padding: var(--sp-5); }
+    .atsauksmes-poga { width: 100%; justify-content: center; }
+}
+
 /* SATURA KARTĪTE (konts, noteikumi) */
 .register-section {
     padding-top: var(--sp-7);
