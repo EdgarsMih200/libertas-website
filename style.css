@@ -6359,6 +6359,56 @@ html.ziema .izvelnes-poga {
     }
 }
 
+/* Vēlā ziema (4. janv. – febr. beigas, html.ziema-vela): tumši zila galvene, mēness sirpis starp logo un izvēlni */
+html.ziema-vela .site-header {
+    background: rgb(44 53 70 / .97);
+    border-bottom-color: #3E4A60;
+}
+
+html.ziema-vela .bju-poga {
+    background: #E6E8EE;
+    color: #2C3546;
+}
+
+html.ziema-vela .bju-poga:hover { background: #FFFFFF; }
+
+html.ziema-vela .bju-poga[aria-expanded="true"] {
+    box-shadow: 0 0 0 3px #2C3546, 0 0 0 5px #E6E8EE;
+}
+
+html.ziema-vela .user-chip { border-color: #3E4A60; }
+
+html.ziema-vela .izvelnes-poga {
+    background: #38435A;
+    border-color: #4A5670;
+    color: #E6E8EE;
+}
+
+@media (min-width: 769px) {
+    html.ziema-vela .main-nav a { color: #E6E8EE; }
+    html.ziema-vela .main-nav a::after,
+    html.ziema-vela .main-nav a[aria-current="page"]::after,
+    html.ziema-vela .main-nav a.active::after { background: #EDE6D2; }
+    html.ziema-vela .main-nav a:hover,
+    html.ziema-vela .main-nav a[aria-current="page"],
+    html.ziema-vela .main-nav a.active { color: #EDE6D2; }
+    html.ziema-vela .main-nav a.nav-aptauja::before { background: #9FC3E8; }
+}
+
+@media (min-width: 1100px) {
+    html.ziema-vela .logo { order: -1; }
+    html.ziema-vela .nav-wrapper::before {
+        content: "";
+        flex: 1 1 0;
+        max-width: 160px;
+        height: 48px;
+        pointer-events: none;
+        background: url("assets/ziemassvetki/menesis.svg") left center / 160px 48px no-repeat;
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+        mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+    }
+}
+
 /* telefonā hero teksts / joslas ceļš nedaudz zemāk, lai virtene tos neskartu */
 @media (max-width: 767px) {
     html.ziemassvetki .hero-container { padding-top: calc(var(--sp-4) + 10px); }

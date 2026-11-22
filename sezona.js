@@ -1,11 +1,12 @@
 /* SEZONA — svētku klases uz <html> visās publiskajās lapās (ielādē <head>, lai nebūtu mirgošanas).
    html.ziema — 15. novembris – februāra beigas: ziemas vakara aina (krēslas debesis, sniegs uz kalniem, laternas gar taku, kupena kājenē);
+   html.ziema-vela — 4. janvāris – februāra beigas: tumši zila galvene ar mēnesi (vienmēr kopā ar html.ziema);
    html.ziemassvetki — 1. decembris – 3. janvāris: Ziemassvētku rotājumi (rotāta egle krastā, lampiņu virtene, zvaniņi, Santa cepure) — vienmēr kopā ar html.ziema;
    html.svetku-dienas — tikai 22.–26. decembrī (sveiciens "Priecīgus Ziemassvētkus!");
    html.ballite — 5. decembrī (īpašnieka dzimšanas diena: karodziņu virtene sākumlapas ainavā).
    html.advente-gaida — 15.–30. novembrī (sākumlapā atskaite līdz adventes kalendāram);
    html.advente — 1.–24. decembrī (sākumlapā "Atver N. durvis" + saite uz egli, izvēlnē saite "Adventes kalendārs"), data-advente-diena = N.
-   Pārbaudei jebkurā dienā: ?ziema=1 (tikai aina), ?ziemassvetki=1, ?sveiciens=1 (rotājumi + sveiciens), ?ballite=1, ?advente=0 (atskaite) / ?advente=1..24.
+   Pārbaudei jebkurā dienā: ?ziema=1 (tikai aina), ?ziemavela=1 (zilā galvene), ?ziemassvetki=1, ?sveiciens=1 (rotājumi + sveiciens), ?ballite=1, ?advente=0 (atskaite) / ?advente=1..24.
    Sniegs ir atsevišķi (snow.js, tikai sākumlapā, nov.–febr., ?sniegs=1). */
 (function () {
     var sodien = new Date();
@@ -19,6 +20,8 @@
     // Ziemas vakara aina: 15. novembris – februāra beigas (arī visu rotājumu laikā)
     if ((menesis === 10 && diena >= 15) || menesis === 11 || menesis === 0 || menesis === 1 ||
         html.classList.contains('ziemassvetki') || /[?&](ziema=1|advente=0)\b/.test(q)) html.classList.add('ziema');
+    // Vēlā ziema: 4. janvāris – februāra beigas (pēc svētkiem): tumši zila galvene ar mēnesi
+    if (!html.classList.contains('ziemassvetki') && ((menesis === 0 && diena >= 4) || menesis === 1) || /[?&]ziemavela=1\b/.test(q)) html.classList.add('ziema-vela', 'ziema');
     if (sveiciens) html.classList.add('svetku-dienas');
     if ((menesis === 11 && diena === 5) || /[?&]ballite=1\b/.test(q)) html.classList.add('ballite');
 

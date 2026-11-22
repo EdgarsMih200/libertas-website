@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 48" width="160" height="48">
+<!-- Vēlās ziemas galvene (html.ziema-vela, 4. janv. – febr.): plakans mēness sirpis un dažas zvaigznes uz tumši zilā fona -->
+<path d="M30 7 A17 17 0 1 0 47 33 A13 13 0 1 1 30 7Z" fill="#EDE6D2"/>
+<g fill="#EDE6D2">
+  <path d="M70 12 l1.1 2.6 2.6 1.1 -2.6 1.1 -1.1 2.6 -1.1 -2.6 -2.6 -1.1 2.6 -1.1z"/>
+  <circle cx="96" cy="26" r="1.4"/>
+  <circle cx="58" cy="34" r="1.1"/>
+  <path d="M124 15 l.9 2 2 .9 -2 .9 -.9 2 -.9 -2 -2 -.9 2 -.9z"/>
+  <circle cx="142" cy="31" r="1.2"/>
+  <circle cx="110" cy="8" r="1"/>
+</g>
+</svg>
