@@ -9275,6 +9275,149 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
     .tirgus-empa { right: 4%; }
 }
 
+/* ---------- Slēgtas būdiņas (tirdzins.js: .ir-slegtas) ----------
+   Maza būdiņa = jumts → izkārtne → logs ar slēģiem (ieskats, nosaukums, cena) → lete.
+   Klikšķis: .budina--atverta izaug pa visu rindu, logu nomaina pilnā .prece (View Transitions, ja ir). */
+.tirgus-padoms {
+    display: flex; align-items: center; gap: var(--sp-2);
+    margin: 0 0 var(--sp-5);
+    font-size: var(--fs-sm); color: var(--t-ink-muted);
+}
+.tirgus-padoms::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c-season-glow); box-shadow: 0 0 10px 2px rgb(242 196 106 / .5); }
+.tirgus-budinas.ir-slegtas {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
+    gap: var(--sp-7) var(--sp-5);
+}
+.ir-slegtas .budina--plata { grid-column: auto; }
+.ir-slegtas .budina { padding: 0 14px; }
+.ir-slegtas .budina::before, .ir-slegtas .budina::after { top: 48px; width: 8px; }
+.ir-slegtas .budina::before { left: 5px; }
+.ir-slegtas .budina::after { right: 5px; }
+.ir-slegtas .budina-virsus { min-height: 60px; max-height: 96px; }
+.ir-slegtas .budina-izkartne { margin: 14px 0 var(--sp-3); padding: 4px 14px 5px; font-size: .9375rem; }
+.ir-slegtas .budina-zvaigzne { width: 14px; height: 14px; }
+html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
+
+.budina-logs {
+    position: relative; z-index: 1;
+    flex: 1;
+    display: flex; flex-direction: column;
+    width: 100%; padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font: inherit; text-align: left;
+    box-shadow: var(--shadow-2);
+    cursor: pointer;
+    transition: transform .25s var(--ease, ease-out), box-shadow .25s var(--ease, ease-out);
+}
+.budina-logs:hover { transform: translateY(-4px); box-shadow: var(--shadow-3, var(--shadow-2)), 0 0 0 3px rgb(242 196 106 / .35); }
+.budina-logs:focus-visible { outline: 3px solid var(--c-season-glow); outline-offset: 3px; }
+.budina--atverta .budina-logs, .ir-slegtas .prece[hidden] { display: none; }
+
+.budina-ieskats {
+    position: relative; display: block;
+    aspect-ratio: 600 / 320;
+    overflow: hidden;
+    background: var(--c-accent-soft);
+    border-bottom: 1px solid var(--c-line);
+}
+.budina-ieskats-vaks { display: block; position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
+.budina-ieskats-karte { --robs: var(--c-accent-soft); position: absolute; left: 10%; right: 10%; top: 50%; transform: translateY(-30%) rotate(-4deg); transition: transform .35s var(--ease, ease-out); }
+.budina-ieskats-soli { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 14%; }
+.budina-ieskats-soli::before { content: ""; position: absolute; left: 22%; right: 22%; top: 50%; border-top: 2px dashed var(--c-brand); opacity: .45; }
+.budina-ieskats-soli i {
+    position: relative;
+    display: grid; place-items: center;
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--c-brand); color: var(--c-surface);
+    font-style: normal; font-weight: 700;
+    box-shadow: 0 0 0 4px var(--c-accent-soft);
+}
+/* Pusnolaisti slēģi (dēlīši), pacelas, kad uzbrauc virsū */
+.budina-slegi {
+    position: absolute; left: 0; right: 0; top: 0;
+    height: 30%;
+    background:
+        linear-gradient(180deg, transparent calc(100% - 6px), rgb(23 35 31 / .25) calc(100% - 6px)),
+        repeating-linear-gradient(180deg, var(--t-lete) 0 9px, var(--t-stabs) 9px 11px);
+    box-shadow: 0 4px 8px rgb(23 35 31 / .2);
+    transition: transform .4s var(--ease, ease-out);
+}
+.budina-slegi::after {
+    content: "";
+    position: absolute; left: 50%; bottom: 10px;
+    width: 26px; height: 5px; margin-left: -13px;
+    border-radius: 3px;
+    background: var(--c-season-glow);
+}
+.budina-logs:hover .budina-slegi, .budina-logs:focus-visible .budina-slegi { transform: translateY(-82%); }
+.budina-logs:hover .budina-ieskats-karte { transform: translateY(-48%) rotate(-1deg) scale(1.04); }
+
+.budina-logs-teksts { display: flex; flex-direction: column; gap: 4px; flex: 1; padding: var(--sp-3) var(--sp-4) var(--sp-4); }
+.budina-logs-birka { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-sage-ink); }
+.budina-logs-nos { font-family: 'Lora', Georgia, serif; font-size: 1.0625rem; font-weight: 600; line-height: 1.25; color: var(--c-brand); }
+.budina-logs-apaksa { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: auto; padding-top: var(--sp-2); }
+.budina-logs-cena { font-weight: 700; }
+.budina-logs-atvert {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: var(--r-pill);
+    background: var(--c-brand); color: var(--c-surface);
+    font-size: var(--fs-xs); font-weight: 600;
+}
+.budina-logs-atvert::after { content: "›"; font-size: 1.1em; line-height: 1; transition: transform .2s; }
+.budina-logs:hover .budina-logs-atvert::after { transform: translateX(2px); }
+
+/* Atvērta būdiņa: pāri visai rindai, prece horizontāli */
+.ir-slegtas .budina--atverta {
+    grid-column: 1 / -1;
+    order: 1; /* zem mazo būdiņu rindas */
+    justify-self: center;
+    width: min(100%, 980px);
+    padding: 0 20px;
+}
+.ir-slegtas .budina--atverta::before, .ir-slegtas .budina--atverta::after { top: 64px; width: 10px; }
+.ir-slegtas .budina--atverta .budina-virsus { max-height: 120px; }
+.ir-slegtas .budina--atverta .budina-izkartne { font-size: 1.0625rem; padding: 6px 20px 7px; }
+.budina--atverta .prece { outline: none; }
+.budina--atverta .prece:not(.prece--davanas):not(.prece--info) { flex-direction: row; }
+.budina--atverta .prece:not(.prece--davanas):not(.prece--info) > .prece-vaks { flex: 0 0 46%; width: 46%; height: auto; aspect-ratio: auto; min-height: 240px; object-position: 0 50%; }
+.budina-aizvert {
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    display: grid; place-items: center;
+    width: 38px; height: 38px; padding: 0;
+    border: 1px solid var(--c-line); border-radius: 50%;
+    background: var(--c-surface); color: var(--c-ink);
+    font-size: 1.5rem; line-height: 1;
+    box-shadow: var(--shadow-1);
+    cursor: pointer;
+}
+.budina-aizvert:hover { background: var(--c-brand); color: var(--c-surface); border-color: var(--c-brand); }
+.budina-aizvert:focus-visible { outline: 3px solid var(--c-season-glow); outline-offset: 2px; }
+.tirgus-budinas:not(.ir-slegtas) .budina-aizvert { display: none; }
+
+::view-transition-group(*) { animation-duration: .42s; animation-timing-function: cubic-bezier(.2, .8, .2, 1); }
+
+@media (max-width: 767px) {
+    .tirgus-budinas.ir-slegtas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-6) var(--sp-3); }
+    .ir-slegtas .budina { padding: 0 9px; }
+    .ir-slegtas .budina::before { left: 2px; } .ir-slegtas .budina::after { right: 2px; }
+    .ir-slegtas .budina::before, .ir-slegtas .budina::after { width: 6px; top: 36px; }
+    .ir-slegtas .budina-virsus { min-height: 44px; }
+    .ir-slegtas .budina-izkartne { font-size: .8125rem; padding: 3px 10px 4px; margin-top: 10px; }
+    .budina-logs-teksts { padding: var(--sp-2) var(--sp-3) var(--sp-3); }
+    .budina-logs-nos { font-size: .9375rem; }
+    .budina-logs-birka { display: none; }
+    .budina-ieskats-soli { gap: 9%; }
+    .budina-ieskats-soli i { width: 28px; height: 28px; font-size: .875rem; }
+    .budina-logs-apaksa { flex-wrap: wrap; }
+    .ir-slegtas .budina--atverta { padding: 0 12px; }
+    .budina--atverta .prece:not(.prece--davanas):not(.prece--info) { flex-direction: column; }
+    .budina--atverta .prece:not(.prece--davanas):not(.prece--info) > .prece-vaks { flex: none; width: 100%; aspect-ratio: 600 / 320; min-height: 0; }
+}
+
 /* ---------- Dāvanu karte = «iekāpšanas karte» (tirdzins.js LIB.dkKarte) ----------
    Izmēri cqw no .dk-turetajs platuma. Zīmola krāsas fiksētas (karte izskatās vienādi visur, arī drukā).
    --robs = fona krāsa aiz kartes (norauj daļas iegriezumiem). */

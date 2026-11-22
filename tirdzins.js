@@ -210,6 +210,103 @@
         return li;
     }
 
+    // ---------- Slēgtas būdiņas: maza priekšpuse ar slēģiem → klikšķis atver (izaug pa visu rindu) ----------
+    // Bez JS visas būdiņas paliek atvērtas (vecais izkārtojums).
+    var KLUSI = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var budinuSk = 0;
+    budinas.classList.add('ir-slegtas');
+    var padoms = el('p', 'tirgus-padoms', 'Pieskaries būdiņai, lai to atvērtu');
+    budinas.parentNode.insertBefore(padoms, budinas);
+
+    function ieskats(li, prece) {
+        var w = el('span', 'budina-ieskats');
+        if (prece.classList.contains('prece--davanas')) {
+            var k = el('span', 'budina-ieskats-karte');
+            k.innerHTML = dkKarte(PARAUGI[1], { tikaiPrieksa: true });
+            w.appendChild(k);
+        } else if (prece.classList.contains('prece--info')) {
+            var s = el('span', 'budina-ieskats-soli');
+            ['1', '2', '3'].forEach(function (n) { s.appendChild(el('i', '', n)); });
+            w.appendChild(s);
+        } else {
+            var v = prece.querySelector('.prece-vaks');
+            if (v) { var c = v.cloneNode(true); c.removeAttribute('id'); c.setAttribute('class', (v.getAttribute('class') || '') + ' budina-ieskats-vaks'); w.appendChild(c); }
+        }
+        w.appendChild(el('span', 'budina-slegi'));
+        return w;
+    }
+
+    function iekartot(li) {
+        var prece = li.querySelector('.prece');
+        if (!prece || li.querySelector('.budina-logs')) return;
+        var n = ++budinuSk;
+        if (!prece.id) prece.id = 'budinas-prece-' + n;
+        li.style.viewTransitionName = 'budina-' + n;
+        li.classList.add('budina--slegta');
+
+        var vh = prece.querySelector('.prece-virsraksts');
+        var cena = prece.querySelector('.prece-cena');
+        var birka = prece.querySelector('.prece-birka');
+        var b = el('button', 'budina-logs'); b.type = 'button';
+        b.setAttribute('aria-expanded', 'false');
+        b.setAttribute('aria-controls', prece.id);
+        b.appendChild(ieskats(li, prece));
+        var t = el('span', 'budina-logs-teksts');
+        if (birka) t.appendChild(el('span', 'budina-logs-birka', birka.textContent));
+        t.appendChild(el('span', 'budina-logs-nos', vh ? vh.textContent : ''));
+        var apaksa = el('span', 'budina-logs-apaksa');
+        apaksa.appendChild(el('span', 'budina-logs-cena', cena ? cena.textContent : 'Uzzināt'));
+        apaksa.appendChild(el('span', 'budina-logs-atvert', 'Atvērt'));
+        t.appendChild(apaksa);
+        b.appendChild(t);
+        b.addEventListener('click', function () { parslegt(li, true); });
+        prece.parentNode.insertBefore(b, prece);
+
+        var x = el('button', 'budina-aizvert'); x.type = 'button';
+        x.setAttribute('aria-label', 'Aizvērt būdiņu');
+        x.innerHTML = '<span aria-hidden="true">×</span>';
+        x.addEventListener('click', function () { parslegt(li, false); });
+        prece.insertBefore(x, prece.firstChild);
+        prece.setAttribute('tabindex', '-1');
+        prece.hidden = true;
+    }
+
+    function parslegt(li, atvert) {
+        var mainit = function () {
+            budinas.querySelectorAll('.budina--atverta').forEach(function (o) { if (o !== li || !atvert) aizvert(o); });
+            if (atvert) {
+                li.classList.add('budina--atverta');
+                li.querySelector('.budina-logs').setAttribute('aria-expanded', 'true');
+                li.querySelector('.prece').hidden = false;
+            }
+        };
+        var beigas = function () {
+            if (atvert) {
+                var p = li.querySelector('.prece');
+                p.focus({ preventScroll: true });
+                var r = li.getBoundingClientRect(), aug = (document.querySelector('.site-header') || { offsetHeight: 0 }).offsetHeight;
+                if (r.top < aug + 8 || r.bottom > innerHeight) window.scrollBy({ top: r.top - aug - 24, behavior: KLUSI ? 'auto' : 'smooth' });
+                if (li.id) history.replaceState(null, '', '#' + li.id);
+            } else {
+                li.querySelector('.budina-logs').focus({ preventScroll: true });
+                history.replaceState(null, '', location.pathname + location.search);
+            }
+        };
+        if (document.startViewTransition && !KLUSI) document.startViewTransition(mainit).finished.then(beigas, beigas);
+        else { mainit(); beigas(); }
+    }
+    function aizvert(li) {
+        li.classList.remove('budina--atverta');
+        li.querySelector('.budina-logs').setAttribute('aria-expanded', 'false');
+        li.querySelector('.prece').hidden = true;
+    }
+    budinas.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var o = budinas.querySelector('.budina--atverta');
+        if (o) { e.preventDefault(); parslegt(o, false); }
+    });
+    budinas.querySelectorAll('.budina').forEach(iekartot);
+
     // ---------- E-kursi ----------
     function ekBudinas() {
         return fetch('/api/ek/kursi', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : { kursi: [] }; }).then(function (d) {
@@ -231,7 +328,10 @@
                 p.appendChild(dv);
                 s.appendChild(p);
                 a.appendChild(s);
-                budinas.insertBefore(budina(k.limenis ? 'E-kurss ' + k.limenis : 'E-kurss', a), grupas);
+                var li = budina(k.limenis ? 'E-kurss ' + k.limenis : 'E-kurss', a);
+                li.id = 'e-kurss-' + k.id;
+                budinas.insertBefore(li, grupas);
+                iekartot(li);
             });
         }).catch(function () {});
     }
@@ -538,7 +638,11 @@
     });
 
     function sakt() {
-        ekBudinas();
+        ekBudinas().then(function () {
+            // #davanu-kartes, #e-kurss-<id> u.c. — atver attiecīgo būdiņu
+            var mer = location.hash.length > 1 && !/^#davana/.test(location.hash) && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+            if (mer && mer.classList && mer.classList.contains('budina--slegta')) parslegt(mer, true);
+        });
         manasKartes();
         // #davana vai #davana-<kursa id> (saite «Uzdāvināt» kursa lapās) atver logu
         var m = location.hash.match(/^#davana(?:-([a-z0-9-]+))?$/);
