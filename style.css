@@ -6297,6 +6297,68 @@ html.ziemassvetki .site-header.izvelne-atverta::after {
     display: none;
 }
 
+/* Ziemas galvene (15. nov. – febr. beigas): tumša meža josla, gaišs logo un saites; būdiņas — tikai html.ziemassvetki (zemāk) */
+html.ziema .site-header {
+    background: rgb(30 46 41 / .97);
+    border-bottom-color: var(--c-forest-3);
+}
+
+html.ziema .logo img {
+    filter: brightness(0) invert(94%) sepia(10%);
+}
+
+html.ziema .bju-poga {
+    background: #8A2A24;
+    color: #FFF6DD;
+}
+
+html.ziema .bju-poga:hover { background: #A3352C; }
+
+html.ziema .bju-poga[aria-expanded="true"] {
+    box-shadow: 0 0 0 3px var(--c-forest), 0 0 0 5px var(--c-season-glow);
+}
+
+html.ziema .user-chip { border-color: var(--c-forest-3); }
+
+@media (min-width: 769px) {
+    html.ziema .main-nav a { color: var(--c-on-forest); }
+    html.ziema .main-nav a::after { background: var(--c-season-glow); }
+    html.ziema .main-nav a:hover { color: var(--c-season-glow); }
+    html.ziema .main-nav a[aria-current="page"],
+    html.ziema .main-nav a.active { color: var(--c-season-glow); }
+    html.ziema .main-nav a[aria-current="page"]::after,
+    html.ziema .main-nav a.active::after { background: var(--c-season-glow); }
+    html.ziema .main-nav a:focus-visible { outline-color: var(--c-focus-dark); }
+    html.ziema .main-nav a.nav-aptauja::before { background: var(--c-sage-bright); }
+    html.ziema .main-nav a.adv-izvelne::before { color: var(--c-season-glow); }
+}
+
+/* mobilajā izvēlnes poga uz tumšā fona */
+html.ziema .izvelnes-poga {
+    background: var(--c-forest-2);
+    border-color: var(--c-forest-3);
+    color: var(--c-on-forest);
+}
+
+/* būdiņas: elastīgs elements starp logo un izvēlni — sarūk līdz brīvajai vietai (arī ar decembra saiti "Adventes kalendārs") */
+@media (min-width: 1100px) {
+    html.ziemassvetki .logo { order: -1; }
+    html.ziemassvetki .nav-wrapper::before {
+        content: "";
+        flex: 1 1 0;      /* aizņem tikai brīvo vietu, izvēlni nekad nesaspiež */
+        max-width: 200px;
+        min-width: 0;
+        height: 40px;
+        align-self: flex-end;
+        margin-bottom: calc(-1 * var(--sp-2) - 1px);
+        pointer-events: none;
+        background: url("assets/ziemassvetki/tirdzins.svg") left bottom / 200px 40px no-repeat;
+        /* ja vietas mazāk, tirdziņš nevis saraujas, bet labajā malā izgaist tumsā */
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+        mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+    }
+}
+
 /* telefonā hero teksts / joslas ceļš nedaudz zemāk, lai virtene tos neskartu */
 @media (max-width: 767px) {
     html.ziemassvetki .hero-container { padding-top: calc(var(--sp-4) + 10px); }
