@@ -30,5 +30,7 @@
     // Pieteikumu e-pastu sūtītājs (Resend, domēns libertas.study). Atslēga: secret RESEND_API_KEY
     "EMAIL_FROM": "Libertas <pieteikumi@libertas.study>"
   },
+  // Ik 15 min: dāvanu kartes ar piegādi «e-pastā vēlāk» (worker/davanas.js davanuCron)
+  "triggers": { "crons": ["*/15 * * * *"] },
   "observability": { "enabled": true }
 }

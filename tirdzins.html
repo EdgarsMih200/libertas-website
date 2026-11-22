@@ -10,7 +10,7 @@
     <meta name="description" content="Libertas tirdziņš: dāvanu kartes valodu kursiem un tiešsaistes pašmācības kursi.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&family=Caveat:wght@500;600&display=swap">
     <link rel="stylesheet" href="style.css">
     <script src="sezona.js"></script>
     <script>
@@ -108,18 +108,18 @@
                         <p class="budina-izkartne" aria-hidden="true">Dāvanas</p>
                         <article class="prece prece--davanas" aria-labelledby="prece-davanas">
                             <div class="prece-dk-paraugi" aria-hidden="true">
-                                <div class="dk-karte dk-karte--anglu dk-karte--mazs" data-dk-paraugs="anglu"></div>
-                                <div class="dk-karte dk-karte--spanu dk-karte--mazs" data-dk-paraugs="spanu"></div>
-                                <div class="dk-karte dk-karte--ziema dk-karte--mazs" data-dk-paraugs="ziema"></div>
+                                <div class="dk-paraugs" data-dk-paraugs></div>
+                                <div class="dk-paraugs" data-dk-paraugs></div>
+                                <div class="dk-paraugs" data-dk-paraugs></div>
                             </div>
                             <div class="prece-saturs">
                                 <p class="prece-birka">Dāvanu karte</p>
-                                <h3 class="prece-virsraksts" id="prece-davanas">Uzdāvini valodu</h3>
-                                <p class="prece-apraksts">Izvēlies summu vai konkrētu kursu, ieraksti apsveikumu, un mēs sagatavosim karti, ko izdrukāt vai nosūtīt. Derīga 12 mēnešus visiem Libertas kursiem.</p>
-                                <p class="prece-cena">no 10 EUR</p>
+                                <h3 class="prece-virsraksts" id="prece-davanas">Biļete uz jaunu valodu</h3>
+                                <p class="prece-apraksts">Iekāpšanas karte uz jaunu valodu: kurss vai summa, tavs noformējums un ziņa aizmugurē. Nosūtīsim e-pastā tad, kad vēlies, PDF vai aploksnē. Derīga 12 mēnešus.</p>
+                                <p class="prece-cena">no 30 EUR</p>
                                 <div class="prece-pogas">
-                                    <button class="btn-cta" type="button" data-dk-atvert="summa">Dāvināt summu</button>
-                                    <button class="btn-secondary" type="button" data-dk-atvert="kurss">Dāvināt kursu</button>
+                                    <button class="btn-cta" type="button" data-dk-atvert="kurss">Dāvināt kursu</button>
+                                    <button class="btn-secondary" type="button" data-dk-atvert="summa">Dāvināt summu</button>
                                 </div>
                             </div>
                         </article>
@@ -162,9 +162,9 @@
                             <div class="prece-saturs">
                                 <h3 class="prece-virsraksts" id="prece-info">Kā notiek pirkums</h3>
                                 <ol class="tirgus-soli">
-                                    <li><b>Pasūti</b><span>Izvēlies karti vai kursu. Pasūtīšanai jāienāk ar Google kontu.</span></li>
+                                    <li><b>Pasūti</b><span>Izvēlies kursu vai summu, noformējumu un piegādi. Reģistrēties nav obligāti.</span></li>
                                     <li><b>Apmaksā rēķinu</b><span>Rēķinu uzreiz nosūtām uz tavu e-pastu. Apmaksa ar pārskaitījumu.</span></li>
-                                    <li><b>Saņem</b><span>Kad apmaksa ir saņemta, dāvanu karte atnāk e-pastā, un e-kurss atveras sadaļā «Mani kursi».</span></li>
+                                    <li><b>Saņem</b><span>Pēc apmaksas karte nonāk pie saņēmēja tavā izvēlētajā laikā, un e-kurss atveras sadaļā «Mani kursi».</span></li>
                                 </ol>
                                 <p class="tirgus-piezime">Saņēmējs ievada kartes kodu, piesakoties kursam. Ja karte ir uz summu, neizmantotais atlikums paliek kartē. <a href="noteikumi.html#davanu-kartes">Dāvanu karšu noteikumi</a></p>
                             </div>

@@ -292,11 +292,11 @@
         });
         d.appendChild(ol);
 
-        // Atlaides kods (adventes kalendārs) vai dāvanu kartes kods (DK-XXXX-XXXX) — neobligāts; serveris pārbauda
+        // Atlaides kods (adventes kalendārs) vai dāvanu kartes kods (LIB-XXXX-XXXX) — neobligāts; serveris pārbauda
         var kw = el('div', 'pl-kods');
         var kl = el('label', '', 'Atlaides vai dāvanu kartes kods (ja ir)'); kl.htmlFor = 'pl-kods';
         var kodsLauks = el('input', 'lauks'); kodsLauks.id = 'pl-kods'; kodsLauks.type = 'text'; kodsLauks.maxLength = 20;
-        kodsLauks.autocomplete = 'off'; kodsLauks.spellcheck = false; kodsLauks.placeholder = 'Piem., ADV-ES10 vai DK-XXXX-XXXX';
+        kodsLauks.autocomplete = 'off'; kodsLauks.spellcheck = false; kodsLauks.placeholder = 'Piem., ADV-ES10 vai LIB-XXXX-XXXX';
         kw.appendChild(kl); kw.appendChild(kodsLauks);
         d.appendChild(kw);
 

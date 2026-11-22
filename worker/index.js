@@ -7,7 +7,7 @@ import { blogsMarsruts } from './blogs.js';
 import { bjuMarsruts } from './bju.js';
 import { aptaujaMarsruts } from './aptauja.js';
 import { gkMarsruts, irPasniedzejs } from './grupu-kursi.js';
-import { davanasMarsruts, sinhronizetDavanu, parbauditDavanu, norakstitDavanu, atgrieztDavanu, KODA_RE } from './davanas.js';
+import { davanasMarsruts, sinhronizetDavanu, parbauditDavanu, norakstitDavanu, atgrieztDavanu, davanuCron, KODA_RE } from './davanas.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -294,7 +294,7 @@ async function enroll(request, env, user, ctx, origin) {
   if (!course) return fail('Kurss nav atrasts', 404);
   const pr = parbauditPeriodu(course_id, period);
   if (pr.kluda) return fail(pr.kluda);
-  // Atlaides kods (adventes kalendārs) vai dāvanu kartes kods (DK-XXXX-XXXX): nederīgs kods aptur pieteikumu, lai lietotājs to var izlabot
+  // Atlaides kods (adventes kalendārs) vai dāvanu kartes kods (LIB-XXXX-XXXX): nederīgs kods aptur pieteikumu, lai lietotājs to var izlabot
   let atl = { kods: null, proc: null };
   let dav = null;
   if (typeof kods === 'string' && kods.trim()) {
@@ -483,6 +483,11 @@ async function tikaiRegistretiem(request, env, url, valoda) {
 
 // ---------- Maršrutēšana ----------
 export default {
+  // Cron (wrangler.jsonc triggers): ieplānotās dāvanu kartes
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(davanuCron(env));
+  },
+
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname.replace(/\/+$/, '') || '/';

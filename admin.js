@@ -335,33 +335,89 @@
     }
 
     // ---------- DĀVANU KARTES (Tirdziņš) ----------
-    var DK_ST = { gaida: ['Gaida apmaksu', 'badge-pieteicies'], aktiva: ['Aktīva', 'badge-uznemts'], izmantota: ['Izmantota', 'badge-pabeidzis'], atcelta: ['Atcelta', 'badge-atteicies'] };
+    var DK_ST = { gaida: ['Gaida apmaksu', 'badge-pieteicies'], planota: ['Ieplānota', 'badge-sacis'], aktiva: ['Aktīva', 'badge-uznemts'], dalji: ['Daļēji izmantota', 'badge-sacis'], izmantota: ['Izmantota', 'badge-pabeidzis'], beigusies: ['Beigusies', 'badge-atteicies'], atcelta: ['Atcelta', 'badge-atteicies'] };
+    var DK_PIEG = { epasts: 'E-pastā saņēmējam', velak: 'E-pastā vēlāk', pdf: 'PDF pircējam', pasts: 'Aploksnē' };
     function dkTab() {
         var wrap = el('div', 'ek-admin');
-        wrap.appendChild(el('p', 'muted', 'Pasūtot karti, rēķins izveidojas un nosūtās pircējam automātiski. Kad nauda saņemta, atver rēķinu un atzīmē apmaksu — karte aktivizējas (derīga 12 mēnešus) un pircējs saņem e-pastu ar kodu.'));
         var K = state.dk.kartes || [];
+        var apm = K.filter(function(k) { return k.statuss !== 'gaida' && k.statuss !== 'atcelta'; });
+        var sum = function(a, f) { return a.reduce(function(x, k) { return x + Number(f(k) || 0); }, 0); };
+        var gaida = K.filter(function(k) { return k.statuss === 'gaida'; });
+        var kpi = el('div', 'summary-chips');
+        [['apmaksātas', apm.length + ' · ' + eurS(sum(apm, function(k) { return k.summa; }))],
+         ['izmantots', eurS(sum(apm, function(k) { return k.summa - k.atlikums; }))],
+         ['neizmantots atlikums (saistības)', eurS(sum(apm.filter(function(k) { return k.redzamais !== 'beigusies'; }), function(k) { return k.atlikums; }))],
+         ['gaida apmaksu', gaida.length + ' · ' + eurS(sum(gaida, function(k) { return k.summa + (k.pasta_maksa || 0); }))]].forEach(function(x) {
+            var c = el('span', 'badge'); c.style.gap = '6px'; c.appendChild(el('strong', '', x[1])); c.appendChild(el('span', '', x[0])); kpi.appendChild(c);
+        });
+        wrap.appendChild(kpi);
+        wrap.appendChild(el('p', 'muted', 'Pasūtot karti, rēķins izveidojas un nosūtās pircējam automātiski. Kad nauda saņemta, atver rēķinu un atzīmē apmaksu — karte aktivizējas (derīga 12 mēnešus) un tiek piegādāta: saņēmējam e-pastā (uzreiz vai ieplānotajā laikā), pircējam PDF, vai tev atnāk ziņa izdrukāt un nosūtīt aploksnē.'));
+
+        // Manuāli izveidota karte (balva / kompensācija) — uzreiz aktīva, bez rēķina
+        var det = el('details', 'ek-karte');
+        det.appendChild(el('summary', '', '+ Izveidot karti manuāli (balva, bez rēķina)')).style.cssText = 'font-weight:700;cursor:pointer';
+        var f = el('form', 'ek-forma');
+        var tips = select([['summa', 'Summa'], ['kurss', 'Kurss']], 'summa', function(v) { lk.hidden = v !== 'kurss'; ls.hidden = v !== 'summa'; });
+        var lt = el('label', '', 'Veids'); lt.appendChild(tips); f.appendChild(lt);
+        var ls = el('label', '', 'Summa (EUR)'); var summa = el('input', 'lauks'); summa.type = 'number'; summa.min = 1; summa.value = 50; ls.appendChild(summa); f.appendChild(ls);
+        var lk = el('label', '', 'Kurss'); var kurss = select(state.courses.map(function(c) { return [c.id, c.name]; }), (state.courses[0] || {}).id || '', function() {}); lk.appendChild(kurss); lk.hidden = true; f.appendChild(lk);
+        var ld = el('label', '', 'Noformējums'); var diz = select([['mezs', 'Mežs'], ['bordo', 'Jaungada'], ['papirs', 'Papīrs']], 'mezs', function() {}); ld.appendChild(diz); f.appendChild(ld);
+        var lkam = el('label', '', 'Kam'); var kam = el('input', 'lauks'); kam.maxLength = 24; lkam.appendChild(kam); f.appendChild(lkam);
+        var lno = el('label', '', 'No kā'); var no = el('input', 'lauks'); no.maxLength = 24; no.value = 'Libertas'; lno.appendChild(no); f.appendChild(lno);
+        var lz = el('label', '', 'Ziņa aizmugurē'); var zina = el('input', 'lauks'); zina.maxLength = 140; lz.appendChild(zina); f.appendChild(lz);
+        var sb = el('button', 'btn-cta', 'Izveidot'); sb.type = 'submit'; f.appendChild(sb);
+        f.addEventListener('submit', function(ev) {
+            ev.preventDefault();
+            api('POST', '/api/admin/davanas', { tips: tips.value, summa: Number(summa.value), course_id: kurss.value, dizains: diz.value, kam: kam.value, no: no.value, apsveikums: zina.value }).then(function(d) {
+                L.toast('Karte izveidota: ' + d.karte.kods);
+                window.open('davanu-karte.html?k=' + d.karte.token, '_blank', 'noopener');
+                return load();
+            }).catch(err);
+        });
+        det.appendChild(f);
+        wrap.appendChild(det);
+
         if (!K.length) { wrap.appendChild(el('p', 'register-intro', 'Dāvanu karšu vēl nav.')); return wrap; }
-        var t = tableWrap(['Pasūtīta', 'Pircējs', 'Kam', 'Vērtība', 'Atlikums', 'Statuss', 'Kods', 'Derīga līdz', 'Rēķins', '']);
+        var t = tableWrap(['Pasūtīta', 'Pircējs', 'Kam', 'Vērtība', 'Atlikums', 'Statuss', 'Piegāde', 'Kods', 'Derīga līdz', 'Rēķins', '']);
         var q = state.q.toLowerCase();
         K.filter(function(k) {
-            return !q || [k.pircejs, k.pirceja_epasts, k.kam, k.no_ka, k.kods].join(' ').toLowerCase().indexOf(q) >= 0;
+            return !q || [k.pirceja_vards, k.pirceja_epasts, k.kam, k.no_ka, k.kods, k.sanemeja_epasts].join(' ').toLowerCase().indexOf(q) >= 0;
         }).forEach(function(k) {
             var tr = el('tr');
             td(tr, fmt(k.created_at, true));
-            var who = el('div'); who.appendChild(el('strong', '', k.pircejs || '—')); who.appendChild(el('div', 'muted', k.pirceja_epasts || '')); td(tr, who);
-            var kam = el('div'); kam.appendChild(el('strong', '', k.kam || '—')); kam.appendChild(el('div', 'muted', 'no ' + (k.no_ka || '—'))); td(tr, kam);
+            var who = el('div'); who.appendChild(el('strong', '', k.pirceja_vards || '—')); who.appendChild(el('div', 'muted', (k.pirceja_epasts || '') + (k.user_id ? '' : ' · viesis'))); td(tr, who);
+            var kamD = el('div'); kamD.appendChild(el('strong', '', k.kam || '—')); kamD.appendChild(el('div', 'muted', 'no ' + (k.no_ka || '—'))); td(tr, kamD);
             td(tr, k.tips === 'kurss' ? (k.kursa_nosaukums || k.course_id) + ' (' + eurS(k.summa) + ')' : eurS(k.summa));
             td(tr, k.tips === 'kurss' ? (k.atlikums > 0 ? 'neizmantota' : 'izmantota') : eurS(k.atlikums));
-            var st = DK_ST[k.statuss] || DK_ST.gaida; td(tr, el('span', 'badge ' + st[1], st[0]));
+            var st = DK_ST[k.redzamais] || DK_ST.gaida; td(tr, el('span', 'badge ' + st[1], st[0]));
+            var pg = el('div'); pg.appendChild(el('span', '', DK_PIEG[k.piegade] || k.piegade));
+            var pinf = k.piegade === 'velak' ? (k.sanemeja_epasts + ' · ' + fmt(k.sutit_at, true)) : k.piegade === 'epasts' ? k.sanemeja_epasts : k.piegade === 'pasts' ? k.adrese : '';
+            if (pinf) pg.appendChild(el('div', 'muted', pinf));
+            if (k.nosutita_at) pg.appendChild(el('div', 'muted', 'Nosūtīta ' + fmt(k.nosutita_at, true)));
+            else if (k.statuss === 'aktiva') pg.appendChild(el('div', 'muted', 'Vēl nav nosūtīta'));
+            td(tr, pg);
             td(tr, k.statuss === 'gaida' ? '—' : k.kods);
             td(tr, lvD(k.derigs_lidz));
-            if (k.rekins_id) { var ra = el('a', 'btn-link', 'Nr. ' + (k.rekins_nr || k.rekins_id)); ra.href = 'rekins.html?id=' + k.rekins_id; td(tr, ra); } else td(tr, '—');
+            if (k.rekins_id) { var ra = el('a', 'btn-link', 'Nr. ' + (k.rekins_nr || k.rekins_id)); ra.href = 'rekins.html?id=' + k.rekins_id; td(tr, ra); } else td(tr, 'bez rēķina');
             var act = el('div', 'summary-chips');
             var o = el('a', 'btn-link', 'Karte'); o.href = 'davanu-karte.html?k=' + k.token; o.target = '_blank'; o.rel = 'noopener'; act.appendChild(o);
-            if (k.statuss === 'aktiva') {
-                var sv = el('button', 'btn-link', 'Sūtīt vēlreiz'); sv.type = 'button';
-                sv.addEventListener('click', function() { api('POST', '/api/admin/davanas/' + k.id + '/sutit').then(function() { L.toast('Karte nosūtīta uz ' + k.pirceja_epasts); }).catch(err); });
+            if (k.statuss === 'aktiva' && k.piegade === 'pasts' && !k.nosutita_at) {
+                var ns = el('button', 'btn-link', 'Nosūtīta'); ns.type = 'button'; ns.title = 'Atzīmē, kad aploksne nosūtīta';
+                ns.addEventListener('click', function() { api('PATCH', '/api/admin/davanas/' + k.id, { nosutita: true }).then(load).catch(err); });
+                act.appendChild(ns);
+            }
+            if (k.statuss === 'aktiva' && k.piegade !== 'pasts' && k.rekins_id) {
+                var sv = el('button', 'btn-link', k.piegade === 'velak' && !k.nosutita_at ? 'Sūtīt tagad' : 'Sūtīt vēlreiz'); sv.type = 'button';
+                sv.addEventListener('click', function() { api('POST', '/api/admin/davanas/' + k.id + '/sutit').then(function() { L.toast('Karte nosūtīta.'); return load(); }).catch(err); });
                 act.appendChild(sv);
+            }
+            if (k.statuss === 'aktiva') {
+                var pag = el('button', 'btn-link', 'Pagarināt'); pag.type = 'button';
+                pag.addEventListener('click', function() {
+                    var v = prompt('Jauns derīguma datums (GGGG-MM-DD):', k.derigs_lidz || '');
+                    if (v) api('PATCH', '/api/admin/davanas/' + k.id, { derigs_lidz: v.trim() }).then(load).catch(err);
+                });
+                act.appendChild(pag);
             }
             if ((k.statuss === 'gaida' || k.statuss === 'aktiva') && Number(k.atlikums) === Number(k.summa) && !k.izmantojumi) {
                 var at = el('button', 'btn-link btn-danger', 'Atcelt'); at.type = 'button';
