@@ -9237,17 +9237,55 @@ html.tirgus-svetki .budina-virtene {
 .tirgus-piezime { margin: var(--sp-2) 0 0; padding-top: var(--sp-4); border-top: 1px dashed var(--c-line); font-size: var(--fs-sm); color: var(--c-muted); }
 .tirgus-piezime a { color: var(--c-accent-strong); }
 
-/* Iela zem būdiņām: sniegs ziemā, bruģis citos gadalaikos */
+/* Iela: zeme (sniegs / zāle / smiltis / zeme ar lapām) + bruģēts celiņš gar būdiņām un taka uz skatītāju.
+   Būdiņas stāv uz celiņa (zeme pabīdīta zem tām ar negatīvu margin). */
 .tirgus-zeme {
     position: relative;
-    height: 88px;
-    margin-top: var(--sp-7);
-    background-color: var(--t-zeme);
+    height: 132px;
+    margin-top: -20px;
+    background: var(--t-zeme-raksts, none), var(--t-zeme);
+}
+.tirgus-taka { position: absolute; inset: 0; filter: drop-shadow(0 -2px 0 var(--t-mala)) drop-shadow(0 2px 0 var(--t-mala)); }
+.tirgus-taka span {
+    position: absolute; inset: 0;
+    background-color: var(--t-cels);
     background-image:
-        radial-gradient(ellipse 15px 7px at 50% 50%, var(--t-akmens) 92%, transparent 100%),
-        radial-gradient(ellipse 15px 7px at 50% 50%, var(--t-akmens) 92%, transparent 100%);
-    background-size: 40px 22px;
-    background-position: 0 6px, 20px 17px;
+        radial-gradient(ellipse 13px 6px at 50% 50%, var(--t-akmens) 90%, transparent 100%),
+        radial-gradient(ellipse 13px 6px at 50% 50%, var(--t-akmens) 90%, transparent 100%);
+    background-size: 34px 18px;
+    background-position: 0 4px, 17px 13px;
+    clip-path: polygon(0 6%, 100% 6%, 100% 34%, 59% 34%, 64% 100%, 36% 100%, 41% 34%, 0 34%);
+}
+/* Blāvs vecpilsētas fons aiz būdiņām */
+.tirgus-fons {
+    position: absolute; left: 0; bottom: 112px;
+    width: 100%; height: 300px;
+    z-index: 0;
+    opacity: var(--t-fons-o, .6);
+    pointer-events: none;
+}
+.tirgus-iela > .container { position: relative; z-index: 1; }
+
+/* Gadalaiku iela */
+html.tirgus-svetki, html.tirgus-ziema {
+    --t-fons: var(--c-forest-3); --t-fons-o: .7; --t-logi: var(--c-season-glow); --t-logi-o: .5; --t-zvaigznes: .6;
+    --t-cels: var(--c-sunk); --t-akmens: var(--c-line); --t-mala: var(--c-surface);
+}
+html.tirgus-svetki { --t-virtene-o: .9; --t-virtene-a: var(--c-season-glow); --t-virtene-b: var(--c-error); }
+html.tirgus-pavasaris {
+    --t-fons: var(--c-sage-bright); --t-fons-o: .6; --t-logi: var(--c-surface); --t-logi-o: .7;
+    --t-cels: var(--c-bg); --t-akmens: var(--c-sunk); --t-mala: var(--c-line);
+    --t-zeme-raksts: radial-gradient(circle at 12px 10px, var(--c-surface) 2.5px, transparent 3px) 0 0 / 46px 30px, radial-gradient(circle at 34px 24px, var(--c-accent-soft) 2.5px, transparent 3px) 0 0 / 46px 30px;
+}
+html.tirgus-vasara {
+    --t-fons: var(--c-line); --t-fons-o: .6; --t-logi: var(--c-surface); --t-logi-o: .7;
+    --t-virtene-o: 1; --t-virtene-a: var(--c-accent); --t-virtene-b: var(--c-surface);
+    --t-cels: var(--c-bg); --t-akmens: var(--c-line); --t-mala: var(--c-line-strong);
+}
+html.tirgus-rudens {
+    --t-fons: var(--c-line); --t-koks: var(--c-accent); --t-fons-o: .55; --t-logi: var(--c-season-glow); --t-logi-o: .6;
+    --t-cels: var(--c-bg); --t-akmens: var(--c-sunk); --t-mala: var(--c-line-strong);
+    --t-zeme-raksts: radial-gradient(ellipse 5px 3px at 14px 12px, var(--c-accent) 95%, transparent) 0 0 / 52px 34px, radial-gradient(ellipse 5px 3px at 40px 26px, var(--c-season-glow) 95%, transparent) 0 0 / 52px 34px;
 }
 html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before {
     content: "";
@@ -9257,10 +9295,14 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
 }
 .tirgus-empa { position: absolute; right: 7%; bottom: 28px; line-height: 0; }
 /* Svētku egle uz ielas */
-.tirgus-egle { display: none; position: absolute; left: 4%; bottom: 22px; width: 124px; height: auto; overflow: visible; }
+.tirgus-egle { display: none; position: absolute; left: 4%; bottom: 30px; width: 124px; height: auto; overflow: visible; }
 html.tirgus-svetki .tirgus-egle { display: block; }
 .tirgus-budinas { position: relative; z-index: 1; }
-@media (max-width: 767px) { .tirgus-egle { width: 64px; left: 3%; bottom: 18px; } }
+@media (max-width: 767px) {
+    .tirgus-egle { width: 56px; left: 2%; bottom: 24px; }
+    .tirgus-fons { height: 190px; }
+    .tirgus-taka span { clip-path: polygon(0 6%, 100% 6%, 100% 34%, 62% 34%, 70% 100%, 30% 100%, 38% 34%, 0 34%); }
+}
 @media (prefers-reduced-motion: no-preference) {
     .tirgus-egle-zvaigzne { transform-origin: 60px 13px; animation: egle-mirdz 2.6s ease-in-out infinite; }
 }
