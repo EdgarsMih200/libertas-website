@@ -9259,10 +9259,19 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
 /* Svētku egle uz ielas */
 .tirgus-egle { display: none; position: absolute; left: 4%; bottom: 22px; width: 124px; height: auto; overflow: visible; }
 html.tirgus-svetki .tirgus-egle { display: block; }
+.tirgus-budinas { position: relative; z-index: 1; }
+@media (max-width: 767px) { .tirgus-egle { width: 64px; left: 3%; bottom: 18px; } }
 @media (prefers-reduced-motion: no-preference) {
     .tirgus-egle-zvaigzne { transform-origin: 60px 13px; animation: egle-mirdz 2.6s ease-in-out infinite; }
 }
 @keyframes egle-mirdz { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .75; transform: scale(.86); } }
+
+/* Kā notiek pirkums — atsevišķa sadaļa zem ielas */
+.tirgus-info { display: grid; gap: var(--sp-5); padding-block: var(--sp-8) var(--sp-4); }
+.tirgus-info .sadalas-virsraksts { margin: 0; }
+.tirgus-info .tirgus-piezime { margin: 0; }
+.tirgus-grupas { margin: 0; padding: var(--sp-4) var(--sp-5); border-radius: var(--r-md); background: var(--c-sage); color: var(--c-sage-ink); font-size: var(--fs-sm); }
+.tirgus-grupas a { margin-left: var(--sp-1); font-weight: 700; color: inherit; }
 
 /* Manas dāvanu kartes */
 .tirgus-manas { padding-block: var(--sp-8); }
@@ -9344,8 +9353,9 @@ html.tirgus-svetki .budina::before, html.tirgus-svetki .budina::after {
 }
 .tirgus-padoms::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c-season-glow); box-shadow: 0 0 10px 2px rgb(242 196 106 / .5); }
 .tirgus-budinas.ir-slegtas {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr));
-    gap: var(--sp-7) var(--sp-5);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 250px));
+    justify-content: center;
+    gap: var(--sp-7) var(--sp-6);
 }
 .ir-slegtas .budina--plata { grid-column: auto; }
 .ir-slegtas .budina { padding: 0 14px; }
@@ -9353,7 +9363,7 @@ html.tirgus-svetki .budina::before, html.tirgus-svetki .budina::after {
 .ir-slegtas .budina::before { left: 5px; }
 .ir-slegtas .budina::after { right: 5px; }
 .ir-slegtas .budina-virsus { min-height: 60px; max-height: 96px; }
-.ir-slegtas .budina-izkartne { margin: 14px 0 var(--sp-3); padding: 4px 14px 5px; font-size: .9375rem; }
+.ir-slegtas .budina-izkartne { margin: 6px 0 var(--sp-2); padding: 4px 14px 5px; font-size: .9375rem; }
 .ir-slegtas .budina-zvaigzne { width: 14px; height: 14px; }
 html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
 
@@ -9385,16 +9395,6 @@ html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
 }
 .budina-ieskats-vaks { display: block; position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
 .budina-ieskats-karte { --robs: var(--c-accent-soft); position: absolute; left: 10%; right: 10%; top: 50%; transform: translateY(-30%) rotate(-4deg); transition: transform .35s var(--ease, ease-out); }
-.budina-ieskats-soli { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 14%; }
-.budina-ieskats-soli::before { content: ""; position: absolute; left: 22%; right: 22%; top: 50%; border-top: 2px dashed var(--c-brand); opacity: .45; }
-.budina-ieskats-soli i {
-    position: relative;
-    display: grid; place-items: center;
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--c-brand); color: var(--c-surface);
-    font-style: normal; font-weight: 700;
-    box-shadow: 0 0 0 4px var(--c-accent-soft);
-}
 /* Pusnolaisti slēģi (dēlīši), pacelas, kad uzbrauc virsū */
 .budina-slegi {
     position: absolute; left: 0; right: 0; top: 0;
@@ -9415,11 +9415,14 @@ html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
 .budina-logs:hover .budina-slegi, .budina-logs:focus-visible .budina-slegi { transform: translateY(-82%); }
 .budina-logs:hover .budina-ieskats-karte { transform: translateY(-48%) rotate(-1deg) scale(1.04); }
 
-.budina-logs-teksts { display: flex; flex-direction: column; gap: 4px; flex: 1; padding: var(--sp-3) var(--sp-4) var(--sp-4); }
+.budina-logs-teksts { display: flex; flex-direction: column; gap: 4px; flex: 1; padding: var(--sp-3) var(--sp-4); }
 .budina-logs-birka { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-sage-ink); }
-.budina-logs-nos { font-family: 'Lora', Georgia, serif; font-size: 1.0625rem; font-weight: 600; line-height: 1.25; color: var(--c-brand); }
+.budina-logs-nos {
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+    font-family: 'Lora', Georgia, serif; font-size: 1.0625rem; font-weight: 600; line-height: 1.25; color: var(--c-brand);
+}
 .budina-logs-apaksa { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: auto; padding-top: var(--sp-2); }
-.budina-logs-cena { font-weight: 700; }
+.budina-logs-cena { font-weight: 700; white-space: nowrap; }
 .budina-logs-atvert {
     display: inline-flex; align-items: center; gap: 4px;
     padding: 3px 10px; border-radius: var(--r-pill);
@@ -9441,8 +9444,8 @@ html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
 .ir-slegtas .budina--atverta .budina-virsus { max-height: 120px; }
 .ir-slegtas .budina--atverta .budina-izkartne { font-size: 1.0625rem; padding: 6px 20px 7px; }
 .budina--atverta .prece { outline: none; }
-.budina--atverta .prece:not(.prece--davanas):not(.prece--info) { flex-direction: row; }
-.budina--atverta .prece:not(.prece--davanas):not(.prece--info) > .prece-vaks { flex: 0 0 46%; width: 46%; height: auto; aspect-ratio: auto; min-height: 240px; object-position: 0 50%; }
+.budina--atverta .prece:not(.prece--davanas) { flex-direction: row; }
+.budina--atverta .prece:not(.prece--davanas) > .prece-vaks { flex: 0 0 46%; width: 46%; height: auto; aspect-ratio: auto; min-height: 240px; object-position: 0 50%; }
 .budina-aizvert {
     position: absolute; top: 10px; right: 10px; z-index: 3;
     display: grid; place-items: center;
@@ -9469,12 +9472,10 @@ html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
     .budina-logs-teksts { padding: var(--sp-2) var(--sp-3) var(--sp-3); }
     .budina-logs-nos { font-size: .9375rem; }
     .budina-logs-birka { display: none; }
-    .budina-ieskats-soli { gap: 9%; }
-    .budina-ieskats-soli i { width: 28px; height: 28px; font-size: .875rem; }
     .budina-logs-apaksa { flex-wrap: wrap; }
     .ir-slegtas .budina--atverta { padding: 0 12px; }
-    .budina--atverta .prece:not(.prece--davanas):not(.prece--info) { flex-direction: column; }
-    .budina--atverta .prece:not(.prece--davanas):not(.prece--info) > .prece-vaks { flex: none; width: 100%; aspect-ratio: 600 / 320; min-height: 0; }
+    .budina--atverta .prece:not(.prece--davanas) { flex-direction: column; }
+    .budina--atverta .prece:not(.prece--davanas) > .prece-vaks { flex: none; width: 100%; aspect-ratio: 600 / 320; min-height: 0; }
 }
 
 /* ---------- Dāvanu karte = «iekāpšanas karte» (tirdzins.js LIB.dkKarte) ----------

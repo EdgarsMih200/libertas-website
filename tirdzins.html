@@ -120,51 +120,7 @@
                         <div class="budina-lete" aria-hidden="true"></div>
                     </li>
 
-                    <!-- E-kursi: būdiņas pievieno tirdzins.js no /api/ek/kursi (vieta: pirms "Grupu kursi") -->
-
-                    <!-- Grupu kursi: netiek pārdoti tirdziņā (vajag grupu + rēķinu pa daļām) — saite uz kursi.html -->
-                    <li class="budina" data-budina-grupas>
-                        <div class="budina-virsus" aria-hidden="true">
-                            <svg class="budina-jumts" viewBox="0 0 360 120" preserveAspectRatio="none" focusable="false"><use href="#budina-jumts"/></svg>
-                            <span class="budina-zvaigzne"></span>
-                            <span class="budina-virtene"></span>
-                        </div>
-                        <p class="budina-izkartne" aria-hidden="true">Grupas</p>
-                        <article class="prece" aria-labelledby="prece-grupas">
-                            <svg class="prece-vaks prece-vaks--ainava" viewBox="0 330 1440 470" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-300 120)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/><use href="assets/scene/ainava.svg#sc-path"/></svg>
-                            <div class="prece-saturs">
-                                <p class="prece-birka">Ar pasniedzēju</p>
-                                <h3 class="prece-virsraksts" id="prece-grupas">Grupu kursi</h3>
-                                <p class="prece-apraksts">Spāņu valoda A1–B1.2 un angļu valoda A1–A2. 14 nodarbības tiešsaistē mazā grupā. Pieteikšanās un grupas izvēle notiek kursu lapā.</p>
-                                <div class="prece-pogas">
-                                    <a class="btn-secondary" href="kursi.html">Skatīt grupas</a>
-                                </div>
-                            </div>
-                        </article>
-                        <div class="budina-lete" aria-hidden="true"></div>
-                    </li>
-
-                    <!-- Kā tas notiek (dāvanu kartes) -->
-                    <li class="budina budina--plata budina--info">
-                        <div class="budina-virsus" aria-hidden="true">
-                            <svg class="budina-jumts" viewBox="0 0 360 120" preserveAspectRatio="none" focusable="false"><use href="#budina-jumts"/></svg>
-                            <span class="budina-zvaigzne"></span>
-                            <span class="budina-virtene"></span>
-                        </div>
-                        <p class="budina-izkartne" aria-hidden="true">Kā notiek</p>
-                        <article class="prece prece--info" aria-labelledby="prece-info">
-                            <div class="prece-saturs">
-                                <h3 class="prece-virsraksts" id="prece-info">Kā notiek pirkums</h3>
-                                <ol class="tirgus-soli">
-                                    <li><b>Pasūti</b><span>Izvēlies kursu vai summu, noformējumu un piegādi. Reģistrēties nav obligāti.</span></li>
-                                    <li><b>Apmaksā rēķinu</b><span>Rēķinu uzreiz nosūtām uz tavu e-pastu. Apmaksa ar pārskaitījumu.</span></li>
-                                    <li><b>Saņem</b><span>Pēc apmaksas karte nonāk pie saņēmēja tavā izvēlētajā laikā, un e-kurss atveras sadaļā «Mani kursi».</span></li>
-                                </ol>
-                                <p class="tirgus-piezime">Saņēmējs ievada kartes kodu, piesakoties kursam. Ja karte ir uz summu, neizmantotais atlikums paliek kartē. <a href="noteikumi.html#davanu-kartes">Dāvanu karšu noteikumi</a></p>
-                            </div>
-                        </article>
-                        <div class="budina-lete" aria-hidden="true"></div>
-                    </li>
+                    <!-- E-kursi: būdiņas pievieno tirdzins.js no /api/ek/kursi (saraksta beigās). Grupu kursi te netiek pārdoti (saite zem «Kā notiek pirkums») -->
                 </ul>
             </div>
             <div class="tirgus-zeme" aria-hidden="true">
@@ -180,6 +136,18 @@
                 </svg>
                 <span class="tirgus-empa" data-empa-poza="vicina" data-empa-merogs="3"></span>
             </div>
+        </section>
+
+        <!-- Kā notiek pirkums (atsevišķi no būdiņām) -->
+        <section class="tirgus-info container" aria-labelledby="tirgus-info-virsraksts">
+            <h2 class="sadalas-virsraksts" id="tirgus-info-virsraksts">Kā notiek pirkums</h2>
+            <ol class="tirgus-soli">
+                <li><b>Pasūti</b><span>Izvēlies kursu vai summu, noformējumu un piegādi. Reģistrēties nav obligāti.</span></li>
+                <li><b>Apmaksā rēķinu</b><span>Rēķinu uzreiz nosūtām uz tavu e-pastu. Apmaksa ar pārskaitījumu.</span></li>
+                <li><b>Saņem</b><span>Pēc apmaksas karte nonāk pie saņēmēja tavā izvēlētajā laikā, un e-kurss atveras sadaļā «Mani kursi».</span></li>
+            </ol>
+            <p class="tirgus-piezime">Saņēmējs ievada kartes kodu, piesakoties kursam. Ja karte ir uz summu, neizmantotais atlikums paliek kartē. <a href="noteikumi.html#davanu-kartes">Dāvanu karšu noteikumi</a></p>
+            <p class="tirgus-grupas">Meklē grupu kursu ar pasniedzēju? Pieteikšanās notiek kursu lapā, un to var apmaksāt arī ar dāvanu karti. <a href="kursi.html">Skatīt grupu kursus</a></p>
         </section>
 
         <!-- Manas dāvanu kartes (tikai ienākušajiem, ja tādas ir) -->

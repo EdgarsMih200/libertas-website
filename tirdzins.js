@@ -224,10 +224,6 @@
             var k = el('span', 'budina-ieskats-karte');
             k.innerHTML = dkKarte(PARAUGI[1], { tikaiPrieksa: true });
             w.appendChild(k);
-        } else if (prece.classList.contains('prece--info')) {
-            var s = el('span', 'budina-ieskats-soli');
-            ['1', '2', '3'].forEach(function (n) { s.appendChild(el('i', '', n)); });
-            w.appendChild(s);
         } else {
             var v = prece.querySelector('.prece-vaks');
             if (v) { var c = v.cloneNode(true); c.removeAttribute('id'); c.setAttribute('class', (v.getAttribute('class') || '') + ' budina-ieskats-vaks'); w.appendChild(c); }
@@ -253,7 +249,8 @@
         b.appendChild(ieskats(li, prece));
         var t = el('span', 'budina-logs-teksts');
         if (birka) t.appendChild(el('span', 'budina-logs-birka', birka.textContent));
-        t.appendChild(el('span', 'budina-logs-nos', vh ? vh.textContent : ''));
+        // Uz būdiņas tikai īsais nosaukums (pirms « — »), pilnais — atvērtajā būdiņā
+        t.appendChild(el('span', 'budina-logs-nos', vh ? vh.textContent.split(/\s+[—–]\s+/)[0] : ''));
         var apaksa = el('span', 'budina-logs-apaksa');
         apaksa.appendChild(el('span', 'budina-logs-cena', cena ? cena.textContent : 'Uzzināt'));
         apaksa.appendChild(el('span', 'budina-logs-atvert', 'Atvērt'));
@@ -312,7 +309,6 @@
     // ---------- E-kursi ----------
     function ekBudinas() {
         return fetch('/api/ek/kursi', { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.json() : { kursi: [] }; }).then(function (d) {
-            var grupas = budinas.querySelector('[data-budina-grupas]');
             ((d && d.kursi) || []).forEach(function (k) {
                 var a = el('article', 'prece'); a.setAttribute('aria-labelledby', 'prece-ek-' + k.id);
                 var img = el('img', 'prece-vaks'); img.src = L.ekVaks ? L.ekVaks(k) : 'assets/kursi/spanu-a1.svg'; img.alt = ''; img.width = 600; img.height = 320; img.decoding = 'async'; a.appendChild(img);
@@ -332,7 +328,7 @@
                 a.appendChild(s);
                 var li = budina(k.limenis ? 'E-kurss ' + k.limenis : 'E-kurss', a);
                 li.id = 'e-kurss-' + k.id;
-                budinas.insertBefore(li, grupas);
+                budinas.appendChild(li);
                 iekartot(li);
             });
         }).catch(function () {});
