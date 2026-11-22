@@ -261,6 +261,8 @@
         b.appendChild(t);
         b.addEventListener('click', function () { parslegt(li, true); });
         prece.parentNode.insertBefore(b, prece);
+        var mk = el('span', 'budina-markize'); mk.setAttribute('aria-hidden', 'true');
+        li.insertBefore(mk, b);
 
         var x = el('button', 'budina-aizvert'); x.type = 'button';
         x.setAttribute('aria-label', 'Aizvērt būdiņu');

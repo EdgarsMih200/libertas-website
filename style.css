@@ -9045,34 +9045,33 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
     color: var(--c-brand); background: var(--c-surface); border: 1px solid var(--c-line);
 }
 
+/* Būdiņa visu gadu viena: sarkani dēļi (falu), tumšāki stabi un lete. Gadalaiks maina tikai markīzes svītras
+   (--t-a/--t-b) un rotājumus (--t-sniegs / --t-ziedi-r / --t-lapas jumtā, svētkos vainags, virtenes, egle). */
+html[data-tirgus] { --t-stabs: var(--c-brand-strong); --t-lete: var(--c-brand-strong); --t-dels: var(--c-brand); }
+
 /* Gadalaiku tokeni (tikai esošās krāsas) */
 html.tirgus-svetki, html.tirgus-ziema {
     --t-iela: linear-gradient(180deg, var(--c-forest) 0%, var(--c-forest-2) 100%);
     --t-ink: var(--c-on-forest); --t-ink-muted: var(--c-on-forest-muted);
-    --t-stabs: var(--c-brand-strong); --t-lete: var(--c-brand);
-    --t-jumts: var(--c-brand-strong); --t-delis: var(--c-brand); --t-liste: var(--c-brand-strong);
+    --t-a: var(--c-error); --t-b: var(--c-season-snow); --t-sniegs: 1;
     --t-zeme: var(--c-season-snow); --t-akmens: transparent;
 }
 html.tirgus-pavasaris {
     --t-iela: linear-gradient(180deg, var(--c-bg) 0%, var(--c-sage) 100%);
     --t-ink: var(--c-ink); --t-ink-muted: var(--c-muted);
-    --t-stabs: var(--c-sage-ink); --t-lete: var(--c-sage-ink);
-    --t-a: var(--c-surface); --t-b: var(--c-sage-bright); --t-stienis: var(--c-sage-ink); --t-ziedi: var(--c-accent-soft);
+    --t-a: var(--c-sage-ink); --t-b: var(--c-surface); --t-ziedi-r: 1;
     --t-zeme: var(--c-sage-bright); --t-akmens: var(--c-sage);
 }
 html.tirgus-vasara {
     --t-iela: linear-gradient(180deg, var(--c-bg) 0%, var(--c-accent-soft) 100%);
     --t-ink: var(--c-ink); --t-ink-muted: var(--c-muted);
-    --t-stabs: var(--c-brand); --t-lete: var(--c-brand);
-    --t-a: var(--c-surface); --t-b: var(--c-accent); --t-stienis: var(--c-brand);
+    --t-a: var(--c-accent); --t-b: var(--c-surface);
     --t-zeme: var(--c-sunk); --t-akmens: var(--c-line);
 }
 html.tirgus-rudens {
     --t-iela: linear-gradient(180deg, var(--c-bg) 0%, var(--c-sunk) 100%);
     --t-ink: var(--c-ink); --t-ink-muted: var(--c-muted);
-    --t-stabs: var(--c-brand-strong); --t-lete: var(--c-brand-strong);
-    --t-jumts: var(--c-accent-strong); --t-liste: var(--c-brand-strong); --t-mala: var(--c-brand-strong);
-    --t-lapa-a: var(--c-season-glow); --t-lapa-b: var(--c-accent);
+    --t-a: var(--c-accent-strong); --t-b: var(--c-season-glow); --t-lapas: 1;
     --t-zeme: var(--c-line); --t-akmens: var(--c-sunk);
 }
 
@@ -9112,28 +9111,37 @@ html.tirgus-rudens {
 
 .budina-virsus { position: relative; z-index: 2; aspect-ratio: 360 / 120; min-height: 84px; max-height: 132px; margin: 0 -4px; }
 .budina-jumts { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 6px 6px rgb(23 35 31 / .18)); }
-.budina-jumts use { display: none; }
-html.tirgus-svetki .j--ziema, html.tirgus-ziema .j--ziema,
-html.tirgus-pavasaris .j--pavasaris, html.tirgus-vasara .j--vasara, html.tirgus-rudens .j--rudens { display: inline; }
 
 /* Krāsas: style="fill:var(--t-…)" pašā <defs> (CSS selektori neiekļūst <use> kopijās; mainīgie mantojas) */
 
-/* Ziemā — silta gaisma frontonā; svētkos — zvaigzne + lampiņu virtene zem jumta */
-.budina-zvaigzne, .budina-virtene { display: none; }
-html.tirgus-ziema .budina-zvaigzne, html.tirgus-svetki .budina-zvaigzne {
-    display: block;
-    position: absolute; left: 50%; top: 58%;
-    width: 18px; height: 18px;
+/* Frontonā visu gadu silta laterna; svētkos — egļu vainags ar ogām un lentīti + lampiņu virtene zem jumta */
+.budina-virtene { display: none; }
+.budina-zvaigzne {
+    position: absolute; left: 50%; top: 62%;
+    width: 16px; height: 16px;
     transform: translate(-50%, -50%);
     border-radius: 50%;
     background: var(--c-season-glow);
-    box-shadow: 0 0 0 4px rgb(242 196 106 / .25), 0 0 24px 6px rgb(242 196 106 / .45);
+    box-shadow: 0 0 0 4px rgb(242 196 106 / .25), 0 0 22px 6px rgb(242 196 106 / .4);
 }
 html.tirgus-svetki .budina-zvaigzne {
-    border-radius: 0;
-    clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    width: 28px; height: 28px;
-    box-shadow: none;
+    top: 60%;
+    width: 34px; height: 34px;
+    background:
+        radial-gradient(circle at 28% 24%, var(--c-error) 2.5px, transparent 3px),
+        radial-gradient(circle at 74% 28%, var(--c-error) 2.5px, transparent 3px),
+        radial-gradient(circle at 50% 12%, var(--c-season-glow) 2px, transparent 2.5px),
+        radial-gradient(circle at 18% 58%, var(--c-season-glow) 2px, transparent 2.5px),
+        radial-gradient(circle at 84% 62%, var(--c-error) 2.5px, transparent 3px),
+        radial-gradient(circle, transparent 36%, var(--c-sage-ink) 38% 64%, var(--c-forest-3) 66% 70%, transparent 72%);
+    box-shadow: 0 0 18px 4px rgb(242 196 106 / .28);
+}
+html.tirgus-svetki .budina-zvaigzne::after {
+    content: "";
+    position: absolute; left: 50%; bottom: -3px;
+    width: 18px; height: 12px; margin-left: -9px;
+    background: var(--c-error);
+    clip-path: polygon(0 0, 50% 40%, 100% 0, 100% 60%, 62% 50%, 78% 100%, 50% 62%, 22% 100%, 38% 50%, 0 60%);
 }
 html.tirgus-svetki .budina-virtene {
     display: block;
@@ -9248,6 +9256,13 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
     background: radial-gradient(circle at 30px 30px, var(--t-zeme) 26px, transparent 27px) 0 0 / 60px 18px repeat-x;
 }
 .tirgus-empa { position: absolute; right: 7%; bottom: 28px; line-height: 0; }
+/* Svētku egle uz ielas */
+.tirgus-egle { display: none; position: absolute; left: 4%; bottom: 22px; width: 124px; height: auto; overflow: visible; }
+html.tirgus-svetki .tirgus-egle { display: block; }
+@media (prefers-reduced-motion: no-preference) {
+    .tirgus-egle-zvaigzne { transform-origin: 60px 13px; animation: egle-mirdz 2.6s ease-in-out infinite; }
+}
+@keyframes egle-mirdz { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .75; transform: scale(.86); } }
 
 /* Manas dāvanu kartes */
 .tirgus-manas { padding-block: var(--sp-8); }
@@ -9274,6 +9289,50 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
     .tirgus-soli { grid-template-columns: minmax(0, 1fr); }
     .tirgus-empa { right: 4%; }
 }
+
+/* ---------- Būdiņas korpuss: sarkani dēļi starp stabiem, markīze, lete ---------- */
+.budina {
+    background:
+        linear-gradient(180deg, rgb(23 35 31 / .35), transparent 36px) 8px 56px / calc(100% - 16px) calc(100% - 64px) no-repeat,
+        repeating-linear-gradient(90deg, var(--t-dels) 0 22px, var(--c-brand-strong) 22px 24px) 8px 56px / calc(100% - 16px) calc(100% - 64px) no-repeat;
+}
+.budina-markize {
+    position: relative; z-index: 2;
+    display: block;
+    height: 26px;
+    margin: 0 -6px -10px;
+    background:
+        linear-gradient(180deg, var(--c-brand-strong) 0 4px, transparent 4px),
+        repeating-linear-gradient(90deg, var(--t-a) 0 20px, var(--t-b) 20px 40px);
+    -webkit-mask: radial-gradient(circle 10px at 10px 16px, #000 98%, transparent) 0 0 / 20px 26px repeat-x, linear-gradient(#000 0 0) 0 0 / 100% 16px no-repeat;
+            mask: radial-gradient(circle 10px at 10px 16px, #000 98%, transparent) 0 0 / 20px 26px repeat-x, linear-gradient(#000 0 0) 0 0 / 100% 16px no-repeat;
+}
+.budina-lete { background: linear-gradient(180deg, var(--c-brand) 0 4px, var(--t-lete) 4px); }
+html.tirgus-svetki .budina-lete::before, html.tirgus-ziema .budina-lete::before {
+    content: "";
+    position: absolute; left: -2px; right: -2px; top: -5px;
+    height: 8px; border-radius: 6px 6px 3px 3px;
+    background: var(--c-season-snow);
+}
+html.tirgus-svetki .budina-lete::after {
+    content: "";
+    position: absolute; left: 4px; right: 4px; top: 9px;
+    height: 14px;
+    background:
+        radial-gradient(circle at 10px 6px, var(--c-error) 3px, transparent 3.5px) 0 0 / 40px 14px repeat-x,
+        radial-gradient(circle at 30px 7px, var(--c-season-glow) 2.5px, transparent 3px) 0 0 / 40px 14px repeat-x,
+        radial-gradient(ellipse 12px 7px at 10px 3px, var(--c-sage-ink) 96%, transparent) 0 0 / 20px 14px repeat-x;
+}
+html.tirgus-svetki .budina::before, html.tirgus-svetki .budina::after {
+    background: repeating-linear-gradient(-40deg, var(--c-season-snow) 0 6px, var(--c-error) 6px 12px);
+}
+
+/* Lapas josla tirdziņā — zema, lai būdiņas redzamas uzreiz */
+.tirgus-josla .lapas-josla-saturs { gap: var(--sp-2); padding-block: var(--sp-4); }
+.tirgus-josla .lapas-josla-saturs > * { max-width: 720px; }
+.tirgus-virsraksts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2) var(--sp-4); }
+.tirgus-virsraksts .tirgus-zime { margin: 0; }
+.tirgus-josla .lapas-josla-ievads { margin: 0; max-width: 62ch; }
 
 /* ---------- Slēgtas būdiņas (tirdzins.js: .ir-slegtas) ----------
    Maza būdiņa = jumts → izkārtne → logs ar slēģiem (ieskats, nosaukums, cena) → lete.
