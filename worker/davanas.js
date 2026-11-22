@@ -329,23 +329,34 @@ const MONO = "'IBM Plex Mono', Consolas, 'Courier New', monospace";
 
 function vertibaTeksts(k, kurss) { return k.tips === 'kurss' && kurss ? `kursu “${kurss.name}”` : eur(k.summa); }
 
-// «Biļete» e-pastā: tabulas, jo e-pasta klienti neatbalsta grid/cqw
+// «Biļete» e-pastā: tabulas (e-pasta klienti neatbalsta grid/cqw). Krāsas = izvēlētais noformējums (kā .dk-bilete--*),
+// un biļete stāv uz gaiša papīra «galda», lai tumši zaļā karte nesaplūst ar e-pasta meža fonu.
+const BIL = {
+  mezs: { fons: '#1E2E29', fons2: '#2B4038', teksts: '#F3EEE3', blavs: '#AFB9B0', akc: '#B5CCAE', liste: '#3A5249' },
+  bordo: { fons: '#6B1D1D', fons2: '#521515', teksts: '#FBF1E6', blavs: '#E4B9A8', akc: '#F2C46A', liste: '#8A3A33' },
+  papirs: { fons: '#FFFDF8', fons2: '#F2EADC', teksts: '#24211E', blavs: '#6E665C', akc: '#B4502A', liste: '#D9CFC0' },
+};
 function biletesTabula(k, kurss) {
+  const b = BIL[k.dizains] || BIL.mezs;
   const v = kurss ? valoda(kurss.id) : { kods: '?' };
-  const rinda = (a, b) => `<td style="padding:0 18px 0 0;vertical-align:top;"><div style="font-family:${SANS};font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};">${a}</div><div style="font-family:${MONO};font-size:14px;font-weight:600;color:${C.paper};padding-top:3px;">${esc(b)}</div></td>`;
-  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-radius:14px;background:${C.forest};border:1px solid ${C.line};"><tr>
-    <td style="padding:20px 22px;">
-      <div style="font-family:${SERIF};font-size:20px;font-weight:600;color:${C.paper};">Libertas<span style="color:${C.sage};">.</span> <span style="font-family:${SANS};font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:${C.muted};">Dāvanu karte</span></div>
-      <div style="font-family:${MONO};font-size:30px;font-weight:600;color:${C.paper};padding:12px 0 2px;">LV <span style="color:${C.sage};font-size:20px;">- - ✈ - -</span> ${esc(k.tips === 'kurss' ? v.kods : '?')}</div>
-      <div style="font-family:${SERIF};font-size:18px;color:${C.paper};padding-bottom:14px;">${esc(k.tips === 'kurss' && kurss ? kurss.name : 'Ceļojums pēc izvēles')}</div>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${rinda('Kam', k.kam)}${rinda('No', k.no_ka)}${rinda('Derīga līdz', lv(k.derigs_lidz))}</tr></table>
+  const ir = k.tips === 'kurss' && kurss;
+  const rinda = (a, t) => `<td style="padding:0 16px 0 0;vertical-align:top;"><div style="font-family:${SANS};font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:${b.blavs};">${a}</div><div style="font-family:${MONO};font-size:14px;font-weight:600;color:${b.teksts};padding-top:3px;white-space:nowrap;">${esc(t)}</div></td>`;
+  const etik = (t) => `<div style="font-family:${SANS};font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:${b.blavs};">${t}</div>`;
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#EDE5D8;border-radius:16px;"><tr><td style="padding:22px 18px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-radius:14px;background:${b.fons};border:1px solid ${b.liste};box-shadow:0 10px 24px rgba(36,33,30,.22);"><tr>
+    <td style="padding:20px 22px;vertical-align:top;">
+      <div style="font-family:${SERIF};font-size:20px;font-weight:600;color:${b.teksts};">Libertas<span style="color:${b.akc};">.</span> <span style="font-family:${SANS};font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:${b.blavs};">Dāvanu karte</span></div>
+      <div style="font-family:${MONO};font-size:30px;font-weight:600;color:${b.teksts};padding:12px 0 2px;white-space:nowrap;">LV <span style="color:${b.akc};font-size:18px;letter-spacing:2px;">- - &#9992;&#xFE0E; - -</span> ${esc(ir ? v.kods : '?')}</div>
+      <div style="font-family:${SERIF};font-size:18px;color:${b.teksts};padding-bottom:14px;">${esc(ir ? kurss.name : 'Ceļojums pēc izvēles')}</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>${rinda('Kam', k.kam)}${rinda('No', k.no_ka)}${ir ? rinda('Izlidošana', kurss.veids === 'ekurss' ? 'Kad vēlies' : izlidosana(kurss)) : ''}${rinda('Derīga līdz', lv(k.derigs_lidz))}</tr></table>
     </td>
-    <td width="150" style="padding:20px 18px;background:${C.forest2};border-left:2px dashed ${C.line};border-radius:0 14px 14px 0;vertical-align:top;">
-      <div style="font-family:${SANS};font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};">Vērtība</div>
-      <div style="font-family:${SERIF};font-size:22px;font-weight:600;color:${C.paper};padding:4px 0 16px;">${esc(eur(k.summa))}</div>
-      <div style="font-family:${SANS};font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:${C.muted};">Kods</div>
-      <div style="font-family:${MONO};font-size:14px;font-weight:600;color:${C.glow};padding-top:4px;letter-spacing:.04em;">${esc(k.kods)}</div>
-    </td></tr></table>`;
+    <td width="150" style="padding:20px 18px;background:${b.fons2};border-left:2px dashed ${b.liste};border-radius:0 14px 14px 0;vertical-align:top;">
+      ${etik('Vērtība')}
+      <div style="font-family:${SERIF};font-size:22px;font-weight:600;color:${b.teksts};padding:4px 0 16px;white-space:nowrap;">${esc(eur(k.summa))}</div>
+      ${etik('Kods')}
+      <div style="font-family:${MONO};font-size:14px;font-weight:600;color:${b.akc};padding-top:4px;letter-spacing:.04em;white-space:nowrap;">${esc(k.kods)}</div>
+    </td></tr></table>
+  </td></tr></table>`;
 }
 
 function ramis(saturs, preview) {
@@ -480,3 +491,6 @@ export async function davanasMarsruts(request, env, { path, method, user, url, c
   }
   return fail('Nav atrasts', 404);
 }
+
+// Priekšskatījumam / testiem
+export { sanemejaVestule, pircejaVestule };

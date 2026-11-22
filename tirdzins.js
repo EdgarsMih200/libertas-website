@@ -50,6 +50,19 @@
         return '<div class="dk-turetajs"><div class="dk-flip' + (opc.otra ? ' ir-otra' : '') + '"><div class="dk-flip-iekss">' +
             '<div class="dk-puse">' + priekspuse(o) + '</div><div class="dk-puse dk-puse--aizm">' + aizmugure(o) + '</div></div></div></div>';
     }
+    // Aploksne ar karti iekšā (davanu-karte.html, pirmo reizi atverot)
+    function aploksne(o) {
+        var kamV = o.kam ? 'Kam: ' + esc(o.kam) : '';
+        return '<div class="dk-aploksne-skatuve"><div class="dk-aploksne" role="button" tabindex="0" aria-label="Atvērt aploksni ar dāvanu karti">' +
+            '<span class="dk-apl-aizm"></span>' +
+            '<span class="dk-apl-karte">' + dkKarte(o, { tikaiPrieksa: true }) + '</span>' +
+            '<svg class="dk-apl-kabata" viewBox="0 0 160 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="dk-apl-sani" d="M0 0 L80 56 L0 100Z M160 0 L80 56 L160 100Z"/><path class="dk-apl-apaksa" d="M0 100 L80 48 L160 100Z"/></svg>' +
+            '<span class="dk-apl-adrese" aria-hidden="true">' + kamV + '</span>' +
+            '<svg class="dk-apl-varsts" viewBox="0 0 160 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M0 0 H160 L80 58Z"/></svg>' +
+            '<span class="dk-apl-zimogs" aria-hidden="true">L</span>' +
+            '</div><p class="dk-apl-padoms">Klikšķini uz zīmoga, lai atvērtu</p></div>';
+    }
+
     // Klikšķis vai Enter/atstarpe uz [data-dk-apgriezt] apgriež karti
     function apgriezams(vieta) {
         var f = vieta.querySelector('.dk-flip');
@@ -87,10 +100,42 @@
             var gaida = karte.statuss === 'gaida', atcelta = karte.statuss === 'atcelta';
             var rez = el('div', 'dk-skats-rezgis');
             var kv = el('div', 'dk-skats-karte');
-            kv.innerHTML = dkKarte(karte);
-            apgriezams(kv);
-            var pp = el('p', 'dk-skats-padoms', 'Klikšķini uz kartes, lai redzētu aizmuguri.');
+            var vieta = el('div', 'dk-skats-vieta');
+            kv.appendChild(vieta);
+            var pp = el('p', 'dk-skats-padoms');
             kv.appendChild(pp);
+            var MAZ = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+            var ATV = 'dkAtvertas';
+            var atvertas = function () { try { return JSON.parse(localStorage.getItem(ATV) || '[]'); } catch (x) { return []; } };
+            var radKarti = function (ienak) {
+                vieta.innerHTML = dkKarte(karte);
+                if (ienak) vieta.firstChild.classList.add('dk-ienak');
+                apgriezams(vieta);
+                pp.textContent = 'Klikšķini uz kartes, lai redzētu aizmuguri. ';
+                if (!MAZ && !gaida && !atcelta) {
+                    var atpakal = el('button', 'btn-link', 'Ielikt atpakaļ aploksnē'); atpakal.type = 'button';
+                    atpakal.addEventListener('click', function () { radAploksni(); });
+                    pp.appendChild(atpakal);
+                }
+            };
+            // Aploksne: zīmogs → vāciņš atveras → karte izslīd → aploksne aiziet, paliek karte
+            var radAploksni = function () {
+                vieta.innerHTML = aploksne(karte);
+                pp.textContent = '';
+                var a = vieta.querySelector('.dk-aploksne');
+                var atvert = function () {
+                    if (a.classList.contains('atver')) return;
+                    a.classList.add('atver');
+                    try { var l = atvertas(); if (l.indexOf(tok.slice(0, 12)) < 0) { l.push(tok.slice(0, 12)); localStorage.setItem(ATV, JSON.stringify(l.slice(-50))); } } catch (x) {}
+                    setTimeout(function () { a.classList.add('izvilkta'); }, 1500);
+                    setTimeout(function () { radKarti(true); var f = vieta.querySelector('.dk-flip'); if (f) f.focus(); }, 2150);
+                };
+                a.addEventListener('click', atvert);
+                a.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); atvert(); } });
+                a.focus({ preventScroll: true });
+            };
+            if (!gaida && !atcelta && !MAZ && atvertas().indexOf(tok.slice(0, 12)) < 0) radAploksni();
+            else radKarti(false);
             // Drukai: abas puses viena zem otras (izgriez un salokām)
             var druka = el('div', 'dk-druka');
             druka.innerHTML = '<div class="dk-turetajs">' + priekspuse(karte) + '</div><div class="dk-turetajs">' + aizmugure(karte) + '</div>';

@@ -9410,6 +9410,68 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
 }
 @media (max-width: 520px) { .dk-divi { grid-template-columns: minmax(0, 1fr); } }
 
+
+/* Aploksne (davanu-karte.html, pirmo reizi): .atver = zīmogs nokrīt, vāciņš atveras, karte izslīd; .izvilkta = aploksne aiziet uz leju */
+.dk-aploksne-skatuve { padding-top: 26%; }
+.dk-aploksne {
+    position: relative;
+    aspect-ratio: 1.6;
+    perspective: 1400px;
+    cursor: pointer;
+    border-radius: 10px;
+    --apl-papirs: var(--c-surface);
+    --apl-ena: var(--c-sunk);
+    --apl-liste: var(--c-line);
+}
+.dk-aploksne:focus-visible { outline: 3px solid var(--c-focus); outline-offset: 6px; }
+.dk-apl-aizm { position: absolute; inset: 0; z-index: 0; border-radius: 10px; background: var(--apl-ena); box-shadow: var(--shadow-3); transition: transform .55s ease-in, opacity .45s ease-in; }
+.dk-apl-karte { --robs: var(--apl-ena); position: absolute; left: 5%; right: 5%; top: 7%; z-index: 2; transition: transform .85s cubic-bezier(.3, .8, .25, 1) .55s; }
+.dk-apl-karte .dk-bilete { box-shadow: 0 2px 6px rgb(0 0 0 / .18); }
+.dk-apl-kabata { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; overflow: visible; transition: transform .55s ease-in, opacity .45s ease-in; }
+.dk-apl-sani { fill: var(--apl-papirs); stroke: var(--apl-liste); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.dk-apl-apaksa { fill: var(--c-bg); stroke: var(--apl-liste); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.dk-apl-adrese { position: absolute; left: 8%; bottom: 9%; z-index: 3; font: 600 clamp(1.1rem, 3.4vw, 1.75rem)/1 'Caveat', 'Segoe Print', cursive; color: var(--c-brand); transform: rotate(-3deg); transition: transform .55s ease-in, opacity .45s ease-in; }
+.dk-apl-varsts {
+    position: absolute; left: 0; top: 0; z-index: 4;
+    width: 100%; height: 58%;
+    overflow: visible;
+    transform-origin: 50% 0;
+    transition: transform .6s ease-in-out, z-index 0s linear .3s, opacity .45s ease-in;
+    filter: drop-shadow(0 3px 3px rgb(36 33 30 / .12));
+}
+.dk-apl-varsts path { fill: var(--apl-papirs); stroke: var(--apl-liste); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.dk-apl-zimogs {
+    position: absolute; left: 50%; top: 58%; z-index: 5;
+    display: grid; place-items: center;
+    width: 15%; aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--c-brand) 70%, #fff) 0%, var(--c-brand) 45%, var(--c-brand-strong) 100%);
+    box-shadow: 0 2px 6px rgb(36 33 30 / .35), inset 0 0 0 4px rgb(0 0 0 / .12);
+    color: var(--c-surface);
+    font: 700 clamp(1.25rem, 4vw, 2rem)/1 'Lora', Georgia, serif;
+    transition: transform .3s ease-in, opacity .3s ease-in;
+}
+@media (prefers-reduced-motion: no-preference) {
+    .dk-aploksne:not(.atver):hover .dk-apl-zimogs { transform: translate(-50%, -50%) scale(1.08) rotate(-6deg); }
+}
+.dk-apl-padoms { margin: var(--sp-4) 0 0; text-align: center; font-size: var(--fs-sm); color: var(--c-muted); transition: opacity .3s; }
+
+.dk-aploksne.atver { cursor: default; }
+.dk-aploksne.atver .dk-apl-zimogs { transform: translate(-50%, -50%) scale(.2); opacity: 0; }
+.dk-aploksne.atver .dk-apl-varsts { transform: rotateX(180deg); z-index: 1; }
+.dk-aploksne.atver .dk-apl-karte { transform: translateY(-74%); }
+.dk-aploksne-skatuve:has(.atver) .dk-apl-padoms { opacity: 0; }
+.dk-aploksne.izvilkta .dk-apl-aizm,
+.dk-aploksne.izvilkta .dk-apl-kabata,
+.dk-aploksne.izvilkta .dk-apl-adrese,
+.dk-aploksne.izvilkta .dk-apl-varsts { transform: translateY(45%); opacity: 0; }
+.dk-aploksne.izvilkta .dk-apl-varsts { transform: rotateX(180deg) translateY(-45%); }
+.dk-aploksne.izvilkta .dk-apl-karte { transform: translateY(-74%) scale(1.04); transition-delay: 0s; }
+.dk-ienak { animation: dk-ienak .45s ease-out; }
+@keyframes dk-ienak { from { opacity: .4; transform: scale(.97); } to { opacity: 1; transform: none; } }
+.dk-skats-padoms .btn-link { font-size: inherit; }
+
 /* Dāvanu kartes lapa (davanu-karte.html) */
 .dk-lapa { padding-block: var(--sp-6) var(--sp-9); }
 .dk-cels { margin-bottom: var(--sp-6); }
@@ -9435,7 +9497,7 @@ html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before 
 .dk-skats-pogas { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
 @media (max-width: 1023px) { .dk-skats-rezgis { grid-template-columns: minmax(0, 1fr); } }
 @media print {
-    .site-header, .site-footer, .dk-cels, .dk-skats-pogas, .dk-skats-padoms, .empanadillo, .bju-poga, .aptaujas-josla, .dk-skats-karte > .dk-turetajs { display: none !important; }
+    .site-header, .site-footer, .dk-cels, .dk-skats-pogas, .dk-skats-padoms, .dk-aploksne-skatuve, .empanadillo, .bju-poga, .aptaujas-josla, .dk-skats-vieta { display: none !important; }
     .dk-lapa { padding: 0; }
     .dk-skats-rezgis { grid-template-columns: minmax(0, 1fr); gap: 8mm; }
     .dk-skats-karte { --robs: #fff; }
