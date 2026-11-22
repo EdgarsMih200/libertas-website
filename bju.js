@@ -30,6 +30,10 @@
           k: { 'cen': 3, 'cik maks': 3, 'maksā': 2, 'eur': 2, 'dārg': 3, 'izmaks': 3, 'cik tas': 1 },
           a: 'Grupu kursi <b>A1 un A2 — 280 EUR</b>, <b>B1.1 un B1.2 — 420 EUR</b> par visu kursu (14 nodarbības). ' +
              'Pašmācības e-kurss — <b>140 EUR</b> ar piekļuvi 90 dienas. Ja tev ir atlaides kods, ieraksti to pieteikuma logā.' },
+        { id: 'davanas', j: 'Vai var uzdāvināt kursu?',
+          k: { 'dāvan': 3, 'dāvin': 3, 'dāvan kart': 4, 'gift': 3, 'uzdāvin': 3, 'tirdziņ': 3, 'veikal': 2, 'nopirkt': 1 },
+          a: 'Jā! <a href="/tirdzins.html">Tirdziņā</a> ir <b>dāvanu kartes</b> — uz summu (no 10 EUR) vai konkrētam kursam. ' +
+             'Pasūti, apmaksā rēķinu, un karte ar kodu atnāks e-pastā. Tā derīga 12 mēnešus; saņēmējs kodu ievada, piesakoties kursam.' },
         { id: 'sakums', j: 'Kad sākas nākamā grupa?',
           k: { 'sāk': 2, 'nākam': 2, 'kad': 1, 'datum': 2, 'grafik': 3, 'tuvāk': 2, 'jaun grup': 3, 'grupa': 1 },
           a: nakamasGrupas },

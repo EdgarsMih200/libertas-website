@@ -447,7 +447,7 @@
             m_vards: sg ? sg.m_vards : '', m_talrunis: sg ? sg.m_talrunis : '', m_epasts: sg ? sg.m_epasts : '',
             kurss: sg ? sg.kurss : '', kurss_info: sg ? sg.kurss_info : '', enrollment_id: sg ? sg.enrollment_id : null,
             rindas: [{
-                a: 'Kursa maksa' + (sg && sg.atlaide ? ' (atlaide −' + sg.atlaide.proc + ' %, kods ' + sg.atlaide.kods + ')' : ''),
+                a: 'Kursa maksa' + (sg && sg.atlaide ? ' (atlaide −' + sg.atlaide.proc + ' %, kods ' + sg.atlaide.kods + ')' : '') + (sg && sg.davana ? ' (dāvanu karte ' + sg.davana.kods + ': −' + Number(sg.davana.summa).toFixed(2).replace('.', ',') + ' EUR)' : ''),
                 d: sg && sg.nodarbibas.length ? sg.nodarbibas[0] : plusDienas(sodien(), 7), s: sg ? sg.summa : 0, p: null
             }]
         };

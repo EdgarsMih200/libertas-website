@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dāvanu karte — Libertas</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <meta name="robots" content="noindex">
+    <meta name="referrer" content="no-referrer">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+</head>
+<body>
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="tirdzins.html">Tirdziņš</a>
+                <a href="materiali.html">Noderīgi materiāli</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="par-mums.html">Par mums</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="dk-lapa">
+        <div class="container dk-lapa-iekssa">
+            <nav class="lapas-cels dk-cels" aria-label="Atrašanās vieta"><a href="index.html">Sākums</a><span aria-hidden="true">/</span><a href="tirdzins.html">Tirdziņš</a><span aria-hidden="true">/</span><span aria-current="page">Dāvanu karte</span></nav>
+            <div class="dk-skats" data-dk-skats aria-busy="true">
+                <p class="register-intro">Ielādē…</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="tirdzins.html">Tirdziņš un dāvanu kartes</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-norvegu-nyttarsmat.html">Norvēģu A1 — Jaungada ēdieni</a></li>
+                        <li><a href="materiali-spanu-en-la-cafeteria.html">Spāņu A1 — En la cafetería</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Kontakti" parādīsies, kad būs kontaktinformācija -->
+                        <li><a href="par-mums.html">Par mums</a></li>
+                        <li><a href="blogs.html">Blogs</a></li>
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="empanadillo.js"></script>
+    <script src="tirdzins.js"></script>
+</body>
+</html>

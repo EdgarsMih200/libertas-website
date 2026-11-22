@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tirdziņš — Libertas</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <meta name="description" content="Libertas tirdziņš: dāvanu kartes valodu kursiem un tiešsaistes pašmācības kursi.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..600&family=Source+Sans+3:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="style.css">
+    <script src="sezona.js"></script>
+    <script>
+        /* Tirdziņa gadalaiks (būdiņu jumti, iela): svetki 1.12.–3.1. · ziema · pavasaris 3–5 · vasara 6–8 · rudens 9.–14.11. Pārbaudei ?gadalaiks=… */
+        (function () {
+            var h = document.documentElement, m = new Date().getMonth();
+            var g = (location.search.match(/[?&]gadalaiks=(svetki|ziema|pavasaris|vasara|rudens)\b/) || [])[1];
+            if (!g) g = h.classList.contains('ziemassvetki') ? 'svetki' : h.classList.contains('ziema') ? 'ziema' : m >= 2 && m <= 4 ? 'pavasaris' : m >= 5 && m <= 7 ? 'vasara' : m >= 8 && m <= 10 ? 'rudens' : 'ziema';
+            h.classList.add('tirgus-' + g);
+            h.setAttribute('data-tirgus', g);
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Galvene / Navigācija -->
+    <header class="site-header">
+        <div class="container nav-wrapper">
+            <a href="index.html" class="logo" aria-label="Libertas – uz sākumlapu">
+                <img src="assets/libertas.png" alt="LIBERTAS Logo" width="500" height="216">
+            </a>
+            <button class="izvelnes-poga" type="button" aria-expanded="false" aria-controls="galvena-izvelne" aria-label="Atvērt izvēlni">
+                <svg class="izvelnes-ikona" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+                    <path class="ikona-atvert" d="M4 7h16M4 12h16M4 17h16"/>
+                    <path class="ikona-aizvert" d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+            <nav class="main-nav" id="galvena-izvelne" aria-label="Galvenā izvēlne">
+                <a href="kursi.html">Kursi</a>
+                <a href="tirdzins.html" aria-current="page">Tirdziņš</a>
+                <a href="materiali.html">Noderīgi materiāli</a>
+                <a href="blogs.html">Blogs</a>
+                <a href="par-mums.html">Par mums</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Būdiņu jumti: viena grupa katram gadalaikam (CSS rāda vajadzīgo), krāsas no CSS -->
+    <svg class="tirgus-defs" width="0" height="0" aria-hidden="true" focusable="false">
+        <defs>
+            <g id="jumts-ziema">
+                <path style="fill:var(--t-delis)" d="M22 120 L180 40 L338 120 Z"/>
+                <path style="fill:none;stroke:var(--t-liste);stroke-width:2;opacity:.55" d="M100 120 V80 M140 120 V60 M180 120 V40 M220 120 V60 M260 120 V80"/>
+                <path style="fill:var(--t-jumts)" d="M0 104 L180 12 L360 104 L360 118 L180 26 L0 118 Z"/>
+                <path style="fill:var(--c-season-snow)" d="M-2 100 L180 6 L362 100 L354 108 Q342 101 332 106 Q318 96 302 96 L180 22 L58 96 Q42 96 28 106 Q18 101 6 108 Z"/>
+            </g>
+            <g id="jumts-pavasaris">
+                <rect style="fill:var(--t-stienis)" x="4" y="30" width="352" height="8" rx="4"/>
+                <path style="fill:var(--t-a)" d="M10 38 H350 L360 92 Q337.5 116 315 92 Q292.5 116 270 92 Q247.5 116 225 92 Q202.5 116 180 92 Q157.5 116 135 92 Q112.5 116 90 92 Q67.5 116 45 92 Q22.5 116 0 92 Z"/>
+                <path style="fill:var(--t-b)" d="M52.5 38 H95 L90 92 Q67.5 116 45 92 Z M137.5 38 H180 L180 92 Q157.5 116 135 92 Z M222.5 38 H265 L270 92 Q247.5 116 225 92 Z M307.5 38 H350 L360 92 Q337.5 116 315 92 Z"/>
+                <path style="fill:var(--t-ziedi)" d="M30 30 a6 6 0 1 0 0.1 0 Z M110 30 a6 6 0 1 0 0.1 0 Z M190 30 a6 6 0 1 0 0.1 0 Z M270 30 a6 6 0 1 0 0.1 0 Z M340 30 a6 6 0 1 0 0.1 0 Z"/>
+            </g>
+            <g id="jumts-vasara">
+                <rect style="fill:var(--t-stienis)" x="4" y="30" width="352" height="8" rx="4"/>
+                <path style="fill:var(--t-a)" d="M10 38 H350 L360 92 Q337.5 116 315 92 Q292.5 116 270 92 Q247.5 116 225 92 Q202.5 116 180 92 Q157.5 116 135 92 Q112.5 116 90 92 Q67.5 116 45 92 Q22.5 116 0 92 Z"/>
+                <path style="fill:var(--t-b)" d="M52.5 38 H95 L90 92 Q67.5 116 45 92 Z M137.5 38 H180 L180 92 Q157.5 116 135 92 Z M222.5 38 H265 L270 92 Q247.5 116 225 92 Z M307.5 38 H350 L360 92 Q337.5 116 315 92 Z"/>
+            </g>
+            <g id="jumts-rudens">
+                <path style="fill:var(--t-jumts)" d="M0 100 L24 36 H336 L360 100 Z"/>
+                <path style="fill:none;stroke:var(--t-liste);stroke-width:2;opacity:.55" d="M60 36 L48 100 M120 36 L116 100 M180 36 V100 M240 36 L244 100 M300 36 L312 100"/>
+                <path style="fill:var(--t-mala)" d="M0 98 H360 V108 H0 Z"/>
+                <path style="fill:var(--t-lapa-a)" d="M20 108 q8 2 6 12 q-10 -2 -6 -12 Z M92 108 q8 2 6 12 q-10 -2 -6 -12 Z M164 108 q8 2 6 12 q-10 -2 -6 -12 Z M236 108 q8 2 6 12 q-10 -2 -6 -12 Z M308 108 q8 2 6 12 q-10 -2 -6 -12 Z"/>
+                <path style="fill:var(--t-lapa-b)" d="M56 108 q-8 2 -6 12 q10 -2 6 -12 Z M128 108 q-8 2 -6 12 q10 -2 6 -12 Z M200 108 q-8 2 -6 12 q10 -2 6 -12 Z M272 108 q-8 2 -6 12 q10 -2 6 -12 Z M344 108 q-8 2 -6 12 q10 -2 6 -12 Z"/>
+            </g>
+        </defs>
+    </svg>
+
+    <main class="tirgus-lapa">
+        <!-- Lapas josla -->
+        <div class="lapas-josla">
+            <div class="lapas-josla-ainava" aria-hidden="true">
+                <svg viewBox="0 220 1440 390" preserveAspectRatio="xMidYMax slice" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-150 60)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/></svg>
+            </div>
+            <div class="container lapas-josla-saturs">
+                <nav class="lapas-cels" aria-label="Atrašanās vieta"><a href="index.html">Sākums</a><span aria-hidden="true">/</span><span aria-current="page">Tirdziņš</span></nav>
+                <p class="tirgus-zime"><span class="tags-punkts" aria-hidden="true"></span><span data-tirgus-nosaukums>Tirdziņš</span></p>
+                <h1>Tirdziņš</h1>
+                <p class="lapas-josla-ievads">Dāvanu kartes valodu kursiem un tiešsaistes kursi, ko vari sākt jebkurā dienā. Iegādājies sev vai uzdāvini kādam citam.</p>
+            </div>
+        </div>
+
+        <!-- Tirgus iela: katrs produkts savā būdiņā. Gadalaiks maina tikai būdiņu (jumts, stabi, iela), prece paliek tā pati papīra kartīte -->
+        <section class="tirgus-iela" aria-labelledby="tirgus-iela-virsraksts">
+            <div class="container">
+                <h2 class="sr-only" id="tirgus-iela-virsraksts">Preces</h2>
+                <ul class="tirgus-budinas" data-tirgus-budinas>
+
+                    <!-- Dāvanu kartes -->
+                    <li class="budina budina--plata budina--davanas" id="davanu-kartes">
+                        <div class="budina-virsus" aria-hidden="true">
+                            <svg class="budina-jumts" viewBox="0 0 360 120" preserveAspectRatio="none" focusable="false"><use class="j--ziema" href="#jumts-ziema"/><use class="j--pavasaris" href="#jumts-pavasaris"/><use class="j--vasara" href="#jumts-vasara"/><use class="j--rudens" href="#jumts-rudens"/></svg>
+                            <span class="budina-zvaigzne"></span>
+                            <span class="budina-virtene"></span>
+                        </div>
+                        <p class="budina-izkartne" aria-hidden="true">Dāvanas</p>
+                        <article class="prece prece--davanas" aria-labelledby="prece-davanas">
+                            <div class="prece-dk-paraugi" aria-hidden="true">
+                                <div class="dk-karte dk-karte--anglu dk-karte--mazs" data-dk-paraugs="anglu"></div>
+                                <div class="dk-karte dk-karte--spanu dk-karte--mazs" data-dk-paraugs="spanu"></div>
+                                <div class="dk-karte dk-karte--ziema dk-karte--mazs" data-dk-paraugs="ziema"></div>
+                            </div>
+                            <div class="prece-saturs">
+                                <p class="prece-birka">Dāvanu karte</p>
+                                <h3 class="prece-virsraksts" id="prece-davanas">Uzdāvini valodu</h3>
+                                <p class="prece-apraksts">Izvēlies summu vai konkrētu kursu, ieraksti apsveikumu, un mēs sagatavosim karti, ko izdrukāt vai nosūtīt. Derīga 12 mēnešus visiem Libertas kursiem.</p>
+                                <p class="prece-cena">no 10 EUR</p>
+                                <div class="prece-pogas">
+                                    <button class="btn-cta" type="button" data-dk-atvert="summa">Dāvināt summu</button>
+                                    <button class="btn-secondary" type="button" data-dk-atvert="kurss">Dāvināt kursu</button>
+                                </div>
+                            </div>
+                        </article>
+                        <div class="budina-lete" aria-hidden="true"></div>
+                    </li>
+
+                    <!-- E-kursi: būdiņas pievieno tirdzins.js no /api/ek/kursi (vieta: pirms "Grupu kursi") -->
+
+                    <!-- Grupu kursi: netiek pārdoti tirdziņā (vajag grupu + rēķinu pa daļām) — saite uz kursi.html -->
+                    <li class="budina" data-budina-grupas>
+                        <div class="budina-virsus" aria-hidden="true">
+                            <svg class="budina-jumts" viewBox="0 0 360 120" preserveAspectRatio="none" focusable="false"><use class="j--ziema" href="#jumts-ziema"/><use class="j--pavasaris" href="#jumts-pavasaris"/><use class="j--vasara" href="#jumts-vasara"/><use class="j--rudens" href="#jumts-rudens"/></svg>
+                            <span class="budina-zvaigzne"></span>
+                            <span class="budina-virtene"></span>
+                        </div>
+                        <p class="budina-izkartne" aria-hidden="true">Grupas</p>
+                        <article class="prece" aria-labelledby="prece-grupas">
+                            <svg class="prece-vaks prece-vaks--ainava" viewBox="0 330 1440 470" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false"><use href="assets/scene/ainava.svg#sc-sun"/><use href="assets/scene/ainava.svg#sc-birds" transform="translate(-300 120)"/><use href="assets/scene/ainava.svg#sc-far"/><use href="assets/scene/ainava.svg#sc-lake"/><use href="assets/scene/ainava.svg#sc-mid"/><use href="assets/scene/ainava.svg#sc-near"/><use href="assets/scene/ainava.svg#sc-path"/></svg>
+                            <div class="prece-saturs">
+                                <p class="prece-birka">Ar pasniedzēju</p>
+                                <h3 class="prece-virsraksts" id="prece-grupas">Grupu kursi</h3>
+                                <p class="prece-apraksts">Spāņu valoda A1–B1.2 un angļu valoda A1–A2. 14 nodarbības tiešsaistē mazā grupā. Pieteikšanās un grupas izvēle notiek kursu lapā.</p>
+                                <div class="prece-pogas">
+                                    <a class="btn-secondary" href="kursi.html">Skatīt grupas</a>
+                                </div>
+                            </div>
+                        </article>
+                        <div class="budina-lete" aria-hidden="true"></div>
+                    </li>
+
+                    <!-- Kā tas notiek (dāvanu kartes) -->
+                    <li class="budina budina--plata budina--info">
+                        <div class="budina-virsus" aria-hidden="true">
+                            <svg class="budina-jumts" viewBox="0 0 360 120" preserveAspectRatio="none" focusable="false"><use class="j--ziema" href="#jumts-ziema"/><use class="j--pavasaris" href="#jumts-pavasaris"/><use class="j--vasara" href="#jumts-vasara"/><use class="j--rudens" href="#jumts-rudens"/></svg>
+                            <span class="budina-zvaigzne"></span>
+                            <span class="budina-virtene"></span>
+                        </div>
+                        <p class="budina-izkartne" aria-hidden="true">Kā notiek</p>
+                        <article class="prece prece--info" aria-labelledby="prece-info">
+                            <div class="prece-saturs">
+                                <h3 class="prece-virsraksts" id="prece-info">Kā notiek pirkums</h3>
+                                <ol class="tirgus-soli">
+                                    <li><b>Pasūti</b><span>Izvēlies karti vai kursu. Pasūtīšanai jāienāk ar Google kontu.</span></li>
+                                    <li><b>Apmaksā rēķinu</b><span>Rēķinu uzreiz nosūtām uz tavu e-pastu. Apmaksa ar pārskaitījumu.</span></li>
+                                    <li><b>Saņem</b><span>Kad apmaksa ir saņemta, dāvanu karte atnāk e-pastā, un e-kurss atveras sadaļā «Mani kursi».</span></li>
+                                </ol>
+                                <p class="tirgus-piezime">Saņēmējs ievada kartes kodu, piesakoties kursam. Ja karte ir uz summu, neizmantotais atlikums paliek kartē. <a href="noteikumi.html#davanu-kartes">Dāvanu karšu noteikumi</a></p>
+                            </div>
+                        </article>
+                        <div class="budina-lete" aria-hidden="true"></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="tirgus-zeme" aria-hidden="true">
+                <span class="tirgus-empa" data-empa-poza="vicina" data-empa-merogs="3"></span>
+            </div>
+        </section>
+
+        <!-- Manas dāvanu kartes (tikai ienākušajiem, ja tādas ir) -->
+        <section class="tirgus-manas container" data-dk-manas hidden aria-labelledby="dk-manas-virsraksts">
+            <h2 class="sadalas-virsraksts" id="dk-manas-virsraksts">Manas dāvanu kartes</h2>
+            <ul class="dk-saraksts" data-dk-saraksts></ul>
+        </section>
+    </main>
+
+    <!-- Kājene -->
+    <footer class="site-footer">
+        <img class="kajene-ainava" src="assets/ilustracijas/kajene-mezs.svg" alt="" width="1440" height="240" loading="lazy" decoding="async">
+        <div class="kajene-saturs">
+            <div class="container kajene-kolonnas">
+                <div class="kajene-zimols">
+                    <a href="index.html" class="kajene-logo" aria-label="Libertas – uz sākumlapu">
+                        <img src="assets/libertas-light.svg" alt="LIBERTAS Logo" width="431" height="172">
+                    </a>
+                    <p class="kajene-sauklis">Runā, saproti, ceļo, audz!</p>
+                    <p class="kajene-apraksts">Spāņu un angļu valodas kursi</p>
+                </div>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-kursi">
+                    <h2 class="kajene-virsraksts" id="kajene-kursi">Kursi</h2>
+                    <ul>
+                        <li><a href="kursi.html">Kursu piedāvājums</a></li>
+                        <li><a href="kursi.html#spanu">Spāņu valoda A1–B1.2</a></li>
+                        <li><a href="kursi.html#anglu">Angļu valoda A1–A2</a></li>
+                        <li><a href="tirdzins.html">Tirdziņš un dāvanu kartes</a></li>
+                        <li><a href="konts.html">Mani kursi</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-materiali">
+                    <h2 class="kajene-virsraksts" id="kajene-materiali">Materiāli</h2>
+                    <ul>
+                        <li><a href="materiali.html">Noderīgi materiāli</a></li>
+                        <li><a href="materiali-spanu-ziemassvetki.html">Spāņu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-anglu-ziemassvetki.html">Angļu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-spanu-dia-de-muertos.html">Spāņu A1 — Día de Muertos</a></li>
+                        <li><a href="materiali-norvegu-ziemassvetki.html">Norvēģu A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-zviedru-ziemassvetki.html">Zviedru A1 — Ziemassvētki</a></li>
+                        <li><a href="materiali-norvegu-nyttarsmat.html">Norvēģu A1 — Jaungada ēdieni</a></li>
+                        <li><a href="materiali-spanu-en-la-cafeteria.html">Spāņu A1 — En la cafetería</a></li>
+                    </ul>
+                </nav>
+                <nav class="kajene-kolonna" aria-labelledby="kajene-libertas">
+                    <h2 class="kajene-virsraksts" id="kajene-libertas">Libertas</h2>
+                    <ul>
+                        <!-- "Kontakti" parādīsies, kad būs kontaktinformācija -->
+                        <li><a href="par-mums.html">Par mums</a></li>
+                        <li><a href="blogs.html">Blogs</a></li>
+                        <li><a href="noteikumi.html">Noteikumi un privātuma politika</a></li>
+                        <li><a href="noteikumi.html#sikdatnes">Sīkdatnes</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="kajene-josla">
+                <div class="container">
+                    <p>&copy; 2026 Libertas. Visas tiesības aizsargātas.</p>
+                    <a href="noteikumi.html">Noteikumi un privātuma politika</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="empanadillo.js"></script>
+    <script src="tirdzins.js"></script>
+</body>
+</html>

@@ -46,6 +46,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
     ['Kurss', esc(course.name)],
     ['Cena', esc(cena(course.price_eur))],
     ['Atlaide', enrollment.atlaides_kods ? esc(`−${enrollment.atlaide_proc} % (kods ${enrollment.atlaides_kods}) — ņemsim vērā rēķinā`) : ''],
+    ['Dāvanu karte', enrollment.davanu_summa ? esc(`−${cena(enrollment.davanu_summa)}${enrollment.davanu_kods ? ` (${enrollment.davanu_kods})` : ''}${enrollment.paid ? ' — kurss pilnībā apmaksāts' : ''}`) : ''],
     [course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', esc(course.schedule || 'Tiks precizēta')],
     ['Pieteikums iesniegts', esc(datums(enrollment.created_at || enrollment.updated_at))],
   ].filter((r) => r[1]);
@@ -156,6 +157,7 @@ function klientaVestule({ user, course, enrollment, origin }) {
     `Kurss: ${course.name}`,
     `Cena: ${cena(course.price_eur)}`,
     ...(enrollment.atlaides_kods ? [`Atlaide: −${enrollment.atlaide_proc} % (kods ${enrollment.atlaides_kods})`] : []),
+    ...(enrollment.davanu_summa ? [`Dāvanu karte: −${cena(enrollment.davanu_summa)}${enrollment.paid ? ' (kurss pilnībā apmaksāts)' : ''}`] : []),
     `${ek ? 'Piekļuve' : 'Grupa'}: ${course.schedule || 'Tiks precizēta'}`,
     '',
     `Statuss: Gaida apmaksu. ${statusaTeksts}`,
@@ -176,7 +178,7 @@ function adminaVestule({ user, course, enrollment, origin }) {
   const rinda = (k, v) => `<tr><td style="padding:4px 12px 4px 0;color:#5C554D;">${k}</td><td style="padding:4px 0;"><strong>${esc(v)}</strong></td></tr>`;
   const html = `<div style="font-family:${SANS};font-size:15px;color:#24211E;">
 <p>Jauns pieteikums kursam <strong>${esc(course.name)}</strong>.</p>
-<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${enrollment && enrollment.atlaides_kods ? rinda('Atlaide', `−${enrollment.atlaide_proc} % (${enrollment.atlaides_kods})`) : ''}${rinda(course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', course.schedule || 'Tiks precizēta')}</table>
+<table>${rinda('Vārds', user.name || '—')}${rinda('E-pasts', user.email)}${rinda('Tālrunis', user.phone || '—')}${rinda('Cena', cena(course.price_eur))}${enrollment && enrollment.atlaides_kods ? rinda('Atlaide', `−${enrollment.atlaide_proc} % (${enrollment.atlaides_kods})`) : ''}${enrollment && enrollment.davanu_summa ? rinda('Dāvanu karte', `−${cena(enrollment.davanu_summa)} (${enrollment.davanu_kods || ''})${enrollment.paid ? ' — apmaksāts pilnībā' : ''}`) : ''}${rinda(course.veids === 'ekurss' ? 'Piekļuve' : 'Grupa', course.schedule || 'Tiks precizēta')}</table>
 <p><a href="${origin}/admin.html">Atvērt administrāciju</a></p></div>`;
   const text = `Jauns pieteikums: ${course.name}\n${user.name || ''} <${user.email}>\nTālrunis: ${user.phone || '—'}${enrollment && enrollment.atlaides_kods ? `\nAtlaide: −${enrollment.atlaide_proc} % (${enrollment.atlaides_kods})` : ''}\n${origin}/admin.html`;
   return { subject: `Jauns pieteikums: ${course.name} — ${user.name || user.email}`, html, text };

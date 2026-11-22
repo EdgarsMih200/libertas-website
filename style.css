@@ -9028,3 +9028,362 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .gk-md-vertet .ek-uzd-pogas{margin-top:0}
 @media (max-width:1199px){.gk-md-izk{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:reduce){.gk-atm-iekss{transition:none}}
+
+/* =====================================================================
+   TIRDZIŅŠ (tirdzins.html) + DĀVANU KARTES (davanu-karte.html, tirdzins.js)
+   Gadalaiks html.tirgus-<svetki|ziema|pavasaris|vasara|rudens> maina tikai būdiņu
+   (jumts, stabi, lete, iela); prece vienmēr ir tā pati papīra kartīte .prece.
+   ===================================================================== */
+.tirgus-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+.tirgus-zime {
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+    margin: 0 0 var(--sp-3);
+    padding: 5px 14px 5px 10px;
+    border-radius: var(--r-pill);
+    font-size: var(--fs-xs); font-weight: 600; letter-spacing: .04em;
+    color: var(--c-brand); background: var(--c-surface); border: 1px solid var(--c-line);
+}
+
+/* Gadalaiku tokeni (tikai esošās krāsas) */
+html.tirgus-svetki, html.tirgus-ziema {
+    --t-iela: linear-gradient(180deg, var(--c-forest) 0%, var(--c-forest-2) 100%);
+    --t-ink: var(--c-on-forest); --t-ink-muted: var(--c-on-forest-muted);
+    --t-stabs: var(--c-brand-strong); --t-lete: var(--c-brand);
+    --t-jumts: var(--c-brand-strong); --t-delis: var(--c-brand); --t-liste: var(--c-brand-strong);
+    --t-zeme: var(--c-season-snow); --t-akmens: transparent;
+}
+html.tirgus-pavasaris {
+    --t-iela: linear-gradient(180deg, var(--c-bg) 0%, var(--c-sage) 100%);
+    --t-ink: var(--c-ink); --t-ink-muted: var(--c-muted);
+    --t-stabs: var(--c-sage-ink); --t-lete: var(--c-sage-ink);
+    --t-a: var(--c-surface); --t-b: var(--c-sage-bright); --t-stienis: var(--c-sage-ink); --t-ziedi: var(--c-accent-soft);
+    --t-zeme: var(--c-sage-bright); --t-akmens: var(--c-sage);
+}
+html.tirgus-vasara {
+    --t-iela: linear-gradient(180deg, var(--c-bg) 0%, var(--c-accent-soft) 100%);
+    --t-ink: var(--c-ink); --t-ink-muted: var(--c-muted);
+    --t-stabs: var(--c-brand); --t-lete: var(--c-brand);
+    --t-a: var(--c-surface); --t-b: var(--c-accent); --t-stienis: var(--c-brand);
+    --t-zeme: var(--c-sunk); --t-akmens: var(--c-line);
+}
+html.tirgus-rudens {
+    --t-iela: linear-gradient(180deg, var(--c-bg) 0%, var(--c-sunk) 100%);
+    --t-ink: var(--c-ink); --t-ink-muted: var(--c-muted);
+    --t-stabs: var(--c-brand-strong); --t-lete: var(--c-brand-strong);
+    --t-jumts: var(--c-accent-strong); --t-liste: var(--c-brand-strong); --t-mala: var(--c-brand-strong);
+    --t-lapa-a: var(--c-season-glow); --t-lapa-b: var(--c-accent);
+    --t-zeme: var(--c-line); --t-akmens: var(--c-sunk);
+}
+
+.tirgus-iela {
+    position: relative;
+    padding-top: var(--sp-8);
+    background: var(--t-iela);
+    color: var(--t-ink);
+    overflow: hidden;
+}
+
+.tirgus-budinas {
+    list-style: none; margin: 0; padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-flow: row dense;
+    gap: var(--sp-8) var(--sp-6);
+}
+.budina--plata { grid-column: span 2; }
+
+/* Būdiņa: jumts (platāks par stabiem) → izkārtne → prece → lete */
+.budina {
+    position: relative;
+    display: flex; flex-direction: column;
+    padding: 0 18px;
+}
+.budina::before, .budina::after {
+    content: "";
+    position: absolute;
+    top: 64px; bottom: 6px;
+    width: 10px;
+    border-radius: 3px;
+    background: var(--t-stabs);
+}
+.budina::before { left: 6px; }
+.budina::after { right: 6px; }
+
+.budina-virsus { position: relative; z-index: 2; aspect-ratio: 360 / 120; min-height: 84px; max-height: 132px; margin: 0 -4px; }
+.budina-jumts { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 6px 6px rgb(23 35 31 / .18)); }
+.budina-jumts use { display: none; }
+html.tirgus-svetki .j--ziema, html.tirgus-ziema .j--ziema,
+html.tirgus-pavasaris .j--pavasaris, html.tirgus-vasara .j--vasara, html.tirgus-rudens .j--rudens { display: inline; }
+
+/* Krāsas: style="fill:var(--t-…)" pašā <defs> (CSS selektori neiekļūst <use> kopijās; mainīgie mantojas) */
+
+/* Ziemā — silta gaisma frontonā; svētkos — zvaigzne + lampiņu virtene zem jumta */
+.budina-zvaigzne, .budina-virtene { display: none; }
+html.tirgus-ziema .budina-zvaigzne, html.tirgus-svetki .budina-zvaigzne {
+    display: block;
+    position: absolute; left: 50%; top: 58%;
+    width: 18px; height: 18px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--c-season-glow);
+    box-shadow: 0 0 0 4px rgb(242 196 106 / .25), 0 0 24px 6px rgb(242 196 106 / .45);
+}
+html.tirgus-svetki .budina-zvaigzne {
+    border-radius: 0;
+    clip-path: polygon(50% 0, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    width: 28px; height: 28px;
+    box-shadow: none;
+}
+html.tirgus-svetki .budina-virtene {
+    display: block;
+    position: absolute; left: 4px; right: 4px; bottom: -14px;
+    height: 24px;
+    background: url("assets/ziemassvetki/virtene.svg") left top / 120px 24px repeat-x;
+}
+
+.budina-izkartne {
+    position: relative; z-index: 3;
+    align-self: center;
+    margin: 18px 0 var(--sp-4);
+    padding: 6px 20px 7px;
+    border: 2px solid var(--t-stabs);
+    border-radius: var(--r-xs);
+    background: var(--c-surface);
+    color: var(--c-brand);
+    font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 600; font-size: 1.0625rem; line-height: 1.2;
+    box-shadow: var(--shadow-1);
+    transform: rotate(-1.5deg);
+    transform-origin: 50% -18px;
+}
+.budina-izkartne::before, .budina-izkartne::after {
+    content: "";
+    position: absolute; bottom: 100%;
+    width: 2px; height: 20px;
+    background: var(--t-stabs);
+}
+.budina-izkartne::before { left: 18%; }
+.budina-izkartne::after { right: 18%; }
+.budina:nth-child(even) .budina-izkartne { transform: rotate(1.2deg); }
+@media (prefers-reduced-motion: no-preference) {
+    .budina:hover .budina-izkartne { animation: izkartne-supojas 1.6s ease-in-out; }
+}
+@keyframes izkartne-supojas {
+    0%, 100% { transform: rotate(-1.5deg); } 30% { transform: rotate(3deg); } 60% { transform: rotate(-3deg); } 80% { transform: rotate(1deg); }
+}
+
+.prece {
+    position: relative; z-index: 1;
+    flex: 1;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--c-line);
+    border-radius: var(--r-md);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-2);
+}
+.prece-vaks { display: block; width: 100%; height: auto; aspect-ratio: 600 / 320; object-fit: cover; }
+.prece-vaks--ainava { background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky2) 42%, var(--sc-sky3) 62%, var(--sc-sky3) 100%); }
+.prece-saturs { flex: 1; display: flex; flex-direction: column; gap: var(--sp-3); padding: var(--sp-5); }
+.prece-birka { margin: 0; font-size: var(--fs-xs); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-sage-ink); }
+.prece-virsraksts { margin: 0; font-family: 'Lora', Georgia, serif; font-size: var(--fs-h3); line-height: 1.25; color: var(--c-brand); }
+.prece-virsraksts a { color: inherit; text-decoration: none; }
+.prece-virsraksts a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.prece-apraksts { margin: 0; color: var(--c-muted); }
+.prece-cena { margin: auto 0 0; padding-top: var(--sp-2); font-size: 1.375rem; font-weight: 700; color: var(--c-ink); }
+.prece-pogas { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+.prece-pogas > * { flex: 1 1 auto; text-align: center; }
+
+.budina-lete {
+    position: relative; z-index: 2;
+    height: 14px;
+    margin: -8px -10px 0;
+    border-radius: 4px;
+    background: var(--t-lete);
+    box-shadow: 0 8px 0 -3px rgb(23 35 31 / .18);
+}
+
+/* Dāvanu karšu būdiņa: vēdeklis no kartēm + teksts */
+.prece--davanas { flex-direction: row; }
+.prece-dk-paraugi {
+    position: relative;
+    flex: 0 0 46%;
+    min-height: 280px;
+    background: var(--c-accent-soft);
+    overflow: hidden;
+}
+.prece-dk-paraugi .dk-karte { position: absolute; width: 72%; left: 14%; top: 50%; box-shadow: var(--shadow-3); transition: transform .35s var(--ease, ease-out); }
+.prece-dk-paraugi .dk-karte:nth-child(1) { transform: translate(-14%, -64%) rotate(-9deg); }
+.prece-dk-paraugi .dk-karte:nth-child(2) { transform: translate(10%, -50%) rotate(5deg); }
+.prece-dk-paraugi .dk-karte:nth-child(3) { transform: translate(-2%, -30%) rotate(-2deg); }
+@media (prefers-reduced-motion: no-preference) {
+    .budina--davanas:hover .dk-karte:nth-child(1) { transform: translate(-20%, -70%) rotate(-13deg); }
+    .budina--davanas:hover .dk-karte:nth-child(2) { transform: translate(16%, -54%) rotate(9deg); }
+}
+
+/* «Kā notiek» */
+.tirgus-soli { list-style: none; counter-reset: ts; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-5); }
+.tirgus-soli li { counter-increment: ts; display: grid; gap: var(--sp-1); align-content: start; }
+.tirgus-soli li::before {
+    content: counter(ts);
+    display: grid; place-items: center;
+    width: 32px; height: 32px; margin-bottom: var(--sp-2);
+    border-radius: 50%;
+    background: var(--c-brand); color: var(--c-surface);
+    font-weight: 700;
+}
+.tirgus-soli b { font-size: 1.0625rem; }
+.tirgus-soli span { color: var(--c-muted); font-size: var(--fs-sm); }
+.tirgus-piezime { margin: var(--sp-2) 0 0; padding-top: var(--sp-4); border-top: 1px dashed var(--c-line); font-size: var(--fs-sm); color: var(--c-muted); }
+.tirgus-piezime a { color: var(--c-accent-strong); }
+
+/* Iela zem būdiņām: sniegs ziemā, bruģis citos gadalaikos */
+.tirgus-zeme {
+    position: relative;
+    height: 88px;
+    margin-top: var(--sp-7);
+    background-color: var(--t-zeme);
+    background-image:
+        radial-gradient(ellipse 15px 7px at 50% 50%, var(--t-akmens) 92%, transparent 100%),
+        radial-gradient(ellipse 15px 7px at 50% 50%, var(--t-akmens) 92%, transparent 100%);
+    background-size: 40px 22px;
+    background-position: 0 6px, 20px 17px;
+}
+html.tirgus-svetki .tirgus-zeme::before, html.tirgus-ziema .tirgus-zeme::before {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: 100%;
+    height: 18px;
+    background: radial-gradient(circle at 30px 30px, var(--t-zeme) 26px, transparent 27px) 0 0 / 60px 18px repeat-x;
+}
+.tirgus-empa { position: absolute; right: 7%; bottom: 28px; line-height: 0; }
+
+/* Manas dāvanu kartes */
+.tirgus-manas { padding-block: var(--sp-8); }
+.dk-saraksts { list-style: none; margin: var(--sp-5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); gap: var(--sp-5); }
+.dk-saraksts-vienums {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-4); align-items: center;
+    padding: var(--sp-4);
+    border: 1px solid var(--c-line); border-radius: var(--r-md);
+    background: var(--c-surface);
+}
+.dk-saraksts-teksts { display: grid; gap: var(--sp-2); justify-items: start; }
+.dk-saraksts-kam { margin: 0; font-weight: 700; }
+.dk-saraksts-info { margin: 0; font-size: var(--fs-sm); color: var(--c-muted); }
+.dk-saraksts-pogas { display: flex; gap: var(--sp-4); }
+
+@media (max-width: 1023px) {
+    .tirgus-budinas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .budina--plata { grid-column: 1 / -1; }
+}
+@media (max-width: 767px) {
+    .tirgus-budinas { grid-template-columns: minmax(0, 1fr); gap: var(--sp-7); }
+    .prece--davanas { flex-direction: column; }
+    .prece-dk-paraugi { flex: none; min-height: 220px; }
+    .tirgus-soli { grid-template-columns: minmax(0, 1fr); }
+    .tirgus-empa { right: 4%; }
+}
+
+/* ---------- Dāvanu kartes zīmējums (ainava + papīra migla kreisajā pusē, izmēri no konteinera platuma) ---------- */
+.dk-karte {
+    container-type: inline-size;
+    position: relative;
+    aspect-ratio: 8 / 5;
+    overflow: hidden;
+    border-radius: var(--r-sm);
+    background: linear-gradient(180deg, var(--sc-sky1) 0%, var(--sc-sky2) 42%, var(--sc-sky3) 62%, var(--sc-sky3) 100%);
+    color: var(--c-ink);
+    box-shadow: var(--shadow-2);
+}
+/* Toņi: tirdzins.js pievieno .sc-ziema / .sc-kafija / .sc-rits (sk. «Ainavas toņu varianti») */
+.dk-karte-ainava { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dk-karte-saturs {
+    position: absolute; inset: 0 auto 0 0;
+    width: 64%;
+    display: flex; flex-direction: column; align-items: flex-start;
+    gap: 1.4cqi;
+    padding: 6cqi 6.5cqi;
+    background: linear-gradient(90deg, var(--c-bg) 0%, var(--c-bg) 62%, color-mix(in srgb, var(--c-bg) 0%, transparent) 100%);
+}
+.dk-karte-logo { width: 22cqi; height: auto; }
+.dk-karte-zime { margin: auto 0 0; font-family: 'Lora', Georgia, serif; font-style: italic; font-weight: 600; font-size: 4.2cqi; color: var(--c-sage-ink); }
+.dk-karte-vertiba { margin: 0; font-family: 'Lora', Georgia, serif; font-weight: 700; font-size: 8.6cqi; line-height: 1.05; color: var(--c-brand); overflow-wrap: anywhere; }
+.dk-karte-vertiba small { display: block; margin-top: .6cqi; font-family: 'Source Sans 3', sans-serif; font-size: 3.2cqi; font-weight: 600; color: var(--c-muted); }
+.dk-karte-kam { margin: 0; font-size: 4.2cqi; font-weight: 600; overflow-wrap: anywhere; }
+.dk-karte-kods { margin: .8cqi 0 0; padding: .6cqi 2cqi; border: 1px dashed var(--c-accent-strong); border-radius: 1.2cqi; font-family: ui-monospace, Consolas, monospace; font-size: 4.2cqi; font-weight: 700; letter-spacing: .1em; color: var(--c-accent-strong); }
+.dk-karte--mazs .dk-karte-saturs { gap: 1cqi; }
+
+/* ---------- Pasūtīšanas logs (pārmanto .pieteikuma-logs) ---------- */
+.pieteikuma-logs.dk-logs { width: min(960px, calc(100vw - 32px)); }
+.dk-izkartojums { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--sp-6); align-items: start; margin-top: var(--sp-5); }
+.dk-prieksskats { position: sticky; top: 0; }
+.dk-prieksskats-teksts { margin: var(--sp-4) 0 0; font-family: 'Lora', Georgia, serif; font-style: italic; color: var(--c-muted); overflow-wrap: anywhere; }
+.dk-prieksskats-teksts b { font-style: normal; font-family: 'Source Sans 3', sans-serif; font-weight: 600; color: var(--c-ink); }
+.dk-forma { display: grid; gap: var(--sp-5); }
+.dk-lauks { display: grid; gap: var(--sp-2); margin: 0; padding: 0; border: 0; min-width: 0; }
+.dk-lauks[hidden] { display: none; }
+.dk-lauks legend, .dk-etikete { padding: 0; margin-bottom: var(--sp-2); font-weight: 600; }
+.dk-palidziba { font-size: var(--fs-xs); color: var(--c-muted); }
+.dk-segmenti, .dk-summas { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+.dk-segments, .dk-summa { position: relative; cursor: pointer; }
+.dk-segments input, .dk-summa input, .dk-dizains input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.dk-segments span, .dk-summa span {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 72px; min-height: 44px; padding: 0 var(--sp-4);
+    border: 1px solid var(--c-line-strong); border-radius: var(--r-pill);
+    background: var(--c-surface); font-weight: 600;
+}
+.dk-segments span { min-width: 120px; }
+.dk-segments input:checked + span, .dk-summa input:checked + span { background: var(--c-forest); border-color: var(--c-forest); color: var(--c-on-forest); }
+.dk-segments input:focus-visible + span, .dk-summa input:focus-visible + span { outline: 3px solid var(--c-focus); outline-offset: 2px; }
+.dk-cita { display: grid; gap: var(--sp-1); margin-top: var(--sp-2); max-width: 240px; font-size: var(--fs-sm); }
+.dk-cita[hidden] { display: none; }
+.dk-dizaini { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sp-3); }
+.dk-dizains { display: grid; gap: var(--sp-2); cursor: pointer; font-size: var(--fs-sm); text-align: center; position: relative; }
+.dk-dizains-attels { display: block; border-radius: var(--r-sm); outline: 3px solid transparent; outline-offset: 2px; transition: outline-color .15s; }
+.dk-dizains-attels .dk-karte { box-shadow: var(--shadow-1); }
+.dk-dizains input:checked ~ .dk-dizains-attels { outline-color: var(--c-accent); }
+.dk-dizains input:checked ~ .dk-dizains-nos { font-weight: 700; }
+.dk-dizains input:focus-visible ~ .dk-dizains-attels { outline-color: var(--c-focus); }
+.dk-divi { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--sp-4); }
+.dk-forma textarea.lauks { resize: vertical; min-height: 84px; }
+.dk-viltus { position: absolute; left: -9999px; width: 1px; height: 1px; }
+.dk-kopa { margin: 0; font-size: 1.125rem; font-weight: 700; }
+.dk-kluda { margin: 0; color: var(--c-error); font-weight: 600; }
+.dk-kluda:empty { display: none; }
+.dk-gatavs-teksts { margin: 0; }
+@media (max-width: 767px) {
+    .dk-izkartojums { grid-template-columns: minmax(0, 1fr); }
+    .dk-prieksskats { position: static; max-width: 360px; }
+    .dk-divi { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Dāvanu kartes lapa (davanu-karte.html) */
+.dk-lapa { padding-block: var(--sp-6) var(--sp-9); }
+.dk-cels { margin-bottom: var(--sp-6); }
+.dk-skats-rezgis { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--sp-7); align-items: start; }
+.dk-skats-karte .dk-karte { box-shadow: var(--shadow-3); }
+.dk-skats-apsveikums { margin-top: var(--sp-5); padding: var(--sp-5); border-radius: var(--r-md); background: var(--c-surface); border: 1px solid var(--c-line); }
+.dk-skats-apsveikums-teksts { margin: 0; font-family: 'Lora', Georgia, serif; font-style: italic; font-size: var(--fs-lead); overflow-wrap: anywhere; }
+.dk-skats-no { margin: var(--sp-2) 0 0; font-weight: 600; }
+.dk-skats-info { display: grid; gap: var(--sp-4); justify-items: start; }
+.dk-skats-virsraksts { margin: 0; font-family: 'Lora', Georgia, serif; font-size: var(--fs-h2); color: var(--c-brand); line-height: 1.2; }
+.dk-skats-statuss { margin: 0; padding: var(--sp-3) var(--sp-4); border-radius: var(--r-sm); background: var(--c-warn-bg); color: var(--c-warn); font-weight: 600; }
+.dk-skats-dati { margin: 0; display: grid; gap: var(--sp-2); width: 100%; }
+.dk-skats-dati div { display: flex; justify-content: space-between; gap: var(--sp-4); padding-bottom: var(--sp-2); border-bottom: 1px dashed var(--c-line); }
+.dk-skats-dati dt { color: var(--c-muted); }
+.dk-skats-dati dd { margin: 0; font-weight: 700; text-align: right; }
+.dk-skats-kods { font-family: ui-monospace, Consolas, monospace; letter-spacing: .08em; color: var(--c-accent-strong); }
+.dk-skats-apaksvirsraksts { margin: var(--sp-3) 0 0; font-size: 1.125rem; }
+.dk-skats-soli { grid-template-columns: minmax(0, 1fr); gap: var(--sp-3); }
+.dk-skats-soli li { grid-template-columns: 32px minmax(0, 1fr); column-gap: var(--sp-3); }
+.dk-skats-soli li::before { grid-row: span 2; margin: 0; }
+.dk-skats-pogas { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-2); }
+@media (max-width: 1023px) { .dk-skats-rezgis { grid-template-columns: minmax(0, 1fr); } }
+@media print {
+    .dk-lapa .site-header, .site-header, .site-footer, .dk-cels, .dk-skats-pogas, .empanadillo, .bju-poga, .aptaujas-josla { display: none !important; }
+    .dk-lapa { padding: 0; }
+    .dk-skats-rezgis { grid-template-columns: minmax(0, 1fr); gap: 8mm; }
+    .dk-karte { -webkit-print-color-adjust: exact; print-color-adjust: exact; box-shadow: none !important; }
+    .dk-skats-soli li::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

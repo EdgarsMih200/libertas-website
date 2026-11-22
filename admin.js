@@ -3,7 +3,7 @@
     var L = window.LIB, el = L.el, api = L.api;
     var root = document.getElementById('admin');
     var ST = Object.keys(L.STATUSI);
-    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, tab: location.hash === '#rekini' ? 'rek' : location.hash === '#dalibnieki' ? 'dal' : location.hash === '#aptauja' ? 'apt' : 'enr', fc: '', fs: '', fp: '', q: '' };
+    var state = { users: [], enr: [], courses: [], ek: { kursi: [], dalibnieki: [] }, rek: { rekini: [], rekviziti: {} }, dk: { kartes: [] }, tab: location.hash === '#davanas' ? 'dk' : location.hash === '#rekini' ? 'rek' : location.hash === '#dalibnieki' ? 'dal' : location.hash === '#aptauja' ? 'apt' : 'enr', fc: '', fs: '', fp: '', q: '' };
     var G = null; // grafiks.js (grupu periodi)
     var AJ = null; // aptauja-jautajumi.js (jautājumi rezultātiem)
 
@@ -69,8 +69,10 @@
             api('GET', '/api/admin/advente').catch(function() { return { dalibnieki: [], kodi: [], izloze: null }; }),
             api('GET', '/api/admin/rekini').catch(function() { return { rekini: [], rekviziti: {} }; }),
             api('GET', '/api/admin/aptauja').catch(function() { return { atbildes: [], izloze: [] }; }),
-            import('/aptauja-jautajumi.js').catch(function() { return null; })
+            import('/aptauja-jautajumi.js').catch(function() { return null; }),
+            api('GET', '/api/admin/davanas').catch(function() { return { kartes: [] }; })
         ]).then(function(r) {
+            state.dk = r[9];
             state.apt = r[7];
             AJ = r[8];
             state.rek = r[6];
@@ -209,7 +211,7 @@
             });
             lm.setAttribute('aria-label', 'Loma kursā: ' + eName(e));
             td(tr, lm);
-            td(tr, e.atlaides_kods ? '−' + e.atlaide_proc + ' % · ' + e.atlaides_kods : '—');
+            td(tr, [e.atlaides_kods ? '−' + e.atlaide_proc + ' % · ' + e.atlaides_kods : '', e.davanu_summa ? 'Dāvanu karte −' + eurS(e.davanu_summa) : ''].filter(Boolean).join(' · ') || '—');
             td(tr, periodaSelect(e.course_id, e.period_start, function(v) {
                 api('PATCH', '/api/admin/enrollments/' + e.id, { period: v || null }).then(function(r) {
                     var n = (r && r.enrollment) || {};
@@ -326,6 +328,50 @@
             td(tr, nak ? lvD(nak) : '—');
             td(tr, r.nosutits_at ? fmt(r.nosutits_at, true) : 'Nav');
             var o = el('a', 'btn-link', 'Atvērt'); o.href = 'rekins.html?id=' + r.id; td(tr, o);
+            t.body.appendChild(tr);
+        });
+        wrap.appendChild(t.wrap);
+        return wrap;
+    }
+
+    // ---------- DĀVANU KARTES (Tirdziņš) ----------
+    var DK_ST = { gaida: ['Gaida apmaksu', 'badge-pieteicies'], aktiva: ['Aktīva', 'badge-uznemts'], izmantota: ['Izmantota', 'badge-pabeidzis'], atcelta: ['Atcelta', 'badge-atteicies'] };
+    function dkTab() {
+        var wrap = el('div', 'ek-admin');
+        wrap.appendChild(el('p', 'muted', 'Pasūtot karti, rēķins izveidojas un nosūtās pircējam automātiski. Kad nauda saņemta, atver rēķinu un atzīmē apmaksu — karte aktivizējas (derīga 12 mēnešus) un pircējs saņem e-pastu ar kodu.'));
+        var K = state.dk.kartes || [];
+        if (!K.length) { wrap.appendChild(el('p', 'register-intro', 'Dāvanu karšu vēl nav.')); return wrap; }
+        var t = tableWrap(['Pasūtīta', 'Pircējs', 'Kam', 'Vērtība', 'Atlikums', 'Statuss', 'Kods', 'Derīga līdz', 'Rēķins', '']);
+        var q = state.q.toLowerCase();
+        K.filter(function(k) {
+            return !q || [k.pircejs, k.pirceja_epasts, k.kam, k.no_ka, k.kods].join(' ').toLowerCase().indexOf(q) >= 0;
+        }).forEach(function(k) {
+            var tr = el('tr');
+            td(tr, fmt(k.created_at, true));
+            var who = el('div'); who.appendChild(el('strong', '', k.pircejs || '—')); who.appendChild(el('div', 'muted', k.pirceja_epasts || '')); td(tr, who);
+            var kam = el('div'); kam.appendChild(el('strong', '', k.kam || '—')); kam.appendChild(el('div', 'muted', 'no ' + (k.no_ka || '—'))); td(tr, kam);
+            td(tr, k.tips === 'kurss' ? (k.kursa_nosaukums || k.course_id) + ' (' + eurS(k.summa) + ')' : eurS(k.summa));
+            td(tr, k.tips === 'kurss' ? (k.atlikums > 0 ? 'neizmantota' : 'izmantota') : eurS(k.atlikums));
+            var st = DK_ST[k.statuss] || DK_ST.gaida; td(tr, el('span', 'badge ' + st[1], st[0]));
+            td(tr, k.statuss === 'gaida' ? '—' : k.kods);
+            td(tr, lvD(k.derigs_lidz));
+            if (k.rekins_id) { var ra = el('a', 'btn-link', 'Nr. ' + (k.rekins_nr || k.rekins_id)); ra.href = 'rekins.html?id=' + k.rekins_id; td(tr, ra); } else td(tr, '—');
+            var act = el('div', 'summary-chips');
+            var o = el('a', 'btn-link', 'Karte'); o.href = 'davanu-karte.html?k=' + k.token; o.target = '_blank'; o.rel = 'noopener'; act.appendChild(o);
+            if (k.statuss === 'aktiva') {
+                var sv = el('button', 'btn-link', 'Sūtīt vēlreiz'); sv.type = 'button';
+                sv.addEventListener('click', function() { api('POST', '/api/admin/davanas/' + k.id + '/sutit').then(function() { L.toast('Karte nosūtīta uz ' + k.pirceja_epasts); }).catch(err); });
+                act.appendChild(sv);
+            }
+            if ((k.statuss === 'gaida' || k.statuss === 'aktiva') && Number(k.atlikums) === Number(k.summa) && !k.izmantojumi) {
+                var at = el('button', 'btn-link btn-danger', 'Atcelt'); at.type = 'button';
+                at.addEventListener('click', function() {
+                    if (!confirm('Atcelt dāvanu karti (' + (k.kam || '') + ')? Kodu vairs nevarēs izmantot. Rēķins paliek — to izdzēs vai labo atsevišķi.')) return;
+                    api('PATCH', '/api/admin/davanas/' + k.id, { statuss: 'atcelta' }).then(load).catch(err);
+                });
+                act.appendChild(at);
+            }
+            td(tr, act);
             t.body.appendChild(tr);
         });
         wrap.appendChild(t.wrap);
@@ -618,12 +664,12 @@
         root.appendChild(addForm());
 
         var tabs = el('div', 'admin-tabs');
-        [['enr', 'Pieteikumi (' + state.enr.filter(function(e) { return !irDal(e); }).length + ')'], ['dal', 'Kursu dalībnieki (' + state.enr.filter(irDal).length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')'], ['apt', 'Aptauja (' + ((state.apt && state.apt.atbildes) || []).length + ')']].forEach(function(x) {
+        [['enr', 'Pieteikumi (' + state.enr.filter(function(e) { return !irDal(e); }).length + ')'], ['dal', 'Kursu dalībnieki (' + state.enr.filter(irDal).length + ')'], ['users', 'Lietotāji (' + state.users.length + ')'], ['ek', 'E-kursi (' + state.ek.kursi.length + ')'], ['adv', 'Advente (' + ((state.adv && state.adv.dalibnieki) || []).length + ')'], ['rek', 'Rēķini (' + state.rek.rekini.length + ')'], ['dk', 'Dāvanu kartes (' + state.dk.kartes.length + ')'], ['apt', 'Aptauja (' + ((state.apt && state.apt.atbildes) || []).length + ')']].forEach(function(x) {
             var b = el('button', 'admin-tab' + (state.tab === x[0] ? ' active' : ''), x[1]); b.type = 'button';
             b.addEventListener('click', function() {
                 if (state.tab !== x[0]) state.fs = '';
                 state.tab = x[0];
-                history.replaceState(null, '', x[0] === 'rek' ? '#rekini' : x[0] === 'apt' ? '#aptauja' : x[0] === 'dal' ? '#dalibnieki' : location.pathname + location.search);
+                history.replaceState(null, '', x[0] === 'dk' ? '#davanas' : x[0] === 'rek' ? '#rekini' : x[0] === 'apt' ? '#aptauja' : x[0] === 'dal' ? '#dalibnieki' : location.pathname + location.search);
                 render();
             });
             tabs.appendChild(b);
@@ -652,7 +698,7 @@
         }
         if (state.tab === 'ek') { root.appendChild(ekTab()); return; }
         root.appendChild(bar);
-        root.appendChild(state.tab === 'enr' ? enrTab(false) : state.tab === 'dal' ? enrTab(true) : state.tab === 'adv' ? advTab() : state.tab === 'apt' ? aptTab() : state.tab === 'rek' ? rekTab() : usersTab());
+        root.appendChild(state.tab === 'enr' ? enrTab(false) : state.tab === 'dal' ? enrTab(true) : state.tab === 'adv' ? advTab() : state.tab === 'apt' ? aptTab() : state.tab === 'rek' ? rekTab() : state.tab === 'dk' ? dkTab() : usersTab());
     }
 
     function start(me) {

@@ -22,7 +22,7 @@ export async function rekviziti(env) {
   try { return r ? JSON.parse(r.v) : {}; } catch { return {}; }
 }
 
-async function nakamaisNr(env) {
+export async function nakamaisNr(env) {
   const { results } = await env.DB.prepare('SELECT nr FROM rekini').all();
   const max = results.reduce((m, r) => Math.max(m, parseInt(r.nr, 10) || 0), 0);
   const rk = await rekviziti(env);
@@ -91,7 +91,9 @@ async function sagatave(env, enrId) {
   ).bind(enrId).first();
   if (!e) return fail('Pieteikums nav atrasts', 404);
   const p = e.period_start ? atrastPeriodu(e.course_id, e.period_start) : null;
-  const summa = Math.round(Number(e.price_eur || 0) * (100 - (e.atlaide_proc || 0))) / 100;
+  const arAtlaidi = Math.round(Number(e.price_eur || 0) * (100 - (e.atlaide_proc || 0))) / 100;
+  const dk = e.davanu_karte_id ? await env.DB.prepare('SELECT kods FROM davanu_kartes WHERE id = ?').bind(e.davanu_karte_id).first() : null;
+  const summa = Math.max(0, Math.round((arAtlaidi - Number(e.davanu_summa || 0)) * 100) / 100);
   return json({
     sagatave: {
       enrollment_id: e.id,
@@ -99,6 +101,7 @@ async function sagatave(env, enrId) {
       kurss: `Kurss “${e.kurss}”`,
       kurss_info: e.veids === 'ekurss' ? 'Tiešsaistes pašmācības kurss' : p ? `Grupa: ${periodaTeksts(p)}` : '',
       summa, cena: e.price_eur, atlaide: e.atlaides_kods ? { kods: e.atlaides_kods, proc: e.atlaide_proc } : null,
+      davana: dk ? { kods: dk.kods, summa: e.davanu_summa } : null,
       nodarbibas: p ? p.nodarbibas : [],
     },
   });
@@ -150,7 +153,7 @@ async function izveidot(request, env) {
   return json({ rekins: await viens(env, r.meta.last_row_id) }, 201);
 }
 
-async function labot(request, env, id, pecApmaksas) {
+async function labot(request, env, id, pecApmaksas, pecDavanas, origin) {
   const cur = await env.DB.prepare('SELECT * FROM rekini WHERE id = ?').bind(id).first();
   if (!cur) return fail('Rēķins nav atrasts', 404);
   const { out, kluda } = lauki(await readBody(request), cur);
@@ -162,6 +165,7 @@ async function labot(request, env, id, pecApmaksas) {
     .bind(...k.map((x) => out[x]), new Date().toISOString(), id).run();
   const r = await viens(env, id);
   if (out.rindas) await sinhronizetPieteikumu(env, r, pecApmaksas);
+  if (out.rindas && pecDavanas) await pecDavanas(env, r, origin);
   return json({ rekins: r });
 }
 
@@ -246,7 +250,7 @@ async function nosutit(request, env, id, origin) {
 }
 
 // ---------- Maršruti ----------
-export async function rekiniMarsruts(request, env, { path, method, user, url, pecApmaksas }) {
+export async function rekiniMarsruts(request, env, { path, method, user, url, pecApmaksas, pecDavanas }) {
   let m = path.match(/^\/api\/rekins\/([0-9a-f]{48})$/);
   if (m && method === 'GET') {
     const r = izvert(await env.DB.prepare('SELECT nr, m_vards, m_talrunis, m_epasts, kurss, kurss_info, datums, rindas, piezime, summa, apmaksats FROM rekini WHERE token = ?').bind(m[1]).first());
@@ -292,7 +296,7 @@ export async function rekiniMarsruts(request, env, { path, method, user, url, pe
       const r = await viens(env, id);
       return r ? json({ rekins: r, rekviziti: await rekviziti(env), epasts: !!(env.RESEND_API_KEY && env.EMAIL_FROM) }) : fail('Rēķins nav atrasts', 404);
     }
-    if (method === 'PUT') return labot(request, env, id, pecApmaksas);
+    if (method === 'PUT') return labot(request, env, id, pecApmaksas, pecDavanas, url.origin);
     if (method === 'DELETE') {
       const r = await env.DB.prepare('DELETE FROM rekini WHERE id = ?').bind(id).run();
       return r.meta.changes ? json({ ok: true }) : fail('Rēķins nav atrasts', 404);

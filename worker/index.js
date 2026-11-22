@@ -7,6 +7,7 @@ import { blogsMarsruts } from './blogs.js';
 import { bjuMarsruts } from './bju.js';
 import { aptaujaMarsruts } from './aptauja.js';
 import { gkMarsruts, irPasniedzejs } from './grupu-kursi.js';
+import { davanasMarsruts, sinhronizetDavanu, parbauditDavanu, norakstitDavanu, atgrieztDavanu, KODA_RE } from './davanas.js';
 import { AR_GRAFIKU, atrastPeriodu, periodaTeksts } from '../grafiks.js';
 
 const STATUSES = ['pieteicies', 'uznemts', 'sacis', 'pabeidzis', 'atteicies'];
@@ -176,7 +177,7 @@ async function logout(request, env) {
 
 // ---------- Lietotāja API ----------
 const ENROLL_SELECT = `SELECT e.id, e.user_id, e.course_id, c.name AS course_name, c.price_eur, c.schedule, e.status, e.paid, e.created_at,
-  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz, e.atlaides_kods, e.atlaide_proc, COALESCE(e.loma, 'students') AS loma,
+  e.period_start, e.period_end, e.period_days, c.veids, e.ek_lidz, e.atlaides_kods, e.atlaide_proc, e.davanu_summa, COALESCE(e.loma, 'students') AS loma,
   (SELECT kods FROM ek_sertifikati s WHERE s.user_id = e.user_id AND s.kurss = e.course_id) AS ek_sertifikats,
   (SELECT COUNT(*) FROM ek_progress p WHERE p.user_id = e.user_id AND p.kurss = e.course_id AND p.nokartots_at IS NOT NULL) AS ek_nokartotas,
   (SELECT COUNT(*) FROM ek_saturs x WHERE x.kurss = e.course_id AND x.fails LIKE 'nodarbiba-%' AND x.gabals = 0) AS ek_nodarbibas
@@ -293,11 +294,17 @@ async function enroll(request, env, user, ctx, origin) {
   if (!course) return fail('Kurss nav atrasts', 404);
   const pr = parbauditPeriodu(course_id, period);
   if (pr.kluda) return fail(pr.kluda);
-  // Atlaides kods (adventes kalendārs): nederīgs kods aptur pieteikumu, lai lietotājs to var izlabot
+  // Atlaides kods (adventes kalendārs) vai dāvanu kartes kods (DK-XXXX-XXXX): nederīgs kods aptur pieteikumu, lai lietotājs to var izlabot
   let atl = { kods: null, proc: null };
+  let dav = null;
   if (typeof kods === 'string' && kods.trim()) {
-    atl = await parbauditKodu(env, user, course, kods);
-    if (atl.kluda) return fail(atl.kluda);
+    if (KODA_RE.test(kods.trim().toUpperCase())) {
+      dav = await parbauditDavanu(env, user, course, kods);
+      if (dav.kluda) return fail(dav.kluda);
+    } else {
+      atl = await parbauditKodu(env, user, course, kods);
+      if (atl.kluda) return fail(atl.kluda);
+    }
   }
   const pv = pr.p ? [pr.p.sakums, pr.p.beigas, pr.p.dienas] : [null, null, null];
   const now = new Date().toISOString();
@@ -311,7 +318,20 @@ async function enroll(request, env, user, ctx, origin) {
       "INSERT INTO enrollments (user_id, course_id, status, paid, period_start, period_end, period_days, atlaides_kods, atlaide_proc, created_at, updated_at) VALUES (?, ?, 'pieteicies', 0, ?, ?, ?, ?, ?, ?, ?)"
     ).bind(user.id, course_id, ...pv, atl.kods, atl.proc, now, now).run();
   }
-  const enrollment = await getEnrollment(env, user.id, course_id);
+  let enrollment = await getEnrollment(env, user.id, course_id);
+  // Dāvanu karte: noraksta segto summu; ja tā sedz visu cenu — pieteikums uzreiz apmaksāts
+  if (dav && dav.segt > 0) {
+    if (!(await norakstitDavanu(env, dav.karte.id, dav.segt, enrollment.id))) {
+      await env.DB.prepare("UPDATE enrollments SET status = 'atteicies', updated_at = ? WHERE id = ?").bind(now, enrollment.id).run();
+      return fail('Dāvanu karti neizdevās izmantot — mēģini vēlreiz', 409);
+    }
+    if (dav.segt >= Math.round(Number(course.price_eur || 0) * 100) / 100) {
+      await env.DB.prepare("UPDATE enrollments SET paid = 1, paid_at = ?, status = 'uznemts', updated_at = ? WHERE id = ?").bind(now, now, enrollment.id).run();
+      await pecApmaksas(env, enrollment.id);
+    }
+    enrollment = await getEnrollment(env, user.id, course_id);
+    enrollment.davanu_kods = dav.karte.kods;
+  }
   // Apstiprinājuma e-pasts klientam + paziņojums administratoram (fonā, neaizkavē atbildi)
   const admins = (env.ADMIN_EMAILS || '').split(',').map((s) => s.trim()).filter(Boolean);
   const kursam = { ...course, schedule: course.veids === 'ekurss' ? `Pašmācība · ${course.ek_dienas || 90} dienas no apmaksas` : pr.p ? periodaTeksts(pr.p) : 'Nākamā grupa — datumi tiks precizēti' };
@@ -328,6 +348,7 @@ async function cancel(request, env, user) {
   if (existing.status !== 'pieteicies') return fail('Šo pieteikumu vairs nevar atcelt', 409);
   await env.DB.prepare("UPDATE enrollments SET status = 'atteicies', updated_at = ? WHERE id = ?")
     .bind(new Date().toISOString(), existing.id).run();
+  await atgrieztDavanu(env, existing.id);
   return json({ enrollment: await getEnrollment(env, user.id, course_id) });
 }
 
@@ -426,12 +447,14 @@ async function adminPatchEnrollment(request, env, id) {
   if (!sets.length) return fail('Nav ko mainīt');
   sets.push('updated_at = ?'); vals.push(now);
   await env.DB.prepare(`UPDATE enrollments SET ${sets.join(', ')} WHERE id = ?`).bind(...vals, id).run();
+  if (body.status === 'atteicies' && cur.status !== 'atteicies') await atgrieztDavanu(env, id);
   if (body.paid !== undefined) await pecApmaksas(env, id);
   const row = await env.DB.prepare(`${ADMIN_ENROLL_SELECT} WHERE e.id = ?`).bind(id).first();
   return json({ enrollment: row });
 }
 
 async function adminDeleteEnrollment(env, id) {
+  await atgrieztDavanu(env, id);
   const r = await env.DB.prepare('DELETE FROM enrollments WHERE id = ?').bind(id).run();
   if (!r.meta.changes) return fail('Pieteikums nav atrasts', 404);
   return json({ ok: true });
@@ -496,12 +519,17 @@ export default {
       }
 
       if (path.startsWith('/api/rekins/') || path.startsWith('/api/admin/rekini') || path === '/api/admin/rekviziti') {
-        const atb = await rekiniMarsruts(request, env, { path, method, user, url, pecApmaksas });
+        const atb = await rekiniMarsruts(request, env, { path, method, user, url, pecApmaksas, pecDavanas: sinhronizetDavanu });
         if (atb) return atb;
       }
 
       if (path === '/api/blogs' || path.startsWith('/api/blogs/')) {
         const atb = await blogsMarsruts(request, env, { path, method, user, url });
+        if (atb) return atb;
+      }
+
+      if (path.startsWith('/api/davana') || path.startsWith('/api/admin/davanas')) {
+        const atb = await davanasMarsruts(request, env, { path, method, user, url, ctx });
         if (atb) return atb;
       }
 
