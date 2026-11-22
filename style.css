@@ -9394,31 +9394,15 @@ html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
     border-bottom: 1px solid var(--c-line);
 }
 .budina-ieskats-vaks { display: block; position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; object-fit: cover; }
-.budina-ieskats-karte { --robs: var(--c-accent-soft); position: absolute; left: 10%; right: 10%; top: 50%; transform: translateY(-30%) rotate(-4deg); transition: transform .35s var(--ease, ease-out); }
-/* Pusnolaisti slēģi (dēlīši), pacelas, kad uzbrauc virsū */
-.budina-slegi {
-    position: absolute; left: 0; right: 0; top: 0;
-    height: 30%;
-    background:
-        linear-gradient(180deg, transparent calc(100% - 6px), rgb(23 35 31 / .25) calc(100% - 6px)),
-        repeating-linear-gradient(180deg, var(--t-lete) 0 9px, var(--t-stabs) 9px 11px);
-    box-shadow: 0 4px 8px rgb(23 35 31 / .2);
-    transition: transform .4s var(--ease, ease-out);
-}
-.budina-slegi::after {
-    content: "";
-    position: absolute; left: 50%; bottom: 10px;
-    width: 26px; height: 5px; margin-left: -13px;
-    border-radius: 3px;
-    background: var(--c-season-glow);
-}
-.budina-logs:hover .budina-slegi, .budina-logs:focus-visible .budina-slegi { transform: translateY(-82%); }
-.budina-logs:hover .budina-ieskats-karte { transform: translateY(-48%) rotate(-1deg) scale(1.04); }
+.budina-ieskats-karte { --robs: var(--c-accent-soft); position: absolute; left: 10%; right: 10%; top: 50%; transform: translateY(-18%) rotate(-4deg); transition: transform .35s var(--ease, ease-out); }
+.budina-vitrina { position: absolute; inset: 0; width: 100%; height: 100%; transition: transform .4s var(--ease, ease-out); }
+.budina-logs:hover .budina-vitrina, .budina-logs:hover .budina-ieskats-vaks { transform: scale(1.04); }
+.budina-logs:hover .budina-ieskats-karte { transform: translateY(-24%) rotate(-1deg) scale(1.04); }
 
 .budina-logs-teksts { display: flex; flex-direction: column; gap: 4px; flex: 1; padding: var(--sp-3) var(--sp-4); }
 .budina-logs-birka { font-size: .6875rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c-sage-ink); }
 .budina-logs-nos {
-    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;
+    overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
     font-family: 'Lora', Georgia, serif; font-size: 1.0625rem; font-weight: 600; line-height: 1.25; color: var(--c-brand);
 }
 .budina-logs-apaksa { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); margin-top: auto; padding-top: var(--sp-2); }
@@ -9470,7 +9454,7 @@ html.tirgus-svetki .ir-slegtas .budina-zvaigzne { width: 22px; height: 22px; }
     .ir-slegtas .budina-virsus { min-height: 44px; }
     .ir-slegtas .budina-izkartne { font-size: .8125rem; padding: 3px 10px 4px; margin-top: 10px; }
     .budina-logs-teksts { padding: var(--sp-2) var(--sp-3) var(--sp-3); }
-    .budina-logs-nos { font-size: .9375rem; }
+    .budina-logs-nos { font-size: .9375rem; white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; min-height: 2.5em; }
     .budina-logs-birka { display: none; }
     .budina-logs-apaksa { flex-wrap: wrap; }
     .ir-slegtas .budina--atverta { padding: 0 12px; }

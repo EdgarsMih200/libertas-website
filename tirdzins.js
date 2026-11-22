@@ -224,12 +224,58 @@
             var k = el('span', 'budina-ieskats-karte');
             k.innerHTML = dkKarte(PARAUGI[1], { tikaiPrieksa: true });
             w.appendChild(k);
+        } else if (li.dataset.valoda) {
+            w.innerHTML = vitrina(li.dataset.valoda, li.dataset.limenis);
         } else {
             var v = prece.querySelector('.prece-vaks');
             if (v) { var c = v.cloneNode(true); c.removeAttribute('id'); c.setAttribute('class', (v.getAttribute('class') || '') + ' budina-ieskats-vaks'); w.appendChild(c); }
         }
-        w.appendChild(el('span', 'budina-slegi'));
         return w;
+    }
+
+    // E-kursa vitrīna būdiņas logā (300×160): karodziņu virtene, klēpjdators ar «play», runas burbulis,
+    // grāmatu kaudze ar līmeņa birku. Augšējie ~24px paliek tukši (tur nokarājas markīze).
+    function vitrina(valoda, limenis) {
+        var en = valoda === 'en';
+        var karogs = en ? ['var(--c-info)', 'var(--c-surface)', 'var(--c-error)'] : ['var(--c-error)', 'var(--c-season-glow)'];
+        var virt = '';
+        for (var i = 0; i < 12; i++) {
+            var x = 6 + i * 25, y = 30 + Math.sin((i + .5) / 12 * Math.PI) * 6;
+            virt += '<path style="fill:' + karogs[i % karogs.length] + '" d="M' + x + ' ' + y + ' h18 l-9 15 Z"/>';
+        }
+        var lim = String(limenis || 'A1').replace(/[<&"]/g, '');
+        return '<svg class="budina-vitrina" viewBox="0 0 300 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">' +
+            '<rect width="300" height="160" style="fill:var(--c-accent-soft)"/>' +
+            '<path style="fill:none;stroke:var(--c-line);stroke-width:2;opacity:.7" d="M50 0V128M100 0V128M150 0V128M200 0V128M250 0V128"/>' +
+            '<path style="fill:none;stroke:var(--c-line-strong);stroke-width:1.5" d="M0 28 Q150 44 300 28"/>' + virt +
+            // runas burbulis
+            '<rect x="22" y="56" width="80" height="32" rx="10" style="fill:var(--c-surface);stroke:var(--c-line-strong);stroke-width:1.5"/>' +
+            '<path style="fill:var(--c-surface);stroke:var(--c-line-strong);stroke-width:1.5;stroke-linejoin:round" d="M78 87 l12 12 l-2 -12"/>' +
+            '<path style="fill:var(--c-surface)" d="M77 85 h12 v4 h-12 Z"/>' +
+            '<text x="62" y="77" text-anchor="middle" style="font:italic 600 15px Lora, Georgia, serif;fill:var(--c-brand)">' + (en ? 'Hello!' : '¡Hola!') + '</text>' +
+            // lete
+            '<rect y="128" width="300" height="32" style="fill:var(--c-sunk)"/>' +
+            '<rect y="125" width="300" height="6" rx="2" style="fill:var(--c-line-strong)"/>' +
+            // krūze
+            '<path style="fill:var(--c-brand)" d="M30 104 h24 v16 a6 6 0 0 1 -6 6 h-12 a6 6 0 0 1 -6 -6 Z"/>' +
+            '<path style="fill:none;stroke:var(--c-brand);stroke-width:3" d="M54 108 a5 5 0 0 1 0 10"/>' +
+            '<path style="fill:none;stroke:var(--c-line-strong);stroke-width:2;stroke-linecap:round;opacity:.7" d="M38 99 q-3 -5 0 -9 M46 99 q-3 -5 0 -9"/>' +
+            // klēpjdators
+            '<rect x="98" y="62" width="110" height="62" rx="6" style="fill:var(--c-forest)"/>' +
+            '<rect x="104" y="68" width="98" height="50" rx="3" style="fill:var(--c-forest-2)"/>' +
+            '<circle cx="153" cy="93" r="15" style="fill:var(--c-season-glow)"/>' +
+            '<path style="fill:var(--c-forest)" d="M148 85 L161 93 L148 101 Z"/>' +
+            '<path style="fill:var(--c-line-strong)" d="M88 124 h130 l-6 6 h-118 Z"/>' +
+            // grāmatas + līmeņa birka
+            '<rect x="226" y="112" width="54" height="13" rx="2" style="fill:var(--c-brand)"/>' +
+            '<rect x="231" y="99" width="46" height="13" rx="2" style="fill:var(--c-sage-ink)"/>' +
+            '<rect x="224" y="86" width="50" height="13" rx="2" style="fill:var(--c-accent)"/>' +
+            '<path style="fill:none;stroke:var(--c-surface);stroke-width:1.5;opacity:.6" d="M232 118.5h40M237 105.5h34M230 92.5h38"/>' +
+            '<path style="fill:none;stroke:var(--c-line-strong);stroke-width:1.5" d="M252 40 V52"/>' +
+            '<circle cx="252" cy="68" r="17" style="fill:var(--c-surface);stroke:var(--c-brand);stroke-width:2.5"/>' +
+            '<circle cx="252" cy="54" r="2.5" style="fill:var(--c-line-strong)"/>' +
+            '<text x="252" y="74" text-anchor="middle" style="font:700 16px Lora, Georgia, serif;fill:var(--c-brand)">' + lim + '</text>' +
+            '</svg>';
     }
 
     function iekartot(li) {
@@ -250,7 +296,10 @@
         var t = el('span', 'budina-logs-teksts');
         if (birka) t.appendChild(el('span', 'budina-logs-birka', birka.textContent));
         // Uz būdiņas tikai īsais nosaukums (pirms « — »), pilnais — atvērtajā būdiņā
-        t.appendChild(el('span', 'budina-logs-nos', vh ? vh.textContent.split(/\s+[—–]\s+/)[0] : ''));
+        // un bez līmeņa beigās (tas jau ir izkārtnē un vitrīnas birkā)
+        var nos = vh ? vh.textContent.split(/\s+[—–]\s+/)[0] : '';
+        if (li.dataset.limenis) nos = nos.replace(/\s+[ABC][12](\.\d)?$/, '');
+        t.appendChild(el('span', 'budina-logs-nos', nos));
         var apaksa = el('span', 'budina-logs-apaksa');
         apaksa.appendChild(el('span', 'budina-logs-cena', cena ? cena.textContent : 'Uzzināt'));
         apaksa.appendChild(el('span', 'budina-logs-atvert', 'Atvērt'));
@@ -328,6 +377,8 @@
                 a.appendChild(s);
                 var li = budina(k.limenis ? 'E-kurss ' + k.limenis : 'E-kurss', a);
                 li.id = 'e-kurss-' + k.id;
+                li.dataset.valoda = k.valoda || 'es';
+                if (k.limenis) li.dataset.limenis = k.limenis;
                 budinas.appendChild(li);
                 iekartot(li);
             });
