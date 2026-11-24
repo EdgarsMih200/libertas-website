@@ -8892,6 +8892,10 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .gk-teksts table{border-collapse:collapse;margin:0 0 1em;background:var(--c-surface);font-size:var(--fs-sm);display:block;overflow-x:auto;max-width:100%}
 .gk-teksts td,.gk-teksts th{padding:7px 12px;border:1px solid var(--c-line);text-align:left;vertical-align:top}
 .gk-teksts th{background:var(--c-sunk)}
+/* Dark departures board (table.board inside a coloured box): keep the box's white text readable */
+.gk-teksts table.board{background:transparent;display:table;margin:0}
+.gk-teksts table.board td,.gk-teksts table.board th{background:transparent;border-color:rgba(255,255,255,.18)}
+.gk-teksts table.board .es{color:inherit;text-decoration-color:rgba(255,255,255,.45)}
 .gk-teksts .vrow{margin:0 0 4px}
 .gk-teksts .cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px}
 .gk-teksts .cols2>p{margin:0}
