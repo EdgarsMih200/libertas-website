@@ -86,11 +86,26 @@
     function jaukt(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
     const bezAkc = (s) => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '');
     const norm = (s) => String(s == null ? '' : s).toLowerCase().normalize('NFC').replace(/[.,!?¡¿;:"'’«»“”()]/g, ' ').replace(/\s+/g, ' ').trim();
-    // 2 = precīzi, 1 = pareizi, bet bez garumzīmēm, 0 = nepareizi
+    // Damerau–Levenšteina attālums (apmainīti blakus burti = 1 kļūda)
+    function attalums(a, b) {
+        const d = [];
+        for (let i = 0; i <= a.length; i++) {
+            d[i] = [i];
+            for (let j = 1; j <= b.length; j++) {
+                if (i === 0) { d[0][j] = j; continue; }
+                d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+                if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+            }
+        }
+        return d[a.length][b.length];
+    }
+    const pielaide = (n) => (n <= 3 ? 0 : n <= 6 ? 1 : n <= 12 ? 2 : 3);
+    // 2 = precīzi, 1 = pareizi, bet bez garumzīmēm, -1 = gandrīz (drukas kļūda; neskaitās pareizs), 0 = nepareizi
     function salidzinat(atb, varianti) {
         const a = norm(atb); if (!a) return 0;
         if (varianti.some((v) => norm(v) === a)) return 2;
         if (varianti.some((v) => bezAkc(norm(v)) === bezAkc(a))) return 1;
+        if (varianti.some((v) => { const x = bezAkc(norm(v)); return attalums(x, bezAkc(a)) <= pielaide(x.length); })) return -1;
         return 0;
     }
 
@@ -101,6 +116,7 @@
         et: { bcp: 'et-EE', nos: 'igauņu', iski: 'igauniski', labi: 'Väga hea!', fant: 'Suurepärane!', bravo: 'Tubli!', genial: 'Vahva!', sutits: 'Saadetud!' },
     };
     let VALODA = 'es', AUDIO = false;
+    let LENAK = false; try { LENAK = localStorage.getItem('gk-lenak') === '1'; } catch (e) { /* privātais režīms */ }
     const V = () => VAL[VALODA];
 
     // ---------- runa ----------
@@ -123,7 +139,7 @@
             const atpakal = () => { beigtSkanu(); sintezet(teksts, avots); };
             audioAtslega(teksts).then((k) => {
                 if (avots && skanAvots !== avots) return;
-                const a = new Audio('/api/gk/' + encodeURIComponent(kurss) + '/audio/' + k); skanAudio = a;
+                const a = new Audio('/api/gk/' + encodeURIComponent(kurss) + '/audio/' + k); skanAudio = a; a.playbackRate = LENAK ? 0.7 : 1;
                 a.onended = () => { if (skanAudio === a) { skanAudio = null; beigtSkanu(); } };
                 a.onerror = () => { if (skanAudio === a) { skanAudio = null; atpakal(); } };
                 a.play().catch(() => { if (skanAudio === a) { skanAudio = null; atpakal(); } });
@@ -136,11 +152,24 @@
         if (!('speechSynthesis' in window)) { toast('Šī pārlūkprogramma neatbalsta skaņu', true); return; }
         const u = new SpeechSynthesisUtterance(String(teksts).replace(/\([^)]*\)/g, ''));
         const bcp = V().bcp;
-        u.lang = bcp; u.rate = 0.9;
+        u.lang = bcp; u.rate = LENAK ? 0.55 : 0.9;
         const b = speechSynthesis.getVoices().find((v) => v.lang === bcp) || speechSynthesis.getVoices().find((v) => v.lang.slice(0, 2) === bcp.slice(0, 2));
         if (b) u.voice = b;
         if (avots) { skanAvots = avots; avots.classList.add('skan'); avots.setAttribute('aria-pressed', 'true'); pogasTeksts(avots, 'Apturēt'); u.onend = u.onerror = () => { if (skanAvots === avots) beigtSkanu(); }; }
         speechSynthesis.speak(u);
+    }
+    // «Lēnāka izruna»: palēnina gan sintezēto, gan ierakstīto izrunu visā kursa telpā (atceras localStorage)
+    function lenakPoga() {
+        const b = el('button', 'ek-cips gk-lenak'); b.type = 'button';
+        b.appendChild(ikona('skana')); b.appendChild(document.createTextNode(' Lēnāka izruna'));
+        const rad = () => { b.setAttribute('aria-pressed', LENAK ? 'true' : 'false'); b.title = LENAK ? 'Lēnā izruna ieslēgta' : 'Klausīties lēnāk'; };
+        b.addEventListener('click', () => {
+            LENAK = !LENAK; rad();
+            try { localStorage.setItem('gk-lenak', LENAK ? '1' : '0'); } catch (e) { /* privātais režīms */ }
+            if (skanAudio) skanAudio.playbackRate = LENAK ? 0.7 : 1;
+            toast(LENAK ? 'Lēnā izruna ieslēgta' : 'Parasts izrunas ātrums');
+        });
+        rad(); return b;
     }
     function skanasPoga(teksts) { const b = el('button', 'ek-skana-poga'); b.type = 'button'; b.setAttribute('aria-label', 'Klausīties: ' + teksts); b.appendChild(ikona('skana')); b.addEventListener('click', (e) => { e.stopPropagation(); runat(teksts, b); }); return b; }
 
@@ -354,6 +383,7 @@
             const lay = el('div', 'ek-nod gk-nod');
             const nav = el('nav', 'ek-nod-nav gk-nod-nav'); nav.setAttribute('aria-label', 'Nodarbības saturs');
             const atp = saite('← Kursa sākums', '#', 'mat-atpakal'); atp.style.padding = '0'; nav.appendChild(atp);
+            nav.appendChild(lenakPoga());
             const navOl = el('ol'); nav.appendChild(navOl);
             const sat = el('div', 'gk-nod-saturs');
             let sk = 0;
@@ -632,9 +662,9 @@
     function rezultats(w, labi, visi) {
         let r = w.querySelector('.ek-atgriezeniska'); if (!r) { r = el('div'); w.appendChild(r); }
         r.className = 'ek-atgriezeniska ' + (labi === visi ? 'ek-atgriezeniska--labi' : 'ek-atgriezeniska--slikti');
-        r.textContent = labi === visi ? V().labi + ' Viss pareizi (' + labi + '/' + visi + ').' : 'Pareizi ' + labi + ' no ' + visi + '. Izlabo sarkanos un pārbaudi vēlreiz.';
+        r.textContent = labi === visi ? V().labi + ' Viss pareizi (' + labi + '/' + visi + ').' : 'Pareizi ' + labi + ' no ' + visi + '. ' + (w.querySelector('.lauks.gandriz:not(.pareizi)') ? 'Dzeltenie ir gandrīz pareizi – pārbaudi rakstību. Izlabo un pārbaudi vēlreiz.' : 'Izlabo sarkanos un pārbaudi vēlreiz.');
     }
-    function atzimet(inp, v) { inp.classList.remove('pareizi', 'nepareizi', 'gandriz'); if (v === 2) inp.classList.add('pareizi'); else if (v === 1) inp.classList.add('pareizi', 'gandriz'); else inp.classList.add('nepareizi'); inp.setAttribute('aria-invalid', v ? 'false' : 'true'); }
+    function atzimet(inp, v) { inp.classList.remove('pareizi', 'nepareizi', 'gandriz'); if (v === 2) inp.classList.add('pareizi'); else if (v === 1) inp.classList.add('pareizi', 'gandriz'); else if (v === -1) inp.classList.add('gandriz'); else inp.classList.add('nepareizi'); inp.setAttribute('aria-invalid', v > 0 ? 'false' : 'true'); inp.title = v === -1 ? 'Gandrīz! Pārbaudi rakstību.' : ''; }
     function rFill(b, w) {
         const ol = el('ol', 'gk-vingr'); const lauki = [];
         b.items.forEach((it) => {
@@ -647,7 +677,7 @@
             ol.appendChild(li);
         });
         w.appendChild(ol);
-        w.appendChild(pogas(() => { let l = 0; lauki.forEach((i) => { const v = salidzinat(i.value, i.dataset.v.split('|')); atzimet(i, v); if (v) l++; if (v === 1) i.title = 'Ar garumzīmēm: ' + i.dataset.v.split('|')[0]; }); rezultats(w, l, lauki.length); },
+        w.appendChild(pogas(() => { let l = 0; lauki.forEach((i) => { const v = salidzinat(i.value, i.dataset.v.split('|')); atzimet(i, v); if (v > 0) l++; if (v === 1) i.title = 'Ar garumzīmēm: ' + i.dataset.v.split('|')[0]; }); rezultats(w, l, lauki.length); },
             () => lauki.forEach((i) => { i.value = i.dataset.v.split('|')[0]; atzimet(i, 2); })));
     }
     function pogas(parbaudit, paradit) {
@@ -689,7 +719,7 @@
         });
         w.appendChild(ol);
         if (b.hint) w.appendChild(el('p', 'gk-piezime', b.hint));
-        w.appendChild(pogas(() => { let l = 0; lauki.forEach((i) => { const v = salidzinat(i.value, i._a); atzimet(i, v); if (v) l++; }); rezultats(w, l, lauki.length); },
+        w.appendChild(pogas(() => { let l = 0; lauki.forEach((i) => { const v = salidzinat(i.value, i._a); atzimet(i, v); if (v > 0) l++; }); rezultats(w, l, lauki.length); },
             () => lauki.forEach((i) => { i.value = i._a[0]; atzimet(i, 2); })));
     }
     function rTf(b, w) {

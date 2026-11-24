@@ -8884,6 +8884,9 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .lauks.pareizi{border-color:var(--c-success);background:var(--c-success-bg)}
 .lauks.nepareizi{border-color:var(--c-error);background:var(--c-error-bg)}
 .lauks.gandriz{background:var(--c-warn-bg);border-color:var(--c-warn)}
+.gk-lenak{display:inline-flex;align-items:center;gap:6px;margin-top:var(--sp-3);font-size:var(--fs-sm);min-height:40px}
+.gk-lenak .ek-ikona{width:18px;height:18px}
+.gk-lenak[aria-pressed="true"]{background:var(--c-accent-soft);border-color:var(--c-accent);font-weight:700}
 .gk-izvele-opc{display:inline-flex;flex-wrap:wrap;gap:6px;margin-left:6px;vertical-align:middle;line-height:1.2}
 .gk-izvele-opc .ek-cips{min-height:36px;padding:4px 12px;font-size:1rem}
 .ek-cips.pareizi{border-color:var(--c-success);background:var(--c-success-bg);color:var(--c-success)}
