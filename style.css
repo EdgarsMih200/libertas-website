@@ -8897,6 +8897,7 @@ html.bju-atverts .empanadillo { visibility: hidden !important; transition: none 
 .gk-teksts table.board td,.gk-teksts table.board th{background:transparent;border-color:rgba(255,255,255,.18)}
 .gk-teksts table.board .es{color:inherit;text-decoration-color:rgba(255,255,255,.45)}
 .gk-teksts .vrow{margin:0 0 4px}
+.gk-teksts .tr{color:var(--c-muted);font-style:italic;font-size:.92em}
 .gk-teksts .cols2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px}
 .gk-teksts .cols2>p{margin:0}
 .gk-teksts .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 24px;margin:0 0 1em}
