@@ -757,9 +757,25 @@ button.chip:hover { border-color: var(--c-line-strong); }
 
 }
 
-/* Orientieri tikai 1200–1599px (šaurākā tie sadurtos ar apakšvirsrakstu, ļoti platā ainava apgriezta augšā un tie sniegtos līdz virsrakstam) */
-@media (max-width: 1199px), (min-width: 1600px) {
-    .hero-orientieris { display: none; }
+/* Orientieri redzami visos platumos; zemāk tikai novietojuma labojumi */
+/* Ļoti plats ekrāns: ainava apgriezta augšā — čipi ne augstāk par 120px no hero augšas (citādi aiz galvenes) */
+@media (min-width: 1600px) {
+    .hero-orientieris--es { top: max(43.2%, calc(100% - var(--hero-h) + 120px)); }
+    .hero-orientieris--en { top: max(47.6%, calc(100% - var(--hero-h) + 120px)); }
+}
+
+/* 1024–1199: spāņu čips pabīdīts pa kreisi, lai neskartu apakšvirsrakstu (kātiņš paliek virs vējdzirnavām) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .hero-orientieris--es { transform: translate(calc(-85% + var(--px, 0) * -.55vw), -100%); }
+    .hero-orientieris--es::after { left: 85%; }
+}
+
+/* <1024: ainavas joslas augša = orientieru virsotnes, tāpēc čipi karājas zem tiem (kātiņš uz augšu) */
+@media (max-width: 1023px) {
+    .hero-orientieris { transform: translateX(-50%); }
+    .hero-orientieris::after { top: -10px; bottom: auto; }
+    .hero-orientieris--es { top: 50%; }
+    .hero-orientieris--en { top: 52%; }
 }
 
 /* Telefons: josla 270px (apgriezums x 100–820), pogas pilnā platumā, ceļotājs ainavas labajā pusē */
@@ -778,6 +794,11 @@ button.chip:hover { border-color: var(--c-line-strong); }
     }
 
     .hero-empa { left: 43.4%; top: 97.78%; }
+
+    /* Bāka joslā nav redzama: angļu čips bez kātiņa labajā pusē virs ezera */
+    .hero-orientieris { padding: 7px 11px; font-size: 11px; }
+    .hero-orientieris--en { left: 51%; top: 50%; transform: translateX(-100%); }
+    .hero-orientieris--en::after { display: none; }
 }
 
 /* Ainavas toņu varianti (vākiem): rīts un ziemas vakars */
