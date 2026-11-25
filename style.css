@@ -6821,7 +6821,7 @@ html.ziemassvetki .empa-cepure { display: inline; }
 
 /* ===== 3. NODARBĪBA ===== */
 .ek-nod{display:grid;grid-template-columns:260px minmax(0,1fr);gap:var(--sp-7);align-items:start}
-.ek-nod-nav{position:sticky;top:calc(var(--header-h,76px) + 70px)}
+.ek-nod-nav{position:sticky;top:calc(var(--header-h,76px) + 70px);max-height:calc(100vh - var(--header-h,76px) - 90px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:4px}
 .ek-nod-nav ol{list-style:none;margin:var(--sp-4) 0 0;padding:0;display:grid;gap:4px}
 .ek-nod-nav a{display:flex;gap:10px;align-items:center;padding:9px 12px;border-radius:var(--r-md);color:var(--c-ink);text-decoration:none;font-size:var(--fs-sm)}
 .ek-nod-nav a:hover{background:var(--c-sunk)}
@@ -6946,7 +6946,7 @@ html.ziemassvetki .empa-cepure { display: inline; }
 @media (max-width:1023px){
  .ek-piedavajums,.ek-sakums,.ek-nod,.ek-iest{grid-template-columns:minmax(0,1fr)}
  .ek-panelis{position:static;order:-1}
- .ek-nod-nav{position:static}
+ .ek-nod-nav{position:static;max-height:none;overflow:visible;padding-right:0}
  .ek-nod-nav ol{display:flex;overflow-x:auto;gap:6px;padding-bottom:6px}
  .ek-nod-nav a{white-space:nowrap;border:1px solid var(--c-line)}
 }
